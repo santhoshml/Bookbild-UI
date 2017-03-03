@@ -1,0 +1,175 @@
+import React, {Component, PropTypes} from 'react';
+import {reduxForm} from 'redux-form';
+import { registerCompany } from '../actions/index';
+import {Link} from 'react-router';
+
+import * as actionCreators from '../actions/index';
+
+export default class RegisterCompany extends Component{
+	static contextTypes ={
+	    router : PropTypes.object
+	};
+
+	state = { company: {} };
+
+	onSubmit(props){
+			// const { createPost } = this.props;
+    	// const { post } = this.state;
+    	// const { router } = this.context;
+			//
+	    // this.props.registerCompany(props)
+	    //   .then(()=>{
+	    //     this.context.router.push('/');
+	    //   });
+	}
+
+	render(){
+		const {companyName, ein, role, email
+			, phone, address, city, state, zip
+			, userFullName, password} = this.props;
+
+		return (
+		      <form>
+		        <h3>Create a new Compay</h3>
+
+		        <div className="form-group">
+		          <label> Company Name </label>
+		          <input type="text" className="form-control" {...companyName}/>
+		        </div>
+
+		        <div className="form-group">
+		          <label>Company EIN</label>
+		          <input type="text" className="form-control" {...ein}/>
+		        </div>
+
+		        <div className="form-group">
+		          <label> Company Role </label>
+		          <input type="text" className="form-control" {...role}/>
+		        </div>
+
+		        // <div className={`form-group ${email.touched && email.invalid ? 'has-danger': ''}`}>
+		        //   <label>Email</label>
+		        //   <input type="text" className="form-control" {...email}/>
+		        //   <div className="text-help">
+		        //     {email.touched ? email.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${phone.touched && phone.invalid ? 'has-danger': ''}`}>
+		        //   <label> Phone# </label>
+		        //   <input type="text" className="form-control" {...phone}/>
+		        //   <div className="text-help">
+		        //     {phone.touched ? phone.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${address.touched && address.invalid ? 'has-danger': ''}`}>
+		        //   <label>Address</label>
+		        //   <input type="text" className="form-control" {...address}/>
+		        //   <div className="text-help">
+		        //     {address.touched ? address.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${city.touched && city.invalid ? 'has-danger': ''}`}>
+		        //   <label> City </label>
+		        //   <input type="text" className="form-control" {...city}/>
+		        //   <div className="text-help">
+		        //     {city.touched ? city.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${state.touched && state.invalid ? 'has-danger': ''}`}>
+		        //   <label>State</label>
+		        //   <input type="text" className="form-control" {...state}/>
+		        //   <div className="text-help">
+		        //     {state.touched ? state.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${zip.touched && zip.invalid ? 'has-danger': ''}`}>
+		        //   <label> Zip </label>
+		        //   <input type="text" className="form-control" {...zip}/>
+		        //   <div className="text-help">
+		        //     {zip.touched ? zip.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${userFullName.touched && userFullName.invalid ? 'has-danger': ''}`}>
+		        //   <label>Full Name</label>
+		        //   <input type="text" className="form-control" {...userFullName}/>
+		        //   <div className="text-help">
+		        //     {userFullName.touched ? userFullName.error : null}
+		        //   </div>
+		        // </div>
+						//
+		        // <div className={`form-group ${password.touched && password.invalid ? 'has-danger': ''}`}>
+		        //   <label>Password</label>
+		        //   <input type="text" className="form-control" {...password}/>
+		        //   <div className="text-help">
+		        //     {password.touched ? password.error : null}
+		        //   </div>
+		        // </div>
+
+		        <button type="submit" className="btn btn-primary">Submit</button>
+		        <Link to="/" className="btn btn-danger">Cancel</Link>
+		      </form>
+		    );
+	}
+}
+
+// function validate(values){
+//   const errors={};
+//
+//   if(!values.companyName){
+//     errors.companyName='Enter a company name';
+//   }
+//
+//   if(!values.ein){
+//     errors.ein='Enter company EIN';
+//   }
+//
+//   if(!values.role){
+//     errors.role='Enter company role';
+//   }
+//
+//   if(!values.email){
+//     errors.email='Enter a email';
+//   }
+//
+//   if(!values.phone){
+//     errors.phone='Enter phone#';
+//   }
+//
+//   if(!values.address){
+//     errors.address='Enter address';
+//   }
+//
+//   if(!values.city){
+//     errors.city='Enter a city';
+//   }
+//
+//   if(!values.state){
+//     errors.state='Enter State';
+//   }
+//
+//   if(!values.zip){
+//     errors.zip='Enter zip';
+//   }
+//
+//   if(!values.userFullName){
+//     errors.userFullName='Enter full name of the user';
+//   }
+//
+//   if(!values.password){
+//     errors.password='Enter password';
+//   }
+//
+//   return errors;
+// }
+
+// export default reduxForm({
+//   form: 'RegisterCompanyForm',
+//   fields: ['companyName', 'ein', 'role', 'email', 'phone', 'address', 'city', 'state', 'zip', 'userFullName', 'password'],
+//   validate
+// }, null, {registerCompany})(RegisterCompany);
