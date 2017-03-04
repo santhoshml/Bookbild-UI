@@ -2,96 +2,195 @@ import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
 import { registerCompany } from '../actions/index';
 import {Link} from 'react-router';
+import validator from 'validator';
 
 import * as actionCreators from '../actions/index';
 
 class RegisterCompany extends Component{
-	// static contextTypes ={
-	//     router : PropTypes.object
-	// };
+	static contextTypes ={
+	    router : PropTypes.object
+	};
 
 	onSubmit(props){
-			// const { createPost } = this.props;
-    	// const { post } = this.state;
-    	// const { router } = this.context;
-			//
-	    // this.props.registerCompany(props)
-	    //   .then(()=>{
-	    //     this.context.router.push('/');
-	    //   });
+		console.log('In onSubmit:'+JSON.stringify(props));
+		this.props.registerCompany(props)
+		 .then(() => {
+			 // blog post has been created, navigate the user to the index
+			 // We navigate by calling this.context.router.push with the
+			 // new path to navigate to.
+			 this.context.router.push('/');
+		 });
 	}
 
 	render(){
 		const {fields:{companyName, ein, role
-			, streetAddress, city, state, zip
-			, userFullName, email, password, confirmPassword, phone
+			, streetAddress, city, state, zipcode
+			, userFullName, email, password, confirmPassword, phoneNumber
 			}, handleSubmit} = this.props;
 
 		return (
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 		        <h3>Compay Details</h3>
 
-		        <div className="form-group">
+		        <div className={`form-group ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
 		          <label> Company Name </label>
-		          <input type="text" className="form-control" {...companyName}/>
+		          <input type="text" className="form-control" placeholder="Enter a valid Company Name" {...companyName}/>
+							<div className="text-help">
+            		{companyName.touched ? companyName.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
+		        <div className={`form-group ${ein.touched && ein.invalid ? 'has-danger' : ''}`}>
 		          <label>EIN of the Company</label>
-		          <input type="text" className="form-control" {...ein}/>
+		          <input type="text" className="form-control" placeholder="Enter a valid Company EIN" {...ein}/>
+							<div className="text-help">
+            		{ein.touched ? ein.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
-		          <label>Role of the company</label>
-		          <input type="text" className="form-control" {...role}/>
+		        <div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
+		          <label>Role of the company</label><br/>
+							<label className="radio-inline"><input type="radio" {...role}/>Lender</label>
+							<label className="radio-inline"><input type="radio" {...role}/>Financial Sponsor</label>
+							<label className="radio-inline"><input type="radio" {...role}/>Company</label>
+							<label className="radio-inline"><input type="radio" {...role}/>Legal Counsel</label>
+							<label className="radio-inline"><input type="radio" {...role}/>3rd Part Due Diligence</label>
+							<div className="text-help">
+            		{role.touched ? role.error : ''}
+          		</div>
 		        </div>
 
 						<br/>
 						<hr/>
 						<h3>Address Details</h3>
 
-						<div className="form-group">
+						<div className={`form-group ${streetAddress.touched && streetAddress.invalid ? 'has-danger' : ''}`}>
 		          <label> Street Address </label>
-		          <input type="text" className="form-control" {...streetAddress}/>
+		          <input type="text" className="form-control" placeholder="Enter a valid Street Address of the Company" {...streetAddress}/>
+							<div className="text-help">
+            		{streetAddress.touched ? streetAddress.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
+						<div className={`form-group ${city.touched && city.invalid ? 'has-danger' : ''}`}>
+		          <label>City</label>
+		          <input type="text" className="form-control" placeholder="Enter the City of the Company" {...city}/>
+							<div className="text-help">
+            		{city.touched ? city.error : ''}
+          		</div>
+		        </div>
+
+		        <div className={`form-group ${state.touched && state.invalid ? 'has-danger' : ''}`}>
 		          <label>State</label>
-		          <input type="text" className="form-control" {...state}/>
+							<select className="form-control" {...state}>
+								<option value=""> --- select one --- </option>
+								<option value="AL">Alabama</option>
+								<option value="AK">Alaska</option>
+								<option value="AZ">Arizona</option>
+								<option value="AR">Arkansas</option>
+								<option value="CA">California</option>
+								<option value="CO">Colorado</option>
+								<option value="CT">Connecticut</option>
+								<option value="DE">Delaware</option>
+								<option value="DC">District Of Columbia</option>
+								<option value="FL">Florida</option>
+								<option value="GA">Georgia</option>
+								<option value="HI">Hawaii</option>
+								<option value="ID">Idaho</option>
+								<option value="IL">Illinois</option>
+								<option value="IN">Indiana</option>
+								<option value="IA">Iowa</option>
+								<option value="KS">Kansas</option>
+								<option value="KY">Kentucky</option>
+								<option value="LA">Louisiana</option>
+								<option value="ME">Maine</option>
+								<option value="MD">Maryland</option>
+								<option value="MA">Massachusetts</option>
+								<option value="MI">Michigan</option>
+								<option value="MN">Minnesota</option>
+								<option value="MS">Mississippi</option>
+								<option value="MO">Missouri</option>
+								<option value="MT">Montana</option>
+								<option value="NE">Nebraska</option>
+								<option value="NV">Nevada</option>
+								<option value="NH">New Hampshire</option>
+								<option value="NJ">New Jersey</option>
+								<option value="NM">New Mexico</option>
+								<option value="NY">New York</option>
+								<option value="NC">North Carolina</option>
+								<option value="ND">North Dakota</option>
+								<option value="OH">Ohio</option>
+								<option value="OK">Oklahoma</option>
+								<option value="OR">Oregon</option>
+								<option value="PA">Pennsylvania</option>
+								<option value="RI">Rhode Island</option>
+								<option value="SC">South Carolina</option>
+								<option value="SD">South Dakota</option>
+								<option value="TN">Tennessee</option>
+								<option value="TX">Texas</option>
+								<option value="UT">Utah</option>
+								<option value="VT">Vermont</option>
+								<option value="VA">Virginia</option>
+								<option value="WA">Washington</option>
+								<option value="WV">West Virginia</option>
+								<option value="WI">Wisconsin</option>
+								<option value="WY">Wyoming</option>
+						  </select>
+							<div className="text-help">
+            		{state.touched ? state.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
+		        <div className={`form-group ${zipcode.touched && zipcode.invalid ? 'has-danger' : ''}`}>
 		          <label>Zipcode</label>
-		          <input type="text" className="form-control" {...zipcode}/>
+		          <input type="text" className="form-control" placeholder="Enter a valid zipcode of the Company" {...zipcode}/>
+							<div className="text-help">
+            		{zipcode.touched ? zipcode.error : ''}
+          		</div>
 		        </div>
 
 						<br/>
 						<hr/>
 						<h3>Contact Details</h3>
 
-						<div className="form-group">
+						<div className={`form-group ${userFullName.touched && userFullName.invalid ? 'has-danger' : ''}`}>
 		          <label> Full Name </label>
-		          <input type="text" className="form-control" {...fullName}/>
+		          <input type="text" className="form-control" placeholder="Enter users full name" {...userFullName}/>
+							<div className="text-help">
+            		{userFullName.touched ? userFullName.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
+		        <div className={`form-group ${email.touched && email.invalid ? 'has-danger' : ''}`}>
 		          <label>Email</label>
-		          <input type="text" className="form-control" {...email}/>
+		          <input type="email" className="form-control" placeholder="Enter a valid email" {...email}/>
+							<div className="text-help">
+            		{email.touched ? email.error : ''}
+          		</div>
 		        </div>
 
-		        <div className="form-group">
+		        <div className={`form-group ${password.touched && password.invalid ? 'has-danger' : ''}`}>
 		          <label>Password</label>
-		          <input type="text" className="form-control" {...password}/>
+		          <input type="password" className="form-control" placeholder="Enter password" {...password}/>
+							<div className="text-help">
+            		{password.touched ? password.error : ''}
+          		</div>
 		        </div>
 
-						<div className="form-group">
+						<div className={`form-group ${confirmPassword.touched && confirmPassword.invalid ? 'has-danger' : ''}`}>
 		          <label>Confirm Password</label>
-		          <input type="text" className="form-control" {...confirmPassword}/>
+		          <input type="password" className="form-control" placeholder="Enter password should be same as above" {...confirmPassword}/>
+							<div className="text-help">
+            		{confirmPassword.touched ? confirmPassword.error : ''}
+          		</div>
 		        </div>
 
-						<div className="form-group">
+						<div className={`form-group ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
 		          <label>Phone Number</label>
-		          <input type="text" className="form-control" {...phoneNumber}/>
+		          <input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
+							<div className="text-help">
+            		{phoneNumber.touched ? phoneNumber.error : ''}
+          		</div>
 		        </div>
 
 		        <button type="submit" className="btn btn-primary">Submit</button>
@@ -101,57 +200,68 @@ class RegisterCompany extends Component{
 	}
 }
 
-// function validate(values){
-//   const errors={};
-//
-//   if(!values.companyName){
-//     errors.companyName='Enter a company name';
-//   }
-//
-//   if(!values.ein){
-//     errors.ein='Enter company EIN';
-//   }
-//
-//   if(!values.role){
-//     errors.role='Enter company role';
-//   }
-//
-//   if(!values.email){
-//     errors.email='Enter a email';
-//   }
-//
-//   if(!values.phone){
-//     errors.phone='Enter phone#';
-//   }
-//
-//   if(!values.address){
-//     errors.address='Enter address';
-//   }
-//
-//   if(!values.city){
-//     errors.city='Enter a city';
-//   }
-//
-//   if(!values.state){
-//     errors.state='Enter State';
-//   }
-//
-//   if(!values.zip){
-//     errors.zip='Enter zip';
-//   }
-//
-//   if(!values.userFullName){
-//     errors.userFullName='Enter full name of the user';
-//   }
-//
-//   if(!values.password){
-//     errors.password='Enter password';
-//   }
-//
-//   return errors;
-// }
+function validate(values){
+  const errors={};
+
+  if(!values.companyName){
+    errors.companyName='Enter a company name';
+  }
+
+  if(!values.ein){
+    errors.ein='Enter company EIN';
+  }
+
+  if(!values.role){
+    errors.role='Enter company role';
+  }
+
+  if(!values.email || !validator.isEmail(values.email)){
+    errors.email='Enter a valid email';
+  }
+
+  if(!values.phoneNumber){
+    errors.phoneNumber='Enter phone#';
+  }
+
+  if(!values.streetAddress){
+    errors.streetAddress='Enter Street Address';
+  }
+
+  if(!values.city){
+    errors.city='Enter a city';
+  }
+
+  if(!values.state){
+    errors.state='Enter State';
+  }
+
+  if(!values.zipcode){
+    errors.zipcode='Enter zipcode';
+  }
+
+  if(!values.userFullName){
+    errors.userFullName='Enter full name of the user';
+  }
+
+  if(!values.password){
+    errors.password='Enter password';
+  }
+
+	if(!values.confirmPassword){
+    errors.confirmPassword='Enter confirm password';
+  }
+
+	if(values.password !== values.confirmPassword){
+		errors.password = 'password and confirm password should be same';
+		errors.confirmPassword = 'password and confirm password should be same';
+	}
+
+	// console.log('errors:'+JSON.stringify(errors));
+  return errors;
+}
 
 export default reduxForm({
-  'form': 'RegisterCompany',
-  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zip', 'userFullName', 'email', 'password', 'confirmPassword', 'phone']
+  'form': 'RegisterCompanyForm',
+  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'userFullName', 'email', 'password', 'confirmPassword', 'phoneNumber'],
+	validate
 }, null, {registerCompany})(RegisterCompany);

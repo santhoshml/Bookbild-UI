@@ -6,7 +6,7 @@ import Home from './components/home';
 import RegisterCompany from './components/register_company';
 
 
-export const createRoutes = store => (
+export default (
   <Route path="/" component={App} >
     <IndexRoute component={Home} />
     <Route path="registerCompany" component={RegisterCompany} />
