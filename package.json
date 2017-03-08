@@ -31,6 +31,7 @@
     "axios": "^0.8.1",
     "babel-preset-stage-1": "^6.1.18",
     "history": "^1.17.0",
+    "local-storage": "^1.4.2",
     "lodash": "^3.10.1",
     "node-bourbon": "^4.2.8",
     "react": "^0.14.3",

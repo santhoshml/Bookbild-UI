@@ -1,19 +1,19 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
-import { registerCompany } from '../actions/index';
+import { registerCompanyAction } from '../actions/index';
 import {Link} from 'react-router';
 import validator from 'validator';
 
 import * as actionCreators from '../actions/index';
 
-class RegisterCompany extends Component{
+class RegisterCompanyForm extends Component{
 	static contextTypes ={
 	    router : PropTypes.object
 	};
 
 	onSubmit(props){
 		console.log('In onSubmit:'+JSON.stringify(props));
-		this.props.registerCompany(props)
+		this.props.registerCompanyAction(props)
 		 .then(() => {
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
@@ -264,4 +264,4 @@ export default reduxForm({
   'form': 'RegisterCompanyForm',
   'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'userFullName', 'email', 'password', 'confirmPassword', 'phoneNumber'],
 	validate
-}, null, {registerCompany})(RegisterCompany);
+}, null, {registerCompanyAction})(RegisterCompanyForm);
