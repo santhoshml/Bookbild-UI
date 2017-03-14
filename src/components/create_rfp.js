@@ -3,6 +3,8 @@ import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { createRFPAction } from '../actions/index';
 import { Link } from 'react-router';
+import lsUtils from '../utils/ls_utils';
+import constants from '../utils/constants';
 
 class CreateRFP extends Component {
 
@@ -11,6 +13,8 @@ class CreateRFP extends Component {
   };
 
   onSubmit(props) {
+      var createdBy = JSON.parse(lsUtils.get(constants.KEY_USER_OBJECT)).user_id;
+      props.createdBy = createdBy;
       this.props.createRFPAction(props)
         .then(() => {
           // blog post has been created, navigate the user to the index
@@ -23,7 +27,7 @@ class CreateRFP extends Component {
   render() {
     const { fields: { requestType, dealSize, tenor, category, product, sector
       , txnOverview, companyName, companyDesc, ltmRevenue, ltmEbitda, contactName
-      , contactRole, contactEmail }, handleSubmit } = this.props;
+      , contactRole, contactEmail, createdBy }, handleSubmit } = this.props;
 
     return (
       <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
@@ -229,6 +233,6 @@ export default reduxForm({
   form: 'CreateRFPForm',
   fields: ['requestType', 'dealSize', 'tenor', 'category', 'product', 'sector'
   , 'txnOverview', 'companyName', 'companyDesc', 'ltmRevenue', 'ltmEbitda'
-  , 'contactName', 'contactRole', 'contactEmail'],
+  , 'contactName', 'contactRole', 'contactEmail', 'createdBy'],
   validate
 }, null, { createRFPAction })(CreateRFP);

@@ -1,8 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
-import { loginAction } from '../actions/index';
+import { loginAction, fetchAllRFPAction } from '../actions/index';
 import {Link} from 'react-router';
 import validator from 'validator';
+import lsUtils from '../utils/ls_utils';
+import constants from '../utils/constants';
 
 import * as actionCreators from '../actions/index';
 
@@ -19,22 +21,21 @@ class LoginForm extends Component{
 	};
 
 	onSubmit(props){
-		console.log('In onSubmit:'+JSON.stringify(props));
 		const {resetForm} = this.props;
 		this.props.loginAction(props)
 		 .then((data) => {
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
-			 console.log('data in loginForm :'+JSON.stringify(data));
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
-				 this.context.router.push('/');
+				 // store the files in local storage
+				 lsUtils.set(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
+				 lsUtils.set(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
+
+				 this.context.router.push('/rfpMarketPlace');
 			 } else {	// login failed
 				//empty the username and password
 				resetForm();
-				console.log('yoyo state:'+JSON.stringify(this.state));
-				console.log('yoyo props:'+JSON.stringify(this.props));
-				console.log('yoyo:'+JSON.stringify(data.payload.data));
 				this.setState({
 					errorObject : data.payload.data
 				})
@@ -46,7 +47,7 @@ class LoginForm extends Component{
 
 	render(){
 		const {fields:{ email, password }, handleSubmit, errors} = this.props;
-		console.log('props:'+JSON.stringify(this.props));
+		// console.log('props:'+JSON.stringify(this.props));
 		return (
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 		        <h3>Login to access your account</h3>

@@ -1,5 +1,4 @@
 import { LOGIN } from '../actions/index';
-import { localStorage } from 'local-storage';
 
 const INITIAL_STATE = { userObject: null, companyObject: null, errObject : null };
 
