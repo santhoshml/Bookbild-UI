@@ -7,6 +7,8 @@ import RegisterCompanyForm from './components/register_company';
 import LoginForm from './components/login';
 import CreateRFPForm from './components/create_rfp';
 import RFPMarketPlace from './components/rfp_marketPlace';
+import MyProfile from './components/user_profile';
+
 import FilterExample from './components/filter_example';
 import DGExample from './components/data_grid_example';
 
@@ -17,6 +19,7 @@ export default (
     <Route path="login" component={LoginForm} />
     <Route path="createRFP" component={CreateRFPForm} />
     <Route path="rfpMarketPlace" component={RFPMarketPlace} />
+    <Route path="myProfile" component={MyProfile} />
 
     <Route path="fe" component={FilterExample} />
     <Route path="dge" component={DGExample} />

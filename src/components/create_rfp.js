@@ -13,8 +13,8 @@ class CreateRFP extends Component {
   };
 
   onSubmit(props) {
-      var createdBy = JSON.parse(lsUtils.get(constants.KEY_USER_OBJECT)).user_id;
-      props.createdBy = createdBy;
+      // var createdBy = JSON.parse(lsUtils.getValue(constants.KEY_USER_OBJECT)).user_id;
+      // props.createdBy = createdBy;
       this.props.createRFPAction(props)
         .then(() => {
           // blog post has been created, navigate the user to the index

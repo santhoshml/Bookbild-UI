@@ -1,22 +1,41 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import DataGrid from './data_grid_example';
 
 export default class DisplayRFPList extends Component {
 
+  constructor(props){
+    super(props);
+
+    // this.getColoumns = this.getColoumns.bind(this);
+  }
+
   getColoumns(){
     return [{
-      header: 'Company Sector',
-      accessor: 'sector' // String-based value accessors!
+      key: 'sector',
+      name: 'Company Sector',
+      filterable: true,
+      sortable: true
     }, {
-      header: 'Deal Size',
-      accessor: 'dealSize',
-      render: props => <span className='number'>{props.value}</span> // Custom cell components!
+      key: 'dealSize',
+      name: 'Deal Size',
+      filterable: true,
+      sortable: true
     }, {
-      header: 'Structure',
-      accessor: 'sector'
+      key: 'product',
+      name: 'Structure',
+      filterable: true,
+      sortable: true
     }, {
-      header: 'UOF',
-      accessor: 'sector'
+      key: 'requestType',
+      name: 'UoF',
+      filterable: true,
+      sortable: true
+    }, {
+      key: 'ltmEbitda',
+      name: 'LTM EBITDA',
+      filterable: true,
+      sortable: true
     }];
   }
 
@@ -34,12 +53,13 @@ export default class DisplayRFPList extends Component {
     console.log('In DisplayRFPList, rfpList:'+JSON.stringify(this.props.rfpList));
     if (!this.props.rfpList) {
       return <div>No RFPs exist</div>;
+    } else {
+      return (
+        <div>
+          <h3>Details for:</h3>
+          <DataGrid columns={this.getColoumns()} dataList={this.props.rfpList} />
+        </div>
+      );
     }
-
-    return (
-      <div>
-        <h3>Details for:</h3>
-      </div>
-    );
   }
 }

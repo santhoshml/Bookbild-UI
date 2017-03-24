@@ -4,8 +4,54 @@ export const REGISTER_COMPANY = 'REGISTER_COMPANY';
 export const LOGIN = 'LOGIN';
 export const CREATE_RFP = 'CREATE_RFP';
 export const FETCH_ALL_RFP = 'FETCH_ALL_RFP';
+export const FETCH_ADDRESS = 'FETCH_ADDRESS';
+export const FETCH_CONTACT = 'FETCH_CONTACT';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
+
+export function updateProfileAction(props){
+  console.log('In actions.updateProfileAction');
+  console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateProfile',
+    method : 'post',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: FETCH_ADDRESS,
+    payload: request
+  }
+}
+
+export function fetchAddressAction(address_id){
+  console.log('In actions.fetchAddressAction');
+  const request=axios({
+    url : '/fetchAddress?addressId='+address_id,
+    method : 'get',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_ADDRESS,
+    payload: request
+  }
+}
+
+export function fetchContactAction(contact_id){
+  console.log('In actions.fetchContactAction');
+  const request=axios({
+    url : '/fetchContact?contactId='+contact_id,
+    method : 'get',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_CONTACT,
+    payload: request
+  }
+}
 
 export function fetchAllRFPAction(){
   console.log('In actions.fetchAllRFPAction');

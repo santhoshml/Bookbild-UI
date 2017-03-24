@@ -29,8 +29,8 @@ class LoginForm extends Component{
 			 // new path to navigate to.
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
 				 // store the files in local storage
-				 lsUtils.set(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
-				 lsUtils.set(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
+				 lsUtils.setValue(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
+				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
 				 this.context.router.push('/rfpMarketPlace');
 			 } else {	// login failed

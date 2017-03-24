@@ -25,7 +25,7 @@ class RegisterCompanyForm extends Component{
 	render(){
 		const {fields:{companyName, ein, role
 			, streetAddress, city, state, zipcode
-			, userFullName, email, password, confirmPassword, phoneNumber
+			, fullName, email, password, confirmPassword, phoneNumber
 			}, handleSubmit} = this.props;
 
 		return (
@@ -45,18 +45,6 @@ class RegisterCompanyForm extends Component{
 		          <input type="text" className="form-control" placeholder="Enter a valid Company EIN" {...ein}/>
 							<div className="text-help">
             		{ein.touched ? ein.error : ''}
-          		</div>
-		        </div>
-
-		        <div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
-		          <label>Role of the company</label><br/>
-							<label className="radio-inline"><input type="radio" {...role}/>Lender</label>
-							<label className="radio-inline"><input type="radio" {...role}/>Financial Sponsor</label>
-							<label className="radio-inline"><input type="radio" {...role}/>Company</label>
-							<label className="radio-inline"><input type="radio" {...role}/>Legal Counsel</label>
-							<label className="radio-inline"><input type="radio" {...role}/>3rd Part Due Diligence</label>
-							<div className="text-help">
-            		{role.touched ? role.error : ''}
           		</div>
 		        </div>
 
@@ -153,11 +141,11 @@ class RegisterCompanyForm extends Component{
 						<hr/>
 						<h3>Contact Details</h3>
 
-						<div className={`form-group ${userFullName.touched && userFullName.invalid ? 'has-danger' : ''}`}>
+						<div className={`form-group ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
 		          <label> Full Name </label>
-		          <input type="text" className="form-control" placeholder="Enter users full name" {...userFullName}/>
+		          <input type="text" className="form-control" placeholder="Enter users full name" {...fullName}/>
 							<div className="text-help">
-            		{userFullName.touched ? userFullName.error : ''}
+            		{fullName.touched ? fullName.error : ''}
           		</div>
 		        </div>
 
@@ -190,6 +178,19 @@ class RegisterCompanyForm extends Component{
 		          <input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
 							<div className="text-help">
             		{phoneNumber.touched ? phoneNumber.error : ''}
+          		</div>
+		        </div>
+
+						<div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
+		          <label>Role of the user</label><br/>
+							<label className="radio-inline"><input type="radio" {...role} value="lender"/>Lender</label>
+							<label className="radio-inline"><input type="radio" {...role} value="financial_sponsor"/>Financial Sponsor</label>
+							<label className="radio-inline"><input type="radio" {...role} value="company"/>Company</label>
+							<label className="radio-inline"><input type="radio" {...role} value="legal_counsel"/>Legal Counsel</label>
+							<label className="radio-inline"><input type="radio" {...role} value="3pdd"/>3rd Part Due Diligence</label>
+							<label className="radio-inline"><input type="radio" {...role} value="other"/>Other</label>
+							<div className="text-help">
+            		{role.touched ? role.error : ''}
           		</div>
 		        </div>
 
@@ -239,8 +240,8 @@ function validate(values){
     errors.zipcode='Enter zipcode';
   }
 
-  if(!values.userFullName){
-    errors.userFullName='Enter full name of the user';
+  if(!values.fullName){
+    errors.fullName='Enter full name of the user';
   }
 
   if(!values.password){
@@ -262,6 +263,6 @@ function validate(values){
 
 export default reduxForm({
   'form': 'RegisterCompanyForm',
-  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'userFullName', 'email', 'password', 'confirmPassword', 'phoneNumber'],
+  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber'],
 	validate
 }, null, {registerCompanyAction})(RegisterCompanyForm);
