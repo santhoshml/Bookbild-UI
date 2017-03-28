@@ -8,3 +8,11 @@ exports.setValue = function(key, value){
 exports.getValue = function(key){
   return ls.get(key);
 }
+
+exports.deleteValue = function(key){
+  return ls.remove(key);
+}
+
+exports.deleteAll = function(){
+  return ls.clear();
+}

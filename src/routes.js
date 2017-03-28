@@ -8,6 +8,7 @@ import LoginForm from './components/login';
 import CreateRFPForm from './components/create_rfp';
 import RFPMarketPlace from './components/rfp_marketPlace';
 import MyProfile from './components/user_profile';
+import AddUser from './components/add_user';
 
 import FilterExample from './components/filter_example';
 import DGExample from './components/data_grid_example';
@@ -20,6 +21,7 @@ export default (
     <Route path="createRFP" component={CreateRFPForm} />
     <Route path="rfpMarketPlace" component={RFPMarketPlace} />
     <Route path="myProfile" component={MyProfile} />
+    <Route path="addUser" component={AddUser} />
 
     <Route path="fe" component={FilterExample} />
     <Route path="dge" component={DGExample} />

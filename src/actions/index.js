@@ -6,21 +6,55 @@ export const CREATE_RFP = 'CREATE_RFP';
 export const FETCH_ALL_RFP = 'FETCH_ALL_RFP';
 export const FETCH_ADDRESS = 'FETCH_ADDRESS';
 export const FETCH_CONTACT = 'FETCH_CONTACT';
+export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
+export const ADD_USER = 'ADD_USER';
+export const FETCH_USER_LIST = 'FETCH_USER_LIST';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
 
-export function updateProfileAction(props){
-  console.log('In actions.updateProfileAction');
+export function fetchUserListAction(company_id){
+  console.log('In actions.fetchUserListAction');
+  console.log('company_id:'+JSON.stringify(company_id));
+  const request=axios({
+    url : '/getUserList?companyId='+company_id,
+    method : 'get',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_USER_LIST,
+    payload: request
+  }
+}
+
+export function addUserAction(props){
+  console.log('In actions.addUserAction');
   console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : '/updateProfile',
+    url : '/addUser',
     method : 'post',
     baseURL : ROOT_URL,
     data : props
   });
 
   return{
-    type: FETCH_ADDRESS,
+    type: ADD_USER,
+    payload: request
+  }
+}
+
+export function updateUserProfileAction(props){
+  console.log('In actions.updateProfileAction');
+  // console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateUserProfile',
+    method : 'post',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_USER_PROFILE,
     payload: request
   }
 }

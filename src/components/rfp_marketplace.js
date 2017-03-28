@@ -29,6 +29,11 @@ class RFPMarketPlace extends Component{
         <Link to="/myProfile" className="btn btn-primary">
           Profile
         </Link>
+        &nbsp;&nbsp;&nbsp;
+        <Link to="/" className="btn btn-primary">
+          Logout
+        </Link>
+
         <br/>
         <br/>
         <DisplayRFPList rfpList={this.props.rfpList} />
