@@ -1,14 +1,18 @@
 import { combineReducers } from 'redux';
 import { reducer as formReducer } from 'redux-form';
 import LoginReducer from './reducer_login';
-import MarketPlaceRFPListReducer from './reducer_marketplace_RFP';
+import RFPMarketPlaceListReducer from './reducer_rfp_marketplace';
 import UserProfileReducer from './reducer_user_profile';
+import RFPDetails from './reducer_rfp_details';
+import IOIMarketPlaceListReducer from './reducer_ioi_marketplace';
 
 const rootReducer = combineReducers({
   form: formReducer,
   login: LoginReducer,
-  rfpList: MarketPlaceRFPListReducer,
-  userProfile : UserProfileReducer
+  rfpList: RFPMarketPlaceListReducer,
+  userProfile : UserProfileReducer,
+  rfpDetails : RFPDetails,
+  ioiList : IOIMarketPlaceListReducer
 });
 
 export default rootReducer;

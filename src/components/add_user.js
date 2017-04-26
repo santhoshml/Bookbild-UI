@@ -15,25 +15,46 @@ class AddUserForm extends Component{
 	};
 
 	onSubmit(props){
-		console.log('In onSubmit:'+JSON.stringify(props));
 		this.props.addUserAction(props)
-		 .then(() => {
+		 .then((data) => {
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
-			 this.context.router.push('/');
+			 console.log('In onSubmit data :'+JSON.stringify(data));
+			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
+				 this.context.router.push('/myProfile');
+			 } else {
+				 this.context.router.push('/addUser');
+				 this.setState({errMsg : data.payload.data.data.errMsg});
+			 }
 		 });
+	}
+
+	displayErrMsg(){
+		if(this.state.errMsg){
+			return(
+				<div className="alert alert-warning">
+					Error : {this.state.errMsg}
+				</div>
+			);
+		}
+	}
+
+	componentWillMount(){
+		this.setState({
+      errMsg : null
+    });
 	}
 
 	render(){
 		const {fields:{companyName, ein, role, addedByUserId
-			, streetAddress, city, state, zipcode, isAdmin, company_id
+			, streetAddress, city, state, zipcode, isAdmin, companyId
 			, fullName, email, password, confirmPassword, phoneNumber
 			}, handleSubmit} = this.props;
 
 		return (
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-
+						{this.displayErrMsg()}
 						<h3>User Details</h3>
 
 						<div className={`form-group ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
@@ -79,9 +100,9 @@ class AddUserForm extends Component{
 						<div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
 							<label>Role of the user</label><br/>
 							<label className="radio-inline"><input type="radio" {...role} value="lender"/>Lender</label>
-							<label className="radio-inline"><input type="radio" {...role} value="financial_sponsor"/>Financial Sponsor</label>
+							<label className="radio-inline"><input type="radio" {...role} value="financialSponsor"/>Financial Sponsor</label>
 							<label className="radio-inline"><input type="radio" {...role} value="company"/>Company</label>
-							<label className="radio-inline"><input type="radio" {...role} value="legal_counsel"/>Legal Counsel</label>
+							<label className="radio-inline"><input type="radio" {...role} value="legalCounsel"/>Legal Counsel</label>
 							<label className="radio-inline"><input type="radio" {...role} value="3pdd"/>3rd Part Due Diligence</label>
 							<label className="radio-inline"><input type="radio" {...role} value="other"/>Other</label>
 							<div className="text-help">
@@ -271,24 +292,22 @@ function validate(values){
 		errors.confirmPassword = 'password and confirm password should be same';
 	}
 
-	// console.log('errors:'+JSON.stringify(errors));
   return errors;
 }
 
 function mapStateToProps(state) {
-  // console.log('In mapStateToProps:'+JSON.stringify(state));
   var userJSON = lsUtils.getValue(constants.KEY_USER_OBJECT);
   var companyJSON = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 
   return {
     initialValues : {
       // user info
-			addedByUserId : userJSON.user_id,
-			company_id : userJSON.company_id,
+			addedByUserId : userJSON.userId,
+			companyId : userJSON.companyId,
 
       // company info
       ein :companyJSON.ein,
-      companyName : companyJSON.company_name
+      companyName : companyJSON.companyName
     }
   };
 }
@@ -303,5 +322,5 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'AddUserForm',
-  'fields': ['company_id', 'isAdmin', 'addedByUserId', 'companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber']
+  'fields': ['companyId', 'isAdmin', 'addedByUserId', 'companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber']
 }, mapStateToProps, mapDispatchToProps)(AddUserForm);

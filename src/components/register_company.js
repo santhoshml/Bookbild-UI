@@ -12,7 +12,6 @@ class RegisterCompanyForm extends Component{
 	};
 
 	onSubmit(props){
-		console.log('In onSubmit:'+JSON.stringify(props));
 		this.props.registerCompanyAction(props)
 		 .then(() => {
 			 // blog post has been created, navigate the user to the index
@@ -183,12 +182,12 @@ class RegisterCompanyForm extends Component{
 
 						<div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
 		          <label>Role of the user</label><br/>
-							<label className="radio-inline"><input type="radio" {...role} value="lender"/>Lender</label>
-							<label className="radio-inline"><input type="radio" {...role} value="financial_sponsor"/>Financial Sponsor</label>
-							<label className="radio-inline"><input type="radio" {...role} value="company"/>Company</label>
-							<label className="radio-inline"><input type="radio" {...role} value="legal_counsel"/>Legal Counsel</label>
-							<label className="radio-inline"><input type="radio" {...role} value="3pdd"/>3rd Part Due Diligence</label>
-							<label className="radio-inline"><input type="radio" {...role} value="other"/>Other</label>
+							<label className="radio-inline"><input type="radio" {...role} value="Lender"/>Lender</label>
+							<label className="radio-inline"><input type="radio" {...role} value="Financial Sponsor"/>Financial Sponsor</label>
+							<label className="radio-inline"><input type="radio" {...role} value="Company"/>Company</label>
+							<label className="radio-inline"><input type="radio" {...role} value="Legal Counsel"/>Legal Counsel</label>
+							<label className="radio-inline"><input type="radio" {...role} value="3rd Part Due Diligence"/>3rd Part Due Diligence</label>
+							<label className="radio-inline"><input type="radio" {...role} value="Other"/>Other</label>
 							<div className="text-help">
             		{role.touched ? role.error : ''}
           		</div>
@@ -257,7 +256,6 @@ function validate(values){
 		errors.confirmPassword = 'password and confirm password should be same';
 	}
 
-	// console.log('errors:'+JSON.stringify(errors));
   return errors;
 }
 

@@ -23,9 +23,9 @@ class UserProfileForm extends Component{
 
   componentWillMount() {
     // console.log('state:'+JSON.stringify(this.state));
-    this.props.fetchAddressAction(this.state.userJSON.address_id);
-    this.props.fetchContactAction(this.state.userJSON.contact_id);
-    this.props.fetchUserListAction(this.state.userJSON.company_id);
+    this.props.fetchAddressAction(this.state.userJSON.addressId);
+    this.props.fetchContactAction(this.state.userJSON.contactId);
+    this.props.fetchUserListAction(this.state.userJSON.companyId);
   }
 
   onSubmit(props){
@@ -46,7 +46,7 @@ class UserProfileForm extends Component{
     const {fields:{companyName, ein, role
 			, streetAddress, city, state, zipcode
 			, fullName, email, password, confirmPassword, phoneNumber
-      , user_id, contact_id, address_id, company_id
+      , userId, contactId, addressId, companyId
 			}, handleSubmit} = this.props;
 
     return(
@@ -95,12 +95,12 @@ class UserProfileForm extends Component{
 
       <div className={`form-group ${role.touched && role.invalid ? 'has-danger' : ''}`}>
         <label>Role of the user</label><br/>
-        <label className="radio-inline"><input type="radio" {...role} value='lender' />Lender</label>
-        <label className="radio-inline"><input type="radio" {...role} value='financial_sponsor' />Financial Sponsor</label>
-        <label className="radio-inline"><input type="radio" {...role} value='company' />Company</label>
-        <label className="radio-inline"><input type="radio" {...role} value='legal_counsel'/>Legal Counsel</label>
-        <label className="radio-inline"><input type="radio" {...role} value='3pdd'/>3rd Part Due Diligence</label>
-        <label className="radio-inline"><input type="radio" {...role} value='other'/>Other</label>
+        <label className="radio-inline"><input type="radio" {...role} value='Lender' />Lender</label>
+        <label className="radio-inline"><input type="radio" {...role} value='Financial Sponsor' />Financial Sponsor</label>
+        <label className="radio-inline"><input type="radio" {...role} value='Company' />Company</label>
+        <label className="radio-inline"><input type="radio" {...role} value='Legal Counsel'/>Legal Counsel</label>
+        <label className="radio-inline"><input type="radio" {...role} value='3rd Part Due Diligence'/>3rd Part Due Diligence</label>
+        <label className="radio-inline"><input type="radio" {...role} value='Other'/>Other</label>
         <div className="text-help">
           {role.touched ? role.error : ''}
         </div>
@@ -190,7 +190,9 @@ class UserProfileForm extends Component{
               <th>Role</th>
             </tr>
           </thead>
-          {this.displayUserListRows()}
+          <tbody>
+            {this.displayUserListRows()}
+          </tbody>
         </table>
       </div>
     );
@@ -199,10 +201,10 @@ class UserProfileForm extends Component{
   displayUserListRows(){
     return this.props.userListJSON.map((user, index)=>{
       return(
-        <tr key={user.contact_id}>
+        <tr key={user.contactId}>
           <td> {index+1}</td>
           <td> {user.email} </td>
-          <td> {user.is_admin} </td>
+          <td> {user.isAdmin} </td>
           <td> {user.role} </td>
         </tr>
       );
@@ -218,14 +220,14 @@ function mapStateToProps(state) {
   var addressJSON = state.userProfile.addressJSON;
   var contactJSON = state.userProfile.contactJSON;
   var userListJSON = state.userProfile.userListJSON;
-  console.log('userListJSON in mapStateToProps:'+JSON.stringify(userListJSON));
+  // console.log('userListJSON in mapStateToProps:'+JSON.stringify(userListJSON));
 
   return {
     initialValues : {
       // user info
       email : userJSON.email,
-      is_admin : userJSON.is_admin,
-      user_accepted_terms_conditions : userJSON.user_accepted_terms_conditions,
+      isAdmin : userJSON.isAdmin,
+      userAcceptedTermsConditions : userJSON.userAcceptedTermsConditions,
       password : userJSON.password,
       role : userJSON.role,
       password : userJSON.password,
@@ -233,7 +235,7 @@ function mapStateToProps(state) {
 
       // company info
       ein :companyJSON.ein,
-      companyName : companyJSON.company_name,
+      companyName : companyJSON.companyName,
 
       // userJSON : lsUtils.getValue(constants.KEY_USER_OBJECT),
       city : addressJSON===null ? '' :addressJSON[0].city,
@@ -245,10 +247,10 @@ function mapStateToProps(state) {
       phoneNumber: contactJSON===null ? '' :contactJSON[0].phoneNumber,
       fullName: contactJSON===null ? '' :contactJSON[0].fullName,
 
-      user_id : userJSON.user_id,
-      contact_id : userJSON.contact_id,
-      address_id : userJSON.address_id,
-      company_id : userJSON.company_id
+      userId : userJSON.userId,
+      contactId : userJSON.contactId,
+      addressId : userJSON.addressId,
+      companyId : userJSON.companyId
     },
     userListJSON : userListJSON
   };
@@ -327,6 +329,6 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'UserProfileForm',
-  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber', 'user_id', 'contact_id', 'address_id', 'company_id'],
+  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber', 'userId', 'contactId', 'addressId', 'companyId'],
   validate
 }, mapStateToProps, mapDispatchToProps)(UserProfileForm);

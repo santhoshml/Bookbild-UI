@@ -46,10 +46,9 @@ class LoginForm extends Component{
 	}
 
 	render(){
-		const {fields:{ email, password }, handleSubmit, errors} = this.props;
-		// console.log('props:'+JSON.stringify(this.props));
+		const {fields:{ email, password, tcAgreement }, handleSubmit, errors} = this.props;
 		return (
-		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">
 		        <h3>Login to access your account</h3>
 
 						<div className="text-help">
@@ -72,6 +71,13 @@ class LoginForm extends Component{
           		</div>
 		        </div>
 
+						<div className="checkbox">
+							<label><input type="checkbox" {...tcAgreement}>&nbsp;by clicking on submit, I agree to <a href="terms_and_conditions.html" target="_blank">Bookbild terms and conditions.</a></input></label>
+							<div className="text-help">
+								{tcAgreement.touched ? tcAgreement.error : ''}
+							</div>
+						</div>
+
 		        <button type="submit" className="btn btn-primary">Submit</button>
 		        <Link to="/" className="btn btn-danger">Cancel</Link>
 		      </form>
@@ -90,12 +96,15 @@ function validate(values){
     errors.password='Enter password';
   }
 
-	// console.log('errors:'+JSON.stringify(errors));
+	if(!values.tcAgreement){
+    errors.tcAgreement='You have to agree to terms and conditions before you login';
+  }
+
   return errors;
 }
 
 export default reduxForm({
   'form': 'LoginForm',
-  'fields': ['email', 'password'],
+  'fields': ['email', 'password', 'tcAgreement'],
 	validate
 }, null, {loginAction})(LoginForm);

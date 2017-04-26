@@ -2,22 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-import DisplayRFPList from './display_RFP_list';
-import { fetchAllRFPAction } from '../actions/index';
+import DisplayIOIList from './display_IOI_list';
+import { fetchIOIListForRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
 
-class RFPMarketPlace extends Component{
+class IOIMarketPlace extends Component{
   constructor(props){
     super(props);
     this.state = {
-			rfpList : null
+			ioiList : null
 		}
   }
 
   componentWillMount() {
-    this.props.fetchAllRFPAction();
+    this.props.fetchIOIListForRFPAction(this.props.params.id);
   }
 
   render(){
@@ -37,7 +37,7 @@ class RFPMarketPlace extends Component{
 
         <br/>
         <br/>
-        <DisplayRFPList list={this.props.rfpList} />
+        <DisplayIOIList list={this.props.ioiList} />
       </div>
     );
   }
@@ -45,16 +45,16 @@ class RFPMarketPlace extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  // lsUtils.setValue(Constants.KEY_RFP_LIST_OBJECT, state.rfpList.rfpList);
+  // console.log('state:'+JSON.stringify(state));
   return {
-    rfpList: state.rfpList.rfpList
+    ioiList: state.ioiList.ioiList
   };
 }
 
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
-  return bindActionCreators({ fetchAllRFPAction: fetchAllRFPAction }, dispatch);
+  return bindActionCreators({ fetchIOIListForRFPAction: fetchIOIListForRFPAction }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RFPMarketPlace);
+export default connect(mapStateToProps, mapDispatchToProps)(IOIMarketPlace);

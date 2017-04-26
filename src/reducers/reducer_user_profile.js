@@ -6,7 +6,6 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case FETCH_ADDRESS:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      console.log('in reducer_address, payload:'+JSON.stringify(action.payload));
 
       return {
         ...state
@@ -20,7 +19,6 @@ export default function(state = INITIAL_STATE, action) {
     }
   case FETCH_CONTACT:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      console.log('in reducer_contact, payload:'+JSON.stringify(action.payload));
 
       return {
         ...state
@@ -33,7 +31,6 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
   case UPDATE_USER_PROFILE:
-    console.log('in reducer_update_user_profile, payload:'+JSON.stringify(action.payload));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
@@ -45,7 +42,6 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
   case ADD_USER:
-    console.log('in reducer_add_user, payload:'+JSON.stringify(action.payload));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
@@ -57,7 +53,6 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
   case FETCH_USER_LIST:
-    console.log('in reducer_fetch_user_list, payload:'+JSON.stringify(action.payload));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state

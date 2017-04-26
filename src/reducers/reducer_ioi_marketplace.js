@@ -1,15 +1,14 @@
-import { LOGIN } from '../actions/index';
+import { FETCH_IOI_LIST_FOR_RFP } from '../actions/index';
 
-const INITIAL_STATE = { userObject: null, companyObject: null, errObject : null };
+const INITIAL_STATE = { ioiList: null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
-  case LOGIN:
+  case FETCH_IOI_LIST_FOR_RFP:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
-        , userObject: action.payload.data.data.userObject
-        , companyObject: action.payload.data.data.companyObject
+        , ioiList: action.payload.data.data.Items
       };
     } else {
       return {

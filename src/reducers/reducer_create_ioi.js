@@ -1,15 +1,15 @@
-import { LOGIN } from '../actions/index';
+import { CREATE_IOI } from '../actions/index';
 
-const INITIAL_STATE = { userObject: null, companyObject: null, errObject : null };
+const INITIAL_STATE = { ioi: null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
-  case LOGIN:
+  case CREATE_IOI:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
+      console.log('In reducer_create_ioi, data:'+JSON.stringify(action.payload.data));
       return {
         ...state
-        , userObject: action.payload.data.data.userObject
-        , companyObject: action.payload.data.data.companyObject
+        , ioi: action.payload.data.data
       };
     } else {
       return {
