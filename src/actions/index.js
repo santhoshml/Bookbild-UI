@@ -14,8 +14,40 @@ export const REMOVE_RFP_FROM_FAVORITES = 'REMOVE_RFP_FROM_FAVORITES';
 export const GET_RFP_FROM_FAVORITES = 'GET_RFP_FROM_FAVORITES';
 export const CREATE_IOI = 'CREATE_IOI';
 export const FETCH_IOI_LIST_FOR_RFP = 'FETCH_IOI_LIST_FOR_RFP';
+export const FETCH_IOI_LIST_FOR_COMPANY = 'FETCH_IOI_LIST_FOR_COMPANY';
+export const FETCH_FAV_RFP_LIST_FOR_RFP = 'FETCH_FAV_RFP_LIST_FOR_RFP';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
+
+export function fetchIOIListForCompanyAction(companyId){
+  console.log('In actions.fetchIOIListForCompanyAction');
+  console.log('In fetchIOIListForCompanyAction, companyId:'+companyId);
+  const request=axios({
+    url : '/fetchIOIListForCompany?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_IOI_LIST_FOR_COMPANY,
+    payload: request
+  }
+}
+
+
+export function fetchFavoriteRFPListAction(userId){
+  console.log('In actions.fetchMyFavoriteRFPListAction');
+  const request=axios({
+    url : '/fetchFavRFPListForRFP?userId='+userId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_FAV_RFP_LIST_FOR_RFP,
+    payload: request
+  }
+}
 
 export function fetchIOIListForRFPAction(rfpId){
   console.log('In actions.fetchIOIListForRFPAction');

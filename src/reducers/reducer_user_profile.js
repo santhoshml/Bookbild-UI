@@ -1,6 +1,6 @@
 import { FETCH_ADDRESS, FETCH_CONTACT, UPDATE_USER_PROFILE, ADD_USER, FETCH_USER_LIST } from '../actions/index';
 
-const INITIAL_STATE = { addressJSON: null, contactJSON: null, userListJSON: null};
+const INITIAL_STATE = { address: null, contact: null, userList: null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
@@ -9,7 +9,7 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state
-        , addressJSON: action.payload.data.data
+        , address: action.payload.data.data
       };
     } else {
       return {
@@ -22,7 +22,7 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state
-        , contactJSON: action.payload.data.data
+        , contact: action.payload.data.data
       };
     } else {
       return {
@@ -56,7 +56,7 @@ export default function(state = INITIAL_STATE, action) {
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
-        , userListJSON: action.payload.data.data
+        , userList: action.payload.data.data
       };
     } else {
       return {

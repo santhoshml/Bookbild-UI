@@ -12,24 +12,58 @@ class RFPMarketPlace extends Component{
   constructor(props){
     super(props);
     this.state = {
-			rfpList : null
+			rfpList : null,
+      user : null,
+      company : null
 		}
   }
 
   componentWillMount() {
+    this.setState({
+      user : lsUtils.getValue(Constants.KEY_USER_OBJECT),
+      company : lsUtils.getValue(Constants.KEY_COMPANY_OBJECT),
+    });
     this.props.fetchAllRFPAction();
   }
 
-  render(){
-    return(
+  displayCreateRFPLink(){
+    return (
       <div>
         <Link to="/createRFP" className="btn btn-primary">
           Create New RFP
         </Link>
         &nbsp;&nbsp;&nbsp;
-        <Link to="/myProfile" className="btn btn-primary">
-          Profile
+      </div>
+    );
+  }
+
+  displayMyIOILink(){
+    return (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <Link to={"/ioiList/"+this.state.company.companyId+"/"+Constants.IOI_FOR_COMPANY} className="btn btn-primary">
+          Recent IOI
         </Link>
+      </span>
+    );
+  }
+
+  render(){
+    return(
+      <div>
+        {(this.state.user.role===Constants.KEY_FINANCIAL_SPONSOR
+          || this.state.user.role===Constants.KEY_COMPANY) ? this.displayCreateRFPLink() : ''}
+
+        <Link to="/myProfile" className="btn btn-primary">
+          My Profile
+        </Link>
+        &nbsp;&nbsp;&nbsp;
+        <Link to="/rfpFavorites" className="btn btn-primary">
+          My Favorites
+        </Link>
+
+        {this.state.user.role===Constants.KEY_LENDER ? this.displayMyIOILink() : ''}
+
         &nbsp;&nbsp;&nbsp;
         <Link to="/" className="btn btn-primary">
           Logout
@@ -37,7 +71,7 @@ class RFPMarketPlace extends Component{
 
         <br/>
         <br/>
-        <DisplayRFPList list={this.props.rfpList} />
+        <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>
       </div>
     );
   }

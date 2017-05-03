@@ -4,7 +4,7 @@ import LoginReducer from './reducer_login';
 import RFPMarketPlaceListReducer from './reducer_rfp_marketplace';
 import UserProfileReducer from './reducer_user_profile';
 import RFPDetails from './reducer_rfp_details';
-import IOIMarketPlaceListReducer from './reducer_ioi_marketplace';
+import IOIListReducer from './reducer_ioi_list';
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -12,7 +12,7 @@ const rootReducer = combineReducers({
   rfpList: RFPMarketPlaceListReducer,
   userProfile : UserProfileReducer,
   rfpDetails : RFPDetails,
-  ioiList : IOIMarketPlaceListReducer
+  ioiList : IOIListReducer
 });
 
 export default rootReducer;

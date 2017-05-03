@@ -156,7 +156,7 @@ class RFPDetail extends Component{
           Profile
         </Link>
         &nbsp;&nbsp;&nbsp;
-        <Link to={"/ioimarketPlace/"+this.state.rfp.rfpId} className="btn btn-primary">
+        <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
           View Intrest List
         </Link>
         &nbsp;&nbsp;&nbsp;

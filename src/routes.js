@@ -6,12 +6,13 @@ import Home from './components/home';
 import RegisterCompanyForm from './components/register_company';
 import LoginForm from './components/login';
 import CreateRFPForm from './components/create_rfp';
-import RFPMarketPlace from './components/rfp_marketPlace';
+import RFPMarketPlace from './components/rfp_marketplace';
 import MyProfile from './components/user_profile';
 import AddUser from './components/add_user';
 import RFPDetail from './components/rfp_detail';
 import CreateIOI from './components/create_ioi';
-import IOIMarketPlace from './components/ioi_marketplace';
+import IOIList from './components/ioi_list';
+import RFPFavorites from './components/rfp_favorites';
 
 import FilterExample from './components/filter_example';
 import DGExample from './components/data_grid_example';
@@ -27,7 +28,9 @@ export default (
     <Route path="addUser" component={AddUser} />
     <Route path="rfpDetail/:id" component={RFPDetail} />
     <Route path="createIOI" component={CreateIOI} />
-    <Route path="ioimarketPlace/:id" component={IOIMarketPlace} />
+    <Route path="ioiList/:id/:type" component={IOIList} />
+    <Route path="rfpFavorites" component={RFPFavorites} />
+
 
 
     <Route path="fe" component={FilterExample} />
