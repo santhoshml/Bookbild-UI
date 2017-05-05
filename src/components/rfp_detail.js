@@ -7,13 +7,17 @@ import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
+import dateFormat from 'dateformat';
+import moment from 'moment';
+
 
 class RFPDetail extends Component{
   constructor(props){
     super(props);
     this.state = {
 			rfp : null,
-      user : null
+      user : null,
+      company : null
 		}
   }
 
@@ -21,9 +25,11 @@ class RFPDetail extends Component{
     // this.props.fetchAllRFPAction();
     let rfp = lsUtils.getValue(Constants.KEY_RFP_OBJECT);
     let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
+    let company = lsUtils.getValue(Constants.KEY_COMPANY_OBJECT);
     this.setState({
       rfp : rfp,
       user : user,
+      company : company,
       isFavorite : false
     });
 
@@ -60,6 +66,10 @@ class RFPDetail extends Component{
             <tr>
               <td>Structure</td>
               <td>{cUtils.getDisplayValue(rfp.product)}</td>
+            </tr>
+            <tr>
+              <td>Status</td>
+              <td>{cUtils.computeStatus(rfp.expiryDt)}</td>
             </tr>
             <tr>
               <td>Deal Size</td>
@@ -102,8 +112,12 @@ class RFPDetail extends Component{
               <td>{rfp.termSheets}</td>
             </tr>
             <tr>
-              <td>Region</td>
-              <td>{rfp.region}</td>
+              <td>Expiry Dt</td>
+              <td>{dateFormat(moment(rfp.expiryDt), 'longDate')}</td>
+            </tr>
+            <tr>
+              <td>#days to expiry</td>
+              <td>{cUtils.daysBetween(moment(rfp.expiryDt), new Date())}</td>
             </tr>
           </tbody>
         </table>
@@ -149,6 +163,20 @@ class RFPDetail extends Component{
       });
   }
 
+  displayViewIntrestListButton(){
+    if(this.state.user.role === Constants.KEY_COMPANY
+      && this.state.rfp.createdByCompanyId === this.state.company.companyId){
+      return( <span>
+      <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
+        View Intrest List
+      </Link>
+      &nbsp;&nbsp;&nbsp;
+      </span>);
+    } else {
+      return(<span></span>);
+    }
+  }
+
   render(){
     return(
       <div>
@@ -156,10 +184,7 @@ class RFPDetail extends Component{
           Profile
         </Link>
         &nbsp;&nbsp;&nbsp;
-        <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
-          View Intrest List
-        </Link>
-        &nbsp;&nbsp;&nbsp;
+        {this.displayViewIntrestListButton()}
         <Link to="/" className="btn btn-primary">
           Logout
         </Link>

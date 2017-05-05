@@ -6,6 +6,7 @@ import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import Constants from '../utils/constants';
 
+
 export default class DisplayRFPList extends Component {
 
   constructor(props){
@@ -88,6 +89,7 @@ export default class DisplayRFPList extends Component {
         rfp.isSponsored = cUtils.getDisplayValue(rfp.isSponsored);
         rfp.dealSize    = formatCurrency(rfp.dealSize, Constants.CURRENCY_OPTS);
         rfp.ltmEbitda   = formatCurrency(rfp.ltmEbitda, Constants.CURRENCY_OPTS);
+        rfp.status      =  cUtils.computeStatus(rfp.expiryDt);
         return rfp;
       });
     } else {

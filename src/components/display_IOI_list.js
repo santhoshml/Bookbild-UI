@@ -7,7 +7,7 @@ import formatCurrency from 'format-currency';
 import Constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';
 import NumberFormat from 'react-number-format';
-
+import { FormattedDate } from 'react-intl';
 
 export default class DisplayIOIList extends Component {
 
@@ -16,7 +16,8 @@ export default class DisplayIOIList extends Component {
     this.state = {
       ioiList : props.list,
       companyList : props.companyList,
-      minimalData : (props.minimalData === undefined ? false : props.minimalData)
+      minimalData : (props.minimalData === undefined ? false : props.minimalData),
+      userList : props.userList
     };
 
   }
@@ -25,6 +26,7 @@ export default class DisplayIOIList extends Component {
     this.setState({
       ioiList : nextProps.list,
       companyList : nextProps.companyList,
+      userList : nextProps.userList,
       minimalData : (nextProps.minimalData === undefined ? false : nextProps.minimalData)
     });
   }
@@ -57,6 +59,20 @@ export default class DisplayIOIList extends Component {
       }
     }
     return 'N/A';
+  }
+
+  getCreatedByNameRenderer(row){
+    let list = (this.state ? this.state.userList : null);
+    for(var i=0; list && i<list.length; i++){
+      if(list[i].userId === row.createdById){
+        return <span>{list[i].email}</span>;
+      }
+    }
+    return 'N/A';
+  }
+
+  getDateFormatRenderer(row){
+    return  <FormattedDate value={row.timestamp} format="short" />
   }
 
   getAllColoumns(){
@@ -133,8 +149,13 @@ export default class DisplayIOIList extends Component {
       name: 'blendedCost',
       display: 'Blended Cost'
     }, {
+      name: 'createdById',
+      display: 'Created By',
+      renderer: this.getCreatedByNameRenderer.bind(this)
+    }, {
       name: 'timestamp',
-      display: 'Last Updated'
+      display: 'Last Updated',
+      renderer: this.getDateFormatRenderer.bind(this)
     }];
   }
 

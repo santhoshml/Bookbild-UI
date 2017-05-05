@@ -28,12 +28,12 @@ class RFPMarketPlace extends Component{
 
   displayCreateRFPLink(){
     return (
-      <div>
+      <span>
         <Link to="/createRFP" className="btn btn-primary">
           Create New RFP
         </Link>
         &nbsp;&nbsp;&nbsp;
-      </div>
+      </span>
     );
   }
 

@@ -18,6 +18,7 @@ export const FETCH_IOI_LIST_FOR_COMPANY = 'FETCH_IOI_LIST_FOR_COMPANY';
 export const FETCH_FAV_RFP_LIST_FOR_RFP = 'FETCH_FAV_RFP_LIST_FOR_RFP';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
+// const ROOT_URL = 'http://ec2-35-167-243-113.us-west-2.compute.amazonaws.com:1127';
 
 export function fetchIOIListForCompanyAction(companyId){
   console.log('In actions.fetchIOIListForCompanyAction');

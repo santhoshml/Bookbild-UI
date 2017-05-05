@@ -13,7 +13,8 @@ class IOIList extends Component{
     super(props);
     this.state = {
 			ioiList : null,
-      ioiCompanyList : null
+      ioiCompanyList : null,
+      ioiUserList : null
 		}
   }
 
@@ -26,16 +27,28 @@ class IOIList extends Component{
   }
 
   displayIOIList(){
-    if(this.props.params.type === Constants.IOI_FOR_RFP){
+    if((!this.props.ioiList) || (this.props.ioiList && this.props.ioiList.length == 0)){
+      return (
+        <div>
+          <h3>NO Indication of intrest for this RFP so far.</h3>
+        </div>
+      );
+    } else if(this.props.params.type === Constants.IOI_FOR_RFP){
       return(
         <div>
-          <DisplayIOIList list={this.props.ioiList} companyList={this.props.ioiCompanyList}/>
+          <DisplayIOIList
+            list={this.props.ioiList}
+            companyList={this.props.ioiCompanyList}/>
         </div>
       );
     } else {
       return(
         <div>
-          <DisplayIOIList list={this.props.ioiList} companyList={this.props.ioiCompanyList} minimalData={true}/>
+          <DisplayIOIList
+            list={this.props.ioiList}
+            companyList={this.props.ioiCompanyList}
+            minimalData={true}
+            userList={this.props.ioiUserList}/>
         </div>
       );
     }
@@ -71,6 +84,7 @@ function mapStateToProps(state) {
   return {
     ioiList: state.ioiList.ioiList,
     ioiCompanyList : state.ioiList.ioiCompanyList,
+    ioiUserList : state.ioiList.ioiUserList
   };
 }
 
