@@ -1,4 +1,4 @@
-import { FETCH_ALL_RFP, FETCH_FAV_RFP_LIST_FOR_RFP } from '../actions/index';
+import { FETCH_ALL_RFP, FETCH_FAV_RFP_LIST, FETCH_COMPANY_RFP_LIST } from '../actions/index';
 
 const INITIAL_STATE = { rfpList: null};
 
@@ -17,9 +17,11 @@ export default function(state = INITIAL_STATE, action) {
             , errObject : action.payload.data
         };
       }
-    case FETCH_FAV_RFP_LIST_FOR_RFP:
+      break;
+    case FETCH_COMPANY_RFP_LIST :
+    case FETCH_FAV_RFP_LIST:
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-
+        // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data));
         return {
           ...state
           , rfpList: action.payload.data.data.Items
@@ -30,6 +32,7 @@ export default function(state = INITIAL_STATE, action) {
             , errObject : action.payload.data
         };
       }
+      break;
     default:
       return state;
     }

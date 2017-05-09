@@ -18,6 +18,7 @@ export default function(state = INITIAL_STATE, action) {
             , errObject : action.payload.data
         };
       }
+      break;
     case REMOVE_RFP_FROM_FAVORITES:
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
 
@@ -32,6 +33,7 @@ export default function(state = INITIAL_STATE, action) {
             , errObject : action.payload.data
         };
       }
+      break;
     case ADD_RFP_TO_FAVORITES:
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
         return {
@@ -47,6 +49,7 @@ export default function(state = INITIAL_STATE, action) {
             , errObject : action.payload.data
         };
       }
+      break;
     default:
       return state;
   }

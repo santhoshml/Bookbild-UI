@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component,PropTypes } from 'react';
 import { connect } from 'react-redux';
 import DataGrid from './data_grid_example';
 import cUtils from '../utils/common_utils';
@@ -8,8 +8,13 @@ import Constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';
 import NumberFormat from 'react-number-format';
 import { FormattedDate } from 'react-intl';
+import lsUtils from '../utils/ls_utils';
 
 export default class DisplayIOIList extends Component {
+
+  static contextTypes = {
+    router: PropTypes.object
+  };
 
   constructor(props){
     super(props);
@@ -159,6 +164,15 @@ export default class DisplayIOIList extends Component {
     }];
   }
 
+  onDoubleClicked(row){
+    // console.log('row clicked in IOI list :'+ row.id);
+    if(row){
+      console.log('row:'+JSON.stringify(row));
+      lsUtils.setValue(Constants.KEY_SELECTED_IOI_OBJECT, row);
+      this.context.router.push('/ioiDetail/'+row.ioiId);
+    }
+  }
+
   render() {
     console.log('In DisplayIOIList');
     if (!this.state.ioiList) {
@@ -166,7 +180,10 @@ export default class DisplayIOIList extends Component {
     } else {
       return (
         <div>
-          <BootstrapTable columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()} data={this.state.ioiList} headers={true}/>
+          <BootstrapTable
+            columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
+            data={this.state.ioiList} headers={true}
+            onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
         </div>
       );
     }

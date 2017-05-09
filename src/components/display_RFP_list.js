@@ -61,7 +61,7 @@ export default class DisplayRFPList extends Component {
       filterable: true,
       sortable: true
     }, {
-      key: 'termSheets',
+      key: 'numOfIOI',
       name: 'Term Sheets',
       filterable: true,
       sortable: true

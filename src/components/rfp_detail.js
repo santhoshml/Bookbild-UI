@@ -24,6 +24,9 @@ class RFPDetail extends Component{
   componentWillMount() {
     // this.props.fetchAllRFPAction();
     let rfp = lsUtils.getValue(Constants.KEY_RFP_OBJECT);
+    if(rfp.rfpId !== this.props.params.id){
+      rfp = null;
+    }
     let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(Constants.KEY_COMPANY_OBJECT);
     this.setState({
@@ -109,7 +112,7 @@ class RFPDetail extends Component{
             </tr>
             <tr>
               <td># of Term Sheets</td>
-              <td>{rfp.termSheets}</td>
+              <td>{rfp.numOfIOI}</td>
             </tr>
             <tr>
               <td>Expiry Dt</td>
@@ -164,11 +167,23 @@ class RFPDetail extends Component{
   }
 
   displayViewIntrestListButton(){
-    if(this.state.user.role === Constants.KEY_COMPANY
-      && this.state.rfp.createdByCompanyId === this.state.company.companyId){
+    if(this.state.rfp.createdByCompanyId === this.state.company.companyId){
       return( <span>
       <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
         View Intrest List
+      </Link>
+      &nbsp;&nbsp;&nbsp;
+      </span>);
+    } else {
+      return(<span></span>);
+    }
+  }
+
+  displayEditRFPButton(){
+    if(this.state.company.companyId === this.state.rfp.createdByCompanyId){
+      return( <span>
+      <Link to={"/createRFP/"+Constants.RFP_EDIT} className="btn btn-primary">
+        Edit RFP
       </Link>
       &nbsp;&nbsp;&nbsp;
       </span>);
@@ -185,6 +200,7 @@ class RFPDetail extends Component{
         </Link>
         &nbsp;&nbsp;&nbsp;
         {this.displayViewIntrestListButton()}
+        {this.displayEditRFPButton()}
         <Link to="/" className="btn btn-primary">
           Logout
         </Link>
@@ -196,7 +212,7 @@ class RFPDetail extends Component{
         {this.displayFavoritesButton()}
 
         &nbsp;&nbsp;&nbsp;
-        <Link to="/createIOI" className="btn btn-primary">
+        <Link to={"/createIOI/"+Constants.IOI_NEW} className="btn btn-primary">
           CREATE IOI
         </Link>
         &nbsp;&nbsp;&nbsp;

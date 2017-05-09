@@ -17,6 +17,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   default:
     return state;
   }

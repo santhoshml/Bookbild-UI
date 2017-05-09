@@ -29,7 +29,7 @@ class RFPMarketPlace extends Component{
   displayCreateRFPLink(){
     return (
       <span>
-        <Link to="/createRFP" className="btn btn-primary">
+        <Link to={"/createRFP/"+Constants.RFP_NEW} className="btn btn-primary">
           Create New RFP
         </Link>
         &nbsp;&nbsp;&nbsp;
@@ -48,6 +48,28 @@ class RFPMarketPlace extends Component{
     );
   }
 
+  displayMyRFPLink(){
+    return (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <Link to={"/rfpList/"+this.state.company.companyId+"/"+Constants.RFP_FOR_COMPANY} className="btn btn-primary">
+          My RFP's
+        </Link>
+      </span>
+    );
+  }
+
+  displayMyFavoritesLink(){
+    return (
+      <span>
+        &nbsp;&nbsp;&nbsp;
+        <Link to={"/rfpList/"+this.state.user.userId+"/"+Constants.RFP_MY_FAVORITES} className="btn btn-primary">
+          My Favorites
+        </Link>
+      </span>
+    );
+  }
+
   render(){
     return(
       <div>
@@ -57,11 +79,9 @@ class RFPMarketPlace extends Component{
         <Link to="/myProfile" className="btn btn-primary">
           My Profile
         </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/rfpFavorites" className="btn btn-primary">
-          My Favorites
-        </Link>
-
+        {this.displayMyFavoritesLink()}
+        {(this.state.user.role === Constants.KEY_COMPANY
+          || this.state.user.role === Constants.KEY_FINANCIAL_SPONSOR) ?  this.displayMyRFPLink() : ''}
         {this.state.user.role===Constants.KEY_LENDER ? this.displayMyIOILink() : ''}
 
         &nbsp;&nbsp;&nbsp;

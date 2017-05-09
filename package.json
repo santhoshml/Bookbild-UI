@@ -43,6 +43,7 @@
     "lodash": "^3.10.1",
     "moment": "^2.18.1",
     "node-bourbon": "^4.2.8",
+    "numeral": "^2.0.6",
     "react": "^0.14.3",
     "react-bootstrap-datetimepicker": "0.0.22",
     "react-data-grid": "^2.0.18",

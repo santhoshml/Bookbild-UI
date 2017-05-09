@@ -57,7 +57,7 @@ class IOIList extends Component{
   render(){
     return(
       <div>
-        <Link to="/createRFP" className="btn btn-primary">
+        <Link to={"/createRFP/"+Constants.RFP_NEW} className="btn btn-primary">
           Create New RFP
         </Link>
         &nbsp;&nbsp;&nbsp;

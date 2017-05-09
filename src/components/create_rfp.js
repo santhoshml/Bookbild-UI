@@ -1,26 +1,76 @@
 
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
-import { createRFPAction } from '../actions/index';
+import { bindActionCreators } from 'redux';
+import { createRFPAction, fetchContactAction, updateRFPAction } from '../actions/index';
 import { Link } from 'react-router';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Datetime from "react-datetime";
+import numeral from "numeral";
 
+var gType=null;
 class CreateRFP extends Component {
 
   static contextTypes = {
     router: PropTypes.object
   };
 
-  onSubmit(props) {
-      this.props.createRFPAction(props)
+  constructor(props){
+    super(props);
+    this.state = {
+			type : props.params.type
+		}
+  }
+
+  componentWillMount() {
+    // console.log('I am in componentWillMount');
+    gType = this.props.params.type;
+    this.setState({
+      type : this.props.params.type
+    });
+
+    if(gType === constants.RFP_EDIT){
+      var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
+      this.props.fetchContactAction(rfp.contactId)
         .then(() => {
-          // blog post has been created, navigate the user to the index
-          // We navigate by calling this.context.router.push with the
-          // new path to navigate to.
-          this.context.router.push('/rfpMarketPlace');
+          // console.log('I am in the get result');
+          this.setState({
+            isFavorite : this.props.isFavorite,
+            favorite : this.props.favorite
+          });
         });
+    }
+  }
+
+  onSubmit(props) {
+      // console.log('In onSubmit, props:'+JSON.stringify(props));
+      if(gType === constants.RFP_EDIT){
+        var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
+        props.rfpId = rfp.rfpId;
+        props.contactId = rfp.contactId;
+
+        // sanitize the currency values
+        props.dealSize = numeral(props.dealSize).value();
+        props.ltmRevenue = numeral(props.ltmRevenue).value();
+        props.ltmEbitda = numeral(props.ltmEbitda).value();
+
+        this.props.updateRFPAction(props)
+          .then(() => {
+            // blog post has been created, navigate the user to the index
+            // We navigate by calling this.context.router.push with the
+            // new path to navigate to.
+            this.context.router.push('/rfpMarketPlace');
+        });
+      } else {
+        this.props.createRFPAction(props)
+          .then(() => {
+            // blog post has been created, navigate the user to the index
+            // We navigate by calling this.context.router.push with the
+            // new path to navigate to.
+            this.context.router.push('/rfpMarketPlace');
+        });
+      }
     }
 
   render() {
@@ -244,7 +294,7 @@ class CreateRFP extends Component {
           </div>
         </div>
 
-        <button type="submit" className="btn btn-primary">Create RFP</button>
+        <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
         <Link to="/" className="btn btn-danger">Cancel</Link>
       </form>
       );
@@ -252,15 +302,60 @@ class CreateRFP extends Component {
   }
 
 function mapStateToProps(state) {
+  // console.log('In mapStateToProps, gType:'+gType);
+  // console.log('In mapStateToProps, state:'+JSON.stringify(state));
   var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
   var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+  var intializedData = {
+    createdById           : user.userId,
+    createdByCompanyId    : company.companyId
+  };
+
+  if(gType === constants.RFP_EDIT){
+    var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
+    // console.log('rfp:'+JSON.stringify(rfp));
+    intializedData.requestType = rfp.requestType;
+    intializedData.dealSize = rfp.dealSize;
+    intializedData.tenor = rfp.tenor;
+    intializedData.category = rfp.category;
+    intializedData.product = rfp.product;
+    intializedData.sector = rfp.sector;
+    intializedData.txnOverview = rfp.txnOverview;
+    intializedData.companyName = rfp.companyName;
+    intializedData.companyDesc = rfp.companyDesc;
+    intializedData.ltmRevenue = rfp.ltmRevenue;
+    intializedData.ltmEbitda = rfp.ltmEbitda;
+    intializedData.fullName = rfp.fullName;
+    intializedData.contactRole = rfp.contactRole;
+    intializedData.email = rfp.email;
+    intializedData.isSponsored = rfp.isSponsored;
+    intializedData.region = rfp.region;
+    intializedData.phoneNumber = rfp.phoneNumber;
+    intializedData.expiryDt = rfp.expiryDt;
+  }
+
+  if(gType === constants.RFP_EDIT && state.userProfile.contact && state.userProfile.contact[0]){
+    let contact = state.userProfile.contact[0];
+    intializedData.phoneNumber = contact.phoneNumber;
+    intializedData.fullName = contact.fullName;
+    intializedData.email = contact.email;
+    intializedData.contactRole = contact.contactRole;
+  }
 
   return {
-    initialValues : {
-      createdById           : user.userId,
-      createdByCompanyId  : company.companyId
-    }
+    initialValues : intializedData
   };
+}
+
+
+function mapDispatchToProps(dispatch) {
+  // Whenever selectBook is called, the result shoudl be passed
+  // to all of our reducers
+  return bindActionCreators({
+    createRFPAction : createRFPAction,
+    fetchContactAction : fetchContactAction,
+    updateRFPAction : updateRFPAction
+  }, dispatch);
 }
 
 
@@ -333,4 +428,4 @@ export default reduxForm({
   , 'fullName', 'contactRole', 'email', 'createdById', 'isSponsored', 'region'
   , 'createdByCompanyId', 'phoneNumber', 'expiryDt'],
   validate
-}, mapStateToProps, { createRFPAction })(CreateRFP);
+}, mapStateToProps, mapDispatchToProps)(CreateRFP);

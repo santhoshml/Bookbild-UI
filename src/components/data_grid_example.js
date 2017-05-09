@@ -66,7 +66,7 @@ class DataGrid extends Component{
   }
 
   onRowClick(rowIdx, row) {
-    if(this.props.clickableRow == "true"){
+    if(this.props.clickableRow == "true" && rowIdx > -1){
       lsUtils.setValue(Constants.KEY_RFP_OBJECT, row);
       this.context.router.push('/rfpDetail/'+row.rfpId);
     } else {
@@ -79,15 +79,15 @@ class DataGrid extends Component{
     return  (
       <ReactDataGrid
         rowKey="rfpId"
-        onGridSort={this.handleGridSort}
+        onGridSort={this.handleGridSort.bind(this)}
         enableCellSelect={true}
         columns={this._columns}
         rowGetter={this.rowGetter.bind(this)}
         rowsCount={this.getSize()}
         minHeight={500}
         toolbar={<Toolbar enableFilter={true}/>}
-        onAddFilter={this.handleFilterChange}
-        onClearFilters={this.onClearFilters}
+        onAddFilter={this.handleFilterChange.bind(this)}
+        onClearFilters={this.onClearFilters.bind(this)}
         onRowClick={this.onRowClick.bind(this)}
       />);
   }

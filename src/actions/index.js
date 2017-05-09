@@ -3,6 +3,7 @@ import axios from 'axios';
 export const REGISTER_COMPANY = 'REGISTER_COMPANY';
 export const LOGIN = 'LOGIN';
 export const CREATE_RFP = 'CREATE_RFP';
+export const UPDATE_RFP = 'UPDATE_RFP';
 export const FETCH_ALL_RFP = 'FETCH_ALL_RFP';
 export const FETCH_ADDRESS = 'FETCH_ADDRESS';
 export const FETCH_CONTACT = 'FETCH_CONTACT';
@@ -15,7 +16,8 @@ export const GET_RFP_FROM_FAVORITES = 'GET_RFP_FROM_FAVORITES';
 export const CREATE_IOI = 'CREATE_IOI';
 export const FETCH_IOI_LIST_FOR_RFP = 'FETCH_IOI_LIST_FOR_RFP';
 export const FETCH_IOI_LIST_FOR_COMPANY = 'FETCH_IOI_LIST_FOR_COMPANY';
-export const FETCH_FAV_RFP_LIST_FOR_RFP = 'FETCH_FAV_RFP_LIST_FOR_RFP';
+export const FETCH_FAV_RFP_LIST = 'FETCH_FAV_RFP_LIST';
+export const FETCH_COMPANY_RFP_LIST = 'FETCH_COMPANY_RFP_LIST';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-35-167-243-113.us-west-2.compute.amazonaws.com:1127';
@@ -35,17 +37,30 @@ export function fetchIOIListForCompanyAction(companyId){
   }
 }
 
-
-export function fetchFavoriteRFPListAction(userId){
-  console.log('In actions.fetchMyFavoriteRFPListAction');
+export function fetchCompanyRFPListAction(companyId){
+  console.log('In actions.fetchCompanyRFPListAction');
   const request=axios({
-    url : '/fetchFavRFPListForRFP?userId='+userId,
+    url : '/fetchCompanyRFPList?companyId='+companyId,
     method : 'GET',
     baseURL : ROOT_URL
   });
 
   return{
-    type: FETCH_FAV_RFP_LIST_FOR_RFP,
+    type: FETCH_COMPANY_RFP_LIST,
+    payload: request
+  }
+}
+
+export function fetchFavoriteRFPListAction(userId){
+  console.log('In actions.fetchMyFavoriteRFPListAction');
+  const request=axios({
+    url : '/fetchFavRFPList?userId='+userId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_FAV_RFP_LIST,
     payload: request
   }
 }
@@ -214,6 +229,25 @@ export function fetchAllRFPAction(){
   }
 }
 
+export function updateRFPAction(props){
+  console.log('In actions.updateRFPAction');
+  console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateRFP',
+    method : 'post',
+    baseURL : ROOT_URL,
+    headers : {
+      'Content-Type' : 'application/json'
+    },
+    data: props
+  });
+
+  return{
+    type: UPDATE_RFP,
+    payload: request
+  }
+}
+
 export function createRFPAction(props){
   console.log('In actions.createRFPAction');
   const request=axios({
@@ -227,7 +261,7 @@ export function createRFPAction(props){
   });
 
   return{
-    type: REGISTER_COMPANY,
+    type: CREATE_RFP,
     payload: request
   }
 }

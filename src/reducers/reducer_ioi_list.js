@@ -16,9 +16,10 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   case FETCH_IOI_LIST_FOR_COMPANY :
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      console.log('action.payload.data.data:'+JSON.stringify(action.payload.data.data));
+      // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data.data));
       return {
         ...state
         , ioiList: action.payload.data.data.IOI_LIST.Items
@@ -31,6 +32,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   default:
     return state;
   }

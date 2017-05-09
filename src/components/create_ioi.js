@@ -69,31 +69,27 @@ class CreateIOIForm extends Component{
           <br/>
         </div>
 
-        <div className={`row ${maxDebtAllowed.touched && maxDebtAllowed.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Maximum Debt Allowed</label>
-          <div className="col-md-3">
+        <div className={`row`}>
+          <div className={`form-group col-xs-6 col-md-6 no-padding ${maxDebtAllowed.touched && maxDebtAllowed.invalid ? 'has-danger' : ''}`}>
+            <label>Maximum Debt Allowed</label>
             <input type="text" className="form-control" {...maxDebtAllowed} />
             <div className="text-help">
               {maxDebtAllowed.touched ? maxDebtAllowed.error : ''}
             </div>
           </div>
-        </div>
-        <br/>
 
-        <div className={`row ${loanSize.touched && loanSize.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Loan Size</label>
-          <div className="col-md-3">
+          <div className={`form-group col-xs-6 col-md-6 no-padding ${loanSize.touched && loanSize.invalid ? 'has-danger' : ''}`}>
+            <label>Loan Size</label>
             <input type="text" className="form-control" {...loanSize} />
             <div className="text-help">
               {loanSize.touched ? loanSize.error : ''}
             </div>
           </div>
         </div>
-        <br/>
 
-        <div className={`row ${tranche.touched && tranche.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Tranche? (e.g. Delayed Draw)</label>
-          <div className="col-md-3">
+        <div className={`row`}>
+          <div className={`form-group col-xs-6 col-md-6 ${tranche.touched && tranche.invalid ? 'has-danger' : ''}`}>
+            <label>Tranche? (e.g. Delayed Draw)</label>
             <select className="form-control" {...tranche}>
               <option selected>Choose...</option>
               <option value="Delayed Draw">Delayed Draw</option>
@@ -106,11 +102,9 @@ class CreateIOIForm extends Component{
               {tranche.touched ? tranche.error : ''}
             </div>
           </div>
-        </div>
-        <br/>
-        <div className={`row ${loanStructure.touched && loanStructure.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Loan Structure</label>
-          <div className="col-md-3">
+
+          <div className={`form-group col-xs-6 col-md-6 ${loanStructure.touched && loanStructure.invalid ? 'has-danger' : ''}`}>
+            <label>Loan Structure</label>
             <select className="form-control" {...loanStructure}>
               <option selected>Choose...</option>
               <option value="ABL-Revolver">ABL-Revolver</option>
@@ -125,129 +119,28 @@ class CreateIOIForm extends Component{
             </div>
           </div>
         </div>
-        <br/>
 
-        <fieldset className="scheduler-border">
-          <legend className="scheduler-border">Loan Pricing (%)</legend>
-          <div className={`row ${cashInterest.touched && cashInterest.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Cash Interest</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...cashInterest} />
-              <div className="text-help">
-                {cashInterest.touched ? cashInterest.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${pikIntreset.touched && pikIntreset.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">PIK Interest</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...pikIntreset} />
-              <div className="text-help">
-                {pikIntreset.touched ? pikIntreset.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${liborFloor.touched && liborFloor.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">LIBOR Floor</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...liborFloor} />
-              <div className="text-help">
-                {liborFloor.touched ? liborFloor.error : ''}
-              </div>
-            </div>
-          </div>
-
-        </fieldset>
-        <br/>
-
-        <div className={`row ${maturity.touched && maturity.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Maturity (years)</label>
-          <div className="col-md-3">
+        <div className={`row`}>
+          <div className={`form-group col-xs-6 col-md-6 ${maturity.touched && maturity.invalid ? 'has-danger' : ''}`}>
+            <label>Maturity (years)</label>
             <input type="text" className="form-control" {...maturity} />
             <div className="text-help">
               {maturity.touched ? maturity.error : ''}
             </div>
           </div>
-        </div>
-        <br/>
 
-        <fieldset className="scheduler-border">
-          <legend className="scheduler-border">Amortization (%)</legend>
-
-          <div className={`row ${year1.touched && year1.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Year 1</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...year1} />
-              <div className="text-help">
-                {year1.touched ? year1.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${year2.touched && year2.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Year 2</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...year2} />
-              <div className="text-help">
-                {year2.touched ? year2.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${year3.touched && year3.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Year 3</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...year3} />
-              <div className="text-help">
-                {year3.touched ? year3.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${year4.touched && year4.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Year 4</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...year4} />
-              <div className="text-help">
-                {year4.touched ? year4.error : ''}
-              </div>
-            </div>
-          </div>
-          <br/>
-
-          <div className={`row ${year5.touched && year5.invalid ? 'has-danger' : ''}`}>
-            <label className="col-md-3">Year 5</label>
-            <div className="col-md-3">
-              <input type="text" className="form-control" {...year5} />
-              <div className="text-help">
-                {year5.touched ? year5.error : ''}
-              </div>
-            </div>
-          </div>
-        </fieldset>
-        <br/>
-
-        <div className={`row ${upfrontFee.touched && upfrontFee.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">OID / Upfront Fee (%)</label>
-          <div className="col-md-3">
+          <div className={`form-group col-xs-6 col-md-6 ${upfrontFee.touched && upfrontFee.invalid ? 'has-danger' : ''}`}>
+            <label>OID / Upfront Fee (%)</label>
             <input type="text" className="form-control" {...upfrontFee} />
             <div className="text-help">
               {upfrontFee.touched ? upfrontFee.error : ''}
             </div>
           </div>
         </div>
-        <br/>
 
-        <div className={`row ${governance.touched && governance.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Governance</label>
-          <div className="col-md-3">
+        <div className={`row`}>
+          <div className={`form-group col-xs-4 col-md-4 ${governance.touched && governance.invalid ? 'has-danger' : ''}`}>
+            <label>Governance</label>
             <select className="form-control" {...governance}>
               <option selected>Choose...</option>
               <option value="One">One</option>
@@ -258,12 +151,9 @@ class CreateIOIForm extends Component{
               {governance.touched ? governance.error : ''}
             </div>
           </div>
-        </div>
-        <br/>
 
-        <div className={`row ${warrants.touched && warrants.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Warrants</label>
-          <div className="col-md-3">
+          <div className={`form-group col-xs-4 col-md-4 ${warrants.touched && warrants.invalid ? 'has-danger' : ''}`}>
+            <label>Warrants</label>
             <select className="form-control" {...warrants}>
               <option selected>Choose...</option>
               <option value="One">One</option>
@@ -274,12 +164,9 @@ class CreateIOIForm extends Component{
               {warrants.touched ? warrants.error : ''}
             </div>
           </div>
-        </div>
-        <br/>
 
-        <div className={`row ${covenants.touched && covenants.invalid ? 'has-danger' : ''}`}>
-          <label className="col-md-3">Covenants</label>
-          <div className="col-md-3">
+          <div className={`form-group col-xs-4 col-md-4 ${covenants.touched && covenants.invalid ? 'has-danger' : ''}`}>
+            <label>Covenants</label>
             <select className="form-control" {...covenants}>
               <option selected>Choose...</option>
               <option value="One">One</option>
@@ -291,11 +178,94 @@ class CreateIOIForm extends Component{
             </div>
           </div>
         </div>
-
         <br/>
-        <Link to="/rfpMarketPlace" className="btn btn-primary">Home</Link>&nbsp;&nbsp;
-        <button type="submit" className="btn btn-primary">SUBMIT IOI</button>&nbsp;&nbsp;
-        <Link to="/addUser" className="btn btn-primary">PITCH</Link>
+
+        <fieldset className="form-group col-xs-5 col-md-5 scheduler-border">
+          <legend className="scheduler-border">Loan Pricing (%)</legend>
+          <div className={`${cashInterest.touched && cashInterest.invalid ? 'has-danger' : ''}`}>
+            <label>Cash Interest</label>
+            <input type="text" className="form-control" {...cashInterest} />
+            <div className="text-help">
+              {cashInterest.touched ? cashInterest.error : ''}
+            </div>
+          </div>
+          <br/>
+
+          <div className={`${pikIntreset.touched && pikIntreset.invalid ? 'has-danger' : ''}`}>
+            <label>PIK Interest</label>
+            <input type="text" className="form-control" {...pikIntreset} />
+            <div className="text-help">
+              {pikIntreset.touched ? pikIntreset.error : ''}
+            </div>
+          </div>
+          <br/>
+
+          <div className={`${liborFloor.touched && liborFloor.invalid ? 'has-danger' : ''}`}>
+            <label>LIBOR Floor</label>
+            <input type="text" className="form-control" {...liborFloor} />
+            <div className="text-help">
+              {liborFloor.touched ? liborFloor.error : ''}
+            </div>
+          </div>
+        </fieldset>
+
+        <div className={`form-group col-xs-2 col-md-2`}>
+        </div>
+
+        <fieldset className="form-group col-xs-5 col-md-5 scheduler-border">
+          <legend className="scheduler-border">Amortization (%)</legend>
+          <div className={`${year1.touched && year1.invalid ? 'has-danger' : ''}`}>
+            <label>Year 1</label>
+            <input type="text" className="form-control" {...year1} />
+            <div className="text-help">
+              {year1.touched ? year1.error : ''}
+            </div>
+          </div>
+          <br/>
+
+          <div className={`${year2.touched && year2.invalid ? 'has-danger' : ''}`}>
+            <label>Year 2</label>
+            <input type="text" className="form-control" {...year2} />
+            <div className="text-help">
+              {year2.touched ? year2.error : ''}
+            </div>
+          </div>
+          <br/>
+
+          <div className={`${year3.touched && year3.invalid ? 'has-danger' : ''}`}>
+            <label>Year 3</label>
+              <input type="text" className="form-control" {...year3} />
+              <div className="text-help">
+                {year3.touched ? year3.error : ''}
+              </div>
+          </div>
+          <br/>
+
+          <div className={`${year4.touched && year4.invalid ? 'has-danger' : ''}`}>
+            <label>Year 4</label>
+            <input type="text" className="form-control" {...year4} />
+            <div className="text-help">
+              {year4.touched ? year4.error : ''}
+            </div>
+          </div>
+          <br/>
+
+          <div className={`${year5.touched && year5.invalid ? 'has-danger' : ''}`}>
+            <label>Year 5</label>
+            <input type="text" className="form-control" {...year5} />
+            <div className="text-help">
+              {year5.touched ? year5.error : ''}
+            </div>
+          </div>
+        </fieldset>
+        <br/>
+        <br/>
+
+        <div className={`row`}>
+          <Link to="/rfpMarketPlace" className="btn btn-primary">Home</Link>&nbsp;&nbsp;
+          <button type="submit" className="btn btn-primary">SUBMIT IOI</button>&nbsp;&nbsp;
+          <Link to="/addUser" className="btn btn-primary">PITCH</Link>
+        </div>
 
       </form>
     );

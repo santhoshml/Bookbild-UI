@@ -17,6 +17,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   case FETCH_CONTACT:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
 
@@ -30,6 +31,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   case UPDATE_USER_PROFILE:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
@@ -41,6 +43,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   case ADD_USER:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
@@ -52,6 +55,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   case FETCH_USER_LIST:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
@@ -64,6 +68,7 @@ export default function(state = INITIAL_STATE, action) {
           , errObject : action.payload.data
       };
     }
+    break;
   default:
     return state;
   }

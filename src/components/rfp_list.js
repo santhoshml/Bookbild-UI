@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
 import DisplayRFPList from './display_RFP_list';
-import { fetchFavoriteRFPListAction } from '../actions/index';
+import { fetchFavoriteRFPListAction, fetchCompanyRFPListAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
@@ -17,8 +17,11 @@ class RFPFavorites extends Component{
   }
 
   componentWillMount() {
-    let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
-    this.props.fetchFavoriteRFPListAction(user.userId);
+    if(this.props.params.type === Constants.RFP_MY_FAVORITES){
+        this.props.fetchFavoriteRFPListAction(this.props.params.id);
+    } else if(this.props.params.type === Constants.RFP_FOR_COMPANY){
+        this.props.fetchCompanyRFPListAction(this.props.params.id);
+    }
   }
 
   render(){
@@ -38,7 +41,7 @@ class RFPFavorites extends Component{
 
         <br/>
         <br/>
-        <h3> Favorite RFP's</h3>
+        <h3> Open/Active RFP's</h3>
         <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={false}/>
       </div>
     );
@@ -56,7 +59,10 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
-  return bindActionCreators({ fetchFavoriteRFPListAction: fetchFavoriteRFPListAction }, dispatch);
+  return bindActionCreators({
+    fetchFavoriteRFPListAction: fetchFavoriteRFPListAction
+    , fetchCompanyRFPListAction : fetchCompanyRFPListAction}
+    , dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(RFPFavorites);
