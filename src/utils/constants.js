@@ -26,21 +26,21 @@ exports.RFP_MY_FAVORITES = 'RFP_MY_FAVORITES';
 exports.RFP_FOR_COMPANY = 'RFP_FOR_COMPANY';
 
 exports.DISPLAY_VALUES_MAP = {
-  'new_financing' : 'New Financing',
-  'refinancing'   : 'Refinancing',
-  'restructuring' : 'Restructuring',
-  'ma'            : 'M&A',
-  'lbo'           : 'LBO',
-  'abl'           : 'ABL',
-  'cash_flow'     : 'Cash Flow',
-  'open'          : 'Open',
-  'revolver'      : 'Revolver',
-  'term_loan'     : 'Term Loan',
-  'mezzanine'     : 'Mezzanine',
-  'multi-tranche' : 'Multi-Tranche',
-  'uni-tranche'   : 'Uni-Tranche',
-  'yes'           : 'YES',
-  'no'            : 'NO',
-  'true'          : 'True',
-  'false'         : 'False'
+  // 'new_financing' : 'New Financing',
+  // 'refinancing'   : 'Refinancing',
+  // 'restructuring' : 'Restructuring',
+  // 'ma'            : 'M&A',
+  // 'lbo'           : 'LBO',
+  // 'abl'           : 'ABL',
+  // 'cash_flow'     : 'Cash Flow',
+  // 'open'          : 'Open',
+  // 'revolver'      : 'Revolver',
+  // 'term_loan'     : 'Term Loan',
+  // 'mezzanine'     : 'Mezzanine',
+  // 'multi-tranche' : 'Multi-Tranche',
+  // 'uni-tranche'   : 'Uni-Tranche',
+  // 'yes'           : 'YES',
+  // 'no'            : 'NO',
+  // 'true'          : 'True',
+  // 'false'         : 'False'
 };

@@ -24,6 +24,19 @@ class RFPFavorites extends Component{
     }
   }
 
+  checkForRFPList(){
+    if(this.props.rfpList && this.props.rfpList.length > 0){
+      return (<div>
+          <h3> Open/Active RFP's</h3>
+          <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={false}/>
+        </div>);
+    } else {
+      return (<div>
+          <h3> There are no RFP's Open/Active.</h3>
+        </div>);
+    }
+  }
+
   render(){
     return(
       <div>
@@ -41,8 +54,7 @@ class RFPFavorites extends Component{
 
         <br/>
         <br/>
-        <h3> Open/Active RFP's</h3>
-        <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={false}/>
+        {this.checkForRFPList()}
       </div>
     );
   }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-import { getRFPFromFavoritesAction } from '../actions/index';
+import { getRFPFromFavoritesAction, fetchRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
@@ -30,6 +30,15 @@ class IOIDetail extends Component{
     this.setState({
       ioi : ioi,
       company : company
+    });
+
+    this.props.fetchRFPAction(ioi.rfpId)
+      .then(() => {
+        console.log('I am in the get result');
+        lsUtils.setValue(Constants.KEY_RFP_OBJECT, this.props.rfp);
+        this.setState({
+          rfp : this.props.rfp
+        });
     });
   }
 
@@ -151,8 +160,8 @@ class IOIDetail extends Component{
   displayEditIOIButton(){
     if(this.state.company.companyId === this.state.ioi.createdByCompanyId){
       return( <span>
-      <Link to={"/createIOI/"+Constants.RFP_EDIT} className="btn btn-primary">
-        Edit RFP
+      <Link to={"/createIOI/"+Constants.IOI_EDIT} className="btn btn-primary">
+        Edit IOI
       </Link>
       &nbsp;&nbsp;&nbsp;
       </span>);
@@ -183,15 +192,20 @@ class IOIDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  return {
-  };
+  let rObject = {};
+  if(state.rfpList.rfpList){
+    rObject.rfp = state.rfpList.rfpList[0];
+  }
+
+  return rObject;
 }
 
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    getRFPFromFavoritesAction : getRFPFromFavoritesAction
+    getRFPFromFavoritesAction : getRFPFromFavoritesAction,
+    fetchRFPAction : fetchRFPAction
   }, dispatch);
 }
 

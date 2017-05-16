@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
-import { createIOIAction } from '../actions/index';
+import { createIOIAction, updateIOIAction } from '../actions/index';
 import {Link} from 'react-router';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -8,7 +8,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 
-
+var gType=null;
 class CreateIOIForm extends Component{
   static contextTypes ={
 	    router : PropTypes.object
@@ -18,11 +18,14 @@ class CreateIOIForm extends Component{
     super(props);
     this.state = {
       user : null,
-      rfp : null
+      rfp : null,
+      type : props.params.type
     };
   }
 
   componentWillMount() {
+    gType = this.props.params.type;
+    console.log('gType :'+ gType);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
@@ -34,18 +37,38 @@ class CreateIOIForm extends Component{
       createdByCompanyId  : company.companyId
     });
 
+    if(gType === constants.IOI_EDIT){
+      var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+      console.log('');
+      this.setState({
+        ioi : ioi
+      });
+    }
   }
 
   onSubmit(props){
     console.log('createIOIAction:'+JSON.stringify(props));
-    this.props.createIOIAction(props)
-     .then(() => {
-       // blog post has been created, navigate the user to the index
-       // We navigate by calling this.context.router.push with the
-       // new path to navigate to.
-       this.context.router.push('/rfpMarketPlace');
-     });
+    if(gType === constants.IOI_EDIT){
+      var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+      props.ioiId = ioi.ioiId;
+      props.createdById = this.state.createdById;
 
+      this.props.updateIOIAction(props)
+        .then(() => {
+          // blog post has been created, navigate the user to the index
+          // We navigate by calling this.context.router.push with the
+          // new path to navigate to.
+          this.context.router.push('/rfpMarketPlace');
+      });
+    } else {
+      this.props.createIOIAction(props)
+       .then(() => {
+         // blog post has been created, navigate the user to the index
+         // We navigate by calling this.context.router.push with the
+         // new path to navigate to.
+         this.context.router.push('/rfpMarketPlace');
+       });
+     }
 	}
 
   render(){
@@ -278,7 +301,7 @@ function mapStateToProps(state) {
   let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
   let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
 
-  return {
+  let intializedData = {
     user : user,
     initialValues : {
       rfpId               : rfp.rfpId,
@@ -286,6 +309,34 @@ function mapStateToProps(state) {
       createdByCompanyId  : company.companyId
     }
   };
+
+  if(gType == constants.IOI_EDIT){
+    let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+    console.log('ioi to be edited :'+JSON.stringify(ioi));
+
+    intializedData.initialValues.maxDebtAllowed = ioi.maxDebtAllowed;
+    intializedData.initialValues.loanSize = ioi.loanSize;
+    intializedData.initialValues.tranche = ioi.tranche;
+    intializedData.initialValues.loanStructure = ioi.loanStructure;
+    intializedData.initialValues.cashInterest = ioi.cashInterest;
+    intializedData.initialValues.pikIntreset = ioi.pikIntreset;
+    intializedData.initialValues.liborFloor = ioi.liborFloor;
+    intializedData.initialValues.maturity = ioi.maturity;
+    intializedData.initialValues.year1 = ioi.year1;
+    intializedData.initialValues.year2 = ioi.year2;
+    intializedData.initialValues.year3 = ioi.year3;
+    intializedData.initialValues.year4 = ioi.year4;
+    intializedData.initialValues.year5  = ioi.year5;
+    intializedData.initialValues.upfrontFee = ioi.upfrontFee;
+    intializedData.initialValues.governance = ioi.governance;
+    intializedData.initialValues.warrants = ioi.warrants;
+    intializedData.initialValues.covenants = ioi.covenants;
+    intializedData.initialValues.rfpId = ioi.rfpId;
+    intializedData.initialValues.createdById = ioi.createdById;
+    intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
+  }
+
+  return intializedData;
 }
 
 function validate(values){
@@ -330,7 +381,8 @@ function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    createIOIAction   : createIOIAction
+    createIOIAction   : createIOIAction,
+    updateIOIAction : updateIOIAction
   }, dispatch);
 }
 

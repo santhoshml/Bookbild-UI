@@ -72,7 +72,7 @@ class LoginForm extends Component{
 		        </div>
 
 						<div className="checkbox">
-							<label><input type="checkbox" {...tcAgreement}>&nbsp;by clicking on submit, I agree to <a href="terms_and_conditions.html" target="_blank">Bookbild terms and conditions.</a></input></label>
+							<label><input type="checkbox" {...tcAgreement} />&nbsp;by clicking on submit, I agree to <a href="terms_and_conditions.html" target="_blank">Bookbild terms and conditions.</a></label>
 							<div className="text-help">
 								{tcAgreement.touched ? tcAgreement.error : ''}
 							</div>

@@ -4,7 +4,9 @@ export const REGISTER_COMPANY = 'REGISTER_COMPANY';
 export const LOGIN = 'LOGIN';
 export const CREATE_RFP = 'CREATE_RFP';
 export const UPDATE_RFP = 'UPDATE_RFP';
+export const UPDATE_IOI = 'UPDATE_IOI';
 export const FETCH_ALL_RFP = 'FETCH_ALL_RFP';
+export const FETCH_RFP = 'FETCH_RFP';
 export const FETCH_ADDRESS = 'FETCH_ADDRESS';
 export const FETCH_CONTACT = 'FETCH_CONTACT';
 export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
@@ -21,6 +23,20 @@ export const FETCH_COMPANY_RFP_LIST = 'FETCH_COMPANY_RFP_LIST';
 
 const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-35-167-243-113.us-west-2.compute.amazonaws.com:1127';
+
+export function fetchRFPAction(rfpId){
+  console.log('In actions.fetchRFPAction');
+  const request=axios({
+    url : '/fetchRFP?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_RFP,
+    payload: request
+  }
+}
 
 export function fetchIOIListForCompanyAction(companyId){
   console.log('In actions.fetchIOIListForCompanyAction');
@@ -53,6 +69,7 @@ export function fetchCompanyRFPListAction(companyId){
 
 export function fetchFavoriteRFPListAction(userId){
   console.log('In actions.fetchMyFavoriteRFPListAction');
+  console.log('userId:'+userId);
   const request=axios({
     url : '/fetchFavRFPList?userId='+userId,
     method : 'GET',
@@ -90,6 +107,22 @@ export function createIOIAction(props){
 
   return{
     type: CREATE_IOI,
+    payload: request
+  }
+}
+
+export function updateIOIAction(props){
+  console.log('In actions.updateIOIAction');
+  console.log('props:'+ JSON.stringify(props));
+  const request=axios({
+    url : '/updateIOI',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_IOI,
     payload: request
   }
 }

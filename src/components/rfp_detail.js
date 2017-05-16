@@ -24,7 +24,7 @@ class RFPDetail extends Component{
   componentWillMount() {
     // this.props.fetchAllRFPAction();
     let rfp = lsUtils.getValue(Constants.KEY_RFP_OBJECT);
-    if(rfp.rfpId !== this.props.params.id){
+    if(rfp && rfp.rfpId !== this.props.params.id){
       rfp = null;
     }
     let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
@@ -36,14 +36,35 @@ class RFPDetail extends Component{
       isFavorite : false
     });
 
-    this.props.getRFPFromFavoritesAction(user.userId, rfp.rfpId)
-      .then(() => {
-        console.log('I am in the get result');
-        this.setState({
-          isFavorite : this.props.isFavorite,
-          favorite : this.props.favorite
-        });
+    if(rfp){
+      this.props.getRFPFromFavoritesAction(user.userId, rfp.rfpId)
+        .then(() => {
+          console.log('I am in the get result');
+          this.setState({
+            isFavorite : this.props.isFavorite,
+            favorite : this.props.favorite
+          });
       });
+    }
+    // else {
+    //   this.props.fetchRFPAction(this.props.params.id)
+    //     .then(() => {
+    //       console.log('I am in the get result');
+    //       this.setState({
+    //         rfp : this.props.rfp
+    //       });
+    //   });
+    //
+    //   // and check if its his favorite
+    //   this.props.getRFPFromFavoritesAction(user.userId, this.props.params.id)
+    //     .then(() => {
+    //       console.log('I am in the get result');
+    //       this.setState({
+    //         isFavorite : this.props.isFavorite,
+    //         favorite : this.props.favorite
+    //       });
+    //   });
+    // }
   }
 
   displayCompanyDesc(){
@@ -167,7 +188,7 @@ class RFPDetail extends Component{
   }
 
   displayViewIntrestListButton(){
-    if(this.state.rfp.createdByCompanyId === this.state.company.companyId){
+    if(this.state.rfp && this.state.rfp.createdByCompanyId === this.state.company.companyId){
       return( <span>
       <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
         View Intrest List
@@ -180,7 +201,7 @@ class RFPDetail extends Component{
   }
 
   displayEditRFPButton(){
-    if(this.state.company.companyId === this.state.rfp.createdByCompanyId){
+    if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
       return( <span>
       <Link to={"/createRFP/"+Constants.RFP_EDIT} className="btn btn-primary">
         Edit RFP
@@ -204,8 +225,8 @@ class RFPDetail extends Component{
         <Link to="/" className="btn btn-primary">
           Logout
         </Link>
-        {this.displayCompanyDesc()}
-        {this.displayOutstandingRFP()}
+        {this.state.rfp ? this.displayCompanyDesc() : ''}
+        {this.state.rfp ? this.displayOutstandingRFP() : ''}
         {this.displayFinancialDetails()}
         <br/>
         <br/>
@@ -226,10 +247,18 @@ class RFPDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  return {
+  console.log('state:'+JSON.stringify(state));
+
+  let rObject = {
     isFavorite : state.rfpDetails.isFavorite,
     favorite  : state.rfpDetails.rfpFavoritesJSON
   };
+
+  // if(state.rfpList.rfpList){
+  //   rObject.rfp = state.rfpList.rfpList[0];
+  // }
+  //
+  return rObject;
 }
 
 function mapDispatchToProps(dispatch) {

@@ -73,6 +73,10 @@ class CreateRFP extends Component {
       }
     }
 
+  checkRequestTypeValue(){
+
+  }
+
   render() {
     const { fields: { requestType, dealSize, tenor, category, product, sector
       , txnOverview, companyName, companyDesc, ltmRevenue, ltmEbitda, fullName
@@ -90,11 +94,11 @@ class CreateRFP extends Component {
         <div className={`row`}>
           <div className={`form-group col-xs-12 col-md-12 ${requestType.touched && requestType.invalid ? 'has-danger' : ''}`}>
             <label>Request Type</label><br/>
-            <label className="radio-inline"><input type="radio" value="newFinancing" {...requestType}/>New Financing</label>
-            <label className="radio-inline"><input type="radio" value="refinancing" {...requestType}/>Refinancing</label>
-            <label className="radio-inline"><input type="radio" value="restructuring" {...requestType}/>Restructuring</label>
-            <label className="radio-inline"><input type="radio" value="ma" {...requestType}/>M&A</label>
-            <label className="radio-inline"><input type="radio" value="lbo" {...requestType}/>LBO</label>
+            <label className="radio-inline"><input type="radio" value="New Financing" {...requestType}/>New Financing</label>
+            <label className="radio-inline"><input type="radio" value="Refinancing" {...requestType}/>Refinancing</label>
+            <label className="radio-inline"><input type="radio" value="Restructuring" {...requestType}/>Restructuring</label>
+            <label className="radio-inline"><input type="radio" value="M&A" {...requestType}/>M&A</label>
+            <label className="radio-inline"><input type="radio" value="LBO" {...requestType}/>LBO</label>
             <div className="text-help">
               {requestType.touched ? requestType.error : ''}
             </div>
@@ -313,7 +317,7 @@ function mapStateToProps(state) {
 
   if(gType === constants.RFP_EDIT){
     var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-    // console.log('rfp:'+JSON.stringify(rfp));
+    console.log('rfp:'+JSON.stringify(rfp));
     intializedData.requestType = rfp.requestType;
     intializedData.dealSize = rfp.dealSize;
     intializedData.tenor = rfp.tenor;
