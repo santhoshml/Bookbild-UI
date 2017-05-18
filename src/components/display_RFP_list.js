@@ -6,7 +6,6 @@ import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import Constants from '../utils/constants';
 
-
 export default class DisplayRFPList extends Component {
 
   constructor(props){

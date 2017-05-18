@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import validator from 'validator';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
+import Header from './header';
 
 import * as actionCreators from '../actions/index';
 
@@ -48,6 +49,9 @@ class LoginForm extends Component{
 	render(){
 		const {fields:{ email, password, tcAgreement }, handleSubmit, errors} = this.props;
 		return (
+				<div>
+					<br/>
+					<br/>
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">
 		        <h3>Login to access your account</h3>
 
@@ -81,6 +85,7 @@ class LoginForm extends Component{
 		        <button type="submit" className="btn btn-primary">Submit</button>
 		        <Link to="/" className="btn btn-danger">Cancel</Link>
 		      </form>
+				</div>
 		    );
 	}
 }

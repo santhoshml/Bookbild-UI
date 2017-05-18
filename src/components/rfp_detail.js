@@ -9,7 +9,7 @@ import Constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 import dateFormat from 'dateformat';
 import moment from 'moment';
-
+import Header from './header';
 
 class RFPDetail extends Component{
   constructor(props){
@@ -46,25 +46,6 @@ class RFPDetail extends Component{
           });
       });
     }
-    // else {
-    //   this.props.fetchRFPAction(this.props.params.id)
-    //     .then(() => {
-    //       console.log('I am in the get result');
-    //       this.setState({
-    //         rfp : this.props.rfp
-    //       });
-    //   });
-    //
-    //   // and check if its his favorite
-    //   this.props.getRFPFromFavoritesAction(user.userId, this.props.params.id)
-    //     .then(() => {
-    //       console.log('I am in the get result');
-    //       this.setState({
-    //         isFavorite : this.props.isFavorite,
-    //         favorite : this.props.favorite
-    //       });
-    //   });
-    // }
   }
 
   displayCompanyDesc(){
@@ -190,10 +171,10 @@ class RFPDetail extends Component{
   displayViewIntrestListButton(){
     if(this.state.rfp && this.state.rfp.createdByCompanyId === this.state.company.companyId){
       return( <span>
-      <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
-        View Intrest List
-      </Link>
-      &nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;
+        <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
+          View Intrest List
+        </Link>
       </span>);
     } else {
       return(<span></span>);
@@ -203,43 +184,57 @@ class RFPDetail extends Component{
   displayEditRFPButton(){
     if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
       return( <span>
-      <Link to={"/createRFP/"+Constants.RFP_EDIT} className="btn btn-primary">
-        Edit RFP
-      </Link>
-      &nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;
+        <Link to={"/createRFP/"+Constants.RFP_EDIT} className="btn btn-primary">
+          Edit RFP
+        </Link>
       </span>);
     } else {
       return(<span></span>);
     }
   }
 
+  displayCreateIOIButton(){
+    if(this.state.user && this.state.user.role === Constants.KEY_LENDER){
+      return(
+        <span>
+          &nbsp;&nbsp;&nbsp;
+          <Link to={"/createIOI/"+Constants.IOI_NEW} className="btn btn-primary">
+            CREATE IOI
+          </Link>
+        </span>
+      );
+    }
+  }
+
+  displayIndustryResearchButton(){
+    return(<span>
+        &nbsp;&nbsp;&nbsp;
+        <Link to="/industryResearch" className="btn btn-primary">
+          INDUSTRY RESEARCH
+        </Link>
+      </span>);
+  }
+
   render(){
     return(
       <div>
-        <Link to="/myProfile" className="btn btn-primary">
-          Profile
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        {this.displayViewIntrestListButton()}
-        {this.displayEditRFPButton()}
-        <Link to="/" className="btn btn-primary">
-          Logout
-        </Link>
+        <Header />
         {this.state.rfp ? this.displayCompanyDesc() : ''}
         {this.state.rfp ? this.displayOutstandingRFP() : ''}
         {this.displayFinancialDetails()}
         <br/>
         <br/>
         {this.displayFavoritesButton()}
-
-        &nbsp;&nbsp;&nbsp;
-        <Link to={"/createIOI/"+Constants.IOI_NEW} className="btn btn-primary">
-          CREATE IOI
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/industryResearch" className="btn btn-primary">
-          INDUSTRY RESEARCH
-        </Link>
+        {this.displayCreateIOIButton()}
+        {this.displayViewIntrestListButton()}
+        {this.displayEditRFPButton()}
+        {this.displayIndustryResearchButton()}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
   }

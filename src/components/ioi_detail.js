@@ -10,7 +10,7 @@ import cUtils from '../utils/common_utils';
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-
+import Header from './header';
 
 class IOIDetail extends Component{
   constructor(props){
@@ -173,16 +173,15 @@ class IOIDetail extends Component{
   render(){
     return(
       <div>
-        <Link to="/myProfile" className="btn btn-primary">
-          Profile
-        </Link>
-        &nbsp;&nbsp;&nbsp;
+        <Header />
+        {this.displaySelectedIOI()}
+        <br/>
+        <br/>
         {this.displayViewAttachedRFPButton()}
         {this.displayEditIOIButton()}
-        <Link to="/" className="btn btn-primary">
-          Logout
-        </Link>
-        {this.displaySelectedIOI()}
+        <br/>
+        <br/>
+        <br/>
         <br/>
         <br/>
       </div>

@@ -6,6 +6,7 @@ import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
+import Header from './header';
 
 class UserProfileForm extends Component{
   static contextTypes ={
@@ -57,140 +58,147 @@ class UserProfileForm extends Component{
 			}, handleSubmit} = this.props;
 
     return(
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-      <h3>User Details</h3>
+      <div>
+        <Header />
+        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+          <h3>User Details</h3>
 
-      <div className={`row`}>
-        <div className={`form-group col-xs-12 col-md-12 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
-          <label>Full Name</label>
-          <input type="text" className="form-control" placeholder="Enter full name of the user" {...fullName} />
-          <div className="text-help">
-            {fullName.touched ? fullName.error : ''}
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
+              <label>Full Name</label>
+              <input type="text" className="form-control" placeholder="Enter full name of the user" {...fullName} />
+              <div className="text-help">
+                {fullName.touched ? fullName.error : ''}
+              </div>
+            </div>
           </div>
-        </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${email.touched && email.invalid ? 'has-danger' : ''}`}>
+              <label>Email</label>
+              <input type="email" className="form-control" placeholder="Enter a valid email" {...email} />
+              <div className="text-help">
+                {email.touched ? email.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
+              <label>Phone Number</label>
+              <input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
+              <div className="text-help">
+                {phoneNumber.touched ? phoneNumber.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${password.touched && password.invalid ? 'has-danger' : ''}`}>
+              <label>Password</label>
+              <input type="password" className="form-control" placeholder="Enter password" {...password}/>
+              <div className="text-help">
+                {password.touched ? password.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${confirmPassword.touched && confirmPassword.invalid ? 'has-danger' : ''}`}>
+              <label>Confirm Password</label>
+              <input type="password" className="form-control" placeholder="Enter password should be same as above" {...confirmPassword}/>
+              <div className="text-help">
+                {confirmPassword.touched ? confirmPassword.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
+              <label>Role of the user</label><br/>
+              <label className="radio-inline"><input type="radio" {...role} value='Lender' />Lender</label>
+              <label className="radio-inline"><input type="radio" {...role} value='Financial Sponsor' />Financial Sponsor</label>
+              <label className="radio-inline"><input type="radio" {...role} value='Company' />Company</label>
+              <label className="radio-inline"><input type="radio" {...role} value='Legal Counsel'/>Legal Counsel</label>
+              <label className="radio-inline"><input type="radio" {...role} value='3rd Part Due Diligence'/>3rd Part Due Diligence</label>
+              <label className="radio-inline"><input type="radio" {...role} value='Other'/>Other</label>
+              <div className="text-help">
+                {role.touched ? role.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <hr className={`col-xs-12 col-md-12`}/>
+          <br/>
+          <h3>Company Details</h3>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
+              <label> Company Name </label>
+              <input type="text" className="form-control" placeholder="Enter a valid Company Name" {...companyName} />
+              <div className="text-help">
+                {companyName.touched ? companyName.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-4 col-md-4 ${ein.touched && ein.invalid ? 'has-danger' : ''}`}>
+              <label>EIN of the Company</label>
+              <input type="text" className="form-control" placeholder="Enter a valid Company EIN" {...ein} />
+              <div className="text-help">
+                {ein.touched ? ein.error : ''}
+              </div>
+            </div>
+          </div>
+          <hr className={`col-xs-12 col-md-12`}/>
+          <br/>
+          <h3>Address Details</h3>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${streetAddress.touched && streetAddress.invalid ? 'has-danger' : ''}`}>
+              <label> Street Address </label>
+              <input type="text" className="form-control" placeholder="Enter a valid Street Address of the Company" {...streetAddress} />
+              <div className="text-help">
+                {streetAddress.touched ? streetAddress.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${city.touched && city.invalid ? 'has-danger' : ''}`}>
+              <label>City</label>
+              <input type="text" className="form-control" placeholder="Enter the City of the Company" {...city} />
+              <div className="text-help">
+                {city.touched ? city.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-3 col-md-3 ${state.touched && state.invalid ? 'has-danger' : ''}`}>
+              <label>State</label>
+              <input type="text" className="form-control" placeholder="Enter the State of the Company" {...state} />
+              <div className="text-help">
+                {state.touched ? state.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-3 col-md-3 ${zipcode.touched && zipcode.invalid ? 'has-danger' : ''}`}>
+              <label>Zipcode</label>
+              <input type="text" className="form-control" placeholder="Enter a valid zipcode of the Company" {...zipcode} />
+              <div className="text-help">
+                {zipcode.touched ? zipcode.error : ''}
+              </div>
+            </div>
+          </div>
+          {console.log('this.state.isAdmin:'+this.state.isAdmin)}
+          {this.props.userList && this.props.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
+
+
+          <br/>
+          <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
+          <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>&nbsp;&nbsp;
+
+        </form>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-6 col-md-6 ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-          <label>Email</label>
-          <input type="email" className="form-control" placeholder="Enter a valid email" {...email} />
-          <div className="text-help">
-            {email.touched ? email.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
-          <label>Phone Number</label>
-          <input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
-          <div className="text-help">
-            {phoneNumber.touched ? phoneNumber.error : ''}
-          </div>
-        </div>
-      </div>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-6 col-md-6 ${password.touched && password.invalid ? 'has-danger' : ''}`}>
-          <label>Password</label>
-          <input type="password" className="form-control" placeholder="Enter password" {...password}/>
-          <div className="text-help">
-            {password.touched ? password.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group col-xs-6 col-md-6 ${confirmPassword.touched && confirmPassword.invalid ? 'has-danger' : ''}`}>
-          <label>Confirm Password</label>
-          <input type="password" className="form-control" placeholder="Enter password should be same as above" {...confirmPassword}/>
-          <div className="text-help">
-            {confirmPassword.touched ? confirmPassword.error : ''}
-          </div>
-        </div>
-      </div>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
-          <label>Role of the user</label><br/>
-          <label className="radio-inline"><input type="radio" {...role} value='Lender' />Lender</label>
-          <label className="radio-inline"><input type="radio" {...role} value='Financial Sponsor' />Financial Sponsor</label>
-          <label className="radio-inline"><input type="radio" {...role} value='Company' />Company</label>
-          <label className="radio-inline"><input type="radio" {...role} value='Legal Counsel'/>Legal Counsel</label>
-          <label className="radio-inline"><input type="radio" {...role} value='3rd Part Due Diligence'/>3rd Part Due Diligence</label>
-          <label className="radio-inline"><input type="radio" {...role} value='Other'/>Other</label>
-          <div className="text-help">
-            {role.touched ? role.error : ''}
-          </div>
-        </div>
-      </div>
-
-      <hr className={`col-xs-12 col-md-12`}/>
-      <br/>
-      <h3>Company Details</h3>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
-          <label> Company Name </label>
-          <input type="text" className="form-control" placeholder="Enter a valid Company Name" {...companyName} />
-          <div className="text-help">
-            {companyName.touched ? companyName.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group col-xs-4 col-md-4 ${ein.touched && ein.invalid ? 'has-danger' : ''}`}>
-          <label>EIN of the Company</label>
-          <input type="text" className="form-control" placeholder="Enter a valid Company EIN" {...ein} />
-          <div className="text-help">
-            {ein.touched ? ein.error : ''}
-          </div>
-        </div>
-      </div>
-      <hr className={`col-xs-12 col-md-12`}/>
-      <br/>
-      <h3>Address Details</h3>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-12 col-md-12 ${streetAddress.touched && streetAddress.invalid ? 'has-danger' : ''}`}>
-          <label> Street Address </label>
-          <input type="text" className="form-control" placeholder="Enter a valid Street Address of the Company" {...streetAddress} />
-          <div className="text-help">
-            {streetAddress.touched ? streetAddress.error : ''}
-          </div>
-        </div>
-      </div>
-
-      <div className={`row`}>
-        <div className={`form-group col-xs-6 col-md-6 ${city.touched && city.invalid ? 'has-danger' : ''}`}>
-          <label>City</label>
-          <input type="text" className="form-control" placeholder="Enter the City of the Company" {...city} />
-          <div className="text-help">
-            {city.touched ? city.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group col-xs-3 col-md-3 ${state.touched && state.invalid ? 'has-danger' : ''}`}>
-          <label>State</label>
-          <input type="text" className="form-control" placeholder="Enter the State of the Company" {...state} />
-          <div className="text-help">
-            {state.touched ? state.error : ''}
-          </div>
-        </div>
-
-        <div className={`form-group col-xs-3 col-md-3 ${zipcode.touched && zipcode.invalid ? 'has-danger' : ''}`}>
-          <label>Zipcode</label>
-          <input type="text" className="form-control" placeholder="Enter a valid zipcode of the Company" {...zipcode} />
-          <div className="text-help">
-            {zipcode.touched ? zipcode.error : ''}
-          </div>
-        </div>
-      </div>
-      {console.log('this.state.isAdmin:'+this.state.isAdmin)}
-      {this.props.userList && this.props.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
-
-
-      <br/>
-      <Link to="/rfpMarketPlace" className="btn btn-primary">Home</Link>&nbsp;&nbsp;
-      <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
-      <Link to="/addUser" className="btn btn-primary">Add a User</Link>
-
-      </form>
     );
   }
 

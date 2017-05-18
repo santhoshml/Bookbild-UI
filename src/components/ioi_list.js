@@ -7,6 +7,7 @@ import { fetchIOIListForRFPAction, fetchIOIListForCompanyAction } from '../actio
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
+import Header from './header';
 
 class IOIList extends Component{
   constructor(props){
@@ -57,21 +58,15 @@ class IOIList extends Component{
   render(){
     return(
       <div>
-        <Link to={"/createRFP/"+Constants.RFP_NEW} className="btn btn-primary">
-          Create New RFP
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/myProfile" className="btn btn-primary">
-          My Profile
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/" className="btn btn-primary">
-          Logout
-        </Link>
-
+        <Header />
         <br/>
         <br/>
         {this.displayIOIList()}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
   }

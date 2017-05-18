@@ -8,6 +8,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Datetime from "react-datetime";
 import numeral from "numeral";
+import Header from './header';
 
 var gType=null;
 class CreateRFP extends Component {
@@ -84,223 +85,231 @@ class CreateRFP extends Component {
       , phoneNumber, expiryDt}, handleSubmit } = this.props;
 
     return (
-      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-        <h3>Create RFP / Request Pitch</h3>
-        <br/>
+      <div>
+        <Header />
+        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+          <h3>Create RFP / Request Pitch</h3>
+          <br/>
 
-        <input type="hidden" className="form-control" {...createdById} />
-        <input type="hidden" className="form-control" {...createdByCompanyId} />
+          <input type="hidden" className="form-control" {...createdById} />
+          <input type="hidden" className="form-control" {...createdByCompanyId} />
 
-        <div className={`row`}>
-          <div className={`form-group col-xs-12 col-md-12 ${requestType.touched && requestType.invalid ? 'has-danger' : ''}`}>
-            <label>Request Type</label><br/>
-            <label className="radio-inline"><input type="radio" value="New Financing" {...requestType}/>New Financing</label>
-            <label className="radio-inline"><input type="radio" value="Refinancing" {...requestType}/>Refinancing</label>
-            <label className="radio-inline"><input type="radio" value="Restructuring" {...requestType}/>Restructuring</label>
-            <label className="radio-inline"><input type="radio" value="M&A" {...requestType}/>M&A</label>
-            <label className="radio-inline"><input type="radio" value="LBO" {...requestType}/>LBO</label>
-            <div className="text-help">
-              {requestType.touched ? requestType.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-12 col-md-12 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
-            <label>Company Name</label>
-            <input type="text" className="form-control" {...companyName} />
-            <div className="text-help">
-              {companyName.touched ? companyName.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${dealSize.touched && dealSize.invalid ? 'has-danger' : ''}`}>
-            <label>Deal Size ($)</label>
-            <input type="text" className="form-control" {...dealSize} />
-            <div className="text-help">
-              {dealSize.touched ? dealSize.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${tenor.touched && tenor.invalid ? 'has-danger' : ''}`}>
-            <label>Tenor</label>
-            <input type="text" className="form-control" {...tenor} />
-            <div className="text-help">
-              {tenor.touched ? tenor.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${category.touched && category.invalid ? 'has-danger' : ''}`}>
-            <label>Category</label><br/>
-            <select className="form-control" {...category}>
-              <option value="ABL">ABL</option>
-              <option value="Cash Flow">Cash Flow</option>
-              <option value="Open">Open</option>
-            </select>
-            <div className="text-help">
-              {category.touched ? category.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${product.touched && product.invalid ? 'has-danger' : ''}`}>
-            <label>Product</label><br/>
-            <select className="form-control" {...product}>
-              <option value="Revolver">Revolver</option>
-              <option value="Term Loan">Term Loan</option>
-              <option value="Mezzanine">Mezzanine</option>
-              <option value="Multi-Tranche">Multi-Tranche</option>
-              <option value="Uni-Tranche">Uni-Tranche</option>
-            </select>
-            <div className="text-help">
-              {product.touched ? product.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${sector.touched && sector.invalid ? 'has-danger' : ''}`}>
-            <label>Sector</label>
-            <select className="form-control" {...sector}>
-              <option value=""> --- select one --- </option>
-              <option value="IT">IT</option>
-              <option value="Financials">Financials</option>
-              <option value="Health Care">Health Care</option>
-              <option value="Energy">Energy</option>
-              <option value="Consumer Staples">Consumer Staples</option>
-              <option value="Consumer Disc">Consumer Disc</option>
-              <option value="Industrials">Industrials</option>
-              <option value="Materials">Materials</option>
-              <option value="Utilities">Utilities</option>
-              <option value="Telecoms">Telecoms</option>
-            </select>
-            <div className="text-help">
-              {sector.touched ? sector.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${region.touched && region.invalid ? 'has-danger' : ''}`}>
-            <label>Region</label>
-            <select className="form-control" {...region}>
-              <option value=""> --- select one --- </option>
-              <option value="West Coast">West Coast</option>
-              <option value="Mid Atlantic">Mid Atlantic</option>
-              <option value="Great Lakes">Great Lakes</option>
-              <option value="South">South</option>
-              <option value="Mountain">Mountain</option>
-              <option value="Southeast">Southeast</option>
-              <option value="New England">New England</option>
-              <option value="Midwest">Midwest</option>
-            </select>
-            <div className="text-help">
-              {region.touched ? region.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${ltmRevenue.touched && ltmRevenue.invalid ? 'has-danger' : ''}`}>
-            <label>LTM Revenue ($)</label>
-            <input type="text" className="form-control" {...ltmRevenue} />
-            <div className="text-help">
-              {ltmRevenue.touched ? ltmRevenue.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${ltmEbitda.touched && ltmEbitda.invalid ? 'has-danger' : ''}`}>
-            <label>LTM EBITDA ($)</label>
-            <input type="text" className="form-control" {...ltmEbitda} />
-            <div className="text-help">
-              {ltmEbitda.touched ? ltmEbitda.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-12 col-md-12 ${txnOverview.touched && txnOverview.invalid ? 'has-danger' : ''}`}>
-              <label>Transaction Overview / Use of Funds</label>
-              <textarea className="form-control" {...txnOverview} />
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${requestType.touched && requestType.invalid ? 'has-danger' : ''}`}>
+              <label>Request Type</label><br/>
+              <label className="radio-inline"><input type="radio" value="New Financing" {...requestType}/>New Financing</label>
+              <label className="radio-inline"><input type="radio" value="Refinancing" {...requestType}/>Refinancing</label>
+              <label className="radio-inline"><input type="radio" value="Restructuring" {...requestType}/>Restructuring</label>
+              <label className="radio-inline"><input type="radio" value="M&A" {...requestType}/>M&A</label>
+              <label className="radio-inline"><input type="radio" value="LBO" {...requestType}/>LBO</label>
               <div className="text-help">
-                {txnOverview.touched ? txnOverview.error : ''}
+                {requestType.touched ? requestType.error : ''}
               </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-12 col-md-12 ${companyDesc.touched && companyDesc.invalid ? 'has-danger' : ''}`}>
-            <label>Company Description</label>
-            <textarea type="text" className="form-control" {...companyDesc} />
-            <div className="text-help">
-              {companyDesc.touched ? companyDesc.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${expiryDt.touched && expiryDt.invalid ? 'has-danger' : ''}`}>
-            <label>Expiry date for this RFP </label><br/>
-            <Datetime {...expiryDt}/>
-            <div className="text-help">
-              {expiryDt.touched ? expiryDt.error : ''}
             </div>
           </div>
 
-          <div className={`form-group col-xs-6 col-md-6 ${isSponsored.touched && isSponsored.invalid ? 'has-danger' : ''}`}>
-            <label>Is this sponsered ?</label><br/>
-            <label className="radio-inline"><input type="radio" value="yes" {...isSponsored}/>YES</label>
-            <label className="radio-inline"><input type="radio" value="no" {...isSponsored}/>NO</label>
-            <div className="text-help">
-              {isSponsored.touched ? isSponsored.error : ''}
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
+              <label>Company Name</label>
+              <input type="text" className="form-control" {...companyName} />
+              <div className="text-help">
+                {companyName.touched ? companyName.error : ''}
+              </div>
             </div>
           </div>
-        </div>
 
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${dealSize.touched && dealSize.invalid ? 'has-danger' : ''}`}>
+              <label>Deal Size ($)</label>
+              <input type="text" className="form-control" {...dealSize} />
+              <div className="text-help">
+                {dealSize.touched ? dealSize.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${tenor.touched && tenor.invalid ? 'has-danger' : ''}`}>
+              <label>Tenor</label>
+              <input type="text" className="form-control" {...tenor} />
+              <div className="text-help">
+                {tenor.touched ? tenor.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${category.touched && category.invalid ? 'has-danger' : ''}`}>
+              <label>Category</label><br/>
+              <select className="form-control" {...category}>
+                <option value="ABL">ABL</option>
+                <option value="Cash Flow">Cash Flow</option>
+                <option value="Open">Open</option>
+              </select>
+              <div className="text-help">
+                {category.touched ? category.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${product.touched && product.invalid ? 'has-danger' : ''}`}>
+              <label>Product</label><br/>
+              <select className="form-control" {...product}>
+                <option value="Revolver">Revolver</option>
+                <option value="Term Loan">Term Loan</option>
+                <option value="Mezzanine">Mezzanine</option>
+                <option value="Multi-Tranche">Multi-Tranche</option>
+                <option value="Uni-Tranche">Uni-Tranche</option>
+              </select>
+              <div className="text-help">
+                {product.touched ? product.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${sector.touched && sector.invalid ? 'has-danger' : ''}`}>
+              <label>Sector</label>
+              <select className="form-control" {...sector}>
+                <option value=""> --- select one --- </option>
+                <option value="IT">IT</option>
+                <option value="Financials">Financials</option>
+                <option value="Health Care">Health Care</option>
+                <option value="Energy">Energy</option>
+                <option value="Consumer Staples">Consumer Staples</option>
+                <option value="Consumer Disc">Consumer Disc</option>
+                <option value="Industrials">Industrials</option>
+                <option value="Materials">Materials</option>
+                <option value="Utilities">Utilities</option>
+                <option value="Telecoms">Telecoms</option>
+              </select>
+              <div className="text-help">
+                {sector.touched ? sector.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${region.touched && region.invalid ? 'has-danger' : ''}`}>
+              <label>Region</label>
+              <select className="form-control" {...region}>
+                <option value=""> --- select one --- </option>
+                <option value="West Coast">West Coast</option>
+                <option value="Mid Atlantic">Mid Atlantic</option>
+                <option value="Great Lakes">Great Lakes</option>
+                <option value="South">South</option>
+                <option value="Mountain">Mountain</option>
+                <option value="Southeast">Southeast</option>
+                <option value="New England">New England</option>
+                <option value="Midwest">Midwest</option>
+              </select>
+              <div className="text-help">
+                {region.touched ? region.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${ltmRevenue.touched && ltmRevenue.invalid ? 'has-danger' : ''}`}>
+              <label>LTM Revenue ($)</label>
+              <input type="text" className="form-control" {...ltmRevenue} />
+              <div className="text-help">
+                {ltmRevenue.touched ? ltmRevenue.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${ltmEbitda.touched && ltmEbitda.invalid ? 'has-danger' : ''}`}>
+              <label>LTM EBITDA ($)</label>
+              <input type="text" className="form-control" {...ltmEbitda} />
+              <div className="text-help">
+                {ltmEbitda.touched ? ltmEbitda.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${txnOverview.touched && txnOverview.invalid ? 'has-danger' : ''}`}>
+                <label>Transaction Overview / Use of Funds</label>
+                <textarea className="form-control" {...txnOverview} />
+                <div className="text-help">
+                  {txnOverview.touched ? txnOverview.error : ''}
+                </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${companyDesc.touched && companyDesc.invalid ? 'has-danger' : ''}`}>
+              <label>Company Description</label>
+              <textarea type="text" className="form-control" {...companyDesc} />
+              <div className="text-help">
+                {companyDesc.touched ? companyDesc.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${expiryDt.touched && expiryDt.invalid ? 'has-danger' : ''}`}>
+              <label>Expiry date for this RFP </label><br/>
+              <Datetime {...expiryDt}/>
+              <div className="text-help">
+                {expiryDt.touched ? expiryDt.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${isSponsored.touched && isSponsored.invalid ? 'has-danger' : ''}`}>
+              <label>Is this sponsered ?</label><br/>
+              <label className="radio-inline"><input type="radio" value="yes" {...isSponsored}/>YES</label>
+              <label className="radio-inline"><input type="radio" value="no" {...isSponsored}/>NO</label>
+              <div className="text-help">
+                {isSponsored.touched ? isSponsored.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <br/>
+          <hr/>
+          <h3>Company Management Contact</h3>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
+              <label>Name</label>
+              <input type="text" className="form-control" {...fullName} />
+              <div className="text-help">
+                {fullName.touched ? fullName.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${contactRole.touched && contactRole.invalid ? 'has-danger' : ''}`}>
+              <label>Role</label>
+              <input type="text" className="form-control" {...contactRole} />
+              <div className="text-help">
+                {contactRole.touched ? contactRole.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <div className={`row`}>
+            <div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
+              <label>Phone</label>
+              <input type="text" className="form-control" {...phoneNumber} />
+              <div className="text-help">
+                {phoneNumber.touched ? phoneNumber.error : ''}
+              </div>
+            </div>
+
+            <div className={`form-group col-xs-6 col-md-6 ${email.touched && email.invalid ? 'has-danger' : ''}`}>
+              <label>Email</label>
+              <input type="text" className="form-control" {...email} />
+              <div className="text-help">
+                {email.touched ? email.error : ''}
+              </div>
+            </div>
+          </div>
+
+          <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
+          <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
+        </form>
         <br/>
-        <hr/>
-        <h3>Company Management Contact</h3>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
-            <label>Name</label>
-            <input type="text" className="form-control" {...fullName} />
-            <div className="text-help">
-              {fullName.touched ? fullName.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${contactRole.touched && contactRole.invalid ? 'has-danger' : ''}`}>
-            <label>Role</label>
-            <input type="text" className="form-control" {...contactRole} />
-            <div className="text-help">
-              {contactRole.touched ? contactRole.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <div className={`row`}>
-          <div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
-            <label>Phone</label>
-            <input type="text" className="form-control" {...phoneNumber} />
-            <div className="text-help">
-              {phoneNumber.touched ? phoneNumber.error : ''}
-            </div>
-          </div>
-
-          <div className={`form-group col-xs-6 col-md-6 ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-            <label>Email</label>
-            <input type="text" className="form-control" {...email} />
-            <div className="text-help">
-              {email.touched ? email.error : ''}
-            </div>
-          </div>
-        </div>
-
-        <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
-        <Link to="/" className="btn btn-danger">Cancel</Link>
-      </form>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+      </div>
       );
     }
   }

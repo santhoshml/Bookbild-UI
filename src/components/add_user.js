@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
+import Header from './header';
 import * as actionCreators from '../actions/index';
 
 class AddUserForm extends Component{
@@ -53,6 +54,8 @@ class AddUserForm extends Component{
 			}, handleSubmit} = this.props;
 
 		return (
+				<div>
+					<Header />
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 						{this.displayErrMsg()}
 						<h3>User Details</h3>
@@ -245,9 +248,15 @@ class AddUserForm extends Component{
 			        </div>
 						</div>
 
-		        <button type="submit" className="btn btn-primary">Submit</button>
+		        <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
 		        <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
 		      </form>
+					<br/>
+	        <br/>
+	        <br/>
+	        <br/>
+	        <br/>					
+				</div>
 		    );
 	}
 }

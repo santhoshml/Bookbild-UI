@@ -7,54 +7,47 @@ import { fetchFavoriteRFPListAction, fetchCompanyRFPListAction } from '../action
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
+import Header from './header';
 
-class RFPFavorites extends Component{
+class RFPFavoriteList extends Component{
   constructor(props){
     super(props);
+    // console.log('In RFPList constructor');
     this.state = {
 			rfpList : null
 		}
   }
 
   componentWillMount() {
-    if(this.props.params.type === Constants.RFP_MY_FAVORITES){
-        this.props.fetchFavoriteRFPListAction(this.props.params.id);
-    } else if(this.props.params.type === Constants.RFP_FOR_COMPANY){
-        this.props.fetchCompanyRFPListAction(this.props.params.id);
-    }
+    this.props.fetchFavoriteRFPListAction(this.props.params.id);
   }
 
   checkForRFPList(){
     if(this.props.rfpList && this.props.rfpList.length > 0){
       return (<div>
-          <h3> Open/Active RFP's</h3>
+          <h3> Open/Active RFP's in Favorites list</h3>
           <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={false}/>
         </div>);
     } else {
       return (<div>
-          <h3> There are no RFP's Open/Active.</h3>
+          <h3> There are no RFP's Open/Active in Favorites list</h3>
         </div>);
     }
   }
 
   render(){
+    // console.log('In RFPList render');
     return(
       <div>
-        <Link to="/rfpMarketPlace" className="btn btn-primary">
-          Home
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/myProfile" className="btn btn-primary">
-          My Profile
-        </Link>
-        &nbsp;&nbsp;&nbsp;
-        <Link to="/" className="btn btn-primary">
-          Logout
-        </Link>
+        <Header />
 
         <br/>
-        <br/>
         {this.checkForRFPList()}
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
   }
@@ -77,4 +70,4 @@ function mapDispatchToProps(dispatch) {
     , dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RFPFavorites);
+export default connect(mapStateToProps, mapDispatchToProps)(RFPFavoriteList);
