@@ -1,5 +1,48 @@
 import constants from './constants';
 import moment from 'moment';
+import sortJsonArray from 'sort-json-array';
+
+exports.getTopThreeSectors = function(obj){
+  let sList = [];
+  let keys = Object.keys(obj);
+  keys.forEach(function(key){
+    if(key.startsWith('sector')){
+      sList.push({
+        sector : key,
+        count : obj[key]
+      });
+    }
+  });
+  let sortedList = sortJsonArray(sList, 'count', 'des');
+  return exports.getSectorDisplayName(sortedList[0].sector)
+    +', '+ exports.getSectorDisplayName(sortedList[1].sector)
+    +', '+ exports.getSectorDisplayName(sortedList[2].sector);
+}
+
+exports.getTopThreeProducts = function(obj){
+  let sList = [];
+  let keys = Object.keys(obj);
+  keys.forEach(function(key){
+    if(key.startsWith('struct')){
+      sList.push({
+        sector : key,
+        count : obj[key]
+      });
+    }
+  });
+  let sortedList = sortJsonArray(sList, 'count', 'des');
+  return exports.getProductDisplayName(sortedList[0].sector)
+    +', '+ exports.getProductDisplayName(sortedList[1].sector)
+    +', '+ exports.getProductDisplayName(sortedList[2].sector);
+}
+
+exports.getSectorDisplayName = function(name){
+  return constants.SECTOR_MAP[name];
+}
+
+exports.getProductDisplayName = function(name){
+  return constants.PRODUCT_MAP[name];
+}
 
 exports.getDisplayValue = function(key){
   var val = constants.DISPLAY_VALUES_MAP[key];

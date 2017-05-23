@@ -44,3 +44,26 @@ exports.DISPLAY_VALUES_MAP = {
   // 'true'          : 'True',
   // 'false'         : 'False'
 };
+
+exports.SECTOR_MAP ={
+  'sector_it'               : 'IT',
+  'sector_financials'       : 'Financials',
+  'sector_healthCare'       : 'Healthcare',
+  'sector_energy'           : 'Energy',
+  'sector_consumer_staples' : 'Consumer Staples',
+  'sector_consumer_disc'    : 'Consumer Disc',
+  'sector_industrials'      : 'Industrials',
+  'sector_materials'        : 'Materials',
+  'sector_utilities'        : 'Utilities',
+  'sector_telecoms'         : 'Telecoms',
+  'sector_misc'             : 'Misc'
+};
+
+exports.PRODUCT_MAP = {
+  'struct_revolver'       : 'Revolver',
+  'struct_termloan'       : 'Term Loan',
+  'struct_mezzanine'      : 'Mezzanine',
+  'struct_multi_tranche'  : 'Multi-Tranche',
+  'struct_uni_tranche'    : 'Uni-Tranche',
+  'struct_misc'           : 'Misc'
+};

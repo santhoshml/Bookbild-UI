@@ -22,6 +22,7 @@ import DGExample from './components/data_grid_example';
 export default (
   <Route path="/" component={App} >
     <IndexRoute component={LoginForm} />
+    <Route path="admin" component={Admin} />
     <Route path="registerCompany" component={RegisterCompanyForm} />
     <Route path="login" component={LoginForm} />
     <Route path="createRFP/:type" component={CreateRFPForm} />
