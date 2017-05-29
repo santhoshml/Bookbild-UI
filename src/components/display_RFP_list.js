@@ -86,8 +86,15 @@ export default class DisplayRFPList extends Component {
         rfp.termSheets  = (rfp.termSheets ? rfp.termSheets : 0);
         rfp.category    = cUtils.getDisplayValue(rfp.category);
         rfp.isSponsored = cUtils.getDisplayValue(rfp.isSponsored);
-        rfp.dealSize    = formatCurrency(rfp.dealSize, Constants.CURRENCY_OPTS);
-        rfp.ltmEbitda   = formatCurrency(rfp.ltmEbitda, Constants.CURRENCY_OPTS);
+
+        let fDealSizeVal = formatCurrency(rfp.dealSize, Constants.CURRENCY_OPTS);
+        let decimalIndex = fDealSizeVal.indexOf('.');
+        rfp.dealSize    = fDealSizeVal.substring(0, decimalIndex);
+
+        let fltmEbitdaVal = formatCurrency(rfp.ltmEbitda, Constants.CURRENCY_OPTS);
+        decimalIndex = fltmEbitdaVal.indexOf('.');
+        rfp.ltmEbitda = fltmEbitdaVal.substring(0, decimalIndex);
+
         rfp.status      =  cUtils.computeStatus(rfp.expiryDt);
         return rfp;
       });

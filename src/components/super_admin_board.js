@@ -11,24 +11,23 @@ import Header from './header';
 export default class Admin extends Component{
   constructor(props){
     super(props);
-    console.log('I am in home.constructor');
-    lsUtils.deleteAll();
   }
 
-  componentWillReceiveProps(nextProps){
-    console.log('I am in home.componentWillReceiveProps');
-    lsUtils.deleteAll();
-  }
 
   render(){
     return(
       <div>
+        <Header />
         <Link to="/registerCompany" className="btn btn-primary">
           Add a company
         </Link>
         &nbsp;&nbsp;
-        <Link to="/login" className="btn btn-primary">
-          Login
+        <Link to={"/createRFP/"+constants.RFP_NEW} className="btn btn-primary">
+          Create RFP
+        </Link>
+        &nbsp;&nbsp;
+        <Link to="/" className="btn btn-primary">
+          Reset Activity TermSheet stats
         </Link>
       </div>
     );

@@ -62,6 +62,7 @@
     "redux-promise": "^0.5.0",
     "redux-simple-router": "2.0.3",
     "sort-json-array": "^0.1.7",
+    "text-ellipsis": "^1.0.3",
     "validator": "^7.0.0"
   }
 }

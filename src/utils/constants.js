@@ -18,12 +18,17 @@ exports.KEY_COMPANY='Company';
 exports.KEY_LEGAL_COUNSEL='Legal Counsel';
 exports.KEY_3PDD='3rd Part Due Diligence';
 exports.KEY_OTHER='Other';
+exports.KEY_SUPER_ADMIN='SUPER_ADMIN';
 
 exports.IOI_FOR_RFP = 'IOI_FOR_RFP';
 exports.IOI_FOR_COMPANY = 'IOI_FOR_COMPANY';
 
 exports.RFP_MY_FAVORITES = 'RFP_MY_FAVORITES';
 exports.RFP_FOR_COMPANY = 'RFP_FOR_COMPANY';
+
+exports.TXN_OVERVIEW_SAMPLE='Example: $100.0 million senior secured credit facility to refinance existing indebtedness and [fund a dividend recapitalization, tack-on acquisition, etc].';
+
+exports.COMPANY_DESC_SAMPLE='Example: [City], [State]-based provider of open software solutions for mobile enterprises. The company products provide secure access for the next generation of workers, applications, networks, and things. The secure access offered by the Company solutions empowers business productivity by ensuring enterprise IT applications and environments are securely available, whether these are located in the datacenter or in the cloud.';
 
 exports.DISPLAY_VALUES_MAP = {
   // 'new_financing' : 'New Financing',

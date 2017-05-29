@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import * as actionCreators from '../actions/index';
+import ellipsis from 'text-ellipsis';
 
 export default class Header extends Component{
 	static contextTypes ={
@@ -30,7 +31,11 @@ export default class Header extends Component{
 	}
 
 	displayCreateRFPLink(){
-		if(this.state.user && (this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR)){
+		if(this.state.user
+			&& (this.state.user.role === constants.KEY_COMPANY
+				|| this.state.user.role === constants.KEY_FINANCIAL_SPONSOR
+				|| this.state.user.role === constants.KEY_SUPER_ADMIN )
+			){
 			return (
 				<li><Link to={"/createRFP/"+constants.RFP_NEW}>Create RFP</Link></li>
 			);
@@ -38,7 +43,11 @@ export default class Header extends Component{
 	}
 
 	displayMyRFPLink(){
-		if(this.state.user && (this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR)){
+		if(this.state.user
+			&& (this.state.user.role === constants.KEY_COMPANY
+				|| this.state.user.role === constants.KEY_FINANCIAL_SPONSOR
+				|| this.state.user.role === constants.KEY_SUPER_ADMIN
+			)){
 			return (
 				<li><Link to={"/rfpCompanyList/"+this.state.company.companyId}>My RFP List</Link></li>
 			);
@@ -46,7 +55,10 @@ export default class Header extends Component{
 	}
 
 	displayIOIDD(){
-		if(this.state.user && this.state.user.role === constants.KEY_LENDER){
+		if(this.state.user
+			&& (this.state.user.role === constants.KEY_LENDER
+			|| this.state.user.role === constants.KEY_SUPER_ADMIN)
+		){
 			return(
 				<li className="dropdown">
 					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">IOI</Link>
@@ -67,7 +79,9 @@ export default class Header extends Component{
 	}
 
 	getAddUserLink(){
-		if(this.state.user.isAdmin && this.state.user.isAdmin=== true){
+		if((this.state.user && this.state.user.isAdmin && this.state.user.isAdmin=== true)
+			||(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true)
+		){
 			return(
 				<li><Link to="/addUser">Add a User</Link></li>
 			);
@@ -78,7 +92,7 @@ export default class Header extends Component{
 		if(this.state.user){
 			return (
 				<li className="dropdown">
-					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{this.state.user.email}</Link>
+					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{ellipsis(this.state.user.email, 10)}</Link>
 					<ul className="dropdown-menu">
 						<li><Link to="/myProfile">Profile</Link></li>
 						<li><Link to="#">My Team</Link></li>
@@ -96,6 +110,11 @@ export default class Header extends Component{
 		}
 	}
 
+	displaySuperAdminDashBoard(){
+		if(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true){
+			return (<li><Link to="/superAdmin">SuperAdmin</Link></li>);
+		}
+	}
 
 	render(){
 		// console.log('I am in header render');
@@ -105,6 +124,7 @@ export default class Header extends Component{
 				  <div className="container-fluid">
 				    <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				      <ul className="nav navbar-nav">
+								{this.displaySuperAdminDashBoard()}
 								<li className="dropdown">
 									<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RFP</Link>
 									<ul className="dropdown-menu">

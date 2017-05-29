@@ -7,6 +7,7 @@ import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
+import NumberFormat from 'react-number-format';
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import Header from './header';
@@ -69,10 +70,6 @@ class RFPDetail extends Component{
         <table className="table table-striped">
           <tbody>
             <tr>
-              <td>Structure</td>
-              <td>{cUtils.getDisplayValue(rfp.product)}</td>
-            </tr>
-            <tr>
               <td>Status</td>
               <td>{cUtils.computeStatus(rfp.expiryDt)}</td>
             </tr>
@@ -81,8 +78,16 @@ class RFPDetail extends Component{
               <td>{rfp.dealSize}</td>
             </tr>
             <tr>
-              <td>LTM EBITDA</td>
-              <td>{rfp.ltmEbitda}</td>
+              <td>Tenor</td>
+              <td>{rfp.tenor}</td>
+            </tr>
+            <tr>
+              <td>Category</td>
+              <td>{cUtils.getDisplayValue(rfp.category)}</td>
+            </tr>
+            <tr>
+              <td>Structure</td>
+              <td>{cUtils.getDisplayValue(rfp.product)}</td>
             </tr>
             <tr>
               <td>Company Sector</td>
@@ -93,20 +98,16 @@ class RFPDetail extends Component{
               <td>{cUtils.getDisplayValue(rfp.isSponsored)}</td>
             </tr>
             <tr>
-              <td>LTM Revenue</td>
-              <td>{rfp.ltmRevenue}</td>
-            </tr>
-            <tr>
               <td>UoF</td>
               <td>{cUtils.getDisplayValue(rfp.requestType)}</td>
             </tr>
             <tr>
-              <td>Tenor</td>
-              <td>{rfp.tenor}</td>
+              <td>LTM Revenue</td>
+              <td><NumberFormat value={rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
             </tr>
             <tr>
-              <td>Category</td>
-              <td>{cUtils.getDisplayValue(rfp.category)}</td>
+              <td>LTM EBITDA</td>
+              <td><NumberFormat value={rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
             </tr>
             <tr>
               <td>Region</td>
@@ -242,7 +243,7 @@ class RFPDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  console.log('state:'+JSON.stringify(state));
+  // console.log('state:'+JSON.stringify(state));
 
   let rObject = {
     isFavorite : state.rfpDetails.isFavorite,

@@ -8,6 +8,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 import Header from './header';
+import NumberFormat from 'react-number-format';
 
 var gType=null;
 class CreateIOIForm extends Component{
@@ -87,9 +88,20 @@ class CreateIOIForm extends Component{
           <input type="hidden" className="form-control" {...createdById} />
           <input type="hidden" className="form-control" {...createdByCompanyId} />
 
-          <div className="text-md-center">
-            <h5>RFP : {this.state.rfp.sector} &nbsp; {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</h5>
+          <div>
+            <h4>RFP Details : </h4>
+            <table className="table table-bordered">
+              <tr>
+                <td>Sector: {this.state.rfp.sector}</td>
+                <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+              </tr>
+              <tr>
+                <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+                <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              </tr>
+            </table>
           </div>
+          <br/>
           <div>
             <h4>Indication of Interest</h4>
             <br/>
@@ -123,6 +135,7 @@ class CreateIOIForm extends Component{
                 <option value="Fixed Asset Subline">Fixed Asset Subline</option>
                 <option value="Uni-Tranche">Uni-Tranche</option>
                 <option value="Multi-Tranche">Multi-Tranche</option>
+                <option value="None">None</option>
               </select>
               <div className="text-help">
                 {tranche.touched ? tranche.error : ''}
@@ -169,9 +182,8 @@ class CreateIOIForm extends Component{
               <label>Governance</label>
               <select className="form-control" {...governance}>
                 <option selected>Choose...</option>
-                <option value="One">One</option>
-                <option value="Two">Two</option>
-                <option value="Three">Three</option>
+                <option value="One">YES</option>
+                <option value="Two">NO</option>
               </select>
               <div className="text-help">
                 {governance.touched ? governance.error : ''}
@@ -182,8 +194,8 @@ class CreateIOIForm extends Component{
               <label>Warrants</label>
               <select className="form-control" {...warrants}>
                 <option selected>Choose...</option>
-                <option value="One">One</option>
-                <option value="Two">Two</option>
+                <option value="One">YES</option>
+                <option value="Two">NO</option>
                 <option value="Three">Three</option>
               </select>
               <div className="text-help">
@@ -195,9 +207,8 @@ class CreateIOIForm extends Component{
               <label>Covenants</label>
               <select className="form-control" {...covenants}>
                 <option selected>Choose...</option>
-                <option value="One">One</option>
-                <option value="Two">Two</option>
-                <option value="Three">Three</option>
+                <option value="One">YES</option>
+                <option value="Two">NO</option>
               </select>
               <div className="text-help">
                 {covenants.touched ? covenants.error : ''}

@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
-import { createRFPAction, fetchContactAction, updateRFPAction } from '../actions/index';
+import { createRFPAction, fetchContactAction, updateRFPAction, fetchAllCompanyListForRFP } from '../actions/index';
 import { Link } from 'react-router';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -20,7 +20,8 @@ class CreateRFP extends Component {
   constructor(props){
     super(props);
     this.state = {
-			type : props.params.type
+			type : props.params.type,
+      companyList : null
 		}
   }
 
@@ -30,6 +31,11 @@ class CreateRFP extends Component {
     this.setState({
       type : this.props.params.type
     });
+
+    let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
+    if(user.isSuperAdmin && user.isSuperAdmin === true){
+      this.props.fetchAllCompanyListForRFP();
+    }
 
     if(gType === constants.RFP_EDIT){
       var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
@@ -64,6 +70,10 @@ class CreateRFP extends Component {
             this.context.router.push('/rfpMarketPlace');
         });
       } else {
+        let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
+        if(user.isSuperAdmin && user.isSuperAdmin === true){
+          props.createdByCompanyId = props.createdForCompany;
+        }
         this.props.createRFPAction(props)
           .then(() => {
             // blog post has been created, navigate the user to the index
@@ -74,8 +84,24 @@ class CreateRFP extends Component {
       }
     }
 
-  checkRequestTypeValue(){
+  displayCompanyDropdown(){
+    if(this.props.companyList){
+      const { fields: {createdForCompany}} = this.props;
+      var makeOptions = function(company){
+        return <option value={company.companyId}>{company.companyName}</option>
+      };
 
+      return(<div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-12 col-md-12`}>
+            <label>Select a Company this RFP belongs to</label><br/>
+            <select className="form-control" {...createdForCompany}>
+              {this.props.companyList.map(makeOptions)}
+            </select>
+          </div>
+        </div>
+      </div>);
+    }
   }
 
   render() {
@@ -87,6 +113,9 @@ class CreateRFP extends Component {
     return (
       <div>
         <Header />
+
+        {this.displayCompanyDropdown()}
+
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h3>Create RFP / Request Pitch</h3>
           <br/>
@@ -226,7 +255,7 @@ class CreateRFP extends Component {
           <div className={`row`}>
             <div className={`form-group col-xs-12 col-md-12 ${txnOverview.touched && txnOverview.invalid ? 'has-danger' : ''}`}>
                 <label>Transaction Overview / Use of Funds</label>
-                <textarea className="form-control" {...txnOverview} />
+                <textarea className="form-control" {...txnOverview} placeholder={constants.TXN_OVERVIEW_SAMPLE}/>
                 <div className="text-help">
                   {txnOverview.touched ? txnOverview.error : ''}
                 </div>
@@ -236,7 +265,7 @@ class CreateRFP extends Component {
           <div className={`row`}>
             <div className={`form-group col-xs-12 col-md-12 ${companyDesc.touched && companyDesc.invalid ? 'has-danger' : ''}`}>
               <label>Company Description</label>
-              <textarea type="text" className="form-control" {...companyDesc} />
+              <textarea type="text" className="form-control" {...companyDesc} placeholder={constants.COMPANY_DESC_SAMPLE}/>
               <div className="text-help">
                 {companyDesc.touched ? companyDesc.error : ''}
               </div>
@@ -357,7 +386,8 @@ function mapStateToProps(state) {
   }
 
   return {
-    initialValues : intializedData
+    initialValues : intializedData,
+    companyList : state.rfpList.companyListForRFP
   };
 }
 
@@ -368,7 +398,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     createRFPAction : createRFPAction,
     fetchContactAction : fetchContactAction,
-    updateRFPAction : updateRFPAction
+    updateRFPAction : updateRFPAction,
+    fetchAllCompanyListForRFP : fetchAllCompanyListForRFP
   }, dispatch);
 }
 
@@ -440,6 +471,6 @@ export default reduxForm({
   fields: ['requestType', 'dealSize', 'tenor', 'category', 'product', 'sector'
   , 'txnOverview', 'companyName', 'companyDesc', 'ltmRevenue', 'ltmEbitda'
   , 'fullName', 'contactRole', 'email', 'createdById', 'isSponsored', 'region'
-  , 'createdByCompanyId', 'phoneNumber', 'expiryDt'],
+  , 'createdByCompanyId', 'phoneNumber', 'expiryDt', 'createdForCompany'],
   validate
 }, mapStateToProps, mapDispatchToProps)(CreateRFP);
