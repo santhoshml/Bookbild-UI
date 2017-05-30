@@ -64,7 +64,7 @@ export default class Header extends Component{
 					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">IOI</Link>
 					<ul className="dropdown-menu">
 						<li><Link to={"/ioiList/"+this.state.company.companyId+"/"+constants.IOI_FOR_COMPANY}>My IOI List</Link></li>
-						<li><Link to="#">Create a Pitch</Link></li>
+						<li><Link to={"/createPitch/"+constants.PITCH_NEW}>Create a Pitch</Link></li>
 						<li><Link to="#">Default Pitch Settings</Link></li>
 					</ul>
 				</li>
@@ -111,7 +111,7 @@ export default class Header extends Component{
 	}
 
 	displaySuperAdminDashBoard(){
-		if(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true){
+		if(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin === true){
 			return (<li><Link to="/superAdmin">SuperAdmin</Link></li>);
 		}
 	}

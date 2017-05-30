@@ -11,6 +11,7 @@ import AddUser from './components/add_user';
 import RFPDetail from './components/rfp_detail';
 import IOIDetail from './components/ioi_detail';
 import CreateIOI from './components/create_ioi';
+import UnsolicitedPitch from './components/unsolicited_pitch';
 import IOIList from './components/ioi_list';
 import RFPCompanyList from './components/rfp_company_list';
 import RFPFavoriteList from './components/rfp_favorite_list';
@@ -35,6 +36,7 @@ export default (
     <Route path="rfpFavoriteList/:id" component={RFPFavoriteList} />
     <Route path="rfpCompanyList/:id" component={RFPCompanyList} />
     <Route path="superAdmin" component={SuperAdminBoard} />
+    <Route path="createPitch/:type" component={UnsolicitedPitch} />
 
 
 

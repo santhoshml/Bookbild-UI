@@ -217,6 +217,19 @@ class RFPDetail extends Component{
       </span>);
   }
 
+  displayMakePitchButton(){
+    if(this.state.user && this.state.user.role === Constants.KEY_LENDER){
+      return(
+        <span>
+          &nbsp;&nbsp;&nbsp;
+          <Link to={"/createIOI/"+Constants.PITCH_NEW} className="btn btn-primary">
+            MAKE A PITCH
+          </Link>
+        </span>
+      );
+    }
+  }
+
   render(){
     return(
       <div>
@@ -228,6 +241,7 @@ class RFPDetail extends Component{
         <br/>
         {this.displayFavoritesButton()}
         {this.displayCreateIOIButton()}
+        {this.displayMakePitchButton()}
         {this.displayViewIntrestListButton()}
         {this.displayEditRFPButton()}
         {this.displayIndustryResearchButton()}

@@ -1,6 +1,6 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
-import { createIOIAction, updateIOIAction } from '../actions/index';
+import { fetchAllCompanyListForRFP, createUnsolicitedPitchAction } from '../actions/index';
 import {Link} from 'react-router';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -20,7 +20,6 @@ class CreateIOIForm extends Component{
     super(props);
     this.state = {
       user : null,
-      rfp : null,
       type : props.params.type
     };
   }
@@ -30,27 +29,27 @@ class CreateIOIForm extends Component{
     console.log('gType :'+ gType);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
 
     this.setState({
-      rfp                 : rfp,
       user                : user,
       createdById         : user.userId,
       createdByCompanyId  : company.companyId
     });
 
-    if(gType === constants.IOI_EDIT){
-      var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-      console.log('');
-      this.setState({
-        ioi : ioi
-      });
-    }
+    this.props.fetchAllCompanyListForRFP();
+
+    // if(gType === constants.PITCH_EDIT){
+    //   var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+    //   console.log('');
+    //   this.setState({
+    //     ioi : ioi
+    //   });
+    // }
   }
 
   onSubmit(props){
-    console.log('createIOIAction:'+JSON.stringify(props));
-    if(gType === constants.IOI_EDIT){
+    console.log('unsolicitedPitchAction:'+JSON.stringify(props));
+    if(gType === constants.PITCH_EDIT){
       var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
       props.ioiId = ioi.ioiId;
       props.createdById = this.state.createdById;
@@ -63,7 +62,7 @@ class CreateIOIForm extends Component{
           this.context.router.push('/rfpMarketPlace');
       });
     } else {
-      this.props.createIOIAction(props)
+      this.props.createUnsolicitedPitchAction(props)
        .then(() => {
          // blog post has been created, navigate the user to the index
          // We navigate by calling this.context.router.push with the
@@ -73,40 +72,33 @@ class CreateIOIForm extends Component{
      }
 	}
 
-  displayRFPSummary(){
-    if(gType === constants.IOI_EDIT || gType === constants.IOI_NEW){
-      return (
-        <div>
-          <h4>RFP Details : </h4>
-          <table className="table table-bordered">
-            <tr>
-              <td>Sector: {this.state.rfp.sector}</td>
-              <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
-            </tr>
-            <tr>
-              <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-            </tr>
-          </table>
+  displayCompanyDropdown(){
+    if(this.props.companyList){
+      const { fields: {companyId}} = this.props;
+      var makeOptions = function(company){
+        return <option value={company.companyId}>{company.companyName}</option>
+      };
+
+      return(<div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-12 col-md-12`}>
+            <label>Select a Company to PITCH to</label><br/>
+            <select className="form-control" {...companyId}>
+              {this.props.companyList.map(makeOptions)}
+            </select>
+          </div>
         </div>
-      );
+      </div>);
     }
   }
 
   displaySubtitle(){
-    if(gType === constants.IOI_EDIT || gType === constants.IOI_NEW){
-      return (
-        <div>
-          <h4>Indication of Interest</h4>
-          <br/>
-        </div>
-      );
-    } else {
+    return(
       <div>
-        <h4>Make a Pitch</h4>
+        <h4>Create a Pitch</h4>
         <br/>
       </div>
-    }
+    );
   }
 
   render(){
@@ -120,14 +112,15 @@ class CreateIOIForm extends Component{
       <div>
         <Header />
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <input type="hidden" className="form-control" {...rfpId} />
           <input type="hidden" className="form-control" {...createdById} />
           <input type="hidden" className="form-control" {...createdByCompanyId} />
 
-          {this.displayRFPSummary()}
-
           <br/>
           {this.displaySubtitle()}
+
+          <br/>
+          <br/>
+          {this.displayCompanyDropdown()}
 
           <div className={`row`}>
             <div className={`form-group col-xs-6 col-md-6 no-padding ${maxDebtAllowed.touched && maxDebtAllowed.invalid ? 'has-danger' : ''}`}>
@@ -340,42 +333,41 @@ class CreateIOIForm extends Component{
 function mapStateToProps(state) {
   let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
   let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-  let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
 
   let intializedData = {
     user : user,
     initialValues : {
-      rfpId               : rfp.rfpId,
       createdById         : user.userId,
       createdByCompanyId  : company.companyId
-    }
+    },
+    companyList : state.rfpList.companyListForRFP
   };
 
-  if(gType == constants.IOI_EDIT){
-    let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-    console.log('ioi to be edited :'+JSON.stringify(ioi));
-
-    intializedData.initialValues.maxDebtAllowed = ioi.maxDebtAllowed;
-    intializedData.initialValues.loanSize = ioi.loanSize;
-    intializedData.initialValues.tranche = ioi.tranche;
-    intializedData.initialValues.loanStructure = ioi.loanStructure;
-    intializedData.initialValues.cashInterest = ioi.cashInterest;
-    intializedData.initialValues.pikIntreset = ioi.pikIntreset;
-    intializedData.initialValues.liborFloor = ioi.liborFloor;
-    intializedData.initialValues.maturity = ioi.maturity;
-    intializedData.initialValues.year1 = ioi.year1;
-    intializedData.initialValues.year2 = ioi.year2;
-    intializedData.initialValues.year3 = ioi.year3;
-    intializedData.initialValues.year4 = ioi.year4;
-    intializedData.initialValues.year5  = ioi.year5;
-    intializedData.initialValues.upfrontFee = ioi.upfrontFee;
-    intializedData.initialValues.governance = ioi.governance;
-    intializedData.initialValues.warrants = ioi.warrants;
-    intializedData.initialValues.covenants = ioi.covenants;
-    intializedData.initialValues.rfpId = ioi.rfpId;
-    intializedData.initialValues.createdById = ioi.createdById;
-    intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
-  }
+  // if(gType == constants.IOI_EDIT){
+  //   let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+  //   console.log('ioi to be edited :'+JSON.stringify(ioi));
+  //
+  //   intializedData.initialValues.maxDebtAllowed = ioi.maxDebtAllowed;
+  //   intializedData.initialValues.loanSize = ioi.loanSize;
+  //   intializedData.initialValues.tranche = ioi.tranche;
+  //   intializedData.initialValues.loanStructure = ioi.loanStructure;
+  //   intializedData.initialValues.cashInterest = ioi.cashInterest;
+  //   intializedData.initialValues.pikIntreset = ioi.pikIntreset;
+  //   intializedData.initialValues.liborFloor = ioi.liborFloor;
+  //   intializedData.initialValues.maturity = ioi.maturity;
+  //   intializedData.initialValues.year1 = ioi.year1;
+  //   intializedData.initialValues.year2 = ioi.year2;
+  //   intializedData.initialValues.year3 = ioi.year3;
+  //   intializedData.initialValues.year4 = ioi.year4;
+  //   intializedData.initialValues.year5  = ioi.year5;
+  //   intializedData.initialValues.upfrontFee = ioi.upfrontFee;
+  //   intializedData.initialValues.governance = ioi.governance;
+  //   intializedData.initialValues.warrants = ioi.warrants;
+  //   intializedData.initialValues.covenants = ioi.covenants;
+  //   intializedData.initialValues.rfpId = ioi.rfpId;
+  //   intializedData.initialValues.createdById = ioi.createdById;
+  //   intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
+  // }
 
   return intializedData;
 }
@@ -422,8 +414,8 @@ function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    createIOIAction   : createIOIAction,
-    updateIOIAction : updateIOIAction
+    fetchAllCompanyListForRFP   : fetchAllCompanyListForRFP,
+    createUnsolicitedPitchAction  : createUnsolicitedPitchAction
   }, dispatch);
 }
 
@@ -432,5 +424,5 @@ export default reduxForm({
   'fields': ['maxDebtAllowed', 'loanSize', 'tranche', 'loanStructure', 'cashInterest'
     , 'pikIntreset', 'liborFloor', 'maturity', 'year1', 'year2', 'year3', 'year4', 'year5'
     , 'upfrontFee', 'governance', 'warrants', 'covenants', 'rfpId', 'createdById'
-    , 'createdByCompanyId'],
+    , 'createdByCompanyId', 'companyId'],
 }, mapStateToProps, mapDispatchToProps)(CreateIOIForm);

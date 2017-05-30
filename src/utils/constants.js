@@ -11,6 +11,8 @@ exports.RFP_NEW = 'RFP_NEW';
 
 exports.IOI_EDIT = 'IOI_EDIT';
 exports.IOI_NEW = 'IOI_NEW';
+exports.PITCH_NEW = 'PITCH_NEW';
+exports.PITCH_EDIT = 'PITCH_EDIT';
 
 exports.KEY_FINANCIAL_SPONSOR='Financial Sponsor';
 exports.KEY_LENDER='Lender';

@@ -124,8 +124,8 @@ class AddUserForm extends Component{
 						<div className={`row`}>
 							<div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
 								<label>Admin privileges</label><br/>
-								<label className="radio-inline"><input type="radio" {...isAdmin} value="true"/>Will be a ADMIN</label>
-								<label className="radio-inline"><input type="radio" {...isAdmin} value="false"/>NOT an ADMIN</label>
+								<label className="radio-inline"><input type="radio" {...isAdmin} value={true}/>Will be a ADMIN</label>
+								<label className="radio-inline"><input type="radio" {...isAdmin} value={false}/>NOT an ADMIN</label>
 								<div className="text-help">
 									{role.touched ? role.error : ''}
 								</div>
@@ -255,7 +255,7 @@ class AddUserForm extends Component{
 	        <br/>
 	        <br/>
 	        <br/>
-	        <br/>					
+	        <br/>
 				</div>
 		    );
 	}
