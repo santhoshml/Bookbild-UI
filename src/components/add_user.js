@@ -135,7 +135,7 @@ class AddUserForm extends Component{
 						<br/>
 						<hr className={`col-xs-12 col-md-12`}/>
 
-		        <h3>Compay Details</h3>
+		        <h3>Company Details</h3>
 
 						<div className={`row`}>
 			        <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>

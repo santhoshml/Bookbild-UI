@@ -117,8 +117,6 @@ class CreateIOIForm extends Component{
 
           <br/>
           {this.displaySubtitle()}
-
-          <br/>
           <br/>
           {this.displayCompanyDropdown()}
 
@@ -211,7 +209,6 @@ class CreateIOIForm extends Component{
                 <option selected>Choose...</option>
                 <option value="One">YES</option>
                 <option value="Two">NO</option>
-                <option value="Three">Three</option>
               </select>
               <div className="text-help">
                 {warrants.touched ? warrants.error : ''}

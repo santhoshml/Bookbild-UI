@@ -10,26 +10,96 @@ import cUtils from '../utils/common_utils';
 import Constants from '../utils/constants';
 import Header from './header';
 import formatCurrency from 'format-currency';
+import Dropdown from 'react-dropdown'
 
 class RFPMarketPlace extends Component{
   constructor(props){
     super(props);
     this.state = {
 			rfpList : null,
-      termSheetActivity : null
+      termSheetActivity : null,
+      selectedSector : null
 		}
   }
 
   componentWillMount() {
     this.props.fetchAllRFPAction();
-    this.props.fetchTermSheetActivityStatsAction();
+    this.props.fetchTermSheetActivityStatsAction('overall');
   }
+
+  onTermSheetActivityChange(option){
+    console.log('I am in onTermSheetActivityChange');
+    console.log('option:'+JSON.stringify(option));
+    this.setState({
+      selectedSector : option
+    });
+    this.props.fetchTermSheetActivityStatsAction(option.value);
+  }
+
+  createTermSheetActivityDropdown(){
+    const options = [
+      {value:'overall', label:'All Sectors'},
+      {value:'it', label:'IT'},
+      {value:'financials', label:'Financials'},
+      {value:'healthcare', label:'Health Care'},
+      {value:'energy', label:'Energy'},
+      {value:'consumerStaples', label:'Consumer Staples'},
+      {value:'consumerDisc', label:'Consumer Disc'},
+      {value:'industrials', label:'Industrials'},
+      {value:'materials', label:'Materials'},
+      {value:'utilities', label:'Utilities'},
+      {value:'telecoms', label:'Telecoms'},
+    ];
+    const defaultOption = options[0];
+    console.log('In createTermSheetActivityDropdown, '+JSON.stringify(this.state.selectedSector));
+    return(
+      <div className='col-md-3'>
+        <Dropdown
+          options={options}
+          onChange={this.onTermSheetActivityChange.bind(this)}
+          value={this.state.selectedSector ? this.state.selectedSector : defaultOption}
+          placeholder="Select an option" />
+      </div>
+    );
+  }
+
+  displaySectorRankings(){
+    if(this.state.selectedSector === 'overall'){
+      return(
+        <tr>
+          <td>
+            Sector Rankings :
+          </td>
+          <td>
+            yoyo
+          </td>
+        </tr>
+      );
+    }
+  }
+
+  displayStructureRankings(){
+    if(this.state.selectedSector === 'overall'){
+      return(
+        <tr>
+          <td>
+            Structure Rankings :
+          </td>
+          <td>
+            yoyo
+          </td>
+        </tr>
+      );
+    }
+  }
+
 
   displayTermSheetActivity(){
     console.log('I am in displayTermSheetActivity');
     if(this.props.termSheetActivity != null){
       return(<div>
-        <h3>Term Sheet Activity</h3>
+        {this.createTermSheetActivityDropdown()}
+        <center><h3>Term Sheet Activity</h3></center>
         <br/>
         <table className="table table-striped">
           <tbody>
@@ -67,20 +137,14 @@ class RFPMarketPlace extends Component{
             </tr>
             <tr>
               <td>
-                Sector Rankings:
+                Levarage :
               </td>
               <td>
-                {cUtils.getTopThreeSectors(this.props.termSheetActivity)}
+                {this.props.termSheetActivity.levarage}
               </td>
             </tr>
-            <tr>
-              <td>
-                Structure Rankings :
-              </td>
-              <td>
-                {cUtils.getTopThreeProducts(this.props.termSheetActivity)}
-              </td>
-            </tr>
+            {this.displaySectorRankings()}
+            {this.displayStructureRankings()}
           </tbody>
         </table>
       </div>);

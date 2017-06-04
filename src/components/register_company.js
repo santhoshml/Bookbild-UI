@@ -34,7 +34,7 @@ class RegisterCompanyForm extends Component{
 					<h3>Add a NEW Company </h3>
 					<br/>
 					<br/>
-	        <h3>Compay Details</h3>
+	        <h3>Company Details</h3>
 
 					<div className={`row`}>
 		        <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>

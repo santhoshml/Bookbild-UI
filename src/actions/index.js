@@ -56,10 +56,10 @@ export function fetchAllCompanyListForRFP(){
   }
 }
 
-export function fetchTermSheetActivityStatsAction(){
+export function fetchTermSheetActivityStatsAction(sector){
   console.log('In actions.fetchRFPAction');
   const request=axios({
-    url : '/fetchTermSheetActivity',
+    url : '/fetchTermSheetActivity?sector='+sector,
     method : 'GET',
     baseURL : ROOT_URL
   });

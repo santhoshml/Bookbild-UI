@@ -241,7 +241,6 @@ class RFPDetail extends Component{
         <br/>
         {this.displayFavoritesButton()}
         {this.displayCreateIOIButton()}
-        {this.displayMakePitchButton()}
         {this.displayViewIntrestListButton()}
         {this.displayEditRFPButton()}
         {this.displayIndustryResearchButton()}

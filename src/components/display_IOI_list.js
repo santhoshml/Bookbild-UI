@@ -118,7 +118,7 @@ export default class DisplayIOIList extends Component {
       display: 'Amortization'
     }, {
       name: 'upfrontFee',
-      display: 'IOD/Upfront fee',
+      display: 'OID/Upfront fee',
       renderer : this.upfrontFeeRenderer
     }, {
       name: 'governance',
