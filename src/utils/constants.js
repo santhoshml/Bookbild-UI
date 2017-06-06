@@ -53,24 +53,24 @@ exports.DISPLAY_VALUES_MAP = {
 };
 
 exports.SECTOR_MAP ={
-  'sector_it'               : 'IT',
-  'sector_financials'       : 'Financials',
-  'sector_healthCare'       : 'Healthcare',
-  'sector_energy'           : 'Energy',
-  'sector_consumer_staples' : 'Consumer Staples',
-  'sector_consumer_disc'    : 'Consumer Disc',
-  'sector_industrials'      : 'Industrials',
-  'sector_materials'        : 'Materials',
-  'sector_utilities'        : 'Utilities',
-  'sector_telecoms'         : 'Telecoms',
-  'sector_misc'             : 'Misc'
+  'it'               : 'IT',
+  'financials'       : 'Financials',
+  'healthCare'       : 'Health Care',
+  'energy'           : 'Energy',
+  'consumerStaples' : 'Consumer Staples',
+  'consumerDisc'    : 'Consumer Disc',
+  'industrials'      : 'Industrials',
+  'materials'        : 'Materials',
+  'utilities'        : 'Utilities',
+  'telecoms'         : 'Telecoms',
+  'misc'             : 'Misc'
 };
 
 exports.PRODUCT_MAP = {
-  'struct_revolver'       : 'Revolver',
-  'struct_termloan'       : 'Term Loan',
-  'struct_mezzanine'      : 'Mezzanine',
-  'struct_multi_tranche'  : 'Multi-Tranche',
-  'struct_uni_tranche'    : 'Uni-Tranche',
-  'struct_misc'           : 'Misc'
+  'revolver'       : 'Revolver',
+  'termLoan'       : 'Term Loan',
+  'mezzanine'      : 'Mezzanine',
+  'multiTranche'  : 'Multi-Tranche',
+  'uniTranche'    : 'Uni-Tranche',
+  'misc'           : 'Misc'
 };

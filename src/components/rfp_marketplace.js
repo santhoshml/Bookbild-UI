@@ -25,6 +25,9 @@ class RFPMarketPlace extends Component{
   componentWillMount() {
     this.props.fetchAllRFPAction();
     this.props.fetchTermSheetActivityStatsAction('overall');
+    this.setState({
+      selectedSector : {value:'overall', label:'All Sectors'}
+    });
   }
 
   onTermSheetActivityChange(option){
@@ -41,7 +44,7 @@ class RFPMarketPlace extends Component{
       {value:'overall', label:'All Sectors'},
       {value:'it', label:'IT'},
       {value:'financials', label:'Financials'},
-      {value:'healthcare', label:'Health Care'},
+      {value:'healthCare', label:'Health Care'},
       {value:'energy', label:'Energy'},
       {value:'consumerStaples', label:'Consumer Staples'},
       {value:'consumerDisc', label:'Consumer Disc'},
@@ -64,14 +67,14 @@ class RFPMarketPlace extends Component{
   }
 
   displaySectorRankings(){
-    if(this.state.selectedSector === 'overall'){
+    if(this.state.selectedSector && this.state.selectedSector.value === 'overall'){
       return(
         <tr>
           <td>
             Sector Rankings :
           </td>
           <td>
-            yoyo
+            {this.props.termSheetActivity.sector_count ? cUtils.getTopThreeSectors(this.props.termSheetActivity.sector_count, Number(this.props.termSheetActivity.num_active_rfp)) : ''}
           </td>
         </tr>
       );
@@ -79,14 +82,14 @@ class RFPMarketPlace extends Component{
   }
 
   displayStructureRankings(){
-    if(this.state.selectedSector === 'overall'){
+    if(this.state.selectedSector && this.state.selectedSector.value === 'overall'){
       return(
         <tr>
           <td>
             Structure Rankings :
           </td>
           <td>
-            yoyo
+            {this.props.termSheetActivity.struct_count ? cUtils.getTopThreeProducts(this.props.termSheetActivity.struct_count, Number(this.props.termSheetActivity.num_active_rfp)) : ''}
           </td>
         </tr>
       );

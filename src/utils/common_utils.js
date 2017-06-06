@@ -2,38 +2,36 @@ import constants from './constants';
 import moment from 'moment';
 import sortJsonArray from 'sort-json-array';
 
-exports.getTopThreeSectors = function(obj){
+exports.getTopThreeSectors = function(obj, grandTotal){
   let sList = [];
   let keys = Object.keys(obj);
   keys.forEach(function(key){
-    if(key.startsWith('sector')){
-      sList.push({
-        sector : key,
-        count : obj[key]
-      });
-    }
+    sList.push({
+      sector : key,
+      count : Number(obj[key])
+    });
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
-  return exports.getSectorDisplayName(sortedList[0].sector)
-    +', '+ exports.getSectorDisplayName(sortedList[1].sector)
-    +', '+ exports.getSectorDisplayName(sortedList[2].sector);
+  // console.log('In sectors, sortedList :'+JSON.stringify(sortedList));
+  return exports.getSectorDisplayName(sortedList[0].sector) + '('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getSectorDisplayName(sortedList[1].sector) + '('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getSectorDisplayName(sortedList[2].sector) + '('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
 }
 
-exports.getTopThreeProducts = function(obj){
+exports.getTopThreeProducts = function(obj, grandTotal){
   let sList = [];
   let keys = Object.keys(obj);
   keys.forEach(function(key){
-    if(key.startsWith('struct')){
-      sList.push({
-        sector : key,
-        count : obj[key]
-      });
-    }
+    sList.push({
+      sector : key,
+      count : Number(obj[key])
+    });
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
-  return exports.getProductDisplayName(sortedList[0].sector)
-    +', '+ exports.getProductDisplayName(sortedList[1].sector)
-    +', '+ exports.getProductDisplayName(sortedList[2].sector);
+  // console.log('In products, sortedList :'+JSON.stringify(sortedList));
+  return exports.getProductDisplayName(sortedList[0].sector) + '('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getProductDisplayName(sortedList[1].sector) + '('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getProductDisplayName(sortedList[2].sector) + '('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
 }
 
 exports.getSectorDisplayName = function(name){

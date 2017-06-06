@@ -374,19 +374,41 @@ function mapStateToProps(state) {
     intializedData.initialValues.rfpId = ioi.rfpId;
     intializedData.initialValues.createdById = ioi.createdById;
     intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
+  } else {
+    intializedData.initialValues.maxDebtAllowed = 0;
+    intializedData.initialValues.loanSize = 0;
+    intializedData.initialValues.tranche = 'N/A';
+    intializedData.initialValues.loanStructure = 'N/A';
+    intializedData.initialValues.cashInterest = 0;
+    intializedData.initialValues.pikIntreset = 0;
+    intializedData.initialValues.liborFloor = 0;
+    intializedData.initialValues.maturity = 0;
+    intializedData.initialValues.year1 = 0;
+    intializedData.initialValues.year2 = 0;
+    intializedData.initialValues.year3 = 0;
+    intializedData.initialValues.year4 = 0;
+    intializedData.initialValues.year5  = 0;
+    intializedData.initialValues.upfrontFee = 0;
+    intializedData.initialValues.governance = 'N/A';
+    intializedData.initialValues.warrants = 'N/A';
+    intializedData.initialValues.covenants = 'N/A';
+    intializedData.initialValues.rfpId = '0';
+    intializedData.initialValues.createdById = '0';
+    intializedData.initialValues.createdByCompanyId = '0';
   }
 
   return intializedData;
 }
 
 function validate(values){
+  console.log('values:'+JSON.stringify(values));
   const errors={};
 
-  if(!values.loanSize){
+  if(!values.loanSize || values.loanSize == 0){
     errors.loanSize='Enter value of loan size';
   }
 
-  if(!values.loanStructure){
+  if(!values.loanStructure || values.loanStructure === 'N/A'){
     errors.loanStructure='Enter value for loan structure';
   }
 
@@ -398,11 +420,11 @@ function validate(values){
     errors.pikIntreset='Enter value for PIK interest';
   }
 
-  if(!values.liborFloor){
+  if(!values.liborFloor ){
     errors.liborFloor='Enter value for LIBOR floor';
   }
 
-  if(!values.maturity){
+  if(!values.maturity || values.maturity == 0){
     errors.maturity='Enter value for maturity';
   }
 
@@ -410,7 +432,7 @@ function validate(values){
     errors.upfrontFee='Enter value for upfront fee';
   }
 
-	if(!values.covenants){
+	if(!values.covenants || values.covenants === 'N/A'){
     errors.covenants='Enter value for covenants';
   }
 
@@ -432,4 +454,5 @@ export default reduxForm({
     , 'pikIntreset', 'liborFloor', 'maturity', 'year1', 'year2', 'year3', 'year4', 'year5'
     , 'upfrontFee', 'governance', 'warrants', 'covenants', 'rfpId', 'createdById'
     , 'createdByCompanyId'],
+  validate
 }, mapStateToProps, mapDispatchToProps)(CreateIOIForm);

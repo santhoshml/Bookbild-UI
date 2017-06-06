@@ -1,18 +1,30 @@
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router';
-
-import * as actionCreators from '../actions/index';
+import { resetActivityTermSheetStatsAction } from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Header from './header';
+import { bindActionCreators } from 'redux';
 
-export default class Admin extends Component{
+
+class Admin extends Component{
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   constructor(props){
     super(props);
   }
 
+  resetActivityTermSheetStats(){
+    console.log('In resetActivityTermSheetStats');
+    this.props.resetActivityTermSheetStatsAction()
+      .then(() => {
+        this.context.router.push('/superAdmin');
+    });
+  }
 
   render(){
     return(
@@ -26,10 +38,26 @@ export default class Admin extends Component{
           Create RFP
         </Link>
         &nbsp;&nbsp;
-        <Link to="/" className="btn btn-primary">
+        <Link onClick={this.resetActivityTermSheetStats.bind(this)} className="btn btn-primary">
           Reset Activity TermSheet stats
         </Link>
       </div>
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  // Whenever selectBook is called, the result shoudl be passed
+  // to all of our reducers
+  return bindActionCreators({
+    resetActivityTermSheetStatsAction: resetActivityTermSheetStatsAction
+  }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Admin);
