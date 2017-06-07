@@ -236,7 +236,6 @@ class RFPDetail extends Component{
         <Header />
         {this.state.rfp ? this.displayCompanyDesc() : ''}
         {this.state.rfp ? this.displayOutstandingRFP() : ''}
-        {this.displayFinancialDetails()}
         <br/>
         <br/>
         {this.displayFavoritesButton()}
