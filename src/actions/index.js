@@ -24,10 +24,25 @@ export const FETCH_TERM_SHEET_ACTIVITY_STATS = 'FETCH_TERM_SHEET_ACTIVITY_STATS'
 export const FETCH_COMPANY_LIST_FOR_RFP = 'FETCH_COMPANY_LIST_FOR_RFP';
 export const CREATE_PITCH = 'CREATE_PITCH';
 export const RESET_TERMSHEET_ACTIVITY = 'RESET_TERMSHEET_ACTIVITY';
+export const GET_IOI_FOR_RFP_COMPANY = 'GET_IOI_FOR_RFP_COMPANY';
 
 
 const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-35-167-243-113.us-west-2.compute.amazonaws.com:1127';
+
+export function getIOIForRFPAndCompanyAction(rfpId, companyId){
+  console.log('In actions.getIOIForRFPAndCompanyAction');
+  const request=axios({
+    url : '/getIOIForRFPAndCompany?rfpId='+rfpId+'&companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_IOI_FOR_RFP_COMPANY,
+    payload: request
+  }
+}
 
 export function resetActivityTermSheetStatsAction(props){
   console.log('In actions.resetActivityTermSheetStatsAction');

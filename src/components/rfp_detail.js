@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router';
-import { addRFPToFavoritesAction, removeRFPFromFavoritesAction, getRFPFromFavoritesAction } from '../actions/index';
+import { addRFPToFavoritesAction, removeRFPFromFavoritesAction, getRFPFromFavoritesAction, getIOIForRFPAndCompanyAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import Constants from '../utils/constants';
@@ -46,6 +46,9 @@ class RFPDetail extends Component{
             favorite : this.props.favorite
           });
       });
+
+      // this call is to get the IOI created for this RFP by this comapny
+      this.props.getIOIForRFPAndCompanyAction(rfp.rfpId, company.companyId);
     }
   }
 
@@ -195,8 +198,19 @@ class RFPDetail extends Component{
     }
   }
 
-  displayCreateIOIButton(){
+  displayIOIButton(){
     if(this.state.user && this.state.user.role === Constants.KEY_LENDER){
+      if(this.props.ioi){
+        lsUtils.setValue(Constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
+        return(
+          <span>
+            &nbsp;&nbsp;&nbsp;
+            <Link to={"/createIOI/"+Constants.IOI_EDIT} className="btn btn-primary">
+              EDIT IOI
+            </Link>
+          </span>
+        );
+      } else {
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
@@ -204,7 +218,7 @@ class RFPDetail extends Component{
             CREATE IOI
           </Link>
         </span>
-      );
+      )};
     }
   }
 
@@ -231,6 +245,7 @@ class RFPDetail extends Component{
   }
 
   render(){
+    console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
     return(
       <div>
         <Header />
@@ -239,7 +254,7 @@ class RFPDetail extends Component{
         <br/>
         <br/>
         {this.displayFavoritesButton()}
-        {this.displayCreateIOIButton()}
+        {this.displayIOIButton()}
         {this.displayViewIntrestListButton()}
         {this.displayEditRFPButton()}
         {this.displayIndustryResearchButton()}
@@ -258,8 +273,9 @@ function mapStateToProps(state) {
   // console.log('state:'+JSON.stringify(state));
 
   let rObject = {
-    isFavorite : state.rfpDetails.isFavorite,
-    favorite  : state.rfpDetails.rfpFavoritesJSON
+    isFavorite  : state.rfpDetails.isFavorite,
+    favorite    : state.rfpDetails.rfpFavoritesJSON,
+    ioi         : (state.ioiList &&  state.ioiList.ioiList)? state.ioiList.ioiList[0] : null
   };
 
   // if(state.rfpList.rfpList){
@@ -275,7 +291,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     addRFPToFavoritesAction : addRFPToFavoritesAction,
     removeRFPFromFavoritesAction : removeRFPFromFavoritesAction,
-    getRFPFromFavoritesAction : getRFPFromFavoritesAction
+    getRFPFromFavoritesAction : getRFPFromFavoritesAction,
+    getIOIForRFPAndCompanyAction : getIOIForRFPAndCompanyAction
   }, dispatch);
 }
 

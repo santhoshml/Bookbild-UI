@@ -1,4 +1,4 @@
-import { FETCH_IOI_LIST_FOR_RFP, FETCH_IOI_LIST_FOR_COMPANY } from '../actions/index';
+import { FETCH_IOI_LIST_FOR_RFP, FETCH_IOI_LIST_FOR_COMPANY, GET_IOI_FOR_RFP_COMPANY } from '../actions/index';
 
 const INITIAL_STATE = { ioiList: null, ioiCompanyList : null, ioiUserList : null};
 
@@ -33,6 +33,19 @@ export default function(state = INITIAL_STATE, action) {
       };
     }
     break;
+case GET_IOI_FOR_RFP_COMPANY:
+  if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
+    return {
+      ...state
+      , ioiList: action.payload.data.data.Items
+    };
+  } else {
+    return {
+        ...state
+        , errObject : action.payload.data
+    };
+  }
+  break;
   default:
     return state;
   }

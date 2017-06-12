@@ -9,6 +9,7 @@ import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 import Header from './header';
 import NumberFormat from 'react-number-format';
+import Select from 'react-select';
 
 var gType=null;
 class CreateIOIForm extends Component{
@@ -21,7 +22,8 @@ class CreateIOIForm extends Component{
     this.state = {
       user : null,
       rfp : null,
-      type : props.params.type
+      type : props.params.type,
+      selectedCovenant: []
     };
   }
 
@@ -79,14 +81,16 @@ class CreateIOIForm extends Component{
         <div>
           <h4>RFP Details : </h4>
           <table className="table table-bordered">
-            <tr>
-              <td>Sector: {this.state.rfp.sector}</td>
-              <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
-            </tr>
-            <tr>
-              <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-            </tr>
+            <tbody>
+              <tr>
+                <td>Sector: {this.state.rfp.sector}</td>
+                <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+              </tr>
+              <tr>
+                <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+                <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              </tr>
+            </tbody>
           </table>
         </div>
       );
@@ -109,12 +113,41 @@ class CreateIOIForm extends Component{
     }
   }
 
+  onSelectCovenant(option) {
+      console.log('You selected '+JSON.stringify(option));
+      this.setState({
+        selectedCovenant: this.state.selectedCovenant.push(option)
+      });
+    }
+
   render(){
     console.log('I am in create IOI');
     const {fields:{maxDebtAllowed, loanSize, tranche, loanStructure, cashInterest
       , pikIntreset, liborFloor, maturity, year1, year2, year3, year4, year5
       , upfrontFee, governance, warrants, covenants, rfpId, createdById
-      , createdByCompanyId}, handleSubmit} = this.props;
+      , createdByCompanyId, cpYear1, cpYear2, cpYear3, cpYear4, cpYear5}, handleSubmit} = this.props;
+
+      const covenantsOptions = [
+        {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
+        {value: 'Max Total Leverage', label: 'Max Total Leverage'},
+        {value: 'Minimum EBITDA', label: 'Minimum EBITDA'},
+        {value: 'Minimum Revenue', label: 'Minimum Revenue'},
+        {value: 'Minimum Recurring Revenue', label: 'Minimum Recurring Revenue'},
+        {value: 'Minimum Interest Coverage', label: 'Minimum Interest Coverage'},
+        {value: 'Fixed Charge Coverage', label: 'Fixed Charge Coverage'},
+        {value: 'Springing Fixed Charge Coverage', label: 'Springing Fixed Charge Coverage'},
+        {value: 'Minimum Liquidity', label: 'Minimum Liquidity'},
+        {value: 'Minimum Excess Availability', label: 'Minimum Excess Availability'},
+        {value: 'Other', label: 'Other'}
+      ];
+
+      console.log('this.state.selectedCovenants:'+JSON.stringify(this.state.selectedCovenant));
+
+      // <div className={`row`}>
+      //   <label>Covenants</label>
+      //   <Select multi={true} simpleValue={true} value={this.state.selectedCovenant} options={covenantsOptions} onChange={this.onSelectCovenant.bind(this)} />
+      // </div>
+      // <br/>
 
     return(
       <div>
@@ -151,7 +184,7 @@ class CreateIOIForm extends Component{
             <div className={`form-group col-xs-6 col-md-6 ${tranche.touched && tranche.invalid ? 'has-danger' : ''}`}>
               <label>Tranche? (e.g. Delayed Draw)</label>
               <select className="form-control" {...tranche}>
-                <option selected>Choose...</option>
+                <option>Choose...</option>
                 <option value="Delayed Draw">Delayed Draw</option>
                 <option value="Accordion">Accordion</option>
                 <option value="Fixed Asset Subline">Fixed Asset Subline</option>
@@ -167,7 +200,7 @@ class CreateIOIForm extends Component{
             <div className={`form-group col-xs-6 col-md-6 ${loanStructure.touched && loanStructure.invalid ? 'has-danger' : ''}`}>
               <label>Loan Structure</label>
               <select className="form-control" {...loanStructure}>
-                <option selected>Choose...</option>
+                <option>Choose...</option>
                 <option value="ABL-Revolver">ABL-Revolver</option>
                 <option value="ABL-Term Loan">ABL-Term Loan</option>
                 <option value="ABL-Both">ABL-Both</option>
@@ -200,10 +233,10 @@ class CreateIOIForm extends Component{
           </div>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-4 col-md-4 ${governance.touched && governance.invalid ? 'has-danger' : ''}`}>
+            <div className={`form-group col-xs-6 col-md-6 ${governance.touched && governance.invalid ? 'has-danger' : ''}`}>
               <label>Governance</label>
               <select className="form-control" {...governance}>
-                <option selected>Choose...</option>
+                <option>Choose...</option>
                 <option value="One">YES</option>
                 <option value="Two">NO</option>
               </select>
@@ -212,10 +245,10 @@ class CreateIOIForm extends Component{
               </div>
             </div>
 
-            <div className={`form-group col-xs-4 col-md-4 ${warrants.touched && warrants.invalid ? 'has-danger' : ''}`}>
+            <div className={`form-group col-xs-6 col-md-6 ${warrants.touched && warrants.invalid ? 'has-danger' : ''}`}>
               <label>Warrants</label>
               <select className="form-control" {...warrants}>
-                <option selected>Choose...</option>
+                <option>Choose...</option>
                 <option value="One">YES</option>
                 <option value="Two">NO</option>
               </select>
@@ -238,84 +271,136 @@ class CreateIOIForm extends Component{
           </div>
           <br/>
 
-          <fieldset className="form-group col-xs-5 col-md-5 scheduler-border">
-            <legend className="scheduler-border">Loan Pricing (%)</legend>
-            <div className={`${cashInterest.touched && cashInterest.invalid ? 'has-danger' : ''}`}>
-              <label>Cash Interest</label>
-              <input type="text" className="form-control" {...cashInterest} />
-              <div className="text-help">
-                {cashInterest.touched ? cashInterest.error : ''}
-              </div>
-            </div>
-            <br/>
-
-            <div className={`${pikIntreset.touched && pikIntreset.invalid ? 'has-danger' : ''}`}>
-              <label>PIK Interest</label>
-              <input type="text" className="form-control" {...pikIntreset} />
-              <div className="text-help">
-                {pikIntreset.touched ? pikIntreset.error : ''}
-              </div>
-            </div>
-            <br/>
-
-            <div className={`${liborFloor.touched && liborFloor.invalid ? 'has-danger' : ''}`}>
-              <label>LIBOR Floor</label>
-              <input type="text" className="form-control" {...liborFloor} />
-              <div className="text-help">
-                {liborFloor.touched ? liborFloor.error : ''}
-              </div>
-            </div>
-          </fieldset>
-
-          <div className={`form-group col-xs-2 col-md-2`}>
-          </div>
-
-          <fieldset className="form-group col-xs-5 col-md-5 scheduler-border">
-            <legend className="scheduler-border">Amortization (%)</legend>
-            <div className={`${year1.touched && year1.invalid ? 'has-danger' : ''}`}>
-              <label>Year 1</label>
-              <input type="text" className="form-control" {...year1} />
-              <div className="text-help">
-                {year1.touched ? year1.error : ''}
-              </div>
-            </div>
-            <br/>
-
-            <div className={`${year2.touched && year2.invalid ? 'has-danger' : ''}`}>
-              <label>Year 2</label>
-              <input type="text" className="form-control" {...year2} />
-              <div className="text-help">
-                {year2.touched ? year2.error : ''}
-              </div>
-            </div>
-            <br/>
-
-            <div className={`${year3.touched && year3.invalid ? 'has-danger' : ''}`}>
-              <label>Year 3</label>
-                <input type="text" className="form-control" {...year3} />
+          <div className={`row`}>
+            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+              <legend className="scheduler-border">Loan Pricing(%)</legend>
+              <div className={`${cashInterest.touched && cashInterest.invalid ? 'has-danger' : ''}`}>
+                <label>Cash Interest</label>
+                <input type="text" className="form-control" {...cashInterest} />
                 <div className="text-help">
-                  {year3.touched ? year3.error : ''}
+                  {cashInterest.touched ? cashInterest.error : ''}
                 </div>
-            </div>
-            <br/>
-
-            <div className={`${year4.touched && year4.invalid ? 'has-danger' : ''}`}>
-              <label>Year 4</label>
-              <input type="text" className="form-control" {...year4} />
-              <div className="text-help">
-                {year4.touched ? year4.error : ''}
               </div>
-            </div>
-            <br/>
+              <br/>
 
-            <div className={`${year5.touched && year5.invalid ? 'has-danger' : ''}`}>
-              <label>Year 5</label>
-              <input type="text" className="form-control" {...year5} />
-              <div className="text-help">
-                {year5.touched ? year5.error : ''}
+              <div className={`${pikIntreset.touched && pikIntreset.invalid ? 'has-danger' : ''}`}>
+                <label>PIK Interest</label>
+                <input type="text" className="form-control" {...pikIntreset} />
+                <div className="text-help">
+                  {pikIntreset.touched ? pikIntreset.error : ''}
+                </div>
               </div>
+              <br/>
+
+              <div className={`${liborFloor.touched && liborFloor.invalid ? 'has-danger' : ''}`}>
+                <label>LIBOR Floor</label>
+                <input type="text" className="form-control" {...liborFloor} />
+                <div className="text-help">
+                  {liborFloor.touched ? liborFloor.error : ''}
+                </div>
+              </div>
+            </fieldset>
+
+            <div className={`form-group col-xs-1 col-md-1`}>
             </div>
-          </fieldset>
+
+            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+              <legend className="scheduler-border">Amortization (%)</legend>
+              <div className={`${year1.touched && year1.invalid ? 'has-danger' : ''}`}>
+                <label>Year 1</label>
+                <input type="text" className="form-control" {...year1} />
+                <div className="text-help">
+                  {year1.touched ? year1.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${year2.touched && year2.invalid ? 'has-danger' : ''}`}>
+                <label>Year 2</label>
+                <input type="text" className="form-control" {...year2} />
+                <div className="text-help">
+                  {year2.touched ? year2.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${year3.touched && year3.invalid ? 'has-danger' : ''}`}>
+                <label>Year 3</label>
+                  <input type="text" className="form-control" {...year3} />
+                  <div className="text-help">
+                    {year3.touched ? year3.error : ''}
+                  </div>
+              </div>
+              <br/>
+
+              <div className={`${year4.touched && year4.invalid ? 'has-danger' : ''}`}>
+                <label>Year 4</label>
+                <input type="text" className="form-control" {...year4} />
+                <div className="text-help">
+                  {year4.touched ? year4.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${year5.touched && year5.invalid ? 'has-danger' : ''}`}>
+                <label>Year 5</label>
+                <input type="text" className="form-control" {...year5} />
+                <div className="text-help">
+                  {year5.touched ? year5.error : ''}
+                </div>
+              </div>
+            </fieldset>
+
+            <div className={`form-group col-xs-1 col-md-1`}>
+            </div>
+
+            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+              <legend className="scheduler-border">Call Protection(%)</legend>
+              <div className={`${cpYear1.touched && cpYear1.invalid ? 'has-danger' : ''}`}>
+                <label>Year 1</label>
+                <input type="text" className="form-control" {...cpYear1} />
+                <div className="text-help">
+                  {cpYear1.touched ? cpYear1.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${cpYear2.touched && cpYear2.invalid ? 'has-danger' : ''}`}>
+                <label>Year 2</label>
+                <input type="text" className="form-control" {...cpYear2} />
+                <div className="text-help">
+                  {cpYear2.touched ? cpYear2.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${cpYear3.touched && cpYear3.invalid ? 'has-danger' : ''}`}>
+                <label>Year 3</label>
+                  <input type="text" className="form-control" {...cpYear3} />
+                  <div className="text-help">
+                    {cpYear3.touched ? cpYear3.error : ''}
+                  </div>
+              </div>
+              <br/>
+
+              <div className={`${cpYear4.touched && cpYear4.invalid ? 'has-danger' : ''}`}>
+                <label>Year 4</label>
+                <input type="text" className="form-control" {...cpYear4} />
+                <div className="text-help">
+                  {cpYear4.touched ? cpYear4.error : ''}
+                </div>
+              </div>
+              <br/>
+
+              <div className={`${cpYear5.touched && cpYear5.invalid ? 'has-danger' : ''}`}>
+                <label>Year 5</label>
+                <input type="text" className="form-control" {...cpYear5} />
+                <div className="text-help">
+                  {cpYear5.touched ? cpYear5.error : ''}
+                </div>
+              </div>
+            </fieldset>
+          </div>
           <br/>
           <br/>
 
@@ -374,6 +459,12 @@ function mapStateToProps(state) {
     intializedData.initialValues.rfpId = ioi.rfpId;
     intializedData.initialValues.createdById = ioi.createdById;
     intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
+    intializedData.initialValues.cpYear1 = ioi.cpYear1 ? ioi.cpYear1 : 0;
+    intializedData.initialValues.cpYear2 = ioi.cpYear2 ? ioi.cpYear2 : 0;
+    intializedData.initialValues.cpYear3 = ioi.cpYear3 ? ioi.cpYear3 : 0;
+    intializedData.initialValues.cpYear4 = ioi.cpYear4 ? ioi.cpYear4 : 0;
+    intializedData.initialValues.cpYear5  = ioi.cpYear5 ? ioi.cpYear5 : 0;
+
   } else {
     intializedData.initialValues.maxDebtAllowed = 0;
     intializedData.initialValues.loanSize = 0;
@@ -395,6 +486,12 @@ function mapStateToProps(state) {
     intializedData.initialValues.rfpId = '0';
     intializedData.initialValues.createdById = '0';
     intializedData.initialValues.createdByCompanyId = '0';
+    intializedData.initialValues.cpYear1 = 0;
+    intializedData.initialValues.cpYear2 = 0;
+    intializedData.initialValues.cpYear3 = 0;
+    intializedData.initialValues.cpYear4 = 0;
+    intializedData.initialValues.cpYear5  = 0;
+
   }
 
   return intializedData;
@@ -453,6 +550,6 @@ export default reduxForm({
   'fields': ['maxDebtAllowed', 'loanSize', 'tranche', 'loanStructure', 'cashInterest'
     , 'pikIntreset', 'liborFloor', 'maturity', 'year1', 'year2', 'year3', 'year4', 'year5'
     , 'upfrontFee', 'governance', 'warrants', 'covenants', 'rfpId', 'createdById'
-    , 'createdByCompanyId'],
+    , 'createdByCompanyId', 'cpYear1', 'cpYear2', 'cpYear3', 'cpYear4', 'cpYear5'],
   validate
 }, mapStateToProps, mapDispatchToProps)(CreateIOIForm);
