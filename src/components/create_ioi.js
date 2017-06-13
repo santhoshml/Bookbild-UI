@@ -256,20 +256,18 @@ class CreateIOIForm extends Component{
                 {warrants.touched ? warrants.error : ''}
               </div>
             </div>
+          </div>
+          <br/>
 
-            <div className={`form-group col-xs-4 col-md-4 ${covenants.touched && covenants.invalid ? 'has-danger' : ''}`}>
+          <div className={`row`}>
+            <div className={`form-group col-xs-12 col-md-12 ${covenants.touched && covenants.invalid ? 'has-danger' : ''}`}>
               <label>Covenants</label>
-              <select className="form-control" {...covenants}>
-                <option selected>Choose...</option>
-                <option value="One">YES</option>
-                <option value="Two">NO</option>
-              </select>
+              <input type="text" className="form-control" placeholder={constants.COVENANTS_SAMPLE} {...covenants} />
               <div className="text-help">
                 {covenants.touched ? covenants.error : ''}
               </div>
             </div>
           </div>
-          <br/>
 
           <div className={`row`}>
             <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">

@@ -140,7 +140,7 @@ class RFPMarketPlace extends Component{
             </tr>
             <tr>
               <td>
-                Average Maximum Leverage(x) Allowed:
+                Average Leverage(x) :
               </td>
               <td>
                 {this.props.termSheetActivity.levarage}x

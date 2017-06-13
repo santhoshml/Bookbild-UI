@@ -53,7 +53,11 @@ export default class DisplayIOIList extends Component {
   }
 
   upfrontFeeRenderer(row){
-    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+  }
+
+  maturityRenderer(row){
+    return <NumberFormat value={row.maturity} displayType={'text'} suffix={'yrs'} />
   }
 
   getCompanyNameRenderer(row){
@@ -81,11 +85,7 @@ export default class DisplayIOIList extends Component {
   }
 
   getAllColoumns(){
-    return [{
-      name: 'createdByCompanyId',
-      display: 'Investor',
-      renderer: this.getCompanyNameRenderer.bind(this)
-    }, {
+    let colArr = [{
       name: 'maxDebtAllowed',
       display: 'Max Debt Allowed',
       renderer : this.maxDebtRenderer
@@ -94,14 +94,11 @@ export default class DisplayIOIList extends Component {
       display: 'Loan Size',
       renderer : this.loanSizeRenderer
     }, {
-      name: 'delayedDraw',
-      display: 'Delayed Draw'
-    }, {
       name: 'loanStructure',
       display: 'Structure'
     }, {
       name: 'liborSpread',
-      display: 'LIBOR spread'
+      display: 'Intrest'
     }, {
       name: 'pikIntreset',
       display: 'PIK',
@@ -112,10 +109,8 @@ export default class DisplayIOIList extends Component {
       renderer : this.liborFloorRenderer
     }, {
       name: 'maturity',
-      display: 'Maturity'
-    }, {
-      name: 'amortization',
-      display: 'Amortization'
+      display: 'Maturity',
+      renderer : this.maturityRenderer
     }, {
       name: 'upfrontFee',
       display: 'OID/Upfront fee',
@@ -136,14 +131,44 @@ export default class DisplayIOIList extends Component {
       name: 'blendedCost',
       display: 'Blended Cost'
     }];
+
+    // check if there is value for tranche/delayedDraw
+    let delayedDrawExists = false;
+    this.state.ioiList.forEach(function(ioi){
+      if(ioi.delayedDraw && ioi.delayedDraw.trim() !== ''){
+        delayedDrawExists= true;
+      }
+    });
+    if(delayedDrawExists === true){
+      // remove delated Draw from the col list
+      let ele = {
+        name: 'delayedDraw',
+        display: 'Tranche?'
+      };
+      colArr.splice(2, 0, ele);
+    }
+
+    // check if there is value for Amort/amortization
+    let amortizationExists = false;
+    this.state.ioiList.forEach(function(ioi){
+      if(ioi.amortization && ioi.amortization.trim() !== ''){
+        amortizationExists= true;
+      }
+    });
+    if(amortizationExists === true){
+      // remove delated Draw from the col list
+      let ele = {
+        name: 'amortization',
+        display: 'Amort.'
+      };
+      colArr.splice(8, 0, ele);
+    }
+
+    return colArr;
   }
 
   getMinimalColoumns(){
-    return [{
-      name: 'createdByCompanyName',
-      display: 'Investor',
-      renderer: this.getCompanyNameRenderer.bind(this)
-    }, {
+    let colArr= [{
       name: 'loanSize',
       display: 'Loan Size',
       renderer : this.loanSizeRenderer
@@ -162,6 +187,7 @@ export default class DisplayIOIList extends Component {
       display: 'Last Updated',
       renderer: this.getDateFormatRenderer.bind(this)
     }];
+    return colArr;
   }
 
   onDoubleClicked(row){

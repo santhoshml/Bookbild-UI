@@ -117,6 +117,72 @@ export default class Header extends Component{
 		}
 	}
 
+	displayConcourse(){
+		return(
+			<li className="dropdown">
+				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Concourse</Link>
+				<ul className="dropdown-menu">
+					<li><Link to="#">Network</Link></li>
+					<li><Link to="#">Forum</Link></li>
+					<li><Link to="#">Messages</Link></li>
+				</ul>
+			</li>
+		);
+	}
+
+	displayLegalDocs(){
+		return(
+			<li className="dropdown">
+				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Legal Docs</Link>
+				<ul className="dropdown-menu">
+					<li><Link to="#">My Precedents</Link></li>
+					<li><Link to="#">Create Precedent</Link></li>
+					<li><Link to="#">Search Precedents</Link></li>
+				</ul>
+			</li>
+		);
+	}
+
+	displayMarketData(){
+		return(
+			<li className="dropdown">
+				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Market Data</Link>
+				<ul className="dropdown-menu">
+					<li><Link to="#">Sector Heatmaps</Link></li>
+					<li><Link to="#">Private Debt Trends</Link></li>
+					<li><Link to="#">Economic Data</Link></li>
+					<li><Link to="#">News</Link></li>
+				</ul>
+			</li>
+		);
+	}
+
+	displayDataRoom(){
+		return(
+			<li className="dropdown">
+				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data Room</Link>
+				<ul className="dropdown-menu">
+					<li><Link to="#">New Project</Link></li>
+					<li><Link to="#">Edit Deal Team</Link></li>
+					<li><Link to="#">Manage WGL</Link></li>
+					<li><Link to="#">Quarterly Compliance</Link></li>
+				</ul>
+			</li>
+		);
+	}
+
+	displayTombstones(){
+		return(
+			<li className="dropdown">
+				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Tombstones</Link>
+				<ul className="dropdown-menu">
+					<li><Link to="#">Manage Quals</Link></li>
+					<li><Link to="#">Upload Tombstones</Link></li>
+				</ul>
+			</li>
+		);
+	}
+
 	render(){
 		// console.log('I am in header render');
 		return (
@@ -136,11 +202,11 @@ export default class Header extends Component{
 									</ul>
 								</li>
 								{this.displayIOIDD()}
-				      	<li><Link to="#">Concourse</Link></li>
-				        <li><Link to="#">Data Room</Link></li>
-								<li><Link to="#">Legal Docs</Link></li>
-								<li><Link to="#">Market Data</Link></li>
-								<li><Link to="#">Tombstones</Link></li>
+				      	{this.displayConcourse()}
+				        {this.displayDataRoom()}
+								{this.displayLegalDocs()}
+								{this.displayMarketData()}
+								{this.displayTombstones()}
 								{this.displayLoginLogoutDD()}
 				      </ul>
 				    </div>
