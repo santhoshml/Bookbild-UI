@@ -283,8 +283,8 @@ class CreateRFP extends Component {
 
             <div className={`form-group col-xs-6 col-md-6 ${isSponsored.touched && isSponsored.invalid ? 'has-danger' : ''}`}>
               <label>Is this sponsered ?</label><br/>
-              <label className="radio-inline"><input type="radio" value="yes" {...isSponsored}/>YES</label>
-              <label className="radio-inline"><input type="radio" value="no" {...isSponsored}/>NO</label>
+              <label className="radio-inline"><input type="radio" value="yes" {...isSponsored} checked={this.props.fields.isSponsored && this.props.fields.isSponsored.value === 'yes'} />YES</label>
+              <label className="radio-inline"><input type="radio" value="no" {...isSponsored} checked={this.props.fields.isSponsored && this.props.fields.isSponsored.value === 'no'}/>NO</label>
               <div className="text-help">
                 {isSponsored.touched ? isSponsored.error : ''}
               </div>
@@ -371,7 +371,7 @@ function mapStateToProps(state) {
     intializedData.fullName = rfp.fullName;
     intializedData.contactRole = rfp.contactRole;
     intializedData.email = rfp.email;
-    intializedData.isSponsored = rfp.isSponsored;
+    // intializedData.isSponsored = rfp.isSponsored;
     intializedData.region = rfp.region;
     intializedData.phoneNumber = rfp.phoneNumber;
     intializedData.expiryDt = rfp.expiryDt;
