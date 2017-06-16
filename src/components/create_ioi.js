@@ -480,10 +480,10 @@ function mapStateToProps(state) {
     intializedData.initialValues.upfrontFee = 0;
     intializedData.initialValues.governance = 'N/A';
     intializedData.initialValues.warrants = 'N/A';
-    intializedData.initialValues.covenants = 'N/A';
-    intializedData.initialValues.rfpId = '0';
-    intializedData.initialValues.createdById = '0';
-    intializedData.initialValues.createdByCompanyId = '0';
+    intializedData.initialValues.covenants = 'Other';
+    // intializedData.initialValues.rfpId = '0';
+    // intializedData.initialValues.createdById = '0';
+    // intializedData.initialValues.createdByCompanyId = '0';
     intializedData.initialValues.cpYear1 = 0;
     intializedData.initialValues.cpYear2 = 0;
     intializedData.initialValues.cpYear3 = 0;

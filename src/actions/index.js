@@ -175,6 +175,7 @@ export function fetchIOIListForRFPAction(rfpId){
 
 export function createIOIAction(props){
   console.log('In actions.createIOIAction');
+  console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/createIOI',
     method : 'POST',
@@ -360,6 +361,7 @@ export function updateRFPAction(props){
 
 export function createRFPAction(props){
   console.log('In actions.createRFPAction');
+  console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/createRFP',
     method : 'post',
