@@ -108,7 +108,7 @@ class CreateRFP extends Component {
     const { fields: { requestType, dealSize, tenor, category, product, sector
       , txnOverview, companyName, companyDesc, ltmRevenue, ltmEbitda, fullName
       , contactRole, email, createdById, isSponsored, region, createdByCompanyId
-      , phoneNumber, expiryDt}, handleSubmit } = this.props;
+      , phoneNumber, expiryDt, numOfIOI}, handleSubmit } = this.props;
 
     return (
       <div>
@@ -122,6 +122,8 @@ class CreateRFP extends Component {
 
           <input type="hidden" className="form-control" {...createdById} />
           <input type="hidden" className="form-control" {...createdByCompanyId} />
+          <input type="hidden" className="form-control" {...numOfIOI} />
+
 
           <div className={`row`}>
             <div className={`form-group col-xs-12 col-md-12 ${requestType.touched && requestType.invalid ? 'has-danger' : ''}`}>
@@ -375,6 +377,7 @@ function mapStateToProps(state) {
     intializedData.region = rfp.region;
     intializedData.phoneNumber = rfp.phoneNumber;
     intializedData.expiryDt = rfp.expiryDt;
+    intializedData.numOfIOI = rfp.numOfIOI;
   }
 
   if(gType === constants.RFP_EDIT && state.userProfile.contact && state.userProfile.contact[0]){
@@ -471,6 +474,6 @@ export default reduxForm({
   fields: ['requestType', 'dealSize', 'tenor', 'category', 'product', 'sector'
   , 'txnOverview', 'companyName', 'companyDesc', 'ltmRevenue', 'ltmEbitda'
   , 'fullName', 'contactRole', 'email', 'createdById', 'isSponsored', 'region'
-  , 'createdByCompanyId', 'phoneNumber', 'expiryDt', 'createdForCompany'],
+  , 'createdByCompanyId', 'phoneNumber', 'expiryDt', 'createdForCompany', 'numOfIOI'],
   validate
 }, mapStateToProps, mapDispatchToProps)(CreateRFP);
