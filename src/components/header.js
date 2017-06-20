@@ -199,6 +199,7 @@ export default class Header extends Component{
 										<li><Link to={"/rfpFavoriteList/"+this.state.user.userId}>My Favorites</Link></li>
 										{this.displayMyRFPLink()}
 										{this.displayCreateRFPLink()}
+										<li><Link to="/#">Parameter Search</Link></li>
 									</ul>
 								</li>
 								{this.displayIOIDD()}

@@ -5,6 +5,7 @@ import cUtils from '../utils/common_utils';
 import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import Constants from '../utils/constants';
+import {Link} from 'react-router';
 
 export default class DisplayRFPList extends Component {
 
@@ -134,12 +135,19 @@ export default class DisplayRFPList extends Component {
     ];
     const defaultOption = options[0];
     return(
-      <div className='col-md-3'>
-        <Dropdown
-          options={options}
-          onChange={this.onRegionChange.bind(this)}
-          value={this.state.selectedRegion ? this.state.selectedRegion : defaultOption}
-          placeholder="Select an option" />
+      <div>
+        <div className='col-md-3'>
+          <Dropdown
+            options={options}
+            onChange={this.onRegionChange.bind(this)}
+            value={this.state.selectedRegion ? this.state.selectedRegion : defaultOption}
+            placeholder="Select an option" />
+        </div>
+        <div className='col-md-3' />
+        <div className='col-md-3' />
+        <div className='col-md-3' >
+          <Link to="/#" className="btn btn-primary align-right">Invite a Company</Link>
+        </div>
       </div>
     );
   }
