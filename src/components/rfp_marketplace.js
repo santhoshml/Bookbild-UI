@@ -70,10 +70,10 @@ class RFPMarketPlace extends Component{
     if(this.state.selectedSector && this.state.selectedSector.value === 'overall'){
       return(
         <tr>
-          <td>
+          <td className="col-md-6">
             Sector Rankings :
           </td>
-          <td>
+          <td className="col-md-6">
             {this.props.termSheetActivity.sector_count ? cUtils.getTopThreeSectors(this.props.termSheetActivity.sector_count, Number(this.props.termSheetActivity.num_active_rfp)) : ''}
           </td>
         </tr>
@@ -85,10 +85,10 @@ class RFPMarketPlace extends Component{
     if(this.state.selectedSector && this.state.selectedSector.value === 'overall'){
       return(
         <tr>
-          <td>
+          <td className="col-md-6">
             Structure Rankings :
           </td>
-          <td>
+          <td className="col-md-6">
             {this.props.termSheetActivity.struct_count ? cUtils.getTopThreeProducts(this.props.termSheetActivity.struct_count, Number(this.props.termSheetActivity.num_active_rfp)) : ''}
           </td>
         </tr>
@@ -107,42 +107,42 @@ class RFPMarketPlace extends Component{
         <table className="table table-striped">
           <tbody>
             <tr>
-              <td>
+              <td className="col-md-6">
                 # of Active RFP's :
               </td>
-              <td>
+              <td className="col-md-6">
                 {this.props.termSheetActivity.num_active_rfp}
               </td>
             </tr>
             <tr>
-              <td>
+              <td className="col-md-6">
                 # of IOI's received :
               </td>
-              <td>
+              <td className="col-md-6">
                 {this.props.termSheetActivity.num_ioi_issued}
               </td>
             </tr>
             <tr>
-              <td>
+              <td className="col-md-6">
                 Average Deal Size :
               </td>
-              <td>
+              <td className="col-md-6">
                 {formatCurrency(this.props.termSheetActivity.avg_deal_size, Constants.CURRENCY_OPTS)}
               </td>
             </tr>
             <tr>
-              <td>
+              <td className="col-md-6">
                 % of Sponsored deals :
               </td>
-              <td>
+              <td className="col-md-6">
                 {this.props.termSheetActivity.percent_sponsor_deals}
               </td>
             </tr>
             <tr>
-              <td>
+              <td className="col-md-6">
                 Average Leverage(x) :
               </td>
-              <td>
+              <td className="col-md-6">
                 {this.props.termSheetActivity.levarage}x
               </td>
             </tr>

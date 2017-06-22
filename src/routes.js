@@ -17,9 +17,6 @@ import RFPCompanyList from './components/rfp_company_list';
 import RFPFavoriteList from './components/rfp_favorite_list';
 import SuperAdminBoard from './components/super_admin_board';
 
-import FilterExample from './components/filter_example';
-import DGExample from './components/data_grid_example';
-
 export default (
   <Route path="/" component={App} >
     <IndexRoute component={LoginForm} />
@@ -40,7 +37,5 @@ export default (
 
 
 
-    <Route path="fe" component={FilterExample} />
-    <Route path="dge" component={DGExample} />
   </Route>
 );
