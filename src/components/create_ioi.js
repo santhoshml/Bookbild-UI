@@ -207,6 +207,9 @@ class CreateIOIForm extends Component{
                 <option value="CashFlow-Revolver">CashFlow-Revolver</option>
                 <option value="CashFlow-Term Loan">CashFlow-Term Loan</option>
                 <option value="CashFlow-Both">CashFlow-Both</option>
+                <option value="2nd Lien Term Loan">2nd Lien Term Loan</option>
+                <option value="Sub Debt">Sub Debt</option>
+                <option value="Mezzanine">Mezzanine</option>
               </select>
               <div className="text-help">
                 {loanStructure.touched ? loanStructure.error : ''}

@@ -133,7 +133,7 @@ class CreateRFP extends Component {
               <label className="radio-inline"><input type="radio" value="Restructuring" {...requestType}/>Restructuring</label>
               <label className="radio-inline"><input type="radio" value="M&A" {...requestType}/>M&A</label>
               <label className="radio-inline"><input type="radio" value="LBO" {...requestType}/>LBO</label>
-              <label className="radio-inline"><input type="radio" value="LBO" {...requestType}/>Market Check</label>
+              <label className="radio-inline"><input type="radio" value="Market Check" {...requestType}/>Market Check</label>
               <div className="text-help">
                 {requestType.touched ? requestType.error : ''}
               </div>
