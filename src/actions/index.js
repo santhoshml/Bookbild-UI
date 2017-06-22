@@ -76,7 +76,8 @@ export function createUnsolicitedPitchAction(props){
 export function fetchAllCompanyListForRFP(){
   console.log('In actions.fetchCompanyListForRFP');
   const request=axios({
-    url : '/fetchAllCompanyListForRFP',
+    // url : '/fetchAllCompanyListForRFP',
+    url : '/fetchAllCompanyListForRFPUsingCache',
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -88,7 +89,7 @@ export function fetchAllCompanyListForRFP(){
 }
 
 export function fetchTermSheetActivityStatsAction(sector){
-  console.log('In actions.fetchRFPAction');
+  console.log('In actions.fetchTermSheetActivityStatsAction');
   const request=axios({
     url : '/fetchTermSheetActivity?sector='+sector,
     method : 'GET',
@@ -104,7 +105,8 @@ export function fetchTermSheetActivityStatsAction(sector){
 export function fetchRFPAction(rfpId){
   console.log('In actions.fetchRFPAction');
   const request=axios({
-    url : '/fetchRFP?rfpId='+rfpId,
+    // url : '/fetchRFP?rfpId='+rfpId,
+    url : '/fetchRFPUsingCache?rfpId='+rfpId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -177,7 +179,8 @@ export function createIOIAction(props){
   console.log('In actions.createIOIAction');
   console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : '/createIOI',
+    // url : '/createIOI',
+    url : '/createIOIUsingCache',
     method : 'POST',
     baseURL : ROOT_URL,
     data : props
@@ -329,7 +332,8 @@ export function fetchContactAction(contactId){
 export function fetchAllRFPAction(){
   console.log('In actions.fetchAllRFPAction');
   const request=axios({
-    url : '/fetchAllRFPs',
+    // url : '/fetchAllRFPs',
+    url : '/fetchAllRFPsUsingCache',
     method : 'get',
     baseURL : ROOT_URL
   });
@@ -344,7 +348,8 @@ export function updateRFPAction(props){
   console.log('In actions.updateRFPAction');
   console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : '/updateRFP',
+    // url : '/updateRFP',
+    url : '/updateRFPUsingCache',
     method : 'post',
     baseURL : ROOT_URL,
     headers : {
@@ -363,7 +368,8 @@ export function createRFPAction(props){
   console.log('In actions.createRFPAction');
   console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : '/createRFP',
+    // url : '/createRFP',
+    url : '/createRFPUsingCache',
     method : 'post',
     baseURL : ROOT_URL,
     headers : {
