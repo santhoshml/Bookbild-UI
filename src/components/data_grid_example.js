@@ -4,7 +4,7 @@ import exampleWrapper from './exampleWrapper';
 const { Toolbar, Data: { Selectors } } = require('react-data-grid-addons');
 import { Link } from 'react-router';
 import lsUtils from '../utils/ls_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 
 class DataGrid extends Component{
 
@@ -67,8 +67,8 @@ class DataGrid extends Component{
 
   onRowClick(rowIdx, row) {
     if(this.props.clickableRow == "true" && rowIdx > -1){
-      lsUtils.setValue(Constants.KEY_RFP_OBJECT, row);
-      this.context.router.push('/rfpDetail/'+row.rfpId);
+      lsUtils.setValue(constants.KEY_RFP_OBJECT, row);
+      this.context.router.push(constants.ROUTES_MAP.RFP_DETAIL+'/'+row.rfpId);
     } else {
       return null;
     }

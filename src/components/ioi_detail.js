@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { getRFPFromFavoritesAction, fetchRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 import dateFormat from 'dateformat';
 import moment from 'moment';
@@ -24,9 +24,9 @@ class IOIDetail extends Component{
 
   componentWillMount() {
     // this.props.fetchAllRFPAction();
-    let ioi = lsUtils.getValue(Constants.KEY_SELECTED_IOI_OBJECT);
-    // let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
-    let company = lsUtils.getValue(Constants.KEY_COMPANY_OBJECT);
+    let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+    // let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+    let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
       ioi : ioi,
       company : company
@@ -35,7 +35,7 @@ class IOIDetail extends Component{
     this.props.fetchRFPAction(ioi.rfpId)
       .then(() => {
         console.log('I am in the get result');
-        lsUtils.setValue(Constants.KEY_RFP_OBJECT, this.props.rfp);
+        lsUtils.setValue(constants.KEY_RFP_OBJECT, this.props.rfp);
         this.setState({
           rfp : this.props.rfp
         });
@@ -147,7 +147,7 @@ class IOIDetail extends Component{
   displayViewAttachedRFPButton(){
     if(this.state.ioi.createdByCompanyId === this.state.company.companyId){
       return( <span>
-      <Link to={"/rfpDetail/"+this.state.ioi.rfpId} className="btn btn-primary">
+      <Link to={constants.ROUTES_MAP.RFP_DETAIL+"/"+this.state.ioi.rfpId} className="btn btn-primary">
         View Attached RFP
       </Link>
       &nbsp;&nbsp;&nbsp;
@@ -160,7 +160,7 @@ class IOIDetail extends Component{
   displayEditIOIButton(){
     if(this.state.company.companyId === this.state.ioi.createdByCompanyId){
       return( <span>
-      <Link to={"/createIOI/"+Constants.IOI_EDIT} className="btn btn-primary">
+      <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_EDIT} className="btn btn-primary">
         Edit IOI
       </Link>
       &nbsp;&nbsp;&nbsp;

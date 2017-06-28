@@ -33,15 +33,14 @@ class LoginForm extends Component{
 				 lsUtils.setValue(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
 				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
-				 this.context.router.push('/rfpMarketPlace');
+				 this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				//  this.context.router.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
 			 } else {	// login failed
 				//empty the username and password
 				resetForm();
 				this.setState({
 					errorObject : data.payload.data
 				})
-				// this.props.submitError = data.payload.data;
-				// this.context.router.push('login');
 			 }
 		 });
 	}

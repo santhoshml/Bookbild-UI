@@ -28,7 +28,8 @@ export const GET_IOI_FOR_RFP_COMPANY = 'GET_IOI_FOR_RFP_COMPANY';
 
 
 // const ROOT_URL = 'http://127.0.0.1:1127';
-const ROOT_URL = 'http://ec2-35-167-243-113.us-west-2.compute.amazonaws.com:1127';
+const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
+
 
 export function getIOIForRFPAndCompanyAction(rfpId, companyId){
   console.log('In actions.getIOIForRFPAndCompanyAction');

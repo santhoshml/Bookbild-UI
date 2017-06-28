@@ -5,7 +5,7 @@ import { Link } from 'react-router';
 import { addRFPToFavoritesAction, removeRFPFromFavoritesAction, getRFPFromFavoritesAction, getIOIForRFPAndCompanyAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
 import NumberFormat from 'react-number-format';
 import dateFormat from 'dateformat';
@@ -24,12 +24,12 @@ class RFPDetail extends Component{
 
   componentWillMount() {
     // this.props.fetchAllRFPAction();
-    let rfp = lsUtils.getValue(Constants.KEY_RFP_OBJECT);
+    let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
     if(rfp && rfp.rfpId !== this.props.params.id){
       rfp = null;
     }
-    let user = lsUtils.getValue(Constants.KEY_USER_OBJECT);
-    let company = lsUtils.getValue(Constants.KEY_COMPANY_OBJECT);
+    let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+    let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
       rfp : rfp,
       user : user,
@@ -176,7 +176,7 @@ class RFPDetail extends Component{
     if(this.state.rfp && this.state.rfp.createdByCompanyId === this.state.company.companyId){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={"/ioiList/"+this.state.rfp.rfpId+"/"+Constants.IOI_FOR_RFP} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
           View Intrest List
         </Link>
       </span>);
@@ -189,7 +189,7 @@ class RFPDetail extends Component{
     if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={"/createRFP/"+Constants.RFP_EDIT} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_EDIT} className="btn btn-primary">
           Edit RFP
         </Link>
       </span>);
@@ -199,13 +199,13 @@ class RFPDetail extends Component{
   }
 
   displayIOIButton(){
-    if(this.state.user && this.state.user.role === Constants.KEY_LENDER){
+    if(this.state.user && this.state.user.role === constants.KEY_LENDER){
       if(this.props.ioi){
-        lsUtils.setValue(Constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
+        lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
         return(
           <span>
             &nbsp;&nbsp;&nbsp;
-            <Link to={"/createIOI/"+Constants.IOI_EDIT} className="btn btn-primary">
+            <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_EDIT} className="btn btn-primary">
               EDIT IOI
             </Link>
           </span>
@@ -214,7 +214,7 @@ class RFPDetail extends Component{
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
-          <Link to={"/createIOI/"+Constants.IOI_NEW} className="btn btn-primary">
+          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_NEW} className="btn btn-primary">
             CREATE IOI
           </Link>
         </span>
@@ -225,21 +225,99 @@ class RFPDetail extends Component{
   displayIndustryResearchButton(){
     return(<span>
         &nbsp;&nbsp;&nbsp;
-        <Link to="/industryResearch" className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.INDUSTRY_RESEARCH} className="btn btn-primary">
           INDUSTRY RESEARCH
         </Link>
       </span>);
   }
 
   displayMakePitchButton(){
-    if(this.state.user && this.state.user.role === Constants.KEY_LENDER){
+    if(this.state.user && this.state.user.role === constants.KEY_LENDER){
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
-          <Link to={"/createIOI/"+Constants.PITCH_NEW} className="btn btn-primary">
+          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.PITCH_NEW} className="btn btn-primary">
             MAKE A PITCH
           </Link>
         </span>
+      );
+    }
+  }
+
+  displayCollateralInfo(){
+    let rfp = this.state.rfp;
+    if(rfp.category.toUpperCase() === 'ABL'){
+      return (
+        <div className="div-border">
+          <h4 className="display-center">Collateral</h4>
+          <br/>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>Accounts Receivable :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.acctRecvGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.acctRecvComment}
+            </div>
+          </div>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>Inventory :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.invtryGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.invtryComment}
+            </div>
+          </div>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>PP&E :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.ppeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.ppeComment}
+            </div>
+          </div>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>Machinery & Equipment :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.maeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.maeComment}
+            </div>
+          </div>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>Real Estate :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.realEstGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.realEstComment}
+            </div>
+          </div>
+          <div className={`row`}>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <label>Other :</label><br/>
+            </div>
+            <div className={`form-group col-xs-3 col-md-3`}>
+              <NumberFormat value={cUtils.parseNumber(rfp.otherGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+            </div>
+            <div className={`form-group col-xs-6 col-md-6`}>
+              {rfp.otherComment}
+            </div>
+          </div>
+        </div>
       );
     }
   }
@@ -251,6 +329,7 @@ class RFPDetail extends Component{
         <Header />
         {this.state.rfp ? this.displayCompanyDesc() : ''}
         {this.state.rfp ? this.displayOutstandingRFP() : ''}
+        {this.state.rfp ? this.displayCollateralInfo() : ''}
         <br/>
         <br/>
         {this.displayFavoritesButton()}

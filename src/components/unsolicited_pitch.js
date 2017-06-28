@@ -59,7 +59,7 @@ class CreateIOIForm extends Component{
           // blog post has been created, navigate the user to the index
           // We navigate by calling this.context.router.push with the
           // new path to navigate to.
-          this.context.router.push('/rfpMarketPlace');
+          this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       });
     } else {
       this.props.createUnsolicitedPitchAction(props)
@@ -67,7 +67,7 @@ class CreateIOIForm extends Component{
          // blog post has been created, navigate the user to the index
          // We navigate by calling this.context.router.push with the
          // new path to navigate to.
-         this.context.router.push('/rfpMarketPlace');
+         this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
        });
      }
 	}
@@ -312,7 +312,7 @@ class CreateIOIForm extends Component{
 
           <div className={`row`}>
             <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
-            <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
+            <Link to={constants.ROUTES_MAP.RFP_MARKETPLACE} className="btn btn-danger">Cancel</Link>
           </div>
 
         </form>

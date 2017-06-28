@@ -195,7 +195,7 @@ export default class DisplayIOIList extends Component {
     if(row){
       console.log('row:'+JSON.stringify(row));
       lsUtils.setValue(Constants.KEY_SELECTED_IOI_OBJECT, row);
-      this.context.router.push('/ioiDetail/'+row.ioiId);
+      this.context.router.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
     }
   }
 

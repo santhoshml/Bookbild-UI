@@ -22,7 +22,7 @@ class Admin extends Component{
     console.log('In resetActivityTermSheetStats');
     this.props.resetActivityTermSheetStatsAction()
       .then(() => {
-        this.context.router.push('/superAdmin');
+        this.context.router.push(constants.ROUTES_MAP.SUPER_ADMIN);
     });
   }
 
@@ -30,11 +30,11 @@ class Admin extends Component{
     return(
       <div>
         <Header />
-        <Link to="/registerCompany" className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.REGISTER_COMPANY} className="btn btn-primary">
           Add a company
         </Link>
         &nbsp;&nbsp;
-        <Link to={"/createRFP/"+constants.RFP_NEW} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_NEW} className="btn btn-primary">
           Create RFP
         </Link>
         &nbsp;&nbsp;

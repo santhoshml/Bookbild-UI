@@ -52,6 +52,23 @@ class CreateRFP extends Component {
 
   onSubmit(props) {
       // console.log('In onSubmit, props:'+JSON.stringify(props));
+
+      if(props.category.toUpperCase() !== 'ABL'){
+        //erase the values in Collateral
+        props.acctRecvGrossAmt  = '';
+        props.acctRecvComment   = '';
+        props.invtryGrossAmt    = '';
+        props.invtryComment     = '';
+        props.ppeGrossAmt       = '';
+        props.ppeComment        = '';
+        props.maeGrossAmt       = '';
+        props.maeComment        = '';
+        props.realEstGrossAmt   = '';
+        props.realEstComment    = '';
+        props.otherGrossAmt     = '';
+        props.otherComment      = '';
+      }
+
       if(gType === constants.RFP_EDIT){
         var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
         props.rfpId = rfp.rfpId;
@@ -67,7 +84,7 @@ class CreateRFP extends Component {
             // blog post has been created, navigate the user to the index
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
-            this.context.router.push('/rfpMarketPlace');
+            this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
         });
       } else {
         let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
@@ -79,7 +96,9 @@ class CreateRFP extends Component {
             // blog post has been created, navigate the user to the index
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
-            this.context.router.push('/rfpMarketPlace');
+
+            this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            // this.context.router.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
       }
     }
@@ -98,6 +117,88 @@ class CreateRFP extends Component {
             <select className="form-control" {...createdForCompany}>
               {this.props.companyList.map(makeOptions)}
             </select>
+          </div>
+        </div>
+      </div>);
+    }
+  }
+
+  displayABLDetails(val){
+    const { fields: { acctRecvGrossAmt, acctRecvComment
+      , invtryGrossAmt, invtryComment, ppeGrossAmt, ppeComment, maeGrossAmt
+      , maeComment, realEstGrossAmt, realEstComment, otherGrossAmt
+      , otherComment}} = this.props;
+
+    // console.log('In displayABLDetails, this.props.category :'+this.props.category);
+    // console.log('val:'+ JSON.stringify(val));
+    if(val && val.value && val.value.toUpperCase() === 'ABL'){
+      return(<div className="div-border">
+        <h4 className="display-center">Collateral</h4>
+        <br/>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>Accounts Receivable :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...acctRecvGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...acctRecvComment} placeholder="Comments..."/>
+          </div>
+        </div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>Inventory :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...invtryGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...invtryComment} placeholder="Comments..."/>
+          </div>
+        </div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>PP&E :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...ppeGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...ppeComment} placeholder="Comments..."/>
+          </div>
+        </div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>Machinery & Equipment :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...maeGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...maeComment} placeholder="Comments..."/>
+          </div>
+        </div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>Real Estate :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...realEstGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...realEstComment} placeholder="Comments..."/>
+          </div>
+        </div>
+        <div className={`row`}>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <label>Other :</label><br/>
+          </div>
+          <div className={`form-group col-xs-3 col-md-3`}>
+            <input type="text" className="form-control" {...otherGrossAmt} placeholder="Gross Amount ($)"/>
+          </div>
+          <div className={`form-group col-xs-6 col-md-6`}>
+            <input type="text" className="form-control" {...otherComment} placeholder="Comments..."/>
           </div>
         </div>
       </div>);
@@ -172,9 +273,10 @@ class CreateRFP extends Component {
             <div className={`form-group col-xs-6 col-md-6 ${category.touched && category.invalid ? 'has-danger' : ''}`}>
               <label>Category</label><br/>
               <select className="form-control" {...category}>
+                <option value="">Select one</option>
+                <option value="Open">Open</option>
                 <option value="ABL">ABL</option>
                 <option value="Cash Flow">Cash Flow</option>
-                <option value="Open">Open</option>
               </select>
               <div className="text-help">
                 {category.touched ? category.error : ''}
@@ -184,6 +286,7 @@ class CreateRFP extends Component {
             <div className={`form-group col-xs-6 col-md-6 ${product.touched && product.invalid ? 'has-danger' : ''}`}>
               <label>Product</label><br/>
               <select className="form-control" {...product}>
+                <option value="">Select one</option>
                 <option value="Revolver">Revolver</option>
                 <option value="Term Loan">Term Loan</option>
                 <option value="Mezzanine">Mezzanine</option>
@@ -195,6 +298,8 @@ class CreateRFP extends Component {
               </div>
             </div>
           </div>
+
+          {this.displayABLDetails(this.props.fields.category)}
 
           <div className={`row`}>
             <div className={`form-group col-xs-6 col-md-6 ${sector.touched && sector.invalid ? 'has-danger' : ''}`}>
@@ -358,7 +463,7 @@ function mapStateToProps(state) {
 
   if(gType === constants.RFP_EDIT){
     var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-    console.log('rfp:'+JSON.stringify(rfp));
+    // console.log('rfp:'+JSON.stringify(rfp));
     intializedData.requestType = rfp.requestType;
     intializedData.dealSize = rfp.dealSize;
     intializedData.tenor = rfp.tenor;
@@ -474,6 +579,9 @@ export default reduxForm({
   fields: ['requestType', 'dealSize', 'tenor', 'category', 'product', 'sector'
   , 'txnOverview', 'companyName', 'companyDesc', 'ltmRevenue', 'ltmEbitda'
   , 'fullName', 'contactRole', 'email', 'createdById', 'isSponsored', 'region'
-  , 'createdByCompanyId', 'phoneNumber', 'expiryDt', 'createdForCompany', 'numOfIOI'],
+  , 'createdByCompanyId', 'phoneNumber', 'expiryDt', 'createdForCompany', 'numOfIOI'
+  , 'acctRecvGrossAmt', 'acctRecvComment', 'invtryGrossAmt', 'invtryComment'
+  , 'ppeGrossAmt', 'ppeComment', 'maeGrossAmt', 'maeComment', 'realEstGrossAmt'
+  , 'realEstComment', 'otherGrossAmt', 'otherComment'],
   validate
 }, mapStateToProps, mapDispatchToProps)(CreateRFP);

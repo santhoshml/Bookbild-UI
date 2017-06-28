@@ -1,3 +1,17 @@
+.display-center{
+  display: block;
+  text-align: center;
+}
+
+.div-border{
+  border-width: 1px;
+  border-style: dotted;
+  border-color: black;
+  margin: 2px 50px 2px 50px;
+  border-radius: 25px;
+  padding: 20px;
+}
+
 .align-right{
   float: right;
 }

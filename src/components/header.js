@@ -37,7 +37,7 @@ export default class Header extends Component{
 				|| this.state.user.role === constants.KEY_SUPER_ADMIN )
 			){
 			return (
-				<li><Link to={"/createRFP/"+constants.RFP_NEW}>Create RFP</Link></li>
+				<li><Link to={constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_NEW}>Create RFP</Link></li>
 			);
 		}
 	}
@@ -49,7 +49,7 @@ export default class Header extends Component{
 				|| this.state.user.role === constants.KEY_SUPER_ADMIN
 			)){
 			return (
-				<li><Link to={"/rfpCompanyList/"+this.state.company.companyId}>My RFP List</Link></li>
+				<li><Link to={constants.ROUTES_MAP.RFP_COMPANY_LIST+"/"+this.state.company.companyId}>My RFP List</Link></li>
 			);
 		}
 	}
@@ -63,7 +63,7 @@ export default class Header extends Component{
 				<li className="dropdown">
 					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">IOI</Link>
 					<ul className="dropdown-menu">
-						<li><Link to={"/ioiList/"+this.state.company.companyId+"/"+constants.IOI_FOR_COMPANY}>My IOI List</Link></li>
+						<li><Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.company.companyId+"/"+constants.IOI_FOR_COMPANY}>My IOI List</Link></li>
 
 					</ul>
 				</li>
@@ -84,7 +84,7 @@ export default class Header extends Component{
 			||(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true)
 		){
 			return(
-				<li><Link to="/addUser">Add a User</Link></li>
+				<li><Link to={constants.ROUTES_MAP.ADD_USER}>Add a User</Link></li>
 			);
 		}
 	}
@@ -95,7 +95,7 @@ export default class Header extends Component{
 				<li className="dropdown">
 					<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{ellipsis(this.state.user.email, 10)}</Link>
 					<ul className="dropdown-menu">
-						<li><Link to="/myProfile">Profile</Link></li>
+						<li><Link to={constants.ROUTES_MAP.MY_PROFILE}>Profile</Link></li>
 						<li><Link to="#">My Team</Link></li>
 						{this.getAddUserLink()}
 						<li><Link onClick={this.logoutCurrentUser}>Logout</Link></li>
@@ -105,7 +105,7 @@ export default class Header extends Component{
 		} else {
 			return(
 				<li className="dropdown">
-					<Link to="/login" role="button" aria-haspopup="true" aria-expanded="false">Login</Link>
+					<Link to={constants.ROUTES_MAP.LOGIN} role="button" aria-haspopup="true" aria-expanded="false">Login</Link>
 				</li>
 			);
 		}
@@ -113,7 +113,7 @@ export default class Header extends Component{
 
 	displaySuperAdminDashBoard(){
 		if(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin === true){
-			return (<li><Link to="/superAdmin">SuperAdmin</Link></li>);
+			return (<li><Link to={constants.ROUTES_MAP.SUPER_ADMIN}>SuperAdmin</Link></li>);
 		}
 	}
 
@@ -195,8 +195,8 @@ export default class Header extends Component{
 								<li className="dropdown">
 									<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">RFP</Link>
 									<ul className="dropdown-menu">
-										<li><Link to="/rfpMarketPlace">RFP List</Link></li>
-										<li><Link to={"/rfpFavoriteList/"+this.state.user.userId}>My Favorites</Link></li>
+										<li><Link to={constants.ROUTES_MAP.RFP_MARKETPLACE}>RFP List</Link></li>
+										<li><Link to={constants.ROUTES_MAP.RFP_FAVORITES_LIST+"/"+this.state.user.userId}>My Favorites</Link></li>
 										{this.displayMyRFPLink()}
 										{this.displayCreateRFPLink()}
 										<li><Link to="/#">Parameter Search</Link></li>

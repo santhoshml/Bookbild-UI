@@ -23,9 +23,9 @@ class AddUserForm extends Component{
 			 // new path to navigate to.
 			//  console.log('In onSubmit data :'+JSON.stringify(data));
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
-				 this.context.router.push('/myProfile');
+				 this.context.router.push(constants.ROUTES_MAP.MY_PROFILE);
 			 } else {
-				 this.context.router.push('/addUser');
+				 this.context.router.push(constants.ROUTES_MAP.ADD_USER);
 				 this.setState({errMsg : data.payload.data.data.errMsg});
 			 }
 		 });

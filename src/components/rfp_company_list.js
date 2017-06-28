@@ -6,7 +6,7 @@ import DisplayRFPList from './display_RFP_list';
 import { fetchFavoriteRFPListAction, fetchCompanyRFPListAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import Header from './header';
 
 class RFPCompanyList extends Component{

@@ -6,7 +6,7 @@ import DisplayIOIList from './display_IOI_list';
 import { fetchIOIListForRFPAction, fetchIOIListForCompanyAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import Header from './header';
 
 class IOIList extends Component{
@@ -20,7 +20,7 @@ class IOIList extends Component{
   }
 
   componentWillMount() {
-    if(this.props.params.type === Constants.IOI_FOR_RFP){
+    if(this.props.params.type === constants.IOI_FOR_RFP){
       this.props.fetchIOIListForRFPAction(this.props.params.id);
     } else {
       this.props.fetchIOIListForCompanyAction(this.props.params.id);
@@ -34,7 +34,7 @@ class IOIList extends Component{
           <h3>NO Indication of intrest for this RFP so far.</h3>
         </div>
       );
-    } else if(this.props.params.type === Constants.IOI_FOR_RFP){
+    } else if(this.props.params.type === constants.IOI_FOR_RFP){
       return(
         <div>
           <DisplayIOIList

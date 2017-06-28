@@ -28,10 +28,25 @@ exports.IOI_FOR_COMPANY = 'IOI_FOR_COMPANY';
 exports.RFP_MY_FAVORITES = 'RFP_MY_FAVORITES';
 exports.RFP_FOR_COMPANY = 'RFP_FOR_COMPANY';
 
+exports.ROUTES_MAP = {
+  MY_PROFILE      : '/myProfile',
+  ADD_USER        : '/addUser',
+  RFP_MARKETPLACE : '/rfpMarketPlace',
+  CREATE_RFP      : '/createRFP',
+  RFP_COMPANY_LIST  : '/rfpCompanyList',
+  IOI_LIST        : '/ioiList',
+  LOGIN           : '/login',
+  SUPER_ADMIN     : '/superAdmin',
+  RFP_FAVORITES_LIST  : '/rfpFavoriteList',
+  RFP_DETAIL          : '/rfpDetail',
+  CREATE_IOI          : '/createIOI',
+  INDUSTRY_RESEARCH   : '/industryResearch',
+  REGISTER_COMPANY    : '/registerCompany',
+  IOI_DETAIL          : '/ioiDetail'
+};
+
 exports.TXN_OVERVIEW_SAMPLE='Example: $100.0 million senior secured credit facility to refinance existing indebtedness and [fund a dividend recapitalization, tack-on acquisition, etc].';
-
 exports.COMPANY_DESC_SAMPLE='Example: [City], [State]-based provider of open software solutions for mobile enterprises. The company products provide secure access for the next generation of workers, applications, networks, and things. The secure access offered by the Company solutions empowers business productivity by ensuring enterprise IT applications and environments are securely available, whether these are located in the datacenter or in the cloud.';
-
 exports.COVENANTS_SAMPLE = 'Min Excess Availability, Max Senior Leverage, Max Total Leverage, Min EBITDA, Min Revenue, Min Recurring Revenue, Min Interest Coverage, ...';
 
 exports.DISPLAY_VALUES_MAP = {

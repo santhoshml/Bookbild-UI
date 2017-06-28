@@ -7,7 +7,7 @@ import { fetchAllRFPAction, fetchTermSheetActivityStatsAction } from '../actions
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import Header from './header';
 import formatCurrency from 'format-currency';
 import Dropdown from 'react-dropdown'
@@ -127,7 +127,7 @@ class RFPMarketPlace extends Component{
                 Average Deal Size :
               </td>
               <td className="col-md-6">
-                {formatCurrency(this.props.termSheetActivity.avg_deal_size, Constants.CURRENCY_OPTS)}
+                {formatCurrency(this.props.termSheetActivity.avg_deal_size, constants.CURRENCY_OPTS)}
               </td>
             </tr>
             <tr>

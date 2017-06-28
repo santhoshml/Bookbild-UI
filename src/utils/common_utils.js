@@ -1,6 +1,8 @@
 import constants from './constants';
 import moment from 'moment';
 import sortJsonArray from 'sort-json-array';
+import isNumber from 'is-number';
+import numbro from 'numbro';
 
 exports.getTopThreeSectors = function(obj, grandTotal){
   let sList = [];
@@ -75,3 +77,22 @@ exports.computeStatus = function(expiryDt){
       return 'T+'+diffInDays;
     }
   }
+
+exports.parseNumber = (val)=>{
+  if(val){
+    try{
+			if(isNumber(val)){
+				return numbro().unformat(val);
+			} else if(val.indexOf('%') > -1){
+				return numbro().unformat(val) * 100;
+			} else {
+				return numbro().unformat(val);
+			}
+		} catch(ex){
+			console.log('***ERR exception in sanitize the number, val:'+val+' , '+JSON.stringify(ex));
+      return 0;
+		}
+  }
+  else
+    return 0;
+}

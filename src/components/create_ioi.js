@@ -11,6 +11,7 @@ import Header from './header';
 import NumberFormat from 'react-number-format';
 import Select from 'react-select';
 
+
 var gType=null;
 class CreateIOIForm extends Component{
   static contextTypes ={
@@ -23,7 +24,10 @@ class CreateIOIForm extends Component{
       user : null,
       rfp : null,
       type : props.params.type,
-      selectedCovenant: []
+      selectedCovenant: [],
+      collateral : null,
+      totalAvailable : 0,
+      totalGross : 0
     };
   }
 
@@ -33,12 +37,71 @@ class CreateIOIForm extends Component{
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
+    let collateral = {
+            acctReceivable : {
+              gross         : cUtils.parseNumber(rfp.acctRecvGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.acctReceivable.ineligible)) * (cUtils.parseNumber(rfp.acctRecvGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.acctReceivable.netCollateral) * cUtils.parseNumber(this.state.collateral.acctReceivable.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.acctReceivable.available) / (cUtils.parseNumber(rfp.acctRecvGrossAmt))) : 0
+            },
+            inventry : {
+              gross         : cUtils.parseNumber(rfp.invtryGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.inventry.ineligible)) * (cUtils.parseNumber(rfp.invtryGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.inventry.netCollateral) * cUtils.parseNumber(this.state.collateral.inventry.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.inventry.available) / (cUtils.parseNumber(rfp.invtryGrossAmt))) : 0
+            },
+            ppe : {
+              gross         : cUtils.parseNumber(rfp.ppeGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.ppe.ineligible)) * (cUtils.parseNumber(rfp.ppeGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.ppe.netCollateral) * cUtils.parseNumber(this.state.collateral.ppe.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.ppe.available) / (cUtils.parseNumber(rfp.ppeGrossAmt))) : 0
+            },
+            mae : {
+              gross         : cUtils.parseNumber(rfp.maeGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.mae.ineligible)) * (cUtils.parseNumber(rfp.maeGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.mae.netCollateral) * cUtils.parseNumber(this.state.collateral.mae.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.mae.available) / (cUtils.parseNumber(rfp.maeGrossAmt))) : 0
+            },
+            realEst : {
+              gross         : cUtils.parseNumber(rfp.realEstGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.realEst.ineligible)) * (cUtils.parseNumber(rfp.realEstGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.realEst.netCollateral) * cUtils.parseNumber(this.state.collateral.realEst.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.realEst.available) / (cUtils.parseNumber(rfp.realEstGrossAmt))) : 0
+            },
+            other : {
+              gross         : cUtils.parseNumber(rfp.otherGrossAmt),
+              ineligible    : 0,
+              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.other.ineligible)) * (cUtils.parseNumber(rfp.otherGrossAmt)) / 100) : 0,
+              advRate       : 0,
+              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.other.netCollateral) * cUtils.parseNumber(this.state.collateral.other.advRate) / 100) : 0,
+              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.other.available) / (cUtils.parseNumber(rfp.otherGrossAmt))) : 0
+            }
+          };
+      let totalGross = cUtils.parseNumber(rfp.acctRecvGrossAmt)
+        + cUtils.parseNumber(rfp.invtryGrossAmt)
+        + cUtils.parseNumber(rfp.ppeGrossAmt)
+        + cUtils.parseNumber(rfp.maeGrossAmt)
+        + cUtils.parseNumber(rfp.realEstGrossAmt)
+        + cUtils.parseNumber(rfp.otherGrossAmt);
+      // console.log('collateral:'+JSON.stringify(collateral));
 
     this.setState({
       rfp                 : rfp,
       user                : user,
       createdById         : user.userId,
-      createdByCompanyId  : company.companyId
+      createdByCompanyId  : company.companyId,
+      collateral          : collateral,
+      totalGross          : totalGross
     });
 
     if(gType === constants.IOI_EDIT){
@@ -62,7 +125,7 @@ class CreateIOIForm extends Component{
           // blog post has been created, navigate the user to the index
           // We navigate by calling this.context.router.push with the
           // new path to navigate to.
-          this.context.router.push('/rfpMarketPlace');
+          this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       });
     } else {
       this.props.createIOIAction(props)
@@ -70,7 +133,7 @@ class CreateIOIForm extends Component{
          // blog post has been created, navigate the user to the index
          // We navigate by calling this.context.router.push with the
          // new path to navigate to.
-         this.context.router.push('/rfpMarketPlace');
+         this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
        });
      }
 	}
@@ -80,6 +143,13 @@ class CreateIOIForm extends Component{
       return (
         <div>
           <h4>RFP Details : </h4>
+          <br/>
+          {this.state.rfp.companyDesc}
+          <br/>
+          <br/>
+          {this.state.rfp.txnOverview}
+          <br/>
+          <br/>
           <table className="table table-bordered">
             <tbody>
               <tr>
@@ -114,11 +184,121 @@ class CreateIOIForm extends Component{
   }
 
   onSelectCovenant(option) {
-      console.log('You selected '+JSON.stringify(option));
+      // console.log('You selected '+JSON.stringify(option));
       this.setState({
         selectedCovenant: this.state.selectedCovenant.push(option)
       });
     }
+
+  onChangeCollateralValue(element, field, event){
+    console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
+    var updValue = this.state.collateral;
+    updValue[element][field] = event.target.value;
+
+    // re-calculate the
+    if(field === 'ineligible'){
+      updValue[element]['netCollateral'] = (100 - cUtils.parseNumber(event.target.value)) * (cUtils.parseNumber(updValue[element]['gross'])) / 100;
+    }
+    updValue[element]['available'] = cUtils.parseNumber(updValue[element]['netCollateral']) * cUtils.parseNumber(updValue[element]['advRate']) / 100;
+    updValue[element]['netEffective'] = cUtils.parseNumber(updValue[element]['available']) / (cUtils.parseNumber(updValue[element]['gross']));
+
+    console.log('updValue:'+JSON.stringify(updValue));
+
+    this.setState({
+      collateral: updValue,
+      totalAvailable : this.state.totalAvailable + updValue[element]['available']
+    });
+  }
+
+  displayCollateralAnalysis(){
+    console.log('I am in displayCollateralAnalysis');
+    // console.log('thisValue:'+JSON.stringify(thisValue));
+    var rfp = this.state.rfp;
+    if(rfp && rfp.category.toUpperCase() === 'ABL'){
+      console.log('rfp:'+JSON.stringify(rfp));
+      return(<div>
+        <h3>Borrowing Base</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Asset</th>
+              <th>Gross</th>
+              <th>Ineligible %</th>
+              <th>Net Collateral</th>
+              <th>Advance Rate</th>
+              <th>Availabe</th>
+              <th>Net Eff Adv Rate</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Accounts Receivable</td>
+              <td><NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="acctRecvIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'ineligible')} /></td>
+              <td><NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="acctRecvAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'advRate')}/></td>
+              <td><NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td>Inventory</td>
+              <td><NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="invtryIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'ineligible')}/></td>
+              <td><NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="invtryAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'advRate')} /></td>
+              <td><NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td>PP&E</td>
+              <td><NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="ppeIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'ineligible')} /></td>
+              <td><NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="ppeAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'advRate')}/></td>
+              <td><NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td>Machinery & Equipment :</td>
+              <td><NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="maeIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'ineligible')} /></td>
+              <td><NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="maeAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'advRate')}/></td>
+              <td><NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td>Real Estate</td>
+              <td><NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="realEstIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'ineligible')} /></td>
+              <td><NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="realEstAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'advRate')}/></td>
+              <td><NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td>Other</td>
+              <td><NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="otherIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'other', 'ineligible')} /></td>
+              <td><NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><input type="text" className="form-control" name="otherAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'other', 'advRate')}/></td>
+              <td><NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+            </tr>
+            <tr>
+              <td><b>Total</b></td>
+              <td><b><NumberFormat value={this.state.totalGross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></b></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td><b><NumberFormat value={this.state.totalAvailable} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></b></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>);
+    }
+  }
 
   render(){
     console.log('I am in create IOI');
@@ -158,9 +338,13 @@ class CreateIOIForm extends Component{
           <input type="hidden" className="form-control" {...createdByCompanyId} />
 
           {this.displayRFPSummary()}
-
           <br/>
+
+          {this.displayCollateralAnalysis()}
+          <br/>
+
           {this.displaySubtitle()}
+          <br/>
 
           <div className={`row`}>
             <div className={`form-group col-xs-6 col-md-6 no-padding ${maxDebtAllowed.touched && maxDebtAllowed.invalid ? 'has-danger' : ''}`}>

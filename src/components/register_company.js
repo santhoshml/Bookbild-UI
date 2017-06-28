@@ -5,6 +5,7 @@ import {Link} from 'react-router';
 import validator from 'validator';
 import Header from './header';
 import * as actionCreators from '../actions/index';
+import constants from '../utils/constants';
 
 class RegisterCompanyForm extends Component{
 	static contextTypes ={
@@ -17,7 +18,7 @@ class RegisterCompanyForm extends Component{
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
-			 this.context.router.push('/');
+			 this.context.router.push(constants.ROUTES_MAP.SUPER_ADMIN);
 		 });
 	}
 
@@ -213,7 +214,7 @@ class RegisterCompanyForm extends Component{
 					</div>
 
 	        <button type="submit" className="btn btn-primary">Submit</button>
-	        <Link to="/" className="btn btn-danger">Cancel</Link>
+	        <Link to={constants.ROUTES_MAP.SUPER_ADMIN} className="btn btn-danger">Cancel</Link>
 	      </form>
 				<br/>
         <br/>

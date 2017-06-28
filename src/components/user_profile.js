@@ -43,7 +43,7 @@ class UserProfileForm extends Component{
        // blog post has been created, navigate the user to the index
        // We navigate by calling this.context.router.push with the
        // new path to navigate to.
-       this.context.router.push('/rfpMarketPlace');
+       this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
      });
 
 	}
@@ -190,7 +190,7 @@ class UserProfileForm extends Component{
 
           <br/>
           <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
-          <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>&nbsp;&nbsp;
+          <Link to={constants.ROUTES_MAP.RFP_MARKETPLACE} className="btn btn-danger">Cancel</Link>&nbsp;&nbsp;
 
         </form>
         <br/>
