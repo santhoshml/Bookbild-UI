@@ -4,7 +4,7 @@ import DataGrid from './data_grid_example';
 import cUtils from '../utils/common_utils';
 import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import {Link} from 'react-router';
 
 export default class DisplayRFPList extends Component {
@@ -88,11 +88,11 @@ export default class DisplayRFPList extends Component {
         rfp.category    = cUtils.getDisplayValue(rfp.category);
         rfp.isSponsored = cUtils.getDisplayValue(rfp.isSponsored);
 
-        let fDealSizeVal = formatCurrency(rfp.dealSize, Constants.CURRENCY_OPTS);
+        let fDealSizeVal = formatCurrency(rfp.dealSize, constants.CURRENCY_OPTS);
         let decimalIndex = fDealSizeVal.indexOf('.');
         rfp.dealSize    = fDealSizeVal.substring(0, decimalIndex);
 
-        let fltmEbitdaVal = formatCurrency(rfp.ltmEbitda, Constants.CURRENCY_OPTS);
+        let fltmEbitdaVal = formatCurrency(rfp.ltmEbitda, constants.CURRENCY_OPTS);
         decimalIndex = fltmEbitdaVal.indexOf('.');
         rfp.ltmEbitda = fltmEbitdaVal.substring(0, decimalIndex);
 

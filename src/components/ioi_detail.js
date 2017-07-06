@@ -11,6 +11,7 @@ import dateFormat from 'dateformat';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
 import Header from './header';
+import roundTo from 'round-to';
 
 class IOIDetail extends Component{
   constructor(props){
@@ -34,7 +35,7 @@ class IOIDetail extends Component{
 
     this.props.fetchRFPAction(ioi.rfpId)
       .then(() => {
-        console.log('I am in the get result');
+        // console.log('I am in the get result');
         lsUtils.setValue(constants.KEY_RFP_OBJECT, this.props.rfp);
         this.setState({
           rfp : this.props.rfp
@@ -131,6 +132,10 @@ class IOIDetail extends Component{
               <td>{ioi.year5}</td>
             </tr>
             <tr>
+              <td>Yield</td>
+              <td><b>{ioi.yield}</b></td>
+            </tr>
+            <tr>
               <td>Created by</td>
               <td>{ioi.createdById}</td>
             </tr>
@@ -170,11 +175,51 @@ class IOIDetail extends Component{
     }
   }
 
+  displayYieldMatrix(){
+    if(this.state.ioi.yieldMatrix){
+      var yieldMatrixRender = this.state.ioi.yieldMatrix.map(function(row){
+        return(<tr>
+            <td>{row.period}</td>
+            <td><NumberFormat value={roundTo(Number(row.cashFlow)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td>{row.startDate}</td>
+            <td><NumberFormat value={roundTo(Number(row.amtAtBegin)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={roundTo(Number(row.amort)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={roundTo(Number(row.amtAtEnd)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={roundTo(Number(row.intrestPaymet)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={roundTo(Number(row.cashFlow)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+          </tr>
+        );
+      });
+      return(<div>
+        <h3>Yield Matrix</h3>
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th>Period</th>
+              <th>Cash Flows($mm)</th>
+              <th>Date</th>
+              <th>Outstanding Amount Begining of Quater($mm)</th>
+              <th>Amortization ($mm)</th>
+              <th>Outstanding Amount Begining of Period($mm)</th>
+              <th>Intrest Payment($mm)</th>
+              <th>Cash Flow($mm)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {yieldMatrixRender}
+          </tbody>
+        </table>
+        </div>);
+    }
+  }
+
   render(){
     return(
       <div>
         <Header />
         {this.displaySelectedIOI()}
+        <br/>
+        {this.displayYieldMatrix()}
         <br/>
         <br/>
         {this.displayViewAttachedRFPButton()}

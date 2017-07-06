@@ -4,7 +4,7 @@ import DataGrid from './data_grid_example';
 import cUtils from '../utils/common_utils';
 import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
-import Constants from '../utils/constants';
+import constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';
 import NumberFormat from 'react-number-format';
 import { FormattedDate } from 'react-intl';
@@ -193,8 +193,8 @@ export default class DisplayIOIList extends Component {
   onDoubleClicked(row){
     // console.log('row clicked in IOI list :'+ row.id);
     if(row){
-      console.log('row:'+JSON.stringify(row));
-      lsUtils.setValue(Constants.KEY_SELECTED_IOI_OBJECT, row);
+      // console.log('row:'+JSON.stringify(row));
+      lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, row);
       this.context.router.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
     }
   }
