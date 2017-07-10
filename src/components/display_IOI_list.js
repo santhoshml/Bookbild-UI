@@ -36,28 +36,41 @@ export default class DisplayIOIList extends Component {
     });
   }
 
+  investorRenderer(row){
+    if(this.state.companyList){
+      // console.log('row.createdByCompanyId:'+row.createdByCompanyId);
+      // console.log('this.state.companyList:'+JSON.stringify(this.state.companyList));
+      return cUtils.getCompanyNameById(row.createdByCompanyId, this.state.companyList);
+    } else
+      return null;
+  }
+
   maxDebtRenderer(row){
-    return <NumberFormat value={row.maxDebtAllowed} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return <NumberFormat value={row.maxDebtAllowed / 1000000} displayType={'text'} thousandSeparator={true} prefix={'$'} />
   }
 
   loanSizeRenderer(row){
-    return <NumberFormat value={row.maxDebtAllowed} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return <NumberFormat value={row.loanSize / 1000000} displayType={'text'} thousandSeparator={true} prefix={'$'} />
   }
 
   pikRenderer(row){
-    return <NumberFormat value={row.pikIntreset} displayType={'text'} decimalSeparator={true} decimalPrecision={true} suffix={'%'} />
+    return <NumberFormat value={row.pikIntreset} displayType={'text'} decimalSeparator={row.pikIntreset > 0 ? true : false} decimalPrecision={true} suffix={'%'} />
   }
 
   liborFloorRenderer(row){
-    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={true} decimalPrecision={true} suffix={'%'} />
+    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={row.liborFloor > 0 ? true : false} decimalPrecision={true} suffix={'%'} />
   }
 
   upfrontFeeRenderer(row){
-    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={row.upfrontFee>0 ? true : false} suffix={'%'} />
   }
 
   maturityRenderer(row){
     return <NumberFormat value={row.maturity} displayType={'text'} suffix={'yrs'} />
+  }
+
+  cashIntrestRenderer(row){
+    return <NumberFormat value={row.cashInterest} displayType={'text'} thousandSeparator={row.cashInterest>0 ? true : false} suffix={'%'} />
   }
 
   getCompanyNameRenderer(row){
@@ -86,6 +99,10 @@ export default class DisplayIOIList extends Component {
 
   getAllColoumns(){
     let colArr = [{
+      name: 'createdByCompanyId',
+      display: 'Investor',
+      renderer : this.investorRenderer.bind(this)
+    },{
       name: 'maxDebtAllowed',
       display: 'Max Debt Allowed',
       renderer : this.maxDebtRenderer
@@ -98,7 +115,8 @@ export default class DisplayIOIList extends Component {
       display: 'Structure'
     }, {
       name: 'liborSpread',
-      display: 'Intrest'
+      display: 'Intrest',
+      renderer : this.cashIntrestRenderer
     }, {
       name: 'pikIntreset',
       display: 'PIK',
@@ -204,11 +222,22 @@ export default class DisplayIOIList extends Component {
     if (!this.state.ioiList) {
       return <div>No IOIs exist</div>;
     } else {
+      const selectRowProp = {
+        mode: 'checkbox',
+        clickToSelect: true,
+        bgColor: "rgb(238, 193, 213)" 
+        };
       return (
         <div>
           <BootstrapTable
             columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
-            data={this.state.ioiList} headers={true}
+            data={this.state.ioiList}
+            headers={true}
+            striped
+            hover
+            condensed
+            pagination
+            selectRow={ selectRowProp }
             onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
         </div>
       );

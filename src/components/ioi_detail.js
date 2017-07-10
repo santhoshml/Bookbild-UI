@@ -191,7 +191,7 @@ class IOIDetail extends Component{
         );
       });
       return(<div>
-        <h3>Yield Matrix</h3>
+        <h3>Yield Estimate</h3>
         <table className="table table-striped">
           <thead>
             <tr>

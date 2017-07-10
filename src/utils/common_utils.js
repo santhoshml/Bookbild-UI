@@ -4,6 +4,26 @@ import sortJsonArray from 'sort-json-array';
 import isNumber from 'is-number';
 import numbro from 'numbro';
 
+exports.getProductCategories = function(ioiList, companyList){
+  let prdCatMap = {};
+  for(let ioi of ioiList){
+    if(prdCatMap[ioi.loanStructure]){
+      prdCatMap[ioi.loanStructure].push(exports.getCompanyNameById(ioi.createdByCompanyId, companyList));
+    } else {
+      prdCatMap[ioi.loanStructure] = [exports.getCompanyNameById(ioi.createdByCompanyId, companyList)];
+    }
+  }
+  return prdCatMap;
+}
+
+exports.getCompanyNameById = function(id, cmpyList){
+  for(let company of cmpyList){
+    if(company.companyId === id)
+      return company.companyName;
+  }
+  return null;
+}
+
 exports.getTopThreeSectors = function(obj, grandTotal){
   let sList = [];
   let keys = Object.keys(obj);

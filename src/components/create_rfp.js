@@ -97,8 +97,8 @@ class CreateRFP extends Component {
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
 
-            this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-            // this.context.router.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+            // this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            this.context.router.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
       }
     }

@@ -8,7 +8,8 @@ export default function(state = INITIAL_STATE, action) {
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
-        , ioiList: action.payload.data.data.Items
+        , ioiList: action.payload.data.data.IOI_LIST.Items
+        , ioiCompanyList : action.payload.data.data.COMPANY_DETAILS_LIST
       };
     } else {
       return {
