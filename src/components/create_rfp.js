@@ -12,6 +12,11 @@ import numeral from "numeral";
 import Header from './header';
 
 var gType=null;
+const categoryOptions = ['Open', 'ABL', 'Cash Flow'];
+const productOptions = ['Revolver', 'Term Loan', 'Mezzanine', 'Multi-Tranche', 'Uni-Tranche'];
+const sectorOptions = ['IT', 'Financials', 'Health Care', 'Energy', 'Consumer Staples', 'Consumer Disc', 'Industrials', 'Materials', 'Utilities', 'Telecoms'];
+const regionOptions=['West Coast', 'Mid Atlantic', 'Great Lakes', 'South', 'Mountain', 'Southeast', 'New England', 'Midwest'];
+
 class CreateRFP extends Component {
 
   // static contextTypes = {
@@ -26,8 +31,9 @@ class CreateRFP extends Component {
 	// 	}
   // }
 
+
   componentWillMount() {
-    // console.log('I am in componentWillMount');
+    console.log('I am in createRFP componentWillMount');
     gType = this.props.params.type;
     this.setState({
       type : this.props.params.type
@@ -222,11 +228,48 @@ class CreateRFP extends Component {
     );
   }
 
+  renderTextArea(field) {
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+
+    return (
+      <div className={className}>
+        <label>{field.label}</label>
+        <textarea type="text" className="form-control" {...field.input} />
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </div>
+    );
+  }
+
+  renderDropdown(field) {
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+
+    return (
+      <div className={className}>
+        <label>{field.label}</label>
+        <select className="form-control" {...field.input}>
+          <option value="">Select one</option>
+          {field.dpField.map(fOption =>
+            <option value={fOption} key={fOption}>
+              {fOption}
+            </option>
+          )}
+        </select>
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </div>
+    );
+  }
+
   render() {
-    const { fields: { requestType, dealSize, tenor, category, product, sector
-      , txnOverview, companyName, companyDesc, ltmRevenue, ltmEbitda, fullName
-      , contactRole, email, createdById, isSponsored, region, createdByCompanyId
-      , phoneNumber, expiryDt, numOfIOI}, handleSubmit } = this.props;
+    console.log('I am in create RFP render');
+    const { handleSubmit } = this.props;
 
     return (
       <div>
@@ -242,14 +285,98 @@ class CreateRFP extends Component {
           <input type="hidden" className="form-control" {...createdByCompanyId} />
           <input type="hidden" className="form-control" {...numOfIOI} />
 
-
-
           <div className={`row`}>
             <Field
               label="Company Name"
               name="companyName"
               size="col-xs-12 col-md-12"
               component={this.renderField}
+            />
+          </div>
+
+          <div className={`row`}>
+            <Field
+              label="Deal Size ($)"
+              name="dealSize"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              label="Tenor"
+              name="tenor"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+          </div>
+
+          <div className={`row`}>
+            <Field
+              label="Category"
+              name="category"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdown}
+              dpField={categoryOptions}
+            />
+            <Field
+              label="Product"
+              name="product"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdown}
+              dpField={productOptions}
+            />
+          </div>
+
+          {this.displayABLDetails(this.props.fields.category)}
+
+          <div className={`row`}>
+            <Field
+              label="Sector"
+              name="sector"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdown}
+              dpField={sectorOptions}
+            />
+            <Field
+              label="Region"
+              name="region"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdown}
+              dpField={regionOptions}
+            />
+          </div>
+
+          <div className={`row`}>
+            <Field
+              label="LTM Revenue ($)"
+              name="ltmRevenue"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              label="LTM EBITDA ($)"
+              name="ltmEbitda"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+          </div>
+
+          <div className={`row`}>
+            <Field
+              label="Transaction Overview / Use of Funds"
+              name="txnOverview"
+              size="col-xs-12 col-md-12"
+              component={this.renderTextArea}
+              placeholder={constants.TXN_OVERVIEW_SAMPLE}
+            />
+          </div>
+
+          <div className={`row`}>
+            <Field
+              label="Company Description"
+              name="companyDesc"
+              size="col-xs-12 col-md-12"
+              component={this.renderTextArea}
+              placeholder={constants.COMPANY_DESC_SAMPLE}
             />
           </div>
 

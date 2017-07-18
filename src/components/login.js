@@ -11,13 +11,6 @@ import { connect } from "react-redux";
 import * as actionCreators from '../actions/index';
 
 class LoginForm extends Component{
-	// constructor(props){
-	// 	super(props);
-	// 	this.state = {
-	// 		errorObject : null
-	// 	}
-	// };
-
 	renderField(field) {
     const { meta: { touched, error } } = field;
     const className = `form-group ${touched && error ? "has-danger" : ""}`;
@@ -59,7 +52,8 @@ class LoginForm extends Component{
 
 	onSubmit(props){
 		// const {resetForm} = this.props;
-		this.props.loginAction(props, (data)=> {
+		this.props.loginAction(props)
+		 .then((data) => {
 			 console.log('In submit then, data:'+JSON.stringify(data));
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
