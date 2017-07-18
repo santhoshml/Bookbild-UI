@@ -5,6 +5,7 @@ const INITIAL_STATE = { userObject: null, companyObject: null, errObject : null 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case LOGIN:
+    console.log('action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state

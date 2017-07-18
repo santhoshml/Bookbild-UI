@@ -1,30 +1,66 @@
 import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import {Field, reduxForm} from 'redux-form';
 import { loginAction, fetchAllRFPAction } from '../actions/index';
-import {Link} from 'react-router';
+import { Link } from "react-router-dom";
 import validator from 'validator';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Header from './header';
+import { connect } from "react-redux";
 
 import * as actionCreators from '../actions/index';
 
 class LoginForm extends Component{
-	constructor(props){
-		super(props);
-		this.state = {
-			errorObject : null
-		}
-	}
+	// constructor(props){
+	// 	super(props);
+	// 	this.state = {
+	// 		errorObject : null
+	// 	}
+	// };
 
-	static contextTypes ={
-	    router : PropTypes.object
-	};
+	renderField(field) {
+    const { meta: { touched, error } } = field;
+    const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		// console.log('field:'+JSON.stringify(field));
+    return (
+      <div className={className}>
+        <label>{field.label}</label>
+        <input
+					className="form-control"
+					placeholder={field.placeholder}
+					type={field.type}
+					{...field.input} />
+        <div className="text-help">
+          {touched ? error : ""}
+        </div>
+      </div>
+    );
+  }
+
+	renderCheckboxField(field) {
+    const { meta: { touched, error } } = field;
+    const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		// console.log('field:'+JSON.stringify(field));
+    return (
+			<div className={className}>
+				<label>
+		      <input
+						type={field.type}
+						{...field.input}
+						/>
+		      &nbsp;by clicking on submit, I agree to <a href='terms_and_conditions.html' target='_blank'>Bookbild terms and conditions.</a>
+				</label>
+	      <div className="text-help">
+	        {touched ? error : ""}
+	      </div>
+      </div>
+    );
+  }
 
 	onSubmit(props){
-		const {resetForm} = this.props;
-		this.props.loginAction(props)
-		 .then((data) => {
+		// const {resetForm} = this.props;
+		this.props.loginAction(props, (data)=> {
+			 console.log('In submit then, data:'+JSON.stringify(data));
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
@@ -33,11 +69,13 @@ class LoginForm extends Component{
 				 lsUtils.setValue(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
 				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
-				//  this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-				 this.context.router.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
+				 console.log('forwading now');
+
+				//  this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				 this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
 			 } else {	// login failed
 				//empty the username and password
-				resetForm();
+				// resetForm();
 				this.setState({
 					errorObject : data.payload.data
 				})
@@ -46,7 +84,7 @@ class LoginForm extends Component{
 	}
 
 	render(){
-		const {fields:{ email, password, tcAgreement }, handleSubmit, errors} = this.props;
+		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 				<div>
 					<br/>
@@ -54,35 +92,30 @@ class LoginForm extends Component{
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">
 		        <h3>Login to access your account</h3>
 
-						<div className="text-help">
-							{this.state.errorObject ? this.state.errorObject.err_desc : ''}
-						</div>
+						<br/>
+						<br/>
+						<Field
+		          name="email"
+							component={this.renderField}
+		          label="Email used for login"
+							placeholder = "Email used to register with Bookbild"
+							type="text"
+		        />
+						<Field
+		          name="password"
+							component={this.renderField}
+		          label="Password to login"
+							placeholder = "password used with Bookbild"
+							type="password"
+		        />
+						<Field
+		          name="tcAgreement"
+							component={this.renderCheckboxField}
+							type="checkbox"
+		        />
 
-		        <div className={`form-group ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-		          <label> Email used for login </label>
-		          <input type="email" className="form-control" placeholder="Enter a valid email" {...email}/>
-							<div className="text-help">
-            		{email.touched ? email.error : ''}
-          		</div>
-		        </div>
-
-		        <div className={`form-group ${password.touched && password.invalid ? 'has-danger' : ''}`}>
-		          <label>Password</label>
-		          <input type="password" className="form-control" placeholder="Enter password" {...password}/>
-							<div className="text-help">
-            		{password.touched ? password.error : ''}
-          		</div>
-		        </div>
-
-						<div className="checkbox">
-							<label><input type="checkbox" {...tcAgreement} />&nbsp;by clicking on submit, I agree to <a href="terms_and_conditions.html" target="_blank">Bookbild terms and conditions.</a></label>
-							<div className="text-help">
-								{tcAgreement.touched ? tcAgreement.error : ''}
-							</div>
-						</div>
-
-		        <button type="submit" className="btn btn-primary">Submit</button>
-		        <Link to="/" className="btn btn-danger">Cancel</Link>
+						<button type="submit" className="btn btn-primary" disabled={submitting}>Submit</button>
+						<Link to="/" disabled={pristine || submitting} className="btn btn-danger" onClick={reset}>Cancel</Link>
 		      </form>
 				</div>
 		    );
@@ -90,6 +123,7 @@ class LoginForm extends Component{
 }
 
 function validate(values){
+	// console.log('I am in validate');
   const errors={};
 
   if(!values.email || !validator.isEmail(values.email)){
@@ -109,6 +143,5 @@ function validate(values){
 
 export default reduxForm({
   'form': 'LoginForm',
-  'fields': ['email', 'password', 'tcAgreement'],
 	validate
-}, null, {loginAction})(LoginForm);
+})(connect(null, {loginAction})(LoginForm));

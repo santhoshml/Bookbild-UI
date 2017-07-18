@@ -34,8 +34,5 @@ export default (
     <Route path="rfpCompanyList/:id" component={RFPCompanyList} />
     <Route path="superAdmin" component={SuperAdminBoard} />
     <Route path="createPitch/:type" component={UnsolicitedPitch} />
-
-
-
   </Route>
 );
