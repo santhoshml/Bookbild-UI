@@ -1,7 +1,7 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, {Component} from 'react';
+import {Field, reduxForm} from 'redux-form';
 import { createIOIAction, updateIOIAction } from '../actions/index';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
@@ -13,17 +13,17 @@ import Select from 'react-select';
 
 
 var gType=null;
+const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
+const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
+const governanceOptions = ['YES', 'NO'];
 class CreateIOIForm extends Component{
-  static contextTypes ={
-	    router : PropTypes.object
-	};
 
   constructor(props){
     super(props);
     this.state = {
       user : null,
       rfp : null,
-      type : props.params.type,
+      type : props.match.params.type,
       selectedCovenant: [],
       collateral : null,
       totalAvailable : 0,
@@ -31,8 +31,52 @@ class CreateIOIForm extends Component{
     };
   }
 
+  renderDropdownField(field) {
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+
+    return (
+      <span className={className}>
+        <label>{field.label}</label>
+        <select className="form-control" {...field.input}>
+          <option value="">Select one</option>
+          {field.dpField.map(fOption =>
+            <option value={fOption} key={fOption}>
+              {fOption}
+            </option>
+          )}
+        </select>
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </span>
+    );
+  }
+
+  renderField(field) {
+		const { meta: { touched, error } } = field;
+		const { size } = field;
+		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+		// console.log('className:'+JSON.stringify(className));
+		// console.log('field:'+JSON.stringify(field));
+		return (
+			<span className={className}>
+				<label>{field.label}</label>
+				<input
+					className="form-control"
+					placeholder={field.placeholder}
+					type={field.type}
+					{...field.input} />
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</span>
+		);
+	}
+
   componentWillMount() {
-    gType = this.props.params.type;
+    gType = this.props.match.params.type;
     console.log('gType :'+ gType);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -114,6 +158,10 @@ class CreateIOIForm extends Component{
   }
 
   onSubmit(props){
+    // <input type="hidden" className="form-control" {...rfpId} />
+    // <input type="hidden" className="form-control" {...createdById} />
+    // <input type="hidden" className="form-control" {...createdByCompanyId} />
+
     console.log('createIOIAction:'+JSON.stringify(props));
     if(gType === constants.IOI_EDIT){
       var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
@@ -125,7 +173,7 @@ class CreateIOIForm extends Component{
           // blog post has been created, navigate the user to the index
           // We navigate by calling this.context.router.push with the
           // new path to navigate to.
-          this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       });
     } else {
       this.props.createIOIAction(props)
@@ -133,7 +181,7 @@ class CreateIOIForm extends Component{
          // blog post has been created, navigate the user to the index
          // We navigate by calling this.context.router.push with the
          // new path to navigate to.
-         this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+         this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
        });
      }
 	}
@@ -233,57 +281,177 @@ class CreateIOIForm extends Component{
           <tbody>
             <tr>
               <td>Accounts Receivable</td>
-              <td><NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="acctRecvIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'ineligible')} /></td>
-              <td><NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="acctRecvAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'advRate')}/></td>
-              <td><NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+  		            name="acctRecvIneligiblePercent"
+  		            component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'ineligible')}
+  		          />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="acctRecvAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td>Inventory</td>
-              <td><NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="invtryIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'ineligible')}/></td>
-              <td><NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="invtryAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'advRate')} /></td>
-              <td><NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="invtryIneligiblePercent"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'ineligible')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="invtryAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td>PP&E</td>
-              <td><NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="ppeIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'ineligible')} /></td>
-              <td><NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="ppeAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'advRate')}/></td>
-              <td><NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="ppeIneligiblePercent"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'ineligible')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="ppeAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td>Machinery & Equipment :</td>
-              <td><NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="maeIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'ineligible')} /></td>
-              <td><NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="maeAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'advRate')}/></td>
-              <td><NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="maeIneligiblePercent"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'ineligible')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="maeAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td>Real Estate</td>
-              <td><NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="realEstIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'ineligible')} /></td>
-              <td><NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="realEstAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'advRate')}/></td>
-              <td><NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="realEstIneligiblePercent"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'ineligible')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="realEstAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td>Other</td>
-              <td><NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="otherIneligiblePercent" onBlur={this.onChangeCollateralValue.bind(this, 'other', 'ineligible')} /></td>
-              <td><NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><input type="text" className="form-control" name="otherAdvRate" onBlur={this.onChangeCollateralValue.bind(this, 'other', 'advRate')}/></td>
-              <td><NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-              <td><NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/></td>
+              <td>
+                <NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="otherIneligiblePercent"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'other', 'ineligible')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <Field
+                  name="otherAdvRate"
+                  component={this.renderField}
+                  onBlur={this.onChangeCollateralValue.bind(this, 'other', 'advRate')}
+                />
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              </td>
+              <td>
+                <NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+              </td>
             </tr>
             <tr>
               <td><b>Total</b></td>
@@ -302,10 +470,7 @@ class CreateIOIForm extends Component{
 
   render(){
     console.log('I am in create IOI');
-    const {fields:{maxDebtAllowed, loanSize, tranche, loanStructure, cashInterest
-      , pikIntreset, liborFloor, maturity, year1, year2, year3, year4, year5
-      , upfrontFee, governance, warrants, covenants, rfpId, createdById
-      , createdByCompanyId, cpYear1, cpYear2, cpYear3, cpYear4, cpYear5}, handleSubmit} = this.props;
+    const {handleSubmit} = this.props;
 
       const covenantsOptions = [
         {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
@@ -321,7 +486,7 @@ class CreateIOIForm extends Component{
         {value: 'Other', label: 'Other'}
       ];
 
-      console.log('this.state.selectedCovenants:'+JSON.stringify(this.state.selectedCovenant));
+      // console.log('this.state.selectedCovenants:'+JSON.stringify(this.state.selectedCovenant));
 
       // <div className={`row`}>
       //   <label>Covenants</label>
@@ -333,9 +498,6 @@ class CreateIOIForm extends Component{
       <div>
         <Header />
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <input type="hidden" className="form-control" {...rfpId} />
-          <input type="hidden" className="form-control" {...createdById} />
-          <input type="hidden" className="form-control" {...createdByCompanyId} />
 
           {this.displayRFPSummary()}
           <br/>
@@ -347,143 +509,101 @@ class CreateIOIForm extends Component{
           <br/>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 no-padding ${maxDebtAllowed.touched && maxDebtAllowed.invalid ? 'has-danger' : ''}`}>
-              <label>Maximum Debt Allowed</label>
-              <input type="text" className="form-control" {...maxDebtAllowed} />
-              <div className="text-help">
-                {maxDebtAllowed.touched ? maxDebtAllowed.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-6 col-md-6 no-padding ${loanSize.touched && loanSize.invalid ? 'has-danger' : ''}`}>
-              <label>Loan Size</label>
-              <input type="text" className="form-control" {...loanSize} />
-              <div className="text-help">
-                {loanSize.touched ? loanSize.error : ''}
-              </div>
-            </div>
+            <Field
+              name="maxDebtAllowed"
+              label="Maximum Debt Allowed"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              name="loanSize"
+              label="Loan Size"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
           </div>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${tranche.touched && tranche.invalid ? 'has-danger' : ''}`}>
-              <label>Tranche? (e.g. Delayed Draw)</label>
-              <select className="form-control" {...tranche}>
-                <option>Choose...</option>
-                <option value="Delayed Draw">Delayed Draw</option>
-                <option value="Accordion">Accordion</option>
-                <option value="Fixed Asset Subline">Fixed Asset Subline</option>
-                <option value="Uni-Tranche">Uni-Tranche</option>
-                <option value="Multi-Tranche">Multi-Tranche</option>
-                <option value="None">None</option>
-              </select>
-              <div className="text-help">
-                {tranche.touched ? tranche.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-6 col-md-6 ${loanStructure.touched && loanStructure.invalid ? 'has-danger' : ''}`}>
-              <label>Loan Structure</label>
-              <select className="form-control" {...loanStructure}>
-                <option>Choose...</option>
-                <option value="ABL-Revolver">ABL-Revolver</option>
-                <option value="ABL-Term Loan">ABL-Term Loan</option>
-                <option value="ABL-Both">ABL-Both</option>
-                <option value="CashFlow-Revolver">CashFlow-Revolver</option>
-                <option value="CashFlow-Term Loan">CashFlow-Term Loan</option>
-                <option value="CashFlow-Both">CashFlow-Both</option>
-                <option value="2nd Lien Term Loan">2nd Lien Term Loan</option>
-                <option value="Sub Debt">Sub Debt</option>
-                <option value="Mezzanine">Mezzanine</option>
-              </select>
-              <div className="text-help">
-                {loanStructure.touched ? loanStructure.error : ''}
-              </div>
-            </div>
+            <Field
+              label="Tranche? (e.g. Delayed Draw)"
+              name="tranche"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdownField}
+              dpField={trancheOptions}
+            />
+            <Field
+              label="Loan Structure"
+              name="loanStructure"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdownField}
+              dpField={loanStructOptions}
+            />
           </div>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${maturity.touched && maturity.invalid ? 'has-danger' : ''}`}>
-              <label>Maturity (years)</label>
-              <input type="text" className="form-control" {...maturity} />
-              <div className="text-help">
-                {maturity.touched ? maturity.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-6 col-md-6 ${upfrontFee.touched && upfrontFee.invalid ? 'has-danger' : ''}`}>
-              <label>OID / Upfront Fee (%)</label>
-              <input type="text" className="form-control" {...upfrontFee} />
-              <div className="text-help">
-                {upfrontFee.touched ? upfrontFee.error : ''}
-              </div>
-            </div>
+            <Field
+              name="maturity"
+              label="Maturity (years)"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              name="upfrontFee"
+              label="OID / Upfront Fee (%)"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
           </div>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${governance.touched && governance.invalid ? 'has-danger' : ''}`}>
-              <label>Governance</label>
-              <select className="form-control" {...governance}>
-                <option>Choose...</option>
-                <option value="One">YES</option>
-                <option value="Two">NO</option>
-              </select>
-              <div className="text-help">
-                {governance.touched ? governance.error : ''}
-              </div>
-            </div>
+            <Field
+              label="Governance"
+              name="governance"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdownField}
+              dpField={governanceOptions}
+            />
 
-            <div className={`form-group col-xs-6 col-md-6 ${warrants.touched && warrants.invalid ? 'has-danger' : ''}`}>
-              <label>Warrants</label>
-              <select className="form-control" {...warrants}>
-                <option>Choose...</option>
-                <option value="One">YES</option>
-                <option value="Two">NO</option>
-              </select>
-              <div className="text-help">
-                {warrants.touched ? warrants.error : ''}
-              </div>
-            </div>
+            <Field
+              label="Warrants"
+              name="warrants"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdownField}
+              dpField={governanceOptions}
+            />
           </div>
           <br/>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-12 col-md-12 ${covenants.touched && covenants.invalid ? 'has-danger' : ''}`}>
-              <label>Covenants</label>
-              <input type="text" className="form-control" placeholder={constants.COVENANTS_SAMPLE} {...covenants} />
-              <div className="text-help">
-                {covenants.touched ? covenants.error : ''}
-              </div>
-            </div>
+            <Field
+              name="covenants"
+              label="Covenants"
+              size="col-xs-12 col-md-12"
+              component={this.renderField}
+              placeholder={constants.COVENANTS_SAMPLE}
+            />
           </div>
 
           <div className={`row`}>
             <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
               <legend className="scheduler-border">Loan Pricing(%)</legend>
-              <div className={`${cashInterest.touched && cashInterest.invalid ? 'has-danger' : ''}`}>
-                <label>Cash Interest</label>
-                <input type="text" className="form-control" {...cashInterest} />
-                <div className="text-help">
-                  {cashInterest.touched ? cashInterest.error : ''}
-                </div>
-              </div>
+              <Field
+                name="cashInterest"
+                label="Cash Interest"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${pikIntreset.touched && pikIntreset.invalid ? 'has-danger' : ''}`}>
-                <label>PIK Interest</label>
-                <input type="text" className="form-control" {...pikIntreset} />
-                <div className="text-help">
-                  {pikIntreset.touched ? pikIntreset.error : ''}
-                </div>
-              </div>
+              <Field
+                name="pikIntreset"
+                label="PIK Interest"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${liborFloor.touched && liborFloor.invalid ? 'has-danger' : ''}`}>
-                <label>LIBOR Floor</label>
-                <input type="text" className="form-control" {...liborFloor} />
-                <div className="text-help">
-                  {liborFloor.touched ? liborFloor.error : ''}
-                </div>
-              </div>
+              <Field
+                name="liborFloor"
+                label="LIBOR Floor"
+                component={this.renderField}
+              />
             </fieldset>
 
             <div className={`form-group col-xs-1 col-md-1`}>
@@ -491,49 +611,35 @@ class CreateIOIForm extends Component{
 
             <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
               <legend className="scheduler-border">Amortization (%)</legend>
-              <div className={`${year1.touched && year1.invalid ? 'has-danger' : ''}`}>
-                <label>Year 1</label>
-                <input type="text" className="form-control" {...year1} />
-                <div className="text-help">
-                  {year1.touched ? year1.error : ''}
-                </div>
-              </div>
+              <Field
+                name="year1"
+                label="Year 1"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${year2.touched && year2.invalid ? 'has-danger' : ''}`}>
-                <label>Year 2</label>
-                <input type="text" className="form-control" {...year2} />
-                <div className="text-help">
-                  {year2.touched ? year2.error : ''}
-                </div>
-              </div>
+              <Field
+                name="year2"
+                label="Year 2"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${year3.touched && year3.invalid ? 'has-danger' : ''}`}>
-                <label>Year 3</label>
-                  <input type="text" className="form-control" {...year3} />
-                  <div className="text-help">
-                    {year3.touched ? year3.error : ''}
-                  </div>
-              </div>
+              <Field
+                name="year3"
+                label="Year 3"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${year4.touched && year4.invalid ? 'has-danger' : ''}`}>
-                <label>Year 4</label>
-                <input type="text" className="form-control" {...year4} />
-                <div className="text-help">
-                  {year4.touched ? year4.error : ''}
-                </div>
-              </div>
+              <Field
+                name="year4"
+                label="Year 4"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${year5.touched && year5.invalid ? 'has-danger' : ''}`}>
-                <label>Year 5</label>
-                <input type="text" className="form-control" {...year5} />
-                <div className="text-help">
-                  {year5.touched ? year5.error : ''}
-                </div>
-              </div>
+              <Field
+                name="year5"
+                label="Year 5"
+                component={this.renderField}
+              />
             </fieldset>
 
             <div className={`form-group col-xs-1 col-md-1`}>
@@ -541,49 +647,35 @@ class CreateIOIForm extends Component{
 
             <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
               <legend className="scheduler-border">Call Protection(%)</legend>
-              <div className={`${cpYear1.touched && cpYear1.invalid ? 'has-danger' : ''}`}>
-                <label>Year 1</label>
-                <input type="text" className="form-control" {...cpYear1} />
-                <div className="text-help">
-                  {cpYear1.touched ? cpYear1.error : ''}
-                </div>
-              </div>
+              <Field
+                name="cpYear1"
+                label="Year 1"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${cpYear2.touched && cpYear2.invalid ? 'has-danger' : ''}`}>
-                <label>Year 2</label>
-                <input type="text" className="form-control" {...cpYear2} />
-                <div className="text-help">
-                  {cpYear2.touched ? cpYear2.error : ''}
-                </div>
-              </div>
+              <Field
+                name="cpYear2"
+                label="Year 2"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${cpYear3.touched && cpYear3.invalid ? 'has-danger' : ''}`}>
-                <label>Year 3</label>
-                  <input type="text" className="form-control" {...cpYear3} />
-                  <div className="text-help">
-                    {cpYear3.touched ? cpYear3.error : ''}
-                  </div>
-              </div>
+              <Field
+                name="cpYear3"
+                label="Year 3"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${cpYear4.touched && cpYear4.invalid ? 'has-danger' : ''}`}>
-                <label>Year 4</label>
-                <input type="text" className="form-control" {...cpYear4} />
-                <div className="text-help">
-                  {cpYear4.touched ? cpYear4.error : ''}
-                </div>
-              </div>
+              <Field
+                name="cpYear4"
+                label="Year 4"
+                component={this.renderField}
+              />
               <br/>
-
-              <div className={`${cpYear5.touched && cpYear5.invalid ? 'has-danger' : ''}`}>
-                <label>Year 5</label>
-                <input type="text" className="form-control" {...cpYear5} />
-                <div className="text-help">
-                  {cpYear5.touched ? cpYear5.error : ''}
-                </div>
-              </div>
+              <Field
+                name="cpYear5"
+                label="Year 5"
+                component={this.renderField}
+              />
             </fieldset>
           </div>
           <br/>
@@ -732,9 +824,5 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'CreateIOIForm',
-  'fields': ['maxDebtAllowed', 'loanSize', 'tranche', 'loanStructure', 'cashInterest'
-    , 'pikIntreset', 'liborFloor', 'maturity', 'year1', 'year2', 'year3', 'year4', 'year5'
-    , 'upfrontFee', 'governance', 'warrants', 'covenants', 'rfpId', 'createdById'
-    , 'createdByCompanyId', 'cpYear1', 'cpYear2', 'cpYear3', 'cpYear4', 'cpYear5'],
   validate
 }, mapStateToProps, mapDispatchToProps)(CreateIOIForm);

@@ -42,7 +42,9 @@ exports.ROUTES_MAP = {
   CREATE_IOI          : '/createIOI',
   INDUSTRY_RESEARCH   : '/industryResearch',
   REGISTER_COMPANY    : '/registerCompany',
-  IOI_DETAIL          : '/ioiDetail'
+  IOI_DETAIL          : '/ioiDetail',
+  LOGOUT              : '/logout',
+  WGL                 : '/wgl'
 };
 
 exports.TXN_OVERVIEW_SAMPLE='Example: $100.0 million senior secured credit facility to refinance existing indebtedness and [fund a dividend recapitalization, tack-on acquisition, etc].';

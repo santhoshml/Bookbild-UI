@@ -1,5 +1,5 @@
 
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
 import { createRFPAction, fetchContactAction, updateRFPAction, fetchAllCompanyListForRFP } from '../actions/index';
@@ -16,27 +16,16 @@ const categoryOptions = ['Open', 'ABL', 'Cash Flow'];
 const productOptions = ['Revolver', 'Term Loan', 'Mezzanine', 'Multi-Tranche', 'Uni-Tranche'];
 const sectorOptions = ['IT', 'Financials', 'Health Care', 'Energy', 'Consumer Staples', 'Consumer Disc', 'Industrials', 'Materials', 'Utilities', 'Telecoms'];
 const regionOptions=['West Coast', 'Mid Atlantic', 'Great Lakes', 'South', 'Mountain', 'Southeast', 'New England', 'Midwest'];
-
+const sponsoredOptions=['YES', 'NO'];
+const requestTypeOptions=['New Financing', 'Refinancing', 'Restructuring', 'M&A', 'LBO', 'Market Check'];
 class CreateRFP extends Component {
 
-  // static contextTypes = {
-  //   router: PropTypes.object
-  // };
-
-  // constructor(props){
-  //   super(props);
-  //   this.state = {
-	// 		type : props.params.type,
-  //     companyList : null
-	// 	}
-  // }
-
-
   componentWillMount() {
-    console.log('I am in createRFP componentWillMount');
-    gType = this.props.params.type;
+    // console.log('I am in createRFP componentWillMount');
+    gType = this.props.match.params.type;
     this.setState({
-      type : this.props.params.type
+      type : this.props.match.params.type,
+      renderCollateral :false
     });
 
     let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
@@ -51,61 +40,66 @@ class CreateRFP extends Component {
           // console.log('I am in the get result');
           this.setState({
             isFavorite : this.props.isFavorite,
-            favorite : this.props.favorite
+            favorite : this.props.favorite,
+            renderCollateral :false
           });
         });
     }
   }
 
-  onSubmit(props) {
-      // console.log('In onSubmit, props:'+JSON.stringify(props));
+  onSubmit(values) {
+      // console.log('In onSubmit, props:'+JSON.stringify(values));
 
-      if(props.category.toUpperCase() !== 'ABL'){
+      values.createdById = this.props.createdById;
+      values.createdByCompanyId=this.props.createdByCompanyId;
+      values.numOfIOI = this.props.numOfIOI;
+
+      if(values.category.toUpperCase() !== 'ABL'){
         //erase the values in Collateral
-        props.acctRecvGrossAmt  = '';
-        props.acctRecvComment   = '';
-        props.invtryGrossAmt    = '';
-        props.invtryComment     = '';
-        props.ppeGrossAmt       = '';
-        props.ppeComment        = '';
-        props.maeGrossAmt       = '';
-        props.maeComment        = '';
-        props.realEstGrossAmt   = '';
-        props.realEstComment    = '';
-        props.otherGrossAmt     = '';
-        props.otherComment      = '';
+        values.acctRecvGrossAmt  = '';
+        values.acctRecvComment   = '';
+        values.invtryGrossAmt    = '';
+        values.invtryComment     = '';
+        values.ppeGrossAmt       = '';
+        values.ppeComment        = '';
+        values.maeGrossAmt       = '';
+        values.maeComment        = '';
+        values.realEstGrossAmt   = '';
+        values.realEstComment    = '';
+        values.otherGrossAmt     = '';
+        values.otherComment      = '';
       }
 
       if(gType === constants.RFP_EDIT){
         var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-        props.rfpId = rfp.rfpId;
-        props.contactId = rfp.contactId;
+        values.rfpId = rfp.rfpId;
+        values.contactId = rfp.contactId;
 
         // sanitize the currency values
-        props.dealSize = numeral(props.dealSize).value();
-        props.ltmRevenue = numeral(props.ltmRevenue).value();
-        props.ltmEbitda = numeral(props.ltmEbitda).value();
+        values.dealSize = numeral(values.dealSize).value();
+        values.ltmRevenue = numeral(values.ltmRevenue).value();
+        values.ltmEbitda = numeral(values.ltmEbitda).value();
 
-        this.props.updateRFPAction(props)
+        this.props.updateRFPAction(values)
           .then(() => {
             // blog post has been created, navigate the user to the index
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
-            this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
         });
       } else {
         let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
         if(user.isSuperAdmin && user.isSuperAdmin === true){
-          props.createdByCompanyId = props.createdForCompany;
+          values.createdByCompanyId = values.createdForCompany;
         }
-        this.props.createRFPAction(props)
+        this.props.createRFPAction(values)
           .then(() => {
             // blog post has been created, navigate the user to the index
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
 
-            this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-            // this.context.router.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+            // this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
       }
     }
@@ -130,15 +124,8 @@ class CreateRFP extends Component {
     }
   }
 
-  displayABLDetails(val){
-    const { fields: { acctRecvGrossAmt, acctRecvComment
-      , invtryGrossAmt, invtryComment, ppeGrossAmt, ppeComment, maeGrossAmt
-      , maeComment, realEstGrossAmt, realEstComment, otherGrossAmt
-      , otherComment}} = this.props;
-
-    // console.log('In displayABLDetails, this.props.category :'+this.props.category);
-    // console.log('val:'+ JSON.stringify(val));
-    if(val && val.value && val.value.toUpperCase() === 'ABL'){
+  displayABLDetails(){
+    if(this.state.renderCollateral && this.state.renderCollateral === true){
       return(<div className="div-border">
         <h4 className="display-center">Collateral</h4>
         <br/>
@@ -146,73 +133,111 @@ class CreateRFP extends Component {
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>Accounts Receivable :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...acctRecvGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...acctRecvComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="acctRecvGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="acctRecvComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
         <div className={`row`}>
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>Inventory :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...invtryGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...invtryComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="invtryGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="invtryComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
         <div className={`row`}>
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>PP&E :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...ppeGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...ppeComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="ppeGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="ppeComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
         <div className={`row`}>
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>Machinery & Equipment :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...maeGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...maeComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="maeGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="maeComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
         <div className={`row`}>
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>Real Estate :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...realEstGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...realEstComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="realEstGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="realEstComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
         <div className={`row`}>
           <div className={`form-group col-xs-3 col-md-3`}>
             <label>Other :</label><br/>
           </div>
-          <div className={`form-group col-xs-3 col-md-3`}>
-            <input type="text" className="form-control" {...otherGrossAmt} placeholder="Gross Amount ($)"/>
-          </div>
-          <div className={`form-group col-xs-6 col-md-6`}>
-            <input type="text" className="form-control" {...otherComment} placeholder="Comments..."/>
-          </div>
+          <Field
+            name="otherGrossAmt"
+            size="col-xs-3 col-md-3"
+            component={this.renderField}
+            placeholder="Gross Amount ($)"
+          />
+          <Field
+            name="otherComment"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+            placeholder="Comments..."
+          />
         </div>
+        <br/>
       </div>);
     }
   }
 
   renderField(field) {
+    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -220,7 +245,7 @@ class CreateRFP extends Component {
     return (
       <div className={className}>
         <label>{field.label}</label>
-        <input type="text" className="form-control" {...field.input} />
+        <input type="text" className="form-control" placeholder={field.placeholder} {...field.input} />
         <div className="text-help">
           {touched ? error : ''}
         </div>
@@ -229,6 +254,7 @@ class CreateRFP extends Component {
   }
 
   renderTextArea(field) {
+    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -236,7 +262,7 @@ class CreateRFP extends Component {
     return (
       <div className={className}>
         <label>{field.label}</label>
-        <textarea type="text" className="form-control" {...field.input} />
+        <textarea type="text" className="form-control" placeholder={field.placeholder} {...field.input} />
         <div className="text-help">
           {touched ? error : ''}
         </div>
@@ -248,13 +274,12 @@ class CreateRFP extends Component {
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-
     return (
       <div className={className}>
         <label>{field.label}</label>
         <select className="form-control" {...field.input}>
           <option value="">Select one</option>
-          {field.dpField.map(fOption =>
+          {field.options.map(fOption =>
             <option value={fOption} key={fOption}>
               {fOption}
             </option>
@@ -267,24 +292,81 @@ class CreateRFP extends Component {
     );
   }
 
-  render() {
-    console.log('I am in create RFP render');
-    const { handleSubmit } = this.props;
+  renderDatePicker(field){
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
 
+    return (
+      <div className={className}>
+        <label>{field.label}</label>
+        <Datetime {...field.input}/>
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </div>
+    );
+  }
+
+  renderRadioField(field) {
+    // console.log('field:'+JSON.stringify(field));
+		const { meta: { touched, error } } = field;
+    const { size } = field;
+		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+		return (
+      <div className={className}>
+        <label>{field.label}</label><br/>
+        {field.options.map(function(val){
+          // console.log('val:'+val);
+          return(
+            <span key={val}>
+              <input
+    						type="radio"
+                value={val}
+                key={val}
+                {...field.input}
+    						/>
+                &nbsp;
+              {val}
+              &nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+          )
+        })}
+      </div>
+		);
+	}
+
+  onBlurCategory(values){
+    if(values.currentTarget.value === 'ABL'){
+      this.setState({
+        'renderCollateral' : true
+      });
+    } else {
+      this.setState({
+        'renderCollateral' : false
+      });
+    }
+  }
+
+  render() {
+    // console.log('I am in create RFP render');
+    const { handleSubmit } = this.props;
     return (
       <div>
         <Header />
-
         {this.displayCompanyDropdown()}
-
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h3>Create RFP / Request Pitch</h3>
           <br/>
-
-          <input type="hidden" className="form-control" {...createdById} />
-          <input type="hidden" className="form-control" {...createdByCompanyId} />
-          <input type="hidden" className="form-control" {...numOfIOI} />
-
+          <div className={`row`}>
+            <Field
+              label="Request Type"
+              name="requestType"
+              size="col-xs-12 col-md-12"
+              component={this.renderDropdown}
+              options={requestTypeOptions}
+            />
+          </div>
           <div className={`row`}>
             <Field
               label="Company Name"
@@ -293,7 +375,6 @@ class CreateRFP extends Component {
               component={this.renderField}
             />
           </div>
-
           <div className={`row`}>
             <Field
               label="Deal Size ($)"
@@ -308,43 +389,40 @@ class CreateRFP extends Component {
               component={this.renderField}
             />
           </div>
-
           <div className={`row`}>
             <Field
               label="Category"
               name="category"
+              onBlur={this.onBlurCategory.bind(this)}
               size="col-xs-6 col-md-6"
               component={this.renderDropdown}
-              dpField={categoryOptions}
+              options={categoryOptions}
             />
             <Field
               label="Product"
               name="product"
               size="col-xs-6 col-md-6"
               component={this.renderDropdown}
-              dpField={productOptions}
+              options={productOptions}
             />
           </div>
-
-          {this.displayABLDetails(this.props.fields.category)}
-
+          {this.displayABLDetails()}
           <div className={`row`}>
             <Field
               label="Sector"
               name="sector"
               size="col-xs-6 col-md-6"
               component={this.renderDropdown}
-              dpField={sectorOptions}
+              options={sectorOptions}
             />
             <Field
               label="Region"
               name="region"
               size="col-xs-6 col-md-6"
               component={this.renderDropdown}
-              dpField={regionOptions}
+              options={regionOptions}
             />
           </div>
-
           <div className={`row`}>
             <Field
               label="LTM Revenue ($)"
@@ -359,7 +437,6 @@ class CreateRFP extends Component {
               component={this.renderField}
             />
           </div>
-
           <div className={`row`}>
             <Field
               label="Transaction Overview / Use of Funds"
@@ -369,7 +446,6 @@ class CreateRFP extends Component {
               placeholder={constants.TXN_OVERVIEW_SAMPLE}
             />
           </div>
-
           <div className={`row`}>
             <Field
               label="Company Description"
@@ -379,12 +455,53 @@ class CreateRFP extends Component {
               placeholder={constants.COMPANY_DESC_SAMPLE}
             />
           </div>
-
-
+          <div className={`row`}>
+            <Field
+              label="Expiry date for this RFP"
+              name="expiryDt"
+              size="col-xs-6 col-md-6"
+              component={this.renderDatePicker}
+            />
+            <Field
+              label="Is this sponsered ?"
+              name="isSponsored"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdown}
+              options={sponsoredOptions}
+            />
+          </div>
           <br/>
           <hr/>
           <h3>Company Management Contact</h3>
-
+          <div className={`row`}>
+            <Field
+              label="Name"
+              name="fullName"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              label="Role"
+              name="contactRole"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+          </div>
+          <div className={`row`}>
+            <Field
+              label="Phone"
+              name="phoneNumber"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+            <Field
+              label="Email"
+              name="email"
+              type="email"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+            />
+          </div>
 
           <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
           <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
@@ -518,11 +635,11 @@ function validate(values) {
     errors.expiryDt = 'Select a expiry Date for the RFP';
   }
 
-
+  // console.log('errors:'+JSON.stringify(errors));
   return errors;
 }
 
 export default reduxForm({
   validate,
   form: 'CreateRFPForm'
-})( connect(mapStateToProps, mapDispatchToProps)(CreateRFP));
+}) (connect(mapStateToProps, mapDispatchToProps)(CreateRFP));

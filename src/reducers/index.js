@@ -6,6 +6,8 @@ import UserProfileReducer from './reducer_user_profile';
 import RFPDetails from './reducer_rfp_details';
 import IOIListReducer from './reducer_ioi_list';
 import CreatePitchReducer from './reducer_create_pitch';
+import PostsReducer from "./reducer_posts";
+import WGLReducer from "./reducer_wgl";
 
 const rootReducer = combineReducers({
   form: formReducer,
@@ -14,7 +16,9 @@ const rootReducer = combineReducers({
   userProfile : UserProfileReducer,
   rfpDetails : RFPDetails,
   ioiList : IOIListReducer,
-  pitch : CreatePitchReducer
+  pitch : CreatePitchReducer,
+  posts: PostsReducer,
+  wgl: WGLReducer
 });
 
 export default rootReducer;

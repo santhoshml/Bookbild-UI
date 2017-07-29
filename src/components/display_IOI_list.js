@@ -213,7 +213,7 @@ export default class DisplayIOIList extends Component {
     if(row){
       // console.log('row:'+JSON.stringify(row));
       lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, row);
-      this.context.router.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
+      this.context.router.history.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
     }
   }
 
@@ -225,7 +225,7 @@ export default class DisplayIOIList extends Component {
       const selectRowProp = {
         mode: 'checkbox',
         clickToSelect: true,
-        bgColor: "rgb(238, 193, 213)" 
+        bgColor: "rgb(238, 193, 213)"
         };
       return (
         <div>

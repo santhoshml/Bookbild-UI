@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { addRFPToFavoritesAction, removeRFPFromFavoritesAction, getRFPFromFavoritesAction, getIOIForRFPAndCompanyAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
@@ -25,7 +25,7 @@ class RFPDetail extends Component{
   componentWillMount() {
     // this.props.fetchAllRFPAction();
     let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-    if(rfp && rfp.rfpId !== this.props.params.id){
+    if(rfp && rfp.rfpId !== this.props.match.params.id){
       rfp = null;
     }
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);

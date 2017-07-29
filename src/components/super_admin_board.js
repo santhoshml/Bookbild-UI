@@ -1,7 +1,7 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import { resetActivityTermSheetStatsAction } from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -10,10 +10,6 @@ import { bindActionCreators } from 'redux';
 
 
 class Admin extends Component{
-  static contextTypes = {
-    router: PropTypes.object
-  };
-
   constructor(props){
     super(props);
   }
@@ -22,7 +18,7 @@ class Admin extends Component{
     console.log('In resetActivityTermSheetStats');
     this.props.resetActivityTermSheetStatsAction()
       .then(() => {
-        this.context.router.push(constants.ROUTES_MAP.SUPER_ADMIN);
+        this.props.history.push(constants.ROUTES_MAP.SUPER_ADMIN);
     });
   }
 

@@ -5,7 +5,7 @@ import cUtils from '../utils/common_utils';
 import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import constants from '../utils/constants';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 
 export default class DisplayRFPList extends Component {
 
@@ -161,7 +161,7 @@ export default class DisplayRFPList extends Component {
         <div>
           {this.props.isDisplayRegionDropdown ? this.createRegionDropdown() : ''}
           <br/>
-          <DataGrid columns={this.getColoumns()} dataList={this.updateWithDisplayData()} clickableRow="true"/>
+          <DataGrid columns={this.getColoumns()} dataList={this.updateWithDisplayData()} clickableRow="true" />
         </div>
       );
     }

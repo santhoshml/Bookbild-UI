@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
-import { getRFPFromFavoritesAction, fetchRFPAction } from '../actions/index';
+import { Link } from 'react-router-dom';
+import { getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -24,11 +24,13 @@ class IOIDetail extends Component{
   }
 
   componentWillMount() {
+    console.log('In componentWillMount of IOI_DETAIL');
     // this.props.fetchAllRFPAction();
     let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
     // let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
+      disableInvite : false,
       ioi : ioi,
       company : company
     });
@@ -150,10 +152,48 @@ class IOIDetail extends Component{
   }
 
   displayViewAttachedRFPButton(){
-    if(this.state.ioi.createdByCompanyId === this.state.company.companyId){
+    // console.log('this.state.ioi:'+JSON.stringify(this.state.ioi));
+    // console.log('this.state.company:'+JSON.stringify(this.state.company));
+    // console.log('this.state.rfp:'+JSON.stringify(this.state.rfp));
+    if(this.state.ioi.createdByCompanyId === this.state.company.companyId
+      || (this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId)){
       return( <span>
       <Link to={constants.ROUTES_MAP.RFP_DETAIL+"/"+this.state.ioi.rfpId} className="btn btn-primary">
         View Attached RFP
+      </Link>
+      &nbsp;&nbsp;&nbsp;
+      </span>);
+    } else {
+      return(<span></span>);
+    }
+  }
+
+  inviteLender(values){
+    // console.log('values:'+JSON.stringify(values));
+    console.log('rfpId:'+this.state.rfp.rfpId);
+    console.log('ioiId:'+this.state.ioi.ioiId);
+    let data = {
+      rfpId: this.state.rfp.rfpId,
+      ioiId: this.state.ioi.ioiId,
+      borrowerCompanyId : this.state.rfp.createdByCompanyId,
+      lenderCompanyId : this.state.ioi.createdByCompanyId,
+      name : this.state.rfp.companyName.substring(0, 10)+'_'
+    };
+    console.log('data:'+JSON.stringify(data));
+    this.props.inviteLenderAction(data)
+      .then(data => {
+        console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
+        this.setState({
+          disableInvite : true
+        });
+      });
+  }
+
+  displayInviteButton(){
+    if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
+      return( <span>
+      <Link to="#" onClick={this.inviteLender.bind(this)} className="btn btn-primary">
+        Invite for second round
       </Link>
       &nbsp;&nbsp;&nbsp;
       </span>);
@@ -214,6 +254,7 @@ class IOIDetail extends Component{
   }
 
   render(){
+    console.log('I am in IOI_DETAIL');
     return(
       <div>
         <Header />
@@ -224,6 +265,7 @@ class IOIDetail extends Component{
         <br/>
         {this.displayViewAttachedRFPButton()}
         {this.displayEditIOIButton()}
+        {this.displayInviteButton()}
         <br/>
         <br/>
         <br/>
@@ -236,11 +278,11 @@ class IOIDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
+  // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
   let rObject = {};
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];
   }
-
   return rObject;
 }
 
@@ -249,7 +291,8 @@ function mapDispatchToProps(dispatch) {
   // to all of our reducers
   return bindActionCreators({
     getRFPFromFavoritesAction : getRFPFromFavoritesAction,
-    fetchRFPAction : fetchRFPAction
+    fetchRFPAction            : fetchRFPAction,
+    inviteLenderAction        : inviteLenderAction
   }, dispatch);
 }
 

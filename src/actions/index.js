@@ -25,11 +25,50 @@ export const FETCH_COMPANY_LIST_FOR_RFP = 'FETCH_COMPANY_LIST_FOR_RFP';
 export const CREATE_PITCH = 'CREATE_PITCH';
 export const RESET_TERMSHEET_ACTIVITY = 'RESET_TERMSHEET_ACTIVITY';
 export const GET_IOI_FOR_RFP_COMPANY = 'GET_IOI_FOR_RFP_COMPANY';
+export const INVITE_LENDER = 'INVITE_LENDER';
+export const GET_WGL_BY_COMPANYID = 'GET_WGL_BY_COMPANYID';
+
+export const FETCH_POSTS = "fetch_posts";
+export const FETCH_POST = "fetch_post";
+export const CREATE_POST = "create_post";
+export const DELETE_POST = "delete_post";
 
 
 const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 
+// const ROOT_URL = "http://reduxblog.herokuapp.com/api";
+// const API_KEY = "?key=PAPERCLIP1234";
+
+
+export function getWGLByCompanyIdAction(type, companyId){
+  console.log('In actions.getWGLByCompanyIdAction');
+  const request=axios({
+    url : '/getWGLByCompanyId?type='+type+'&companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_WGL_BY_COMPANYID,
+    payload: request
+  }
+}
+
+export function inviteLenderAction(data){
+  console.log('In actions.inviteLenderAction');
+  const request=axios({
+    url : '/inviteLender',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: INVITE_LENDER,
+    payload: request
+  }
+}
 
 export function getIOIForRFPAndCompanyAction(rfpId, companyId){
   console.log('In actions.getIOIForRFPAndCompanyAction');
@@ -419,4 +458,44 @@ export function loginAction(props){
     type: LOGIN,
     payload: request
   }
+}
+
+export function fetchPosts() {
+  const request = axios.get(`${ROOT_URL}/posts${API_KEY}`);
+
+  return {
+    type: FETCH_POSTS,
+    payload: request
+  };
+}
+
+export function createPost(values, callback) {
+  const request = axios
+    .post(`${ROOT_URL}/posts${API_KEY}`, values)
+    .then(() => callback());
+
+  return {
+    type: CREATE_POST,
+    payload: request
+  };
+}
+
+export function fetchPost(id) {
+  const request = axios.get(`${ROOT_URL}/posts/${id}${API_KEY}`);
+
+  return {
+    type: FETCH_POST,
+    payload: request
+  };
+}
+
+export function deletePost(id, callback) {
+  const request = axios
+    .delete(`${ROOT_URL}/posts/${id}${API_KEY}`)
+    .then(() => callback());
+
+  return {
+    type: DELETE_POST,
+    payload: id
+  };
 }

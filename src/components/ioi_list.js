@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import DisplayIOIList from './display_IOI_list';
 import { fetchIOIListForRFPAction, fetchIOIListForCompanyAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
@@ -21,15 +21,15 @@ class IOIList extends Component{
   }
 
   componentWillMount() {
-    if(this.props.params.type === constants.IOI_FOR_RFP){
-      this.props.fetchIOIListForRFPAction(this.props.params.id);
+    if(this.props.match.params.type === constants.IOI_FOR_RFP){
+      this.props.fetchIOIListForRFPAction(this.props.match.params.id);
     } else {
-      this.props.fetchIOIListForCompanyAction(this.props.params.id);
+      this.props.fetchIOIListForCompanyAction(this.props.match.params.id);
     }
   }
 
   displayProductCategory(){
-    if(this.props.params.type === constants.IOI_FOR_RFP){
+    if(this.props.match.params.type === constants.IOI_FOR_RFP){
       let productCategoryMap = cUtils.getProductCategories(this.props.ioiList, this.props.ioiCompanyList);
       let catKeys = Object.keys(productCategoryMap);
       console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
@@ -53,7 +53,7 @@ class IOIList extends Component{
 
   printHeaderForCat(list){
     return list.map(function(ele){
-      return (<td>{ele}</td>);
+      return (<td><b>{ele}</b></td>);
     });
   }
 
@@ -75,7 +75,7 @@ class IOIList extends Component{
           <h3>NO Indication of intrest for this RFP so far.</h3>
         </div>
       );
-    } else if(this.props.params.type === constants.IOI_FOR_RFP){
+    } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
       return(
         <div>
           <DisplayIOIList
@@ -117,7 +117,7 @@ class IOIList extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  console.log('state:'+JSON.stringify(state));
+  // console.log('state:'+JSON.stringify(state));
   return {
     ioiList: state.ioiList.ioiList,
     ioiCompanyList : state.ioiList.ioiCompanyList,

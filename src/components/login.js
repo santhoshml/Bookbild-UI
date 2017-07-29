@@ -1,4 +1,4 @@
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
 import { loginAction, fetchAllRFPAction } from '../actions/index';
 import { Link } from "react-router-dom";
@@ -11,50 +11,51 @@ import { connect } from "react-redux";
 import * as actionCreators from '../actions/index';
 
 class LoginForm extends Component{
+
 	renderField(field) {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		const { meta: { touched, error } } = field;
+		const className = `form-group ${touched && error ? "has-danger" : ""}`;
 		// console.log('field:'+JSON.stringify(field));
-    return (
-      <div className={className}>
-        <label>{field.label}</label>
-        <input
+		return (
+			<div className={className}>
+				<label>{field.label}</label>
+				<input
 					className="form-control"
 					placeholder={field.placeholder}
 					type={field.type}
 					{...field.input} />
-        <div className="text-help">
-          {touched ? error : ""}
-        </div>
-      </div>
-    );
-  }
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</div>
+		);
+	}
 
 	renderCheckboxField(field) {
-    const { meta: { touched, error } } = field;
-    const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		const { meta: { touched, error } } = field;
+		const className = `form-group ${touched && error ? "has-danger" : ""}`;
 		// console.log('field:'+JSON.stringify(field));
-    return (
+		return (
 			<div className={className}>
 				<label>
-		      <input
+					<input
 						type={field.type}
 						{...field.input}
 						/>
-		      &nbsp;by clicking on submit, I agree to <a href='terms_and_conditions.html' target='_blank'>Bookbild terms and conditions.</a>
+					&nbsp;by clicking on submit, I agree to <a href='terms_and_conditions.html' target='_blank'>Bookbild terms and conditions.</a>
 				</label>
-	      <div className="text-help">
-	        {touched ? error : ""}
-	      </div>
-      </div>
-    );
-  }
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</div>
+		);
+	}
 
-	onSubmit(props){
+	onSubmit(values){
 		// const {resetForm} = this.props;
-		this.props.loginAction(props)
+		this.props.loginAction(values)
 		 .then((data) => {
-			 console.log('In submit then, data:'+JSON.stringify(data));
+			//  console.log('In submit then, data:'+JSON.stringify(data));
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
@@ -136,6 +137,6 @@ function validate(values){
 }
 
 export default reduxForm({
-  'form': 'LoginForm',
-	validate
-})(connect(null, {loginAction})(LoginForm));
+	validate,
+  form: 'LoginForm'
+}) (connect(null, {loginAction})(LoginForm));

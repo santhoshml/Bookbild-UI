@@ -1,7 +1,7 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, {Component} from 'react';
+import {Field, reduxForm} from 'redux-form';
 import { addUserAction } from '../actions/index';
-import {Link} from 'react-router';
+import { Link } from "react-router-dom";
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 
@@ -10,10 +10,92 @@ import constants from '../utils/constants';
 import Header from './header';
 import * as actionCreators from '../actions/index';
 
+const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
+	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
+	,'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+
 class AddUserForm extends Component{
-	static contextTypes ={
-	    router : PropTypes.object
-	};
+
+	renderDropdownField(field) {
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+
+    return (
+      <span className={className}>
+        <label>{field.label}</label>
+        <select className="form-control" {...field.input}>
+          <option value="">Select one</option>
+          {field.dpField.map(fOption =>
+            <option value={fOption} key={fOption}>
+              {fOption}
+            </option>
+          )}
+        </select>
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </span>
+    );
+  }
+
+	renderField(field) {
+		const { meta: { touched, error } } = field;
+		const { size } = field;
+		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+		// console.log('className:'+JSON.stringify(className));
+		// console.log('field:'+JSON.stringify(field));
+		return (
+			<span className={className}>
+				<label>{field.label}</label>
+				<input
+					className="form-control"
+					placeholder={field.placeholder}
+					type={field.type}
+					{...field.input} />
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</span>
+		);
+	}
+
+	renderPasswordField(field) {
+		const { meta: { touched, error } } = field;
+		const { size } = field;
+		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+		// console.log('field:'+JSON.stringify(field));
+		return (
+			<span className={className}>
+				<label>{field.label}</label>
+				<input
+					className="form-control"
+					placeholder={field.placeholder}
+					type="password"
+					{...field.input} />
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</span>
+		);
+	}
+
+	renderRadioField(field) {
+		const { meta: { touched, error } } = field;
+		const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		// console.log('field:'+JSON.stringify(field));
+		return (
+			<span>
+				<label className="radio-inline">
+					<input
+						type="radio"
+						{...field.input}
+						/>
+						{field.label}
+				</label>
+			</span>
+		);
+	}
 
 	onSubmit(props){
 		this.props.addUserAction(props)
@@ -23,9 +105,9 @@ class AddUserForm extends Component{
 			 // new path to navigate to.
 			//  console.log('In onSubmit data :'+JSON.stringify(data));
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
-				 this.context.router.push(constants.ROUTES_MAP.MY_PROFILE);
+				 this.props.history.push(constants.ROUTES_MAP.MY_PROFILE);
 			 } else {
-				 this.context.router.push(constants.ROUTES_MAP.ADD_USER);
+				 this.props.history.push(constants.ROUTES_MAP.ADD_USER);
 				 this.setState({errMsg : data.payload.data.data.errMsg});
 			 }
 		 });
@@ -48,10 +130,7 @@ class AddUserForm extends Component{
 	}
 
 	render(){
-		const {fields:{companyName, ein, role, addedByUserId
-			, streetAddress, city, state, zipcode, isAdmin, companyId
-			, fullName, email, password, confirmPassword, phoneNumber
-			}, handleSubmit} = this.props;
+		const { handleSubmit } = this.props;
 
 		return (
 				<div>
@@ -61,74 +140,107 @@ class AddUserForm extends Component{
 						<h3>User Details</h3>
 
 						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
-								<label> Full Name </label>
-								<input type="text" className="form-control" placeholder="Enter users full name" {...fullName}/>
-								<div className="text-help">
-									{fullName.touched ? fullName.error : ''}
-								</div>
-							</div>
+							<Field
+		            name="fullName"
+								label="Full Name"
+		            size="col-xs-12 col-md-12"
+		            component={this.renderField}
+		            placeholder="Enter users full name"
+		          />
+						</div>
+						<div className={`row`}>
+							<Field
+								name="email"
+								label="Email"
+								type="email"
+								size="col-xs-6 col-md-6"
+								component={this.renderField}
+								placeholder="Enter a valid email"
+							/>
+							<Field
+								name="phoneNumber"
+								label="Phone Number"
+								size="col-xs-6 col-md-6"
+								component={this.renderField}
+								placeholder="Enter a valid phone number"
+							/>
+						</div>
+						<div className={`row`}>
+							<Field
+								name="password"
+								label="Password"
+								size="col-xs-6 col-md-6"
+								type="password"
+								component={this.renderField}
+								placeholder="Enter password"
+							/>
+							<Field
+								name="phoneNumber"
+								label="Confirm Password"
+								size="col-xs-6 col-md-6"
+								type="password"
+								component={this.renderField}
+								placeholder="Enter password should be same as above"
+							/>
 						</div>
 
 						<div className={`row`}>
-							<div className={`form-group col-xs-6 col-md-6 no-padding ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-								<label>Email</label>
-								<input type="email" className="form-control" placeholder="Enter a valid email" {...email}/>
-								<div className="text-help">
-									{email.touched ? email.error : ''}
-								</div>
-							</div>
-
-							<div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
-								<label>Phone Number</label>
-								<input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
-								<div className="text-help">
-									{phoneNumber.touched ? phoneNumber.error : ''}
-								</div>
-							</div>
-						</div>
-
-						<div className={`row`}>
-							<div className={`form-group col-xs-6 col-md-6 ${password.touched && password.invalid ? 'has-danger' : ''}`}>
-								<label>Password</label>
-								<input type="password" className="form-control" placeholder="Enter password" {...password}/>
-								<div className="text-help">
-									{password.touched ? password.error : ''}
-								</div>
-							</div>
-
-							<div className={`form-group col-xs-6 col-md-6 ${confirmPassword.touched && confirmPassword.invalid ? 'has-danger' : ''}`}>
-								<label>Confirm Password</label>
-								<input type="password" className="form-control" placeholder="Enter password should be same as above" {...confirmPassword}/>
-								<div className="text-help">
-									{confirmPassword.touched ? confirmPassword.error : ''}
-								</div>
-							</div>
-						</div>
-
-						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
+							<div className={`form-group col-xs-12 col-md-12 }`}>
 								<label>Role of the user</label><br/>
-								<label className="radio-inline"><input type="radio" {...role} value="lender"/>Lender</label>
-								<label className="radio-inline"><input type="radio" {...role} value="financialSponsor"/>Financial Sponsor</label>
-								<label className="radio-inline"><input type="radio" {...role} value="company"/>Company</label>
-								<label className="radio-inline"><input type="radio" {...role} value="legalCounsel"/>Legal Counsel</label>
-								<label className="radio-inline"><input type="radio" {...role} value="3pdd"/>3rd Part Due Diligence</label>
-								<label className="radio-inline"><input type="radio" {...role} value="other"/>Other</label>
-								<div className="text-help">
-									{role.touched ? role.error : ''}
-								</div>
+								<Field
+									name="lender"
+									label="Lender"
+									value="Lender"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="financialSponsor"
+									label="Financial Sponsor"
+									value="Financial Sponsor"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="company"
+									label="Company"
+									value="Company"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="legalCounsel"
+									label="Legal Counsel"
+									value="Legal Counsel"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="3pdd"
+									label="3rd Part Due Diligence"
+									value="3rd Part Due Diligence"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="other"
+									label="Other"
+									value="Other"
+									component={this.renderRadioField}
+								/>
 							</div>
 						</div>
 
 						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
+							<div className={`form-group col-xs-12 col-md-12`}>
 								<label>Admin privileges</label><br/>
-								<label className="radio-inline"><input type="radio" {...isAdmin} value={true}/>Will be a ADMIN</label>
-								<label className="radio-inline"><input type="radio" {...isAdmin} value={false}/>NOT an ADMIN</label>
-								<div className="text-help">
-									{role.touched ? role.error : ''}
-								</div>
+								<Field
+									name="isAdmin"
+									value={true}
+									label="Will be a ADMIN"
+									component={this.renderRadioField}
+								/>
+								<Field
+									name="isAdmin"
+									value={false}
+									label="NOT an ADMIN"
+									component={this.renderRadioField}
+								/>
 							</div>
 						</div>
 
@@ -138,21 +250,21 @@ class AddUserForm extends Component{
 		        <h3>Company Details</h3>
 
 						<div className={`row`}>
-			        <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
-			          <label> Company Name </label>
-			          <input type="text" className="form-control" disabled="true" placeholder="Enter a valid Company Name" {...companyName}/>
-								<div className="text-help">
-	            		{companyName.touched ? companyName.error : ''}
-	          		</div>
-			        </div>
-
-			        <div className={`form-group col-xs-4 col-md-4 ${ein.touched && ein.invalid ? 'has-danger' : ''}`}>
-			          <label>EIN of the Company</label>
-			          <input type="text" className="form-control" disabled="true" placeholder="Enter a valid Company EIN" {...ein}/>
-								<div className="text-help">
-	            		{ein.touched ? ein.error : ''}
-	          		</div>
-			        </div>
+							<Field
+								name="companyName"
+								label="Company Name"
+								size="col-xs-8 col-md-8"
+								component={this.renderField}
+								placeholder="Enter a valid Company Name"
+							/>
+							<Field
+								name="ein"
+								label="Company Name"
+								size="col-xs-4 col-md-4"
+								disabled="true"
+								component={this.renderField}
+								placeholder="Enter a valid Company EIN"
+							/>
 						</div>
 
 						<br/>
@@ -160,94 +272,38 @@ class AddUserForm extends Component{
 						<h3>Address Details</h3>
 
 						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12 ${streetAddress.touched && streetAddress.invalid ? 'has-danger' : ''}`}>
-			          <label> Street Address </label>
-			          <input type="text" className="form-control" placeholder="Enter a valid Street Address of the Company" {...streetAddress}/>
-								<div className="text-help">
-	            		{streetAddress.touched ? streetAddress.error : ''}
-	          		</div>
-			        </div>
+							<Field
+								name="streetAddress"
+								label="Street Address"
+								size="col-xs-12 col-md-12"
+								component={this.renderField}
+								placeholder="Enter a valid Street Address of the Company"
+							/>
 						</div>
 
 						<div className={`row`}>
-							<div className={`form-group col-xs-6 col-md-6 ${city.touched && city.invalid ? 'has-danger' : ''}`}>
-			          <label>City</label>
-			          <input type="text" className="form-control" placeholder="Enter the City of the Company" {...city}/>
-								<div className="text-help">
-	            		{city.touched ? city.error : ''}
-	          		</div>
-			        </div>
-
-			        <div className={`form-group col-xs-3 col-md-3 ${state.touched && state.invalid ? 'has-danger' : ''}`}>
-			          <label>State</label>
-								<select className="form-control" {...state}>
-									<option value=""> --- select one --- </option>
-									<option value="AL">Alabama</option>
-									<option value="AK">Alaska</option>
-									<option value="AZ">Arizona</option>
-									<option value="AR">Arkansas</option>
-									<option value="CA">California</option>
-									<option value="CO">Colorado</option>
-									<option value="CT">Connecticut</option>
-									<option value="DE">Delaware</option>
-									<option value="DC">District Of Columbia</option>
-									<option value="FL">Florida</option>
-									<option value="GA">Georgia</option>
-									<option value="HI">Hawaii</option>
-									<option value="ID">Idaho</option>
-									<option value="IL">Illinois</option>
-									<option value="IN">Indiana</option>
-									<option value="IA">Iowa</option>
-									<option value="KS">Kansas</option>
-									<option value="KY">Kentucky</option>
-									<option value="LA">Louisiana</option>
-									<option value="ME">Maine</option>
-									<option value="MD">Maryland</option>
-									<option value="MA">Massachusetts</option>
-									<option value="MI">Michigan</option>
-									<option value="MN">Minnesota</option>
-									<option value="MS">Mississippi</option>
-									<option value="MO">Missouri</option>
-									<option value="MT">Montana</option>
-									<option value="NE">Nebraska</option>
-									<option value="NV">Nevada</option>
-									<option value="NH">New Hampshire</option>
-									<option value="NJ">New Jersey</option>
-									<option value="NM">New Mexico</option>
-									<option value="NY">New York</option>
-									<option value="NC">North Carolina</option>
-									<option value="ND">North Dakota</option>
-									<option value="OH">Ohio</option>
-									<option value="OK">Oklahoma</option>
-									<option value="OR">Oregon</option>
-									<option value="PA">Pennsylvania</option>
-									<option value="RI">Rhode Island</option>
-									<option value="SC">South Carolina</option>
-									<option value="SD">South Dakota</option>
-									<option value="TN">Tennessee</option>
-									<option value="TX">Texas</option>
-									<option value="UT">Utah</option>
-									<option value="VT">Vermont</option>
-									<option value="VA">Virginia</option>
-									<option value="WA">Washington</option>
-									<option value="WV">West Virginia</option>
-									<option value="WI">Wisconsin</option>
-									<option value="WY">Wyoming</option>
-							  </select>
-								<div className="text-help">
-	            		{state.touched ? state.error : ''}
-	          		</div>
-			        </div>
-
-			        <div className={`form-group col-xs-3 col-md-3 ${zipcode.touched && zipcode.invalid ? 'has-danger' : ''}`}>
-			          <label>Zipcode</label>
-			          <input type="text" className="form-control" placeholder="Enter a valid zipcode of the Company" {...zipcode}/>
-								<div className="text-help">
-	            		{zipcode.touched ? zipcode.error : ''}
-	          		</div>
-			        </div>
+							<Field
+								name="city"
+								label="City"
+								size="col-xs-6 col-md-6"
+								component={this.renderField}
+								placeholder="Enter the City of the Company"
+							/>
+							<Field
+	              label="State"
+	              name="state"
+	              size="col-xs-3 col-md-3"
+	              component={this.renderDropdownField}
+	              dpField={stateOptions}
+	            />
+							<Field
+								name="zipcode"
+								label="Zipcode"
+								size="col-xs-3 col-md-3"
+								component={this.renderField}
+								placeholder="Enter a valid zipcode of the Company"
+							/>
 						</div>
-
 		        <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
 		        <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
 		      </form>
@@ -347,5 +403,4 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'AddUserForm',
-  'fields': ['companyId', 'isAdmin', 'addedByUserId', 'companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber']
 }, mapStateToProps, mapDispatchToProps)(AddUserForm);

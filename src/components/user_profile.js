@@ -1,18 +1,20 @@
-import React, {Component, PropTypes} from 'react';
-import {reduxForm} from 'redux-form';
+import React, {Component} from 'react';
+import {Field, reduxForm} from 'redux-form';
 import { updateUserProfileAction, fetchAddressAction, fetchContactAction, fetchUserListAction} from '../actions/index';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import validator from 'validator';
+import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Header from './header';
 
-class UserProfileForm extends Component{
-  static contextTypes ={
-	    router : PropTypes.object
-	};
+const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
+	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
+	,'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+const roleOptions = ['Lender', 'Financial Sponsor', 'Company', 'Legal Counsel', '3rd Part Due Diligence', 'Other'];
 
+class UserProfileForm extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -43,19 +45,78 @@ class UserProfileForm extends Component{
        // blog post has been created, navigate the user to the index
        // We navigate by calling this.context.router.push with the
        // new path to navigate to.
-       this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+       this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
      });
 
 	}
 
+  renderDropdownField(field) {
+    const { meta: { touched, error } } = field;
+    const { size } = field;
+    const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+
+    return (
+      <span className={className}>
+        <label>{field.label}</label>
+        <select className="form-control" {...field.input}>
+          <option value="">Select one</option>
+          {field.dpField.map(fOption =>
+            <option value={fOption} key={fOption}>
+              {fOption}
+            </option>
+          )}
+        </select>
+        <div className="text-help">
+          {touched ? error : ''}
+        </div>
+      </span>
+    );
+  }
+
+  renderField(field) {
+		const { meta: { touched, error } } = field;
+		const { size } = field;
+		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
+		console.log('field:'+JSON.stringify(field));
+		return (
+			<div className={className}>
+				<label>{field.label}</label>
+				<input
+					className="form-control"
+					placeholder={field.placeholder}
+					type={field.type}
+					{...field.input}
+				/>
+				<div className="text-help">
+					{touched ? error : ""}
+				</div>
+			</div>
+		);
+	}
+
+  renderRadioField(field) {
+		const { meta: { touched, error } } = field;
+		const className = `form-group ${touched && error ? "has-danger" : ""}`;
+		// console.log('field:'+JSON.stringify(field));
+		return (
+			<span>
+				<label className="radio-inline">
+					<input
+						type="radio"
+						{...field.input}
+						/>
+						{field.label}
+				</label>
+			</span>
+		);
+	}
+
   render(){
     console.log('I am in user profile');
+		console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
-    const {fields:{companyName, ein, role
-			, streetAddress, city, state, zipcode
-			, fullName, email, password, confirmPassword, phoneNumber
-      , userId, contactId, addressId, companyId
-			}, handleSubmit} = this.props;
+    const { handleSubmit, load, pristine, reset, submitting } = this.props
+		console.log('yoyo:'+this.props.initialValues.fullName);
 
     return(
       <div>
@@ -64,125 +125,112 @@ class UserProfileForm extends Component{
           <h3>User Details</h3>
 
           <div className={`row`}>
-            <div className={`form-group col-xs-12 col-md-12 ${fullName.touched && fullName.invalid ? 'has-danger' : ''}`}>
-              <label>Full Name</label>
-              <input type="text" className="form-control" placeholder="Enter full name of the user" {...fullName} />
-              <div className="text-help">
-                {fullName.touched ? fullName.error : ''}
-              </div>
-            </div>
-          </div>
+            <Field
+							id="fullName"
+              name="fullName"
+              label="Full Name"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter users full name"
+            />
+						<Field
 
+              label="Role of the user"
+              name="role"
+              size="col-xs-6 col-md-6"
+              component={this.renderDropdownField}
+              dpField={roleOptions}
+            />
+          </div>
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${email.touched && email.invalid ? 'has-danger' : ''}`}>
-              <label>Email</label>
-              <input type="email" className="form-control" placeholder="Enter a valid email" {...email} />
-              <div className="text-help">
-                {email.touched ? email.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-6 col-md-6 ${phoneNumber.touched && phoneNumber.invalid ? 'has-danger' : ''}`}>
-              <label>Phone Number</label>
-              <input type="text" className="form-control" placeholder="Enter a valid phone number" {...phoneNumber}/>
-              <div className="text-help">
-                {phoneNumber.touched ? phoneNumber.error : ''}
-              </div>
-            </div>
+            <Field
+              name="email"
+              type="email"
+              label="Email"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter a valid email"
+            />
+            <Field
+              name="phoneNumber"
+              label="Phone Number"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter a valid phone number"
+            />
           </div>
-
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${password.touched && password.invalid ? 'has-danger' : ''}`}>
-              <label>Password</label>
-              <input type="password" className="form-control" placeholder="Enter password" {...password}/>
-              <div className="text-help">
-                {password.touched ? password.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-6 col-md-6 ${confirmPassword.touched && confirmPassword.invalid ? 'has-danger' : ''}`}>
-              <label>Confirm Password</label>
-              <input type="password" className="form-control" placeholder="Enter password should be same as above" {...confirmPassword}/>
-              <div className="text-help">
-                {confirmPassword.touched ? confirmPassword.error : ''}
-              </div>
-            </div>
+            <Field
+              name="password"
+              label="Password"
+              type="password"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter password"
+            />
+            <Field
+              name="phoneNumber"
+              label="Confirm Password"
+              type="password"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter password should be same as above"
+            />
           </div>
-
-          <div className={`row`}>
-            <div className={`form-group col-xs-12 col-md-12 ${role.touched && role.invalid ? 'has-danger' : ''}`}>
-              <label>Role of the user</label><br/>
-              <label className="radio-inline"><input type="radio" {...role} value='Lender' />Lender</label>
-              <label className="radio-inline"><input type="radio" {...role} value='Financial Sponsor' />Financial Sponsor</label>
-              <label className="radio-inline"><input type="radio" {...role} value='Company' />Company</label>
-              <label className="radio-inline"><input type="radio" {...role} value='Legal Counsel'/>Legal Counsel</label>
-              <label className="radio-inline"><input type="radio" {...role} value='3rd Part Due Diligence'/>3rd Part Due Diligence</label>
-              <label className="radio-inline"><input type="radio" {...role} value='Other'/>Other</label>
-              <div className="text-help">
-                {role.touched ? role.error : ''}
-              </div>
-            </div>
-          </div>
-
           <hr className={`col-xs-12 col-md-12`}/>
           <br/>
           <h3>Company Details</h3>
-
           <div className={`row`}>
-            <div className={`form-group col-xs-8 col-md-8 ${companyName.touched && companyName.invalid ? 'has-danger' : ''}`}>
-              <label> Company Name </label>
-              <input type="text" className="form-control" placeholder="Enter a valid Company Name" {...companyName} />
-              <div className="text-help">
-                {companyName.touched ? companyName.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-4 col-md-4 ${ein.touched && ein.invalid ? 'has-danger' : ''}`}>
-              <label>EIN of the Company</label>
-              <input type="text" className="form-control" placeholder="Enter a valid Company EIN" {...ein} />
-              <div className="text-help">
-                {ein.touched ? ein.error : ''}
-              </div>
-            </div>
+            <Field
+              name="companyName"
+              label="Company Name"
+              size="col-xs-8 col-md-8"
+              component={this.renderField}
+              placeholder="Enter a valid Company Name"
+            />
+            <Field
+              name="ein"
+              label="Company Name"
+              size="col-xs-4 col-md-4"
+              disabled="true"
+              component={this.renderField}
+              placeholder="Enter a valid Company EIN"
+            />
           </div>
           <hr className={`col-xs-12 col-md-12`}/>
           <br/>
           <h3>Address Details</h3>
-
           <div className={`row`}>
-            <div className={`form-group col-xs-12 col-md-12 ${streetAddress.touched && streetAddress.invalid ? 'has-danger' : ''}`}>
-              <label> Street Address </label>
-              <input type="text" className="form-control" placeholder="Enter a valid Street Address of the Company" {...streetAddress} />
-              <div className="text-help">
-                {streetAddress.touched ? streetAddress.error : ''}
-              </div>
-            </div>
+            <Field
+              name="streetAddress"
+              label="Street Address"
+              size="col-xs-12 col-md-12"
+              component={this.renderField}
+              placeholder="Enter a valid Street Address of the Company"
+            />
           </div>
-
           <div className={`row`}>
-            <div className={`form-group col-xs-6 col-md-6 ${city.touched && city.invalid ? 'has-danger' : ''}`}>
-              <label>City</label>
-              <input type="text" className="form-control" placeholder="Enter the City of the Company" {...city} />
-              <div className="text-help">
-                {city.touched ? city.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-3 col-md-3 ${state.touched && state.invalid ? 'has-danger' : ''}`}>
-              <label>State</label>
-              <input type="text" className="form-control" placeholder="Enter the State of the Company" {...state} />
-              <div className="text-help">
-                {state.touched ? state.error : ''}
-              </div>
-            </div>
-
-            <div className={`form-group col-xs-3 col-md-3 ${zipcode.touched && zipcode.invalid ? 'has-danger' : ''}`}>
-              <label>Zipcode</label>
-              <input type="text" className="form-control" placeholder="Enter a valid zipcode of the Company" {...zipcode} />
-              <div className="text-help">
-                {zipcode.touched ? zipcode.error : ''}
-              </div>
-            </div>
+            <Field
+              name="city"
+              label="City"
+              size="col-xs-6 col-md-6"
+              component={this.renderField}
+              placeholder="Enter the City of the Company"
+            />
+            <Field
+              label="State"
+              name="state"
+              size="col-xs-3 col-md-3"
+              component={this.renderDropdownField}
+              dpField={stateOptions}
+            />
+            <Field
+              name="zipcode"
+              label="Zipcode"
+              size="col-xs-3 col-md-3"
+              component={this.renderField}
+              placeholder="Enter a valid zipcode of the Company"
+            />
           </div>
           {console.log('this.state.isAdmin:'+this.state.isAdmin)}
           {this.props.userList && this.props.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
@@ -248,7 +296,7 @@ function mapStateToProps(state) {
   var contact = state.userProfile.contact;
   var userList = state.userProfile.userList;
 
-  return {
+	var retObject = {
     initialValues : {
       // user info
       email : user.email,
@@ -276,9 +324,12 @@ function mapStateToProps(state) {
       contactId : user.contactId,
       addressId : user.addressId,
       companyId : user.companyId
-    },
-    userList : userList
+    }
+    // userList : userList
   };
+
+	console.log('In mapStateToProps:'+JSON.stringify(retObject));
+	return retObject;
 }
 
 function validate(values){
@@ -353,6 +404,7 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'UserProfileForm',
-  'fields': ['companyName', 'ein', 'role', 'streetAddress', 'city', 'state', 'zipcode', 'fullName', 'email', 'password', 'confirmPassword', 'phoneNumber', 'userId', 'contactId', 'addressId', 'companyId'],
+	enableReinitialize: true,
+	initialized	: true,
   validate
-}, mapStateToProps, mapDispatchToProps)(UserProfileForm);
+}) (connect(mapStateToProps, mapDispatchToProps)(UserProfileForm));

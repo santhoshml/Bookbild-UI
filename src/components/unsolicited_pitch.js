@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
 import { fetchAllCompanyListForRFP, createUnsolicitedPitchAction } from '../actions/index';
-import {Link} from 'react-router';
+import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
@@ -59,7 +59,7 @@ class CreateIOIForm extends Component{
           // blog post has been created, navigate the user to the index
           // We navigate by calling this.context.router.push with the
           // new path to navigate to.
-          this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       });
     } else {
       this.props.createUnsolicitedPitchAction(props)
@@ -67,7 +67,7 @@ class CreateIOIForm extends Component{
          // blog post has been created, navigate the user to the index
          // We navigate by calling this.context.router.push with the
          // new path to navigate to.
-         this.context.router.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+         this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
        });
      }
 	}

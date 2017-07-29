@@ -1,14 +1,11 @@
-import React, {Component, PropTypes} from 'react';
-import { Link } from 'react-router';
+import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import * as actionCreators from '../actions/index';
 import ellipsis from 'text-ellipsis';
 
 export default class Header extends Component{
-	static contextTypes ={
-	    router : PropTypes.object
-	};
 
 	componentWillMount(){
 		// console.log('I am in header componentWillMount');
@@ -90,6 +87,7 @@ export default class Header extends Component{
 	}
 
 	displayLoginLogoutDD(){
+
 		if(this.state.user){
 			return (
 				<li className="dropdown">
@@ -98,7 +96,7 @@ export default class Header extends Component{
 						<li><Link to={constants.ROUTES_MAP.MY_PROFILE}>Profile</Link></li>
 						<li><Link to="#">My Team</Link></li>
 						{this.getAddUserLink()}
-						<li><Link onClick={this.logoutCurrentUser}>Logout</Link></li>
+						<li><Link to={constants.ROUTES_MAP.LOGOUT}>Logout</Link></li>
 					</ul>
 				</li>
 			);
@@ -164,7 +162,7 @@ export default class Header extends Component{
 				<ul className="dropdown-menu">
 					<li><Link to="#">New Project</Link></li>
 					<li><Link to="#">Edit Deal Team</Link></li>
-					<li><Link to="#">Manage WGL</Link></li>
+					<li><Link to={constants.ROUTES_MAP.WGL}>Manage WGL</Link></li>
 					<li><Link to="#">Quarterly Compliance</Link></li>
 				</ul>
 			</li>
@@ -203,8 +201,8 @@ export default class Header extends Component{
 									</ul>
 								</li>
 								{this.displayIOIDD()}
-				      	{this.displayConcourse()}
-				        {this.displayDataRoom()}
+								{this.displayConcourse()}
+								{this.displayDataRoom()}
 								{this.displayLegalDocs()}
 								{this.displayMarketData()}
 								{this.displayTombstones()}

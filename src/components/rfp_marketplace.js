@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 import DisplayRFPList from './display_RFP_list';
 import { fetchAllRFPAction, fetchTermSheetActivityStatsAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
