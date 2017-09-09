@@ -67,7 +67,7 @@ export default function(state = INITIAL_STATE, action) {
       break;
     case FETCH_COMPANY_RFP_LIST :
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-        // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data));
+        // console.log('action.payload.data:'+JSON.stringify(action.payload.data));
         return {
           ...state
           , rfpList: action.payload.data.data.Items

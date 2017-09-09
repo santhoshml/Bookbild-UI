@@ -8,10 +8,13 @@ import { connect } from "react-redux";
 
 import * as actionCreators from '../actions/index';
 
-class Logout extends Component{
+export default class Logout extends Component{
 
 	render(){
 		lsUtils.deleteAll();
-		<Redirect to='/login'/>
+		return(
+				<Redirect to='/login'/>
+		);
+
 	}
 }

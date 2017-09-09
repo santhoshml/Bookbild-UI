@@ -7,10 +7,10 @@ export default function(state = INITIAL_STATE, action) {
   case GET_WGL_BY_COMPANYID:
     // console.log('action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      console.log('In wgl reducer:'+JSON.stringify(action.payload));
+      // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
-        , wgl: action.payload.data.data.Items
+        , wgl: action.payload.data.data
       };
     } else {
       return {

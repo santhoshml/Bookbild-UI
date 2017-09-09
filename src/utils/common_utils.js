@@ -3,6 +3,57 @@ import moment from 'moment';
 import sortJsonArray from 'sort-json-array';
 import isNumber from 'is-number';
 import numbro from 'numbro';
+// import s3 from 's3';
+
+// exports.getS3FileURL = function(key){
+//   let url = s3.getPublicUrlHttp(constants.S3_BUCKET_MAP.LINK_DOCS, key);
+//   console.log('link url:'+url);
+//   return url;
+// }
+
+
+exports.didValuesChange = function(object1, object2){
+  let changed=false;
+  console.log('object1.size:'+Object.keys(object1).length);
+  if(Object.keys(object1).length !== Object.keys(object2).length)
+    changed = true;
+
+  let keys = Object.keys(object1);
+  for(let i=0;i<keys.length;i++){
+    if(object1[keys[i]] !== object2[keys[i]])
+      changed = true;
+  }
+  console.log('changed:'+changed);
+  return changed;
+}
+
+
+exports.getS3Filename = function(url){
+  if(url){
+    let idx = url.lastIndexOf('/');
+    return url.substring(idx+1);
+  }
+  return null;
+}
+
+exports.getFileName = function(type, list){
+  console.log('list :'+JSON.stringify(list));
+  console.log('list.length :'+list.length);
+  if(list){
+    if(list.length > 0){
+      for(let i=0; i<list.length; i++){
+        if(list[i].type === type){
+          return list[i].originalFileName;
+        }
+      }
+    } else { // its an element
+      let ele = list;
+      if(ele.type === type){
+        return ele.originalFileName;
+      }
+    }
+  }
+}
 
 exports.getProductCategories = function(ioiList, companyList){
   let prdCatMap = {};

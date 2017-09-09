@@ -263,7 +263,7 @@ class CreateIOIForm extends Component{
     // console.log('thisValue:'+JSON.stringify(thisValue));
     var rfp = this.state.rfp;
     if(rfp && rfp.category.toUpperCase() === 'ABL'){
-      console.log('rfp:'+JSON.stringify(rfp));
+      // console.log('rfp:'+JSON.stringify(rfp));
       return(<div>
         <h3>Borrowing Base</h3>
         <table className="table table-striped">

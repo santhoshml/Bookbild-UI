@@ -3,6 +3,7 @@ exports.KEY_COMPANY_OBJECT = 'KEY_COMPANY_OBJECT';
 exports.KEY_RFP_LIST_OBJECT = 'KEY_RFP_LIST_OBJECT';
 exports.KEY_RFP_OBJECT = 'KEY_RFP_OBJECT';
 exports.KEY_SELECTED_IOI_OBJECT = 'KEY_SELECTED_IOI_OBJECT';
+exports.KEY_SELECTED_LINK = 'KEY_SELECTED_LINK';
 
 exports.CURRENCY_OPTS = { format: '%s%v', symbol: '$' }
 
@@ -44,7 +45,20 @@ exports.ROUTES_MAP = {
   REGISTER_COMPANY    : '/registerCompany',
   IOI_DETAIL          : '/ioiDetail',
   LOGOUT              : '/logout',
-  WGL                 : '/wgl'
+  WGL                 : '/wgl',
+  DOCS                : '/docs'
+};
+
+exports.S3_BUCKET_MAP = {
+	LINK_DOCS : 'com.bookbild.link.documents',
+};
+
+exports.DOCS_CATEGORY_DISPLAY_NAME_MAP = {
+  TXN_OVERVIEW  : 'Transaction Overview',
+  COMPANY       : 'Company',
+  FINANCIAL     : 'Financial',
+  LEGAL         : 'Legal',
+  OPERATIONS    : 'Operations'
 };
 
 exports.TXN_OVERVIEW_SAMPLE='Example: $100.0 million senior secured credit facility to refinance existing indebtedness and [fund a dividend recapitalization, tack-on acquisition, etc].';

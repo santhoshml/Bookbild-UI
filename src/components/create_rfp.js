@@ -16,11 +16,12 @@ const categoryOptions = ['Open', 'ABL', 'Cash Flow'];
 const productOptions = ['Revolver', 'Term Loan', 'Mezzanine', 'Multi-Tranche', 'Uni-Tranche'];
 const sectorOptions = ['IT', 'Financials', 'Health Care', 'Energy', 'Consumer Staples', 'Consumer Disc', 'Industrials', 'Materials', 'Utilities', 'Telecoms'];
 const regionOptions=['West Coast', 'Mid Atlantic', 'Great Lakes', 'South', 'Mountain', 'Southeast', 'New England', 'Midwest'];
-const sponsoredOptions=['YES', 'NO'];
+const sponsoredOptions=['yes', 'no'];
 const requestTypeOptions=['New Financing', 'Refinancing', 'Restructuring', 'M&A', 'LBO', 'Market Check'];
 class CreateRFP extends Component {
 
   componentWillMount() {
+    var that = this;
     // console.log('I am in createRFP componentWillMount');
     gType = this.props.match.params.type;
     this.setState({
@@ -38,17 +39,21 @@ class CreateRFP extends Component {
       this.props.fetchContactAction(rfp.contactId)
         .then(() => {
           // console.log('I am in the get result');
-          this.setState({
+          that.setState({
             isFavorite : this.props.isFavorite,
             favorite : this.props.favorite,
             renderCollateral :false
           });
+
+          // console.log('that.props.initialValues:'+JSON.stringify(that.props.initialValues));
+
+          that.props.initialize(that.props.initialValues);
         });
     }
   }
 
   onSubmit(values) {
-      // console.log('In onSubmit, props:'+JSON.stringify(values));
+      console.log('In onSubmit, props:'+JSON.stringify(values));
 
       values.createdById = this.props.createdById;
       values.createdByCompanyId=this.props.createdByCompanyId;
@@ -86,6 +91,7 @@ class CreateRFP extends Component {
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
       } else {
         let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
@@ -98,8 +104,8 @@ class CreateRFP extends Component {
             // We navigate by calling this.context.router.push with the
             // new path to navigate to.
 
-            // this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-            this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+            this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
       }
     }
@@ -543,7 +549,7 @@ function mapStateToProps(state) {
     intializedData.fullName = rfp.fullName;
     intializedData.contactRole = rfp.contactRole;
     intializedData.email = rfp.email;
-    // intializedData.isSponsored = rfp.isSponsored;
+    intializedData.isSponsored = rfp.isSponsored;
     intializedData.region = rfp.region;
     intializedData.phoneNumber = rfp.phoneNumber;
     intializedData.expiryDt = rfp.expiryDt;
@@ -641,5 +647,6 @@ function validate(values) {
 
 export default reduxForm({
   validate,
-  form: 'CreateRFPForm'
+  form: 'CreateRFPForm',
+  enableReinitialize: true
 }) (connect(mapStateToProps, mapDispatchToProps)(CreateRFP));

@@ -1,17 +1,21 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, initialize} from 'redux-form';
 import { updateUserProfileAction, fetchAddressAction, fetchContactAction, fetchUserListAction} from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
+import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
 import Header from './header';
 
-const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
-	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
-	,'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+// const { DOM: { input, select, textarea } } = React
+
+const stateOptions = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI'
+	,'MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI'
+	,'SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
 const roleOptions = ['Lender', 'Financial Sponsor', 'Company', 'Legal Counsel', '3rd Part Due Diligence', 'Other'];
 
 class UserProfileForm extends Component{
@@ -24,7 +28,63 @@ class UserProfileForm extends Component{
     // console.log('state:'+JSON.stringify(this.state));
   }
 
-  componentWillMount() {
+	setTheValuesReceivedFromBackend(results){
+		let address = results[0].payload.data.data[0];
+		let contact = results[1].payload.data.data[0];
+		let userList = results[2].payload.data.data[0];
+		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+	  let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+
+		// this.props.initialValues = {};
+
+	  // user info
+		if(user){
+			this.props.initialValues.email = user.email;
+			this.props.initialValues.isAdmin = user.isAdmin;
+			this.props.initialValues.userAcceptedTermsConditions = user.userAcceptedTermsConditions;
+			this.props.initialValues.password = user.password;
+			this.props.initialValues.role = user.role;
+			this.props.initialValues.password = user.password;
+			this.props.initialValues.confirmPassword = user.password;
+
+			this.props.initialValues.userId = user.userId;
+			this.props.initialValues.contactId = user.contactId;
+			this.props.initialValues.addressId = user.addressId;
+			this.props.initialValues.companyId = user.companyId;
+		}
+
+	  // company info
+		if(company){
+			this.props.initialValues.ein = company.ein;
+			this.props.initialValues.companyName = company.companyName;
+		}
+
+		if(contact){
+			this.props.initialValues.fullName = contact.fullName;
+			this.props.initialValues.phoneNumber = contact.phoneNumber;
+			this.props.initialValues.contactRole = contact.contactRole;
+		}
+
+		if(address){
+			this.props.initialValues.city = address.city;
+			this.props.initialValues.zipcode = address.zipcode;
+			this.props.initialValues.state = address.state;
+			this.props.initialValues.streetAddress = address.streetAddress;
+		}
+
+		if(userList){
+			this.setState({
+				userList : userList
+			});
+		}
+
+		// console.log('that.props'+JSON.stringify(that.props));
+		this.props.initialize(this.props.initialValues);
+	}
+
+	componentDidMount() {
+		console.log('I am in componentWillMount');
+		var that = this;
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 
@@ -33,24 +93,35 @@ class UserProfileForm extends Component{
       company : company
     });
 
-    this.props.fetchAddressAction(user.addressId);
-    this.props.fetchContactAction(user.contactId);
-    this.props.fetchUserListAction(user.companyId);
-  }
+		if(this.props.initialValues){
+			console.log('setting the initialize');
+			this.props.initialize(this.props.initialValues);
+		}
+
+		Promise.all([this.props.fetchAddressAction(user.addressId)
+			, this.props.fetchContactAction(user.contactId)
+			, this.props.fetchUserListAction(user.companyId)])
+		.then(results => {
+			// console.log('results:'+JSON.stringify(results));
+			that.setTheValuesReceivedFromBackend(results);
+		})
+	}
+
 
   onSubmit(props){
-		console.log('In onSubmit:'+JSON.stringify(props));
+		console.log('In onSubmit');
     this.props.updateUserProfileAction(props)
      .then(() => {
        // blog post has been created, navigate the user to the index
        // We navigate by calling this.context.router.push with the
        // new path to navigate to.
        this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+			// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
      });
-
 	}
 
   renderDropdownField(field) {
+		// console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -73,11 +144,13 @@ class UserProfileForm extends Component{
     );
   }
 
-  renderField(field) {
+  renderField(field){
+		// console.log('ctx:'+JSON.stringify(ctx));
+		// console.log('this.props:'+JSON.stringify(this.props));
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		console.log('field:'+JSON.stringify(field));
+		// console.log('field:'+JSON.stringify(field));
 		return (
 			<div className={className}>
 				<label>{field.label}</label>
@@ -111,12 +184,12 @@ class UserProfileForm extends Component{
 		);
 	}
 
-  render(){
-    console.log('I am in user profile');
+  render = () => {
+    console.log('I am in render');
 		console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, load, pristine, reset, submitting } = this.props
-		console.log('yoyo:'+this.props.initialValues.fullName);
+		// console.log('yoyo:'+this.props.initialValues.fullName);
 
     return(
       <div>
@@ -126,15 +199,13 @@ class UserProfileForm extends Component{
 
           <div className={`row`}>
             <Field
-							id="fullName"
               name="fullName"
-              label="Full Name"
+							label="Full Name"
               size="col-xs-6 col-md-6"
               component={this.renderField}
               placeholder="Enter users full name"
             />
 						<Field
-
               label="Role of the user"
               name="role"
               size="col-xs-6 col-md-6"
@@ -232,8 +303,7 @@ class UserProfileForm extends Component{
               placeholder="Enter a valid zipcode of the Company"
             />
           </div>
-          {console.log('this.state.isAdmin:'+this.state.isAdmin)}
-          {this.props.userList && this.props.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
+          {this.state.userList && this.state.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
 
 
           <br/>
@@ -252,6 +322,7 @@ class UserProfileForm extends Component{
 
   displayUserList(){
     // console.log('In displayUserList :'+ JSON.stringify(userListJSON));
+		console.log('I am in displayUserList');
     return(
       <div className={`row`}>
         <br/>
@@ -275,12 +346,12 @@ class UserProfileForm extends Component{
   }
 
   displayUserListRows(){
-    return this.props.userList.map((user, index)=>{
+    return this.state.userList.map((user, index)=>{
       return(
         <tr key={user.contactId}>
           <td> {index+1}</td>
           <td> {user.email} </td>
-          <td> {user.isAdmin} </td>
+          <td> {user.isAdmin+''} </td>
           <td> {user.role} </td>
         </tr>
       );
@@ -292,44 +363,27 @@ class UserProfileForm extends Component{
 function mapStateToProps(state) {
   var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
   var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-  var address = state.userProfile.address;
-  var contact = state.userProfile.contact;
-  var userList = state.userProfile.userList;
-
-	var retObject = {
+	return {
     initialValues : {
-      // user info
-      email : user.email,
-      isAdmin : user.isAdmin,
-      userAcceptedTermsConditions : user.userAcceptedTermsConditions,
-      password : user.password,
-      role : user.role,
-      password : user.password,
-      confirmPassword : user.password,
-
-      // company info
-      ein :company.ein,
-      companyName : company.companyName,
-
-      city : address===null ? '' :address[0].city,
-      zipcode : address===null ? '' :address[0].zipcode,
-      streetAddress : address===null ? '' :address[0].streetAddress,
-      state : address===null ? '' :address[0].state,
-
-      // contact info
-      phoneNumber: contact===null ? '' :contact[0].phoneNumber,
-      fullName: contact===null ? '' :contact[0].fullName,
-
-      userId : user.userId,
-      contactId : user.contactId,
-      addressId : user.addressId,
-      companyId : user.companyId
+      // // user info
+      // email : user.email,
+      // isAdmin : user.isAdmin,
+      // userAcceptedTermsConditions : user.userAcceptedTermsConditions,
+      // password : user.password,
+      // role : user.role,
+      // password : user.password,
+      // confirmPassword : user.password,
+			//
+      // // company info
+      // ein :company.ein,
+      // companyName : company.companyName,
+			//
+      // userId : user.userId,
+      // contactId : user.contactId,
+      // addressId : user.addressId,
+      // companyId : user.companyId
     }
-    // userList : userList
   };
-
-	console.log('In mapStateToProps:'+JSON.stringify(retObject));
-	return retObject;
 }
 
 function validate(values){
@@ -405,6 +459,5 @@ function mapDispatchToProps(dispatch) {
 export default reduxForm({
   'form': 'UserProfileForm',
 	enableReinitialize: true,
-	initialized	: true,
   validate
 }) (connect(mapStateToProps, mapDispatchToProps)(UserProfileForm));

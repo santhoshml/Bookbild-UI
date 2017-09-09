@@ -66,8 +66,8 @@ class LoginForm extends Component{
 
 				 console.log('forwading now');
 
-				//  this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-				 this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
+				 this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				//  this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
 			 } else {	// login failed
 				//empty the username and password
 				// resetForm();

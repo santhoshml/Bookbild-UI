@@ -27,6 +27,15 @@ export const RESET_TERMSHEET_ACTIVITY = 'RESET_TERMSHEET_ACTIVITY';
 export const GET_IOI_FOR_RFP_COMPANY = 'GET_IOI_FOR_RFP_COMPANY';
 export const INVITE_LENDER = 'INVITE_LENDER';
 export const GET_WGL_BY_COMPANYID = 'GET_WGL_BY_COMPANYID';
+export const ADD_CONTACT_TO_WGL = 'ADD_CONTACT_TO_WGL';
+export const DELETE_CONTACT_FROM_WGL  = 'DELETE_CONTACT_FROM_WGL';
+export const UPDATE_CONTACT_CELL_WGL  = 'UPDATE_CONTACT_CELL_WGL';
+export const UPLOAD_FILE_TO_S3        = 'UPLOAD_FILE_TO_S3';
+export const GET_LINK_DOCS_WITH_RFP_ID = 'GET_LINK_DOCS_WITH_RFP_ID';
+export const DELETE_LINK_DOCUMENT  = 'DELETE_LINK_DOCUMENT';
+export const GET_LINK_DOCUMENT = 'GET_LINK_DOCUMENT';
+export const GET_LINKS_WITH_COMPANYID = 'GET_LINKS_WITH_COMPANYID';
+export const GET_LINKS_DOCS_WITH_RFP_IOI = 'GET_LINKS_DOCS_WITH_RFP_IOI';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -40,6 +49,144 @@ const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = "http://reduxblog.herokuapp.com/api";
 // const API_KEY = "?key=PAPERCLIP1234";
 
+
+export function getLinkDocsWithRFPAndIOIAction(rfpId, ioiId){
+  console.log('In actions.getLinkDocsWithRFPAndIOIAction');
+  const request=axios({
+    url : '/getLinkDocsWithRFPAndIOI?rfpId='+rfpId+'&ioiId='+ioiId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_DOCS_WITH_RFP_IOI,
+    payload: request
+  }
+}
+
+export function getLinksWithCompanyIdAction(companyId){
+  console.log('In actions.getLinksWithCompanyIdAction');
+  const request=axios({
+    url : '/getLinksWithCompanyId?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_WITH_COMPANYID,
+    payload: request
+  }
+}
+
+export function downloadLinkDocumentAction(fileName){
+  console.log('In actions.downloadLinkDocumentAction');
+  const request=axios({
+    url : '/getLinkDocsPublicURL?fileName='+fileName,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINK_DOCUMENT,
+    payload: request
+  }
+}
+
+export function deleteLinkDocumentAction(linkDocumentId, fileName){
+  console.log('In actions.deleteLinkDocumentAction');
+  const request=axios({
+    url : '/deleteLinkDocument?linkDocumentId='+linkDocumentId+'&fileName='+fileName,
+    method : 'DELETE',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: DELETE_LINK_DOCUMENT,
+    payload: request
+  }
+}
+
+export function getLinkDocsWithRFPIdAction(rfpId){
+  console.log('In actions.getLinkDocsWithRFPIdAction');
+  const request=axios({
+    url : '/getLinkDocsWithRFPId?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINK_DOCS_WITH_RFP_ID,
+    payload: request
+  }
+}
+
+export function uploadDocumentRequest({ file, type, ioiId, rfpId, linkId, uploadedCompanyId }) {
+  console.log('In actions.uploadDocumentRequest');
+  let data = new FormData();
+  data.append('file', file);
+  data.append('type', type);
+  data.append('ioiId', ioiId);
+  data.append('rfpId', rfpId);
+  data.append('linkId', linkId);
+  data.append('uploadedCompanyId', uploadedCompanyId);
+
+  const request=axios({
+    url     : '/uploadFile',
+    method  : 'POST',
+    baseURL : ROOT_URL,
+    data    : data
+  });
+
+  console.log('request:'+JSON.stringify(request));
+  return{
+    type: UPLOAD_FILE_TO_S3,
+    payload: request
+  }
+}
+
+export function updateContactCellWGLAction(data){
+  console.log('In actions.updateContactCellWGLAction');
+  const request=axios({
+    url : '/updateContactCellWGLAction',
+    method : 'PUT',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: UPDATE_CONTACT_CELL_WGL,
+    payload: request
+  }
+}
+
+export function deleteContactFromWGLAction(wglListId){
+  console.log('In actions.deleteContactFromWGLAction');
+  const request=axios({
+    url : '/deleteContactFromWGL?wglListId='+wglListId,
+    method : 'DELETE',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: DELETE_CONTACT_FROM_WGL,
+    payload: request
+  }
+}
+
+export function addContactToWGLAction(data){
+  console.log('In actions.addContactToWGLAction');
+  const request=axios({
+    url : '/addContactToWGL',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: INVITE_LENDER,
+    payload: request
+  }
+}
 
 export function getWGLByCompanyIdAction(type, companyId){
   console.log('In actions.getWGLByCompanyIdAction');
@@ -116,7 +263,7 @@ export function createUnsolicitedPitchAction(props){
 export function fetchAllCompanyListForRFP(){
   console.log('In actions.fetchCompanyListForRFP');
   const request=axios({
-    // url : '/fetchAllCompanyListForRFP',
+    // url : '/fetchAllCompanyListForRFP', // FOR TESTING ONLY
     url : '/fetchAllCompanyListForRFPUsingCache',
     method : 'GET',
     baseURL : ROOT_URL
@@ -328,6 +475,7 @@ export function addUserAction(props){
 
 export function updateUserProfileAction(props){
   console.log('In actions.updateProfileAction');
+  console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateUserProfile',
     method : 'post',

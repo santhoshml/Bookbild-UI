@@ -7,7 +7,9 @@ import formatCurrency from 'format-currency';
 import constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';
 import NumberFormat from 'react-number-format';
-import { FormattedDate } from 'react-intl';
+import moment from 'moment';
+// import { FormattedDate } from 'react-intl';
+import dateFormat from 'dateformat';
 import lsUtils from '../utils/ls_utils';
 
 export default class DisplayIOIList extends Component {
@@ -94,7 +96,8 @@ export default class DisplayIOIList extends Component {
   }
 
   getDateFormatRenderer(row){
-    return  <FormattedDate value={row.timestamp} format="short" />
+    return <span>{dateFormat(moment(row.timestamp), 'longDate')}</span>
+    // return  <FormattedDate value={row.timestamp} format="short" />
   }
 
   getAllColoumns(){

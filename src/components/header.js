@@ -161,6 +161,7 @@ export default class Header extends Component{
 				<Link to="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data Room</Link>
 				<ul className="dropdown-menu">
 					<li><Link to="#">New Project</Link></li>
+					<li><Link to={constants.ROUTES_MAP.DOCS}>Documents</Link></li>
 					<li><Link to="#">Edit Deal Team</Link></li>
 					<li><Link to={constants.ROUTES_MAP.WGL}>Manage WGL</Link></li>
 					<li><Link to="#">Quarterly Compliance</Link></li>

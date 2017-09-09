@@ -72,7 +72,7 @@ class IOIList extends Component{
     if((!this.props.ioiList) || (this.props.ioiList && this.props.ioiList.length == 0)){
       return (
         <div>
-          <h3>NO Indication of intrest for this RFP so far.</h3>
+          <h3>NO Indication of intrest.</h3>
         </div>
       );
     } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
@@ -118,11 +118,13 @@ class IOIList extends Component{
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
   // console.log('state:'+JSON.stringify(state));
-  return {
+  let rObject =  {
     ioiList: state.ioiList.ioiList,
     ioiCompanyList : state.ioiList.ioiCompanyList,
     ioiUserList : state.ioiList.ioiUserList
   };
+  console.log('rObject:'+JSON.stringify(rObject));
+  return rObject;
 }
 
 function mapDispatchToProps(dispatch) {
