@@ -115,8 +115,8 @@ class UserProfileForm extends Component{
        // blog post has been created, navigate the user to the index
        // We navigate by calling this.context.router.push with the
        // new path to navigate to.
-       this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-			// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+       	this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
      });
 	}
 

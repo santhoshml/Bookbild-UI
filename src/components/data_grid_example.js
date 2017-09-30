@@ -89,6 +89,7 @@ class DataGrid extends Component{
         onAddFilter={this.handleFilterChange.bind(this)}
         onClearFilters={this.onClearFilters.bind(this)}
         onRowClick={this.onRowClick.bind(this)}
+        onGridRowsUpdated = {this.props.onGridRowsUpdated}
       />);
   }
 }

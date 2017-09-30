@@ -24,6 +24,8 @@ import RFPFavoriteList from './components/rfp_favorite_list';
 import SuperAdminBoard from './components/super_admin_board';
 import WGL from './components/wgl';
 import Documents from './components/documents';
+import QuarterlyCompliance from './components/quarterly_compliance';
+import RelativeValueTool from "./components/relative_value_tool";
 
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";
@@ -53,6 +55,8 @@ ReactDOM.render(
               <Route path="/createPitch/:type" component={UnsolicitedPitch} />
               <Route path="/logout" component={Logout} />
               <Route path="/docs" component={Documents} />
+              <Route path="/qCompliance" component={QuarterlyCompliance} />
+              <Route path="/rvtool" component={RelativeValueTool} />
               <Route path="/" component={LoginForm} />
             </Switch>
           </div>

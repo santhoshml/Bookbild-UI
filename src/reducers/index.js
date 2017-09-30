@@ -9,6 +9,7 @@ import CreatePitchReducer from './reducer_create_pitch';
 import PostsReducer from "./reducer_posts";
 import WGLReducer from "./reducer_wgl";
 import LinkReducer from "./reducer_link";
+import DealCompReducer from "./reducer_deal_comparision";
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -20,7 +21,8 @@ const rootReducer = combineReducers({
   pitch : CreatePitchReducer,
   posts : PostsReducer,
   wgl : WGLReducer,
-  link : LinkReducer
+  link : LinkReducer,
+  dealComp : DealCompReducer
 });
 
 export default rootReducer;

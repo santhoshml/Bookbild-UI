@@ -7,6 +7,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Header from './header';
 import { connect } from "react-redux";
+import RelativeValueTool from './relative_value_tool';
 
 import * as actionCreators from '../actions/index';
 

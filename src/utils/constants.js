@@ -29,6 +29,20 @@ exports.IOI_FOR_COMPANY = 'IOI_FOR_COMPANY';
 exports.RFP_MY_FAVORITES = 'RFP_MY_FAVORITES';
 exports.RFP_FOR_COMPANY = 'RFP_FOR_COMPANY';
 
+exports.CUSTOMER_TYPE_OPTIONS = ['Borrower', 'Lender'];
+exports.SECTOR_OPTIONS = ['IT', 'Financials', 'Health Care', 'Energy', 'Consumer Staples', 'Consumer Disc', 'Industrials', 'Materials', 'Utilities', 'Telecoms'];
+exports.TXN_TYPE_OPTIONS=['New Financing', 'Refinancing', 'Restructuring', 'M&A', 'LBO', 'Market Check'];
+exports.YES_NO_OPTIONS = ['Yes', 'No'];
+
+exports.QCOMPLIANCE_ROWS = [
+  'Min Adj EBITDA',
+  'Max Leverage',
+  'GAAP Revenue',
+  'GAAP Gross Margin',
+  'GAAP Operating Income',
+  'Non-GAAP EBITDA'
+];
+
 exports.ROUTES_MAP = {
   MY_PROFILE      : '/myProfile',
   ADD_USER        : '/addUser',
@@ -46,7 +60,8 @@ exports.ROUTES_MAP = {
   IOI_DETAIL          : '/ioiDetail',
   LOGOUT              : '/logout',
   WGL                 : '/wgl',
-  DOCS                : '/docs'
+  DOCS                : '/docs',
+  QUARTERLY_COMPLIANCE : '/qCompliance'
 };
 
 exports.S3_BUCKET_MAP = {

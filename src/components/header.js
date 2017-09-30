@@ -164,7 +164,7 @@ export default class Header extends Component{
 					<li><Link to={constants.ROUTES_MAP.DOCS}>Documents</Link></li>
 					<li><Link to="#">Edit Deal Team</Link></li>
 					<li><Link to={constants.ROUTES_MAP.WGL}>Manage WGL</Link></li>
-					<li><Link to="#">Quarterly Compliance</Link></li>
+					<li><Link to={constants.ROUTES_MAP.QUARTERLY_COMPLIANCE}>Quarterly Compliance</Link></li>
 				</ul>
 			</li>
 		);

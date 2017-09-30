@@ -11,6 +11,38 @@ import numbro from 'numbro';
 //   return url;
 // }
 
+exports.getQuaterObject = function(period, startYear, startQtr){
+  let qtrObject = {}, _startQtr = startQtr;
+  for(let i=0; i<(period * 4); i++){
+    if(i===0 || _startQtr % 4 === 1){
+      qtrObject[startYear] = [];
+      startYear++;
+    }
+    _startQtr++;
+  }
+  // console.log('years done, qtrObject:'+JSON.stringify(qtrObject));
+
+  let sumOfQtrs = 0;
+  let yrsArr = Object.keys(qtrObject);
+  for(let j=0; j< yrsArr.length; j++){
+    let numOfQtrInThisYear = 4;
+    let rStartQtr = 1
+    // calculate the number of qtr in this year
+    if(j===0){
+      numOfQtrInThisYear = 5-startQtr;
+      rStartQtr = startQtr;
+    } else if(j===yrsArr.length-1){
+      numOfQtrInThisYear = (period*4) - sumOfQtrs;
+    }
+    sumOfQtrs = sumOfQtrs+numOfQtrInThisYear;
+
+    for(let k=rStartQtr;k<(numOfQtrInThisYear+rStartQtr);k++){
+      qtrObject[yrsArr[j]].push(k);
+    }
+  }
+  console.log('all done, qtrObject:'+JSON.stringify(qtrObject));
+  return qtrObject;
+}
 
 exports.didValuesChange = function(object1, object2){
   let changed=false;

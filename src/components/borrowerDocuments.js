@@ -14,7 +14,6 @@ import * as actionCreators from '../actions/index';
 import formatCurrency from 'format-currency';
 import dateFormat from 'dateformat';
 import moment from 'moment';
-import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DisplayDocumentTabs from './displayDocumentTabs';
 
 

@@ -36,6 +36,7 @@ export const DELETE_LINK_DOCUMENT  = 'DELETE_LINK_DOCUMENT';
 export const GET_LINK_DOCUMENT = 'GET_LINK_DOCUMENT';
 export const GET_LINKS_WITH_COMPANYID = 'GET_LINKS_WITH_COMPANYID';
 export const GET_LINKS_DOCS_WITH_RFP_IOI = 'GET_LINKS_DOCS_WITH_RFP_IOI';
+export const SAVE_DEAL_COMPARISION_DATA = 'SAVE_DEAL_COMPARISION_DATA';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -43,12 +44,26 @@ export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
 
-const ROOT_URL = 'http://127.0.0.1:1127';
-// const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
+// const ROOT_URL = 'http://127.0.0.1:1127';
+const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 
 // const ROOT_URL = "http://reduxblog.herokuapp.com/api";
 // const API_KEY = "?key=PAPERCLIP1234";
 
+export function saveComparisionToolData(data){
+  console.log('data: '+JSON.stringify(data));
+  const request=axios({
+    url : '/saveDealComparisionData',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: SAVE_DEAL_COMPARISION_DATA,
+    payload: request
+  }
+}
 
 export function getLinkDocsWithRFPAndIOIAction(rfpId, ioiId){
   console.log('In actions.getLinkDocsWithRFPAndIOIAction');
