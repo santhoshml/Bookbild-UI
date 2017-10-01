@@ -44,7 +44,7 @@ class RelativeValueTool extends Component {
       <div className={className}>
         <label>{field.label}</label>
         <select className="form-control" {...field.input}>
-          <option value="">Select one</option>
+          <option value="">{field.title}</option>
           {field.options.map(fOption =>
             <option value={fOption} key={fOption}>
               {fOption}
@@ -136,6 +136,7 @@ class RelativeValueTool extends Component {
             name="sector"
             size="col-xs-3 col-md-3"
             component={this.renderDropdown}
+            title="Select one"
             options={constants.SECTOR_OPTIONS}
           />
           <Field
@@ -173,6 +174,7 @@ class RelativeValueTool extends Component {
             name="type"
             size="col-xs-3 col-md-3"
             component={this.renderDropdown}
+            title="Select one"
             options={constants.CUSTOMER_TYPE_OPTIONS}
           />
         </div>
@@ -195,6 +197,7 @@ class RelativeValueTool extends Component {
             name="txnType"
             size="col-xs-3 col-md-3"
             component={this.renderDropdown}
+            title="Select one"
             options={constants.TXN_TYPE_OPTIONS}
           />
           <Field
@@ -234,6 +237,7 @@ class RelativeValueTool extends Component {
             name="isRevolverABL"
             size="col-xs-2 col-md-2"
             component={this.renderDropdown}
+            title="ABL ?"
             options={constants.YES_NO_OPTIONS}
           />
         </div>
@@ -266,6 +270,7 @@ class RelativeValueTool extends Component {
             name="isFirstLienLiborABL"
             size="col-xs-2 col-md-2"
             component={this.renderDropdown}
+            title="ABL ?"
             options={constants.YES_NO_OPTIONS}
           />
         </div>
@@ -357,11 +362,11 @@ class RelativeValueTool extends Component {
         <br/>
         <p>1. Over the last 5 quarters, your sector accounted for {roundTo(this.state.countPercent,2)}% of transactions.</p>
         <br/>
-        <p>2. Your deal size was {roundTo(this.state.avgAmt,2)}% {this.state.avgAmt > 0 ? 'higher' : 'lower'} than the average deal size.</p>
+        <p>2. Your deal size was {roundTo(Math.abs(this.state.avgAmt),2)}% {this.state.avgAmt > 0 ? 'higher' : 'lower'} than the average deal size.</p>
         <br/>
-        <p>3. For your sector {roundTo(this.state.singleLenderPercent, 2)}% of transactions were single lender deals.</p>
+        <p>3. For your sector, {roundTo(this.state.singleLenderPercent, 2)}% of transactions were single lender deals.</p>
         <br/>
-        <p>If you'd like to see more detailed analysis, please contact <a href="mailto:sales@bookbild.com">sales@bookbild.com</a> and our team will process your subscription. We look forward to partnering with {this.state.companyName}!</p>
+        <p>If you'd like to see more detailed analysis (e.g. comparative results for LTM financials, loan structures, etc), please contact <a href="mailto:sales@bookbild.com">sales@bookbild.com</a> and our team will process your subscription. We look forward to partnering with you!</p>
         <br/>
         <br/>
         <hr/>
@@ -386,6 +391,10 @@ class RelativeValueTool extends Component {
           <br/>
           <button type="submit" className="btn btn-primary">Submit</button>
           <Link to="/" className="btn btn-danger">Cancel</Link>
+          <br/>
+          <br/>
+          <br/>
+          <br/>
         </form>
       </div>
     );
