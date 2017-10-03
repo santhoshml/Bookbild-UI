@@ -144,7 +144,7 @@ class RelativeValueTool extends Component {
             name="role"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Your role in the deal"
+            placeholder="eg: Sole Lender, Admin Agent, Club, etc"
           />
         </div>
         <div className={`row`}>
@@ -213,25 +213,25 @@ class RelativeValueTool extends Component {
             name="revolverAmt"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Revolver Amount"
+            placeholder="Revolver Amount ($10,000,000)"
           />
           <Field
             name="revolverPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Revolver Pricing"
+            placeholder="Revolver Pricing (2.3%)"
           />
           <Field
             name="revolverTenor"
             size="col-xs-2 col-md-2"
             component={this.renderField}
-            placeholder="Revolver Tenor"
+            placeholder="Revolver Tenor (5)"
           />
           <Field
             name="revolverLiborFloor"
             size="col-xs-2 col-md-2"
             component={this.renderField}
-            placeholder="Revolver LIBOR Floor"
+            placeholder="Revolver LIBOR Floor (2.3%)"
           />
           <Field
             name="isRevolverABL"
@@ -246,25 +246,25 @@ class RelativeValueTool extends Component {
             name="firstLienAmt"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="1st Lien TL Amount"
+            placeholder="1st Lien TL Amount ($10,000,000)"
           />
           <Field
             name="firstLienPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="1st Lien TL Pricing"
+            placeholder="1st Lien TL Pricing (2.3%)"
           />
           <Field
             name="firstLienTenor"
             size="col-xs-2 col-md-2"
             component={this.renderField}
-            placeholder="1st Lien TL Tenor"
+            placeholder="1st Lien TL Tenor (5)"
           />
           <Field
             name="firstLienLiborFloor"
             size="col-xs-2 col-md-2"
             component={this.renderField}
-            placeholder="1st Lien TL LIBOR Floor"
+            placeholder="1st Lien TL LIBOR Floor (2.3%)"
           />
           <Field
             name="isFirstLienLiborABL"
@@ -279,19 +279,19 @@ class RelativeValueTool extends Component {
             name="secondLienAmt"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="2nd Lien TL Amount"
+            placeholder="2nd Lien TL Amount ($10,000,000)"
           />
           <Field
             name="secondLienPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="2nd Lien TL Pricing"
+            placeholder="2nd Lien TL Pricing (2.3%)"
           />
           <Field
             name="secondLienTenor"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="2nd Lien TL Tenor"
+            placeholder="2nd Lien TL Tenor (5)"
           />
         </div>
         <div className={`row`}>
@@ -299,19 +299,19 @@ class RelativeValueTool extends Component {
             name="subDebtAmt"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Sub Debt Amount"
+            placeholder="Sub Debt Amount ($10,000,000)"
           />
           <Field
             name="subDebtPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Sub Debt Pricing"
+            placeholder="Sub Debt Pricing (2.3%)"
           />
           <Field
             name="subDebtTenor"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Sub Debt Tenor"
+            placeholder="Sub Debt Tenor (5)"
           />
         </div>
         <div className={`row`}>
@@ -319,19 +319,19 @@ class RelativeValueTool extends Component {
             name="mezzanineAmt"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Mezzanine Amount"
+            placeholder="Mezzanine Amount ($10,000,000)"
           />
           <Field
             name="mezzaninePricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Mezzanine Pricing"
+            placeholder="Mezzanine Pricing (2.3%)"
           />
           <Field
             name="mezzanineTenor"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Mezzanine Tenor"
+            placeholder="Mezzanine Tenor (5)"
           />
         </div>
       </div>
@@ -381,7 +381,7 @@ class RelativeValueTool extends Component {
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h1 className="align-center">Deal Comparison Tool</h1>
           <br/>
-          <p>Submit the below info about the most recent transaction to see data about your transaction</p>
+          <p>Use our proprietary database of private debt transactions for comparative deal analytics.To compare your debt transaction to other closed transactions, please enter your details below (all data is kept private, and aggregated anonymously). Submit the below info about the most recent transaction to see data about your transaction</p>
           <br/>
           {this.renderPersonalInfo()}
           <hr/>
