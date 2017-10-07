@@ -32,7 +32,7 @@ class NonBorrowerDocumentForm extends Component{
 		console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
-			<div>
+			<div className="container" >
 				<Header />
 				<br/>
 				<br/>

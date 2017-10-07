@@ -133,7 +133,7 @@ class AddUserForm extends Component{
 		const { handleSubmit } = this.props;
 
 		return (
-				<div>
+			<div className="container" >
 					<Header />
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 						{this.displayErrMsg()}

@@ -98,7 +98,7 @@ class IOIList extends Component{
 
   render(){
     return(
-      <div>
+      <div className="container" >
         <Header />
         <br/>
         {this.displayProductCategory()}

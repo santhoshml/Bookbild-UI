@@ -1,3 +1,17 @@
+.navbar-center-display{
+  display: inline-block !important;
+  float: none !important;
+  text-align: center !important;
+}
+
+.indent{
+  padding-left: 1.8em;
+}
+
+.indent-after{
+  padding-left: 1.5em;
+}
+
 .rowName{
   width : 200px;
 }
@@ -47,6 +61,7 @@
 .header-logo-cust-height{
   height : 100px;
   width: 100px;
+  padding-bottom: 10px;
 }
 
 .header-menu-items{

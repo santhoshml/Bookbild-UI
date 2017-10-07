@@ -376,7 +376,7 @@ class RelativeValueTool extends Component {
   render(){
     const { handleSubmit } = this.props;
     return(
-      <div>
+      <div className="container" >
         {this.state.countPercent !== null ? this.renderDealCompStats() : ''}
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h1 className="align-center">Deal Comparison Tool</h1>

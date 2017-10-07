@@ -495,7 +495,7 @@ class CreateIOIForm extends Component{
       // <br/>
 
     return(
-      <div>
+      <div className="container" >
         <Header />
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 

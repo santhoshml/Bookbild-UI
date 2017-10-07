@@ -109,7 +109,7 @@ class CreateIOIForm extends Component{
       , createdByCompanyId}, handleSubmit} = this.props;
 
     return(
-      <div>
+      <div className="container" >
         <Header />
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <input type="hidden" className="form-control" {...createdById} />

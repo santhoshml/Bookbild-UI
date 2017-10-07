@@ -38,7 +38,7 @@ class RFPFavoriteList extends Component{
   render(){
     // console.log('In RFPList render');
     return(
-      <div>
+      <div className="container" >
         <Header />
 
         <br/>

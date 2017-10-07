@@ -195,7 +195,7 @@ class WGL extends Component{
   render(){
     console.log('I am in wgl render');
     return(
-      <div>
+      <div className="container" >
         <Header />
         {this.displayAllWGLData()}
       </div>

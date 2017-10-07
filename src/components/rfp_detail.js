@@ -325,7 +325,7 @@ class RFPDetail extends Component{
   render(){
     console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
     return(
-      <div>
+      <div className="container" >
         <Header />
         {this.state.rfp ? this.displayCompanyDesc() : ''}
         {this.state.rfp ? this.displayOutstandingRFP() : ''}

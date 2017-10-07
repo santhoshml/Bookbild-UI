@@ -256,7 +256,7 @@ class IOIDetail extends Component{
   render(){
     console.log('I am in IOI_DETAIL');
     return(
-      <div>
+      <div className="container" >
         <Header />
         {this.displaySelectedIOI()}
         <br/>

@@ -358,7 +358,7 @@ class CreateRFP extends Component {
     // console.log('I am in create RFP render');
     const { handleSubmit } = this.props;
     return (
-      <div>
+      <div className="container" >
         <Header />
         {this.displayCompanyDropdown()}
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>

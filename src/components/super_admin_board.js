@@ -24,7 +24,7 @@ class Admin extends Component{
 
   render(){
     return(
-      <div>
+      <div className="container" >
         <Header />
         <Link to={constants.ROUTES_MAP.REGISTER_COMPANY} className="btn btn-primary">
           Add a company

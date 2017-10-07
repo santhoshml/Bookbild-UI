@@ -26,6 +26,8 @@ import WGL from './components/wgl';
 import Documents from './components/documents';
 import QuarterlyCompliance from './components/quarterly_compliance';
 import RelativeValueTool from "./components/relative_value_tool";
+import LandingPage from "./components/landing";
+import Solutions from "./components/solutions";
 
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";
@@ -38,6 +40,7 @@ ReactDOM.render(
       <BrowserRouter>
           <div>
             <Switch>
+              <Route path="/landing" component={LandingPage} />
               <Route path="/createRFP/:type" component={CreateRFPForm} />
               <Route path="/login" component={LoginForm} />
               <Route path="/wgl" component={WGL} />
@@ -57,12 +60,13 @@ ReactDOM.render(
               <Route path="/docs" component={Documents} />
               <Route path="/qCompliance" component={QuarterlyCompliance} />
               <Route path="/rvtool" component={RelativeValueTool} />
-              <Route path="/" component={LoginForm} />
+              <Route path="/solutions" component={Solutions} />
+              <Route path="/" component={LandingPage} />
             </Switch>
           </div>
       </BrowserRouter>
     </Provider>
-  , document.querySelector('.container'));
+  , document.querySelector('#test-container'));
 
   // <Route path="/posts/new" component={PostsNew} />
   // <Route path="/posts/:id" component={PostsShow} />

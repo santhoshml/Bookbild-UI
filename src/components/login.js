@@ -82,7 +82,7 @@ class LoginForm extends Component{
 	render(){
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
-				<div>
+				<div className="container" >
 					<br/>
 					<br/>
 		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">

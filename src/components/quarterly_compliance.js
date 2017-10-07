@@ -109,7 +109,7 @@ export default class DocumentForm extends Component{
 		if(this.state.user.role === 'Company'){
 			console.log('forwading to borrower Document form');
 			return (
-				<div>
+				<div className="container" >
           <Header />
           <br/>
           <br/>
@@ -123,7 +123,7 @@ export default class DocumentForm extends Component{
 		} else {
 			console.log('forwading to Non-borrower Document form');
 			return (
-        <div>
+        <div className="container" >
           <h3>Quaterly Compliance</h3>
 
         </div>

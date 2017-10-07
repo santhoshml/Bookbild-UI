@@ -88,7 +88,7 @@ class RegisterCompanyForm extends Component{
 		const {handleSubmit} = this.props;
 
 		return (
-			<div>
+			<div className="container" >
 				<Header />
 	      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 					<h3>Add a NEW Company </h3>

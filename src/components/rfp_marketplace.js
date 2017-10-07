@@ -160,7 +160,7 @@ class RFPMarketPlace extends Component{
 
   render(){
     return(
-      <div>
+      <div className="container" >
         <Header />
         <br/>
         <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>

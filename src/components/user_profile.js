@@ -192,7 +192,7 @@ class UserProfileForm extends Component{
 		// console.log('yoyo:'+this.props.initialValues.fullName);
 
     return(
-      <div>
+      <div className="container" >
         <Header />
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h3>User Details</h3>
