@@ -139,13 +139,6 @@ class RelativeValueTool extends Component {
             title="Select one"
             options={constants.SECTOR_OPTIONS}
           />
-          <Field
-            label="Your Role in the deal"
-            name="role"
-            size="col-xs-3 col-md-3"
-            component={this.renderField}
-            placeholder="eg: Sole Lender, Admin Agent, Club, etc"
-          />
         </div>
         <div className={`row`}>
           <Field
@@ -168,14 +161,6 @@ class RelativeValueTool extends Component {
             size="col-xs-3 col-md-3"
             component={this.renderField}
             placeholder="LTM EBITDA in $"
-          />
-          <Field
-            label="You are Borrower or Lender ? *"
-            name="type"
-            size="col-xs-3 col-md-3"
-            component={this.renderDropdown}
-            title="Select one"
-            options={constants.CUSTOMER_TYPE_OPTIONS}
           />
         </div>
       </div>
@@ -207,6 +192,13 @@ class RelativeValueTool extends Component {
             component={this.renderField}
             placeholder="URL of the press release"
           />
+          <Field
+          label="Your Role in the deal"
+          name="role"
+          size="col-xs-3 col-md-3"
+          component={this.renderField}
+          placeholder="eg: Sole Lender, Admin Agent, Club, etc"
+        />        
         </div>
         <div className={`row`}>
           <Field
@@ -219,7 +211,7 @@ class RelativeValueTool extends Component {
             name="revolverPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="Revolver Pricing (2.3%)"
+            placeholder="Revolver Pricing (L+2.30%)"
           />
           <Field
             name="revolverTenor"
@@ -252,7 +244,7 @@ class RelativeValueTool extends Component {
             name="firstLienPricing"
             size="col-xs-3 col-md-3"
             component={this.renderField}
-            placeholder="1st Lien TL Pricing (2.3%)"
+            placeholder="1st Lien TL Pricing (L+2.30%)"
           />
           <Field
             name="firstLienTenor"
@@ -454,9 +446,9 @@ function validate(values){
     errors.ebitda = 'LTM EBITDA cannot be empty';
   }
 
-  if (!values.type || values.type.toLowerCase() === 'select one') {
-    errors.type = 'Select if you are Borrower or Lender';
-  }
+  // if (!values.type || values.type.toLowerCase() === 'select one') {
+  //   errors.type = 'Select if you are Borrower or Lender';
+  // }
 
   if (!values.txnDt) {
     errors.txnDt = 'Transaction Date cannot be empty';
