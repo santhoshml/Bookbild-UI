@@ -31,7 +31,7 @@ export default class Landing extends Component {
       <div className="container">
         <div className="row text-center">
           <div className="col-lg-10 mx-auto">
-            <h2>Our Services</h2>
+            <h2 className="our-services">Our Services</h2>
             <hr className="small"/>
             <div className="row">
               <div className="col-md-3 col-sm-6">
@@ -41,7 +41,7 @@ export default class Landing extends Component {
                     <i className="fa fa-cloud fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
-                    <strong>Solutions</strong>
+                    <strong className="our-services">Solutions</strong>
                   </h4>
                   <p></p>
                   <a href="/solutions" className="btn btn-light">Learn More</a>
@@ -54,7 +54,7 @@ export default class Landing extends Component {
                     <i className="fa fa-compass fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
-                    <strong>Relative Value Tool</strong>
+                    <strong className="our-services">Relative Value Tool</strong>
                   </h4>
                   <p></p>
                   <a href="/rvtool" className="btn btn-light">Learn More</a>
@@ -67,7 +67,7 @@ export default class Landing extends Component {
                     <i className="fa fa-flask fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
-                    <strong>Blog</strong>
+                    <strong className="our-services">Insights</strong>
                   </h4>
                   <p></p>
                   <a href="#" className="btn btn-light">Learn More</a>
@@ -80,10 +80,10 @@ export default class Landing extends Component {
                     <i className="fa fa-shield fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
-                    <strong>About Us</strong>
+                    <strong className="our-services">About Us</strong>
                   </h4>
                   <p></p>
-                  <a href="#" className="btn btn-light">Learn More</a>
+                  <a href="/aboutUs" className="btn btn-light">Learn More</a>
                 </div>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default class Landing extends Component {
                 <!-- <i className="fa fa-phone fa-fw"></i>
                 (415) 456-7890</li> --> */}
               <li>
-                <i className="fa fa-envelope-o fa-fw"></i>
+                Request a demo : <i className="fa fa-envelope-o fa-fw"></i>
                 <a href="mailto:info@bookbild.com">info@bookbild.com</a>
               </li>
             </ul>

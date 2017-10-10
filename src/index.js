@@ -28,6 +28,7 @@ import QuarterlyCompliance from './components/quarterly_compliance';
 import RelativeValueTool from "./components/relative_value_tool";
 import LandingPage from "./components/landing";
 import Solutions from "./components/solutions";
+import AboutUs from "./components/about_us";
 
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";
@@ -61,6 +62,7 @@ ReactDOM.render(
               <Route path="/qCompliance" component={QuarterlyCompliance} />
               <Route path="/rvtool" component={RelativeValueTool} />
               <Route path="/solutions" component={Solutions} />
+              <Route path="/aboutUs" component={AboutUs} />
               <Route path="/" component={LandingPage} />
             </Switch>
           </div>
