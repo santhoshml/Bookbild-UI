@@ -38,7 +38,7 @@ export default class Landing extends Component {
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
                     <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-cloud fa-stack-1x text-primary"></i>
+                    <i className="fa fa-desktop fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Solutions</strong>
@@ -51,7 +51,7 @@ export default class Landing extends Component {
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
                     <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-compass fa-stack-1x text-primary"></i>
+                    <i className="fa fa-database fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Relative Value Tool</strong>
@@ -64,7 +64,7 @@ export default class Landing extends Component {
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
                     <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-flask fa-stack-1x text-primary"></i>
+                    <i className="fa fa-feed fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Insights</strong>
@@ -77,10 +77,10 @@ export default class Landing extends Component {
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
                     <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-shield fa-stack-1x text-primary"></i>
+                    <i className="fa fa-info fa-stack-1x text-primary"></i>
                   </span>
                   <h4>
-                    <strong className="our-services">About Us</strong>
+                    <strong className="our-services">Our Team</strong>
                   </h4>
                   <p></p>
                   <a href="/aboutUs" className="btn btn-light">Learn More</a>

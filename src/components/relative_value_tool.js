@@ -354,7 +354,7 @@ class RelativeValueTool extends Component {
         <br/>
         <p>1. Over the last 5 quarters, your sector accounted for {roundTo(this.state.countPercent,2)}% of transactions.</p>
         <br/>
-        <p>2. Your deal size was {roundTo(Math.abs(this.state.avgAmt),2)}% {this.state.avgAmt > 0 ? 'higher' : 'lower'} than the average deal size.</p>
+        <p>2. Your deal size was in the {roundTo(Math.abs(this.state.avgAmt),2)}th percentile of all transaction sizes.</p>
         <br/>
         <p>3. For your sector, {roundTo(this.state.singleLenderPercent, 2)}% of transactions were single lender deals.</p>
         <br/>
