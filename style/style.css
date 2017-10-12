@@ -1,3 +1,43 @@
+.solutions-title{
+  float: center;
+  text-align: center;
+  font-size: xx-large;
+  font-weight : bolder;
+  text-decoration : underline;
+}
+
+.hr-card{
+  border-top : 2px solid #333;
+}
+
+.headword{
+  float : center;
+  text-align : center;
+  font-size: 50px;
+  font-weight : bold;
+  color: cornflowerblue;
+}
+
+.solutions-row{
+  width : 1200px;
+}
+
+.card-text{
+  font-size: 20px;
+  font-family: serif;
+}
+
+.card-title{
+  float: center;
+  text-align: center;
+  font-size: x-large;
+  font-style : italic;
+}
+
+.solutions-card{
+  height: 200px;
+}
+
 .our-services{
   color: white;
   font-family: fantasy;

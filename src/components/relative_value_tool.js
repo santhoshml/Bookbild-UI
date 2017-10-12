@@ -349,14 +349,14 @@ class RelativeValueTool extends Component {
   }
 
   renderDealCompStats(){
+    // <p>2. Your deal size was in the {roundTo(Math.abs(this.state.avgAmt),2)}th percentile of all transaction sizes.</p>
+    // <br/>
     return(<div>
         <p>Your deal comparison results:</p>
         <br/>
         <p>1. Over the last 5 quarters, your sector accounted for {roundTo(this.state.countPercent,2)}% of transactions.</p>
         <br/>
-        <p>2. Your deal size was in the {roundTo(Math.abs(this.state.avgAmt),2)}th percentile of all transaction sizes.</p>
-        <br/>
-        <p>3. For your sector, {roundTo(this.state.singleLenderPercent, 2)}% of transactions were single lender deals.</p>
+        <p>2. For your sector, {roundTo(this.state.singleLenderPercent, 2)}% of transactions were single lender deals.</p>
         <br/>
         <p>If you'd like to see more detailed analysis (e.g. comparative results for LTM financials, loan structures, etc), please contact <a href="mailto:sales@bookbild.com">sales@bookbild.com</a> and our team will process your subscription. We look forward to partnering with you!</p>
         <br/>
