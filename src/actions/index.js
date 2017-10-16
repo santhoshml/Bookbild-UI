@@ -37,6 +37,7 @@ export const GET_LINK_DOCUMENT = 'GET_LINK_DOCUMENT';
 export const GET_LINKS_WITH_COMPANYID = 'GET_LINKS_WITH_COMPANYID';
 export const GET_LINKS_DOCS_WITH_RFP_IOI = 'GET_LINKS_DOCS_WITH_RFP_IOI';
 export const SAVE_DEAL_COMPARISION_DATA = 'SAVE_DEAL_COMPARISION_DATA';
+export const SEND_CONTACT_US_EMAIL = 'SEND_CONTACT_US_EMAIL';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -48,8 +49,20 @@ export const DELETE_POST = "delete_post";
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
-// const ROOT_URL = "http://reduxblog.herokuapp.com/api";
-// const API_KEY = "?key=PAPERCLIP1234";
+export function sendContactUsEmailAction(data){
+  console.log('In sendContactUsEmailAction, data: '+JSON.stringify(data));
+  const request=axios({
+    url : '/sendContactUsEmail',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: SEND_CONTACT_US_EMAIL,
+    payload: request
+  }
+}
 
 export function saveComparisionToolData(data){
   console.log('data: '+JSON.stringify(data));

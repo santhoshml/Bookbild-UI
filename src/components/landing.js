@@ -21,7 +21,7 @@ export default class Landing extends Component {
     <section id="about" className="about">
       <div className="container text-center">
         <h2>Bookbild provides transaction and data solutions for middle market private debt</h2>
-        <p className="lead">Our platform features marketplace access, aggregate data analytics, and custom transaction diligence support</p>
+        <p className="lead">Our platform features a marketplace supported by blockchain infrastructure, aggregate data analytics, and custom transaction diligence support</p>
       </div>
       {/* <!-- /.container --> */}
     </section>
@@ -30,15 +30,15 @@ export default class Landing extends Component {
     <section id="services" className="services bkbd-primary text-white">
       <div className="container">
         <div className="row text-center">
-          <div className="col-lg-10 mx-auto">
+          <div className="mx-auto">
             <h2 className="our-services">Our Services</h2>
             <hr className="small"/>
             <div className="row">
               <div className="col-md-3 col-sm-6">
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
-                    <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-desktop fa-stack-1x text-primary"></i>
+                    <i className="fa fa-circle fa-stack-2x circle-white"></i>
+                    <i className="fa fa-desktop fa-stack-1x text-primary bkbd-color"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Solutions</strong>
@@ -50,8 +50,8 @@ export default class Landing extends Component {
               <div className="col-md-3 col-sm-6">
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
-                    <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-database fa-stack-1x text-primary"></i>
+                    <i className="fa fa-circle fa-stack-2x circle-white"></i>
+                    <i className="fa fa-database fa-stack-1x text-primary bkbd-color"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Relative Value Tool</strong>
@@ -63,21 +63,21 @@ export default class Landing extends Component {
               <div className="col-md-3 col-sm-6">
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
-                    <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-feed fa-stack-1x text-primary"></i>
+                    <i className="fa fa-circle fa-stack-2x circle-white"></i>
+                    <i className="fa fa-feed fa-stack-1x text-primary bkbd-color"></i>
                   </span>
                   <h4>
                     <strong className="our-services">Insights</strong>
                   </h4>
                   <p></p>
-                  <a href="#" className="btn btn-light">Learn More</a>
+                  <a href="/insights" className="btn btn-light">Learn More</a>
                 </div>
               </div>
               <div className="col-md-3 col-sm-6">
                 <div className="service-item">
                   <span className="fa-stack fa-4x">
-                    <i className="fa fa-circle fa-stack-2x"></i>
-                    <i className="fa fa-info fa-stack-1x text-primary"></i>
+                    <i className="fa fa-circle fa-stack-2x circle-white"></i>
+                    {<i className="fa fa-users fa-stack-1x text-primary bkbd-color"></i>}
                   </span>
                   <h4>
                     <strong className="our-services">Our Team</strong>
@@ -101,7 +101,7 @@ export default class Landing extends Component {
     <footer>
       <div className="container">
         <div className="row">
-          <div className="col-lg-10 mx-auto text-center">
+          <div className="mx-auto text-center">
             <h4>
               <strong>Bookbild</strong>
             </h4>
@@ -119,7 +119,9 @@ export default class Landing extends Component {
             <br/>
             <ul className="list-inline">
               <li className="list-inline-item">
-                <a href="https://twitter.com/bookbild_inc" className="btn btn-default btn-lg"><i className="fa fa-twitter fa-fw"></i> <span className="network-name">Twitter</span></a>
+                <a href="https://twitter.com/bookbild_inc" className="btn btn-default btn-lg">
+                  <i className="fa fa-twitter fa-fw"></i> <span className="network-name">Twitter</span>
+                </a>
               </li>
               <li className="list-inline-item">
                 <a href="https://www.linkedin.com/company/bookbild-inc." className="btn btn-default btn-lg"><i className="fa fa-linkedin" aria-hidden="true"></i> <span className="network-name">LinkedIn</span></a>

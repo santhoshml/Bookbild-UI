@@ -43,7 +43,7 @@ class LoginForm extends Component{
 						type={field.type}
 						{...field.input}
 						/>
-					&nbsp;by clicking on submit, I agree to <a href='terms_and_conditions.html' target='_blank'>Bookbild terms and conditions.</a>
+					&nbsp;by clicking on submit, I agree to <a href='/termsAndConditions' target='_blank'>Bookbild terms and conditions.</a>
 				</label>
 				<div className="text-help">
 					{touched ? error : ""}

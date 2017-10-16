@@ -29,6 +29,10 @@ import RelativeValueTool from "./components/relative_value_tool";
 import LandingPage from "./components/landing";
 import Solutions from "./components/solutions";
 import AboutUs from "./components/about_us";
+import Insights from "./components/insights";
+import PrivacyPolicy from "./components/privacy_policy";
+import TermsAndConditions from "./components/terms_conditions";
+import ContactUs from "./components/contact_us";
 
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";
@@ -63,6 +67,10 @@ ReactDOM.render(
               <Route path="/rvtool" component={RelativeValueTool} />
               <Route path="/solutions" component={Solutions} />
               <Route path="/aboutUs" component={AboutUs} />
+              <Route path="/insights" component={Insights} />
+              <Route path="/privacyPolicy" component={PrivacyPolicy} />
+              <Route path="/termsAndConditions" component={TermsAndConditions} />
+              <Route path="/contactUs" component={ContactUs} />
               <Route path="/" component={LandingPage} />
             </Switch>
           </div>
