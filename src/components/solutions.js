@@ -11,14 +11,13 @@ export default class Solutions extends Component{
 				<h1 className="solutions-title">Our Solutions</h1>
 
 				<br/>
-
 				<div className="row solutions-row">
 					<div className="col-md-4 solutions-card">
 						<div className="headword"><i className="fa fa-exchange" aria-hidden="true"></i></div>
-						<h3 className="card-title">Middle Market Loan Transactions</h3>
+						<h3 className="card-title">Middle Market Lending Platform</h3>
 						<br/>
-						<p className="card-text">Single access point for institutional middle market private debt capital.</p> 
-						<p className="card-text">Friction-less new deal discovery - enhance pipelines with pre-qualified deal flow tailored to your unique criteria.</p>
+						<p className="card-text">Single access point for middle market loan transactions supported by blockchain infrastructure.</p> 
+						<p className="card-text">Enhanced transaction discovery - pre-qualified deal flow tailored to your unique criteria.</p>
 					</div>
 					<div className="col-md-2 solutions-card"/>
 					<div className="col-md-4 solutions-card">

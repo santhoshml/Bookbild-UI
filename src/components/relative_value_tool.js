@@ -139,6 +139,14 @@ class RelativeValueTool extends Component {
             title="Select one"
             options={constants.SECTOR_OPTIONS}
           />
+          <Field
+          label="Industry *"
+          name="industry"
+          size="col-xs-3 col-md-3"
+          component={this.renderDropdown}
+          title="Select one"
+          options={constants.INDUSTRY_OPTIONS}
+        />          
         </div>
         <div className={`row`}>
           <Field
@@ -147,6 +155,13 @@ class RelativeValueTool extends Component {
             size="col-xs-3 col-md-3"
             component={this.renderField}
             placeholder="comma-separated Lender names"
+          />
+          <Field
+          label="Transaction Sponsor"
+          name="txnSponsor"
+          size="col-xs-3 col-md-3"
+          component={this.renderField}
+          placeholder="Transaction Sponsor"
           />
           <Field
             label="LTM Revenue *"
@@ -352,7 +367,7 @@ class RelativeValueTool extends Component {
     // <p>2. Your deal size was in the {roundTo(Math.abs(this.state.avgAmt),2)}th percentile of all transaction sizes.</p>
     // <br/>
     return(<div>
-        <p>Your deal comparison results:</p>
+        <p>Preliminary comparative results:</p>
         <br/>
         <p>1. Over the last 5 quarters, your sector accounted for {roundTo(this.state.countPercent,2)}% of transactions.</p>
         <br/>
@@ -432,6 +447,10 @@ function validate(values){
 
   if (!values.sector || values.sector.toLowerCase() === 'select one') {
     errors.sector = 'Sector cannot be empty';
+  }
+
+  if (!values.industry || values.industry.toLowerCase() === 'select one') {
+    errors.industry = 'Industry cannot be empty';
   }
 
   if (!values.lenders) {
