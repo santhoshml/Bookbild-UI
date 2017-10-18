@@ -161,7 +161,7 @@ class RelativeValueTool extends Component {
           name="txnSponsor"
           size="col-xs-3 col-md-3"
           component={this.renderField}
-          placeholder="Transaction Sponsor"
+          placeholder="PE firm name"
           />
           <Field
             label="LTM Revenue *"
@@ -388,7 +388,7 @@ class RelativeValueTool extends Component {
         <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
           <h1 className="align-center">Deal Comparison Tool</h1>
           <br/>
-          <p>Use our proprietary database of private debt transactions for comparative deal analytics.To compare your debt transaction to other closed transactions, please enter your details below (all data is kept private, and aggregated anonymously). Submit the below info about the most recent transaction to see data about your transaction</p>
+          <p>Use our proprietary database of private debt transactions for comparative deal analytics.To compare your debt transaction to other closed transactions, please enter your details below (all data is kept private, and aggregated anonymously).</p>
           <br/>
           {this.renderPersonalInfo()}
           <hr/>
