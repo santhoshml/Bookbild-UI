@@ -1,18 +1,18 @@
-const express = require('express');
-const axios = require('axios');
-const compression = require('compression');
-const webpack = require('webpack');
-const webpackMiddleware = require('webpack-dev-middleware');
-const webpackHotMiddleware = require('webpack-hot-middleware');
-const config = require('./webpack.prod');
-const { SERVER_CONFIG } = require('./server/constants');
-
+var express = require('express');
+var axios = require('axios');
+// var compression = require('compression');
+var webpack = require('webpack');
+var webpackMiddleware = require('webpack-dev-middleware');
+var webpackHotMiddleware = require('webpack-hot-middleware');
+var config = require('./webpack.prod');
+var serverConstants = require('./server/constants');
+var SERVER_CONFIG = serverConstants.SERVER_CONFIG;
 // server.js
 // load the things we need
-const development = process.env.NODE_ENV === 'development';
-const port = development ? SERVER_CONFIG.PORT_DEVELOPMENT : SERVER_CONFIG.PORT_PRODUCTION;
-const app = express();
-const compiler = webpack(config);
+var development = process.env.NODE_ENV === 'development';
+var port = development ? SERVER_CONFIG.PORT_DEVELOPMENT : SERVER_CONFIG.PORT_PRODUCTION;
+var app = express();
+var compiler = webpack(config);
 
 // set the view engine to ejs
 app.engine('html', require('ejs').renderFile);
@@ -21,7 +21,7 @@ app.set('views', '.');
 
 
 // use gzip
-app.use(compression());
+// app.use(compression());
 
 const middleware = webpackMiddleware(compiler, {
     publicPath: config.output.publicPath,
