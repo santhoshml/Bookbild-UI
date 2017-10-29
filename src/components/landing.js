@@ -102,9 +102,9 @@ export default class Landing extends Component {
       <div className="container">
         <div className="row">
           <div className="mx-auto text-center">
-            <h4>
+            <h2>
               <strong>Bookbild</strong>
-            </h4>
+            </h2>
             {/* <!-- <p>455 Market St.
               <br>San Francisco, CA 90210</p> --> */}
             <ul className="list-unstyled">

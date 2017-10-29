@@ -1,3 +1,4 @@
+
 .bkbd-color{
   color: #3a4862 !important;
 }
@@ -47,6 +48,9 @@
 
 .our-services{
   color: white;
+  font-size: 18px;
+  font-family: sans-serif;
+  font-weight: 500;
 }
 
 .aboutus-pic{
@@ -88,8 +92,9 @@
 .align-right{
   position: relative;
   float: right;
-  margin-top: 25px;
+  /* margin-top: 25px; */
   margin-right: 25px;
+  height : 100px;
 }
 
 .navbar-center-display{
@@ -144,13 +149,15 @@
 }
 
 .header-cust-attr{
-  font-size: 15px !important;
+  font-size: 17px !important;
+  font-weight: 500;
+  font-family: sans-serif;
 }
 
 .header-logo-cust-height{
-  height : 70px;
-  width: 70px;
-  padding-bottom: 20px;
+  height : 100px;
+  width: 100px;
+  /* padding-bottom: 20px; */
 }
 
 .header-menu-items{

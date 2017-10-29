@@ -8,7 +8,7 @@ export default class AboutUs extends Component {
           <div className="container">
           <div className="row">
             <div className="col-md-6 portfolio-item">
-              <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="img/bobby_aboutus_pic.jpg"/>
+              <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/bobby_aboutus_pic.jpg"/>
             </div>
             <div className="col-md-6">
               <a href="https://www.linkedin.com/in/bobbygrant"><h3>Bobby Grant, Founder and CEO</h3></a>
@@ -40,17 +40,17 @@ export default class AboutUs extends Component {
             </p>
             </div>
             <div className="col-md-6 portfolio-item">
-              <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="img/santhosh_aboutus_pic.jpg"/>
+              <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/santhosh_aboutus_pic.jpg"/>
             </div>
         </div>
         <div className="row">
           <div className="col-md-12"></div>
           <p className="about-us">
-            Prior to joining Bookbild, Santhosh initiated and led the development of Nesterr Inc., a startup in InsureTech to help insurance customers compare and save on their insurance Premium. Prior to Bookbild, Santhosh was a member of the MyCloud at Western Digital where he was responsible for the architecture and design of Cloud Services for the Private Cloud. Prior to that, he held contract software development roles at Wells Fargo and Charles Schwab. Santhosh began his career as a software engineer at AT&T.
+            Prior to joining Bookbild, Santhosh initiated and led the development of Nesterr Inc., a startup in InsureTech to help insurance customers compare and save on their insurance Premium. Santhosh was a member of the MyCloud at Western Digital where he was responsible for the architecture and design of Cloud Services for the Private Cloud. Prior to that, he held contract software development roles at Wells Fargo and Charles Schwab. Santhosh began his career as a software engineer at AT&T.
           </p>
           <br/>
           <p className="about-us">
-            A native of Hyderabad, India, Santhosh received a BS in Electrical Engineering with Honors from JNTU and an MS in Computer Science from the Louisiana Tech University.
+            A native of Hyderabad, India, Santhosh received a BS in Electrical Engineering with Honors from JNTU and a MS in Computer Science from the Louisiana Tech University.
           </p>
         </div>
         </div>

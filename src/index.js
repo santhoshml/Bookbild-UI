@@ -78,6 +78,3 @@ ReactDOM.render(
     </Provider>
   , document.querySelector('#test-container'));
 
-  // <Route path="/posts/new" component={PostsNew} />
-  // <Route path="/posts/:id" component={PostsShow} />
-  // <Route path="/" component={PostsIndex} />
