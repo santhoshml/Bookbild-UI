@@ -8,6 +8,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Datetime from "react-datetime";
 import roundTo from "round-to";
+import Header from './header';
 
 class RelativeValueTool extends Component {
 
@@ -383,26 +384,34 @@ class RelativeValueTool extends Component {
   render(){
     const { handleSubmit } = this.props;
     return(
-      <div className="container" >
-        {this.state.countPercent !== null ? this.renderDealCompStats() : ''}
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <h1 className="align-center">Deal Comparison Tool</h1>
-          <br/>
-          <p>Use our proprietary database of private debt transactions for comparative deal analytics.To compare your debt transaction to other closed transactions, please enter your details below (all data is kept private, and aggregated anonymously).</p>
-          <br/>
-          {this.renderPersonalInfo()}
-          <hr/>
-          {this.renderCompanyInfo()}
-          <hr/>
-          {this.renderTxnInfo()}
-          <br/>
-          <button type="submit" className="btn btn-primary">Submit</button>
-          <Link to="/" className="btn btn-danger">Cancel</Link>
-          <br/>
-          <br/>
-          <br/>
-          <br/>
-        </form>
+      <div>
+        <Header/>
+        <div className="container" >
+          {this.state.countPercent !== null ? this.renderDealCompStats() : ''}
+          <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+            <h1 className="align-center">Deal Comparison Tool</h1>
+            <br/>
+            <p>Use our proprietary database of private debt transactions for comparative deal analytics.To compare your debt transaction to other closed transactions, please enter your details below (all data is kept private, and aggregated anonymously).</p>
+            <br/>
+            {this.renderPersonalInfo()}
+            <hr/>
+            {this.renderCompanyInfo()}
+            <hr/>
+            {this.renderTxnInfo()}
+            <br/>
+            <button type="submit" className="btn btn-primary">Submit</button>
+            <Link to="/" className="btn btn-danger">Cancel</Link>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </form>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
       </div>
     );
   }

@@ -10,8 +10,9 @@ import cUtils from '../utils/common_utils';
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import NumberFormat from 'react-number-format';
-import Header from './header';
+import NavBar from './sidebar';
 import roundTo from 'round-to';
+import Header from './header';
 
 class IOIDetail extends Component{
   constructor(props){
@@ -256,21 +257,26 @@ class IOIDetail extends Component{
   render(){
     console.log('I am in IOI_DETAIL');
     return(
-      <div className="container" >
-        <Header />
-        {this.displaySelectedIOI()}
-        <br/>
-        {this.displayYieldMatrix()}
-        <br/>
-        <br/>
-        {this.displayViewAttachedRFPButton()}
-        {this.displayEditIOIButton()}
-        {this.displayInviteButton()}
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            {this.displaySelectedIOI()}
+            <br/>
+            {this.displayYieldMatrix()}
+            <br/>
+            <br/>
+            {this.displayViewAttachedRFPButton()}
+            {this.displayEditIOIButton()}
+            {this.displayInviteButton()}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
     );
   }

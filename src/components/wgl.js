@@ -7,9 +7,9 @@ import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
-import Header from './header';
-// import BootstrapTable from 'reactjs-bootstrap-table';
+import NavBar from './sidebar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
+import Header from './header';
 
 class WGL extends Component{
   constructor(props){
@@ -195,9 +195,14 @@ class WGL extends Component{
   render(){
     console.log('I am in wgl render');
     return(
-      <div className="container" >
-        <Header />
-        {this.displayAllWGLData()}
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            {this.displayAllWGLData()}
+          </div>
+        </div>
       </div>
     );
   }

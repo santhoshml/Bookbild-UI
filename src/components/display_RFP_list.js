@@ -6,6 +6,7 @@ import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import constants from '../utils/constants';
 import {Link} from 'react-router-dom';
+import Header from './header';
 
 export default class DisplayRFPList extends Component {
 
@@ -146,7 +147,7 @@ export default class DisplayRFPList extends Component {
         <div className='col-md-3' />
         <div className='col-md-3' />
         <div className='col-md-3' >
-          <Link to="/#" className="btn btn-primary align-right">Invite a Company</Link>
+          <Link to="/#" className="btn btn-primary btn-align-right">Invite a Company</Link>
         </div>
       </div>
     );

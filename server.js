@@ -57,7 +57,8 @@ app.all('*', (req, res, next) => {
     console.log('X-Forwarded-Proto:'+req.get('X-Forwarded-Proto'));
   if (!development) {
     if (req.get('X-Forwarded-Proto') === 'https' ) return next();
-    return res.redirect(`https://${req.hostname}${req.url}`);
+    return res.redirect(`https://${req.hostname}:${port}${req.url}`);
+    // return res.redirect(`https://bookbild.com/\${req.url}`);
   } else {
     return next();
   }

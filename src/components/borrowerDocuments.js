@@ -6,7 +6,7 @@ import validator from 'validator';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
-import Header from './header';
+import NavBar from './sidebar';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import FileReaderInput from 'react-file-reader-input';
@@ -15,6 +15,7 @@ import formatCurrency from 'format-currency';
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import DisplayDocumentTabs from './displayDocumentTabs';
+import Header from './header';
 
 
 class BorrowerDocumentForm extends Component{
@@ -41,14 +42,19 @@ class BorrowerDocumentForm extends Component{
 		console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
-			<div className="container" >
-				<Header />
-				<br/>
-				<br/>
-				<h3>List of documents for each of your RFP</h3>
-				<br/>
-				<br/>
-				{this.props.rfpList ? <DisplayDocumentTabs linkList={this.props.rfpList} type={this.state.user.role}/> : ''}
+			<div>
+				<Header/>
+				<div style={{ display: 'flex' }}>
+					<NavBar history={this.props.history}/>    			
+					<div className="container" >
+						<br/>
+						<br/>
+						<h3>List of documents for each of your RFP</h3>
+						<br/>
+						<br/>
+						{this.props.rfpList ? <DisplayDocumentTabs linkList={this.props.rfpList} type={this.state.user.role}/> : ''}
+					</div>
+				</div>
 			</div>
 		    );
 	}

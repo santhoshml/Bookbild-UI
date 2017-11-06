@@ -4,12 +4,13 @@ import { Link } from "react-router-dom";
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
-import Header from './header';
+import NavBar from './sidebar';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/index';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DataGrid from './data_grid_example';
+import Header from './header';
 
 export default class DocumentForm extends Component{
 
@@ -109,23 +110,34 @@ export default class DocumentForm extends Component{
 		if(this.state.user.role === 'Company'){
 			console.log('forwading to borrower Document form');
 			return (
-				<div className="container" >
-          <Header />
-          <br/>
-          <br/>
-					<h3>Quaterly Compliance</h3>
-          <Tabs>
-            <TabList>{this.displayYears(qtrMatrix)}</TabList>
-            {this.displayTabPanel(qtrMatrix)}
-    			</Tabs>
-				</div>
+        <div>
+          <Header/>
+          <div style={{ display: 'flex' }}>
+            <NavBar history={this.props.history}/>        
+            <div className="container" >
+              <br/>
+              <br/>
+              <h3>Quaterly Compliance</h3>
+              <Tabs>
+                <TabList>{this.displayYears(qtrMatrix)}</TabList>
+                {this.displayTabPanel(qtrMatrix)}
+              </Tabs>
+            </div>
+          </div>
+        </div>
 			);
 		} else {
 			console.log('forwading to Non-borrower Document form');
 			return (
-        <div className="container" >
-          <h3>Quaterly Compliance</h3>
+        <div>
+          <Header/>
+          <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+            <div className="container" >
+              <h3>Quaterly Compliance</h3>
 
+            </div>
+          </div>
         </div>
 			);
 		}

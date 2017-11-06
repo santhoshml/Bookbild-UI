@@ -4,10 +4,10 @@ import { addUserAction } from '../actions/index';
 import { Link } from "react-router-dom";
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
-
+import Header from './header';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
-import Header from './header';
+import NavBar from './sidebar';
 import * as actionCreators from '../actions/index';
 
 const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
@@ -133,185 +133,190 @@ class AddUserForm extends Component{
 		const { handleSubmit } = this.props;
 
 		return (
-			<div className="container" >
-					<Header />
-		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-						{this.displayErrMsg()}
-						<h3>User Details</h3>
+			<div>
+				<Header/>
+				<div style={{ display: 'flex' }}>
+					<NavBar history={this.props.history}/>
+					<div className="container" >
+							<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+								{this.displayErrMsg()}
+								<h3>User Details</h3>
 
-						<div className={`row`}>
-							<Field
-		            name="fullName"
-								label="Full Name"
-		            size="col-xs-12 col-md-12"
-		            component={this.renderField}
-		            placeholder="Enter users full name"
-		          />
+								<div className={`row`}>
+									<Field
+										name="fullName"
+										label="Full Name"
+										size="col-xs-12 col-md-12"
+										component={this.renderField}
+										placeholder="Enter users full name"
+									/>
+								</div>
+								<div className={`row`}>
+									<Field
+										name="email"
+										label="Email"
+										type="email"
+										size="col-xs-6 col-md-6"
+										component={this.renderField}
+										placeholder="Enter a valid email"
+									/>
+									<Field
+										name="phoneNumber"
+										label="Phone Number"
+										size="col-xs-6 col-md-6"
+										component={this.renderField}
+										placeholder="Enter a valid phone number"
+									/>
+								</div>
+								<div className={`row`}>
+									<Field
+										name="password"
+										label="Password"
+										size="col-xs-6 col-md-6"
+										type="password"
+										component={this.renderField}
+										placeholder="Enter password"
+									/>
+									<Field
+										name="phoneNumber"
+										label="Confirm Password"
+										size="col-xs-6 col-md-6"
+										type="password"
+										component={this.renderField}
+										placeholder="Enter password should be same as above"
+									/>
+								</div>
+
+								<div className={`row`}>
+									<div className={`form-group col-xs-12 col-md-12 }`}>
+										<label>Role of the user</label><br/>
+										<Field
+											name="lender"
+											label="Lender"
+											value="Lender"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="financialSponsor"
+											label="Financial Sponsor"
+											value="Financial Sponsor"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="company"
+											label="Company"
+											value="Company"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="legalCounsel"
+											label="Legal Counsel"
+											value="Legal Counsel"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="3pdd"
+											label="3rd Part Due Diligence"
+											value="3rd Part Due Diligence"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="other"
+											label="Other"
+											value="Other"
+											component={this.renderRadioField}
+										/>
+									</div>
+								</div>
+
+								<div className={`row`}>
+									<div className={`form-group col-xs-12 col-md-12`}>
+										<label>Admin privileges</label><br/>
+										<Field
+											name="isAdmin"
+											value={true}
+											label="Will be a ADMIN"
+											component={this.renderRadioField}
+										/>
+										<Field
+											name="isAdmin"
+											value={false}
+											label="NOT an ADMIN"
+											component={this.renderRadioField}
+										/>
+									</div>
+								</div>
+
+								<br/>
+								<hr className={`col-xs-12 col-md-12`}/>
+
+								<h3>Company Details</h3>
+
+								<div className={`row`}>
+									<Field
+										name="companyName"
+										label="Company Name"
+										size="col-xs-8 col-md-8"
+										component={this.renderField}
+										placeholder="Enter a valid Company Name"
+									/>
+									<Field
+										name="ein"
+										label="Company Name"
+										size="col-xs-4 col-md-4"
+										disabled="true"
+										component={this.renderField}
+										placeholder="Enter a valid Company EIN"
+									/>
+								</div>
+
+								<br/>
+								<hr className={`col-xs-12 col-md-12`}/>
+								<h3>Address Details</h3>
+
+								<div className={`row`}>
+									<Field
+										name="streetAddress"
+										label="Street Address"
+										size="col-xs-12 col-md-12"
+										component={this.renderField}
+										placeholder="Enter a valid Street Address of the Company"
+									/>
+								</div>
+
+								<div className={`row`}>
+									<Field
+										name="city"
+										label="City"
+										size="col-xs-6 col-md-6"
+										component={this.renderField}
+										placeholder="Enter the City of the Company"
+									/>
+									<Field
+										label="State"
+										name="state"
+										size="col-xs-3 col-md-3"
+										component={this.renderDropdownField}
+										dpField={stateOptions}
+									/>
+									<Field
+										name="zipcode"
+										label="Zipcode"
+										size="col-xs-3 col-md-3"
+										component={this.renderField}
+										placeholder="Enter a valid zipcode of the Company"
+									/>
+								</div>
+								<button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
+								<Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
+							</form>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
+							<br/>
 						</div>
-						<div className={`row`}>
-							<Field
-								name="email"
-								label="Email"
-								type="email"
-								size="col-xs-6 col-md-6"
-								component={this.renderField}
-								placeholder="Enter a valid email"
-							/>
-							<Field
-								name="phoneNumber"
-								label="Phone Number"
-								size="col-xs-6 col-md-6"
-								component={this.renderField}
-								placeholder="Enter a valid phone number"
-							/>
-						</div>
-						<div className={`row`}>
-							<Field
-								name="password"
-								label="Password"
-								size="col-xs-6 col-md-6"
-								type="password"
-								component={this.renderField}
-								placeholder="Enter password"
-							/>
-							<Field
-								name="phoneNumber"
-								label="Confirm Password"
-								size="col-xs-6 col-md-6"
-								type="password"
-								component={this.renderField}
-								placeholder="Enter password should be same as above"
-							/>
-						</div>
-
-						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12 }`}>
-								<label>Role of the user</label><br/>
-								<Field
-									name="lender"
-									label="Lender"
-									value="Lender"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="financialSponsor"
-									label="Financial Sponsor"
-									value="Financial Sponsor"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="company"
-									label="Company"
-									value="Company"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="legalCounsel"
-									label="Legal Counsel"
-									value="Legal Counsel"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="3pdd"
-									label="3rd Part Due Diligence"
-									value="3rd Part Due Diligence"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="other"
-									label="Other"
-									value="Other"
-									component={this.renderRadioField}
-								/>
-							</div>
-						</div>
-
-						<div className={`row`}>
-							<div className={`form-group col-xs-12 col-md-12`}>
-								<label>Admin privileges</label><br/>
-								<Field
-									name="isAdmin"
-									value={true}
-									label="Will be a ADMIN"
-									component={this.renderRadioField}
-								/>
-								<Field
-									name="isAdmin"
-									value={false}
-									label="NOT an ADMIN"
-									component={this.renderRadioField}
-								/>
-							</div>
-						</div>
-
-						<br/>
-						<hr className={`col-xs-12 col-md-12`}/>
-
-		        <h3>Company Details</h3>
-
-						<div className={`row`}>
-							<Field
-								name="companyName"
-								label="Company Name"
-								size="col-xs-8 col-md-8"
-								component={this.renderField}
-								placeholder="Enter a valid Company Name"
-							/>
-							<Field
-								name="ein"
-								label="Company Name"
-								size="col-xs-4 col-md-4"
-								disabled="true"
-								component={this.renderField}
-								placeholder="Enter a valid Company EIN"
-							/>
-						</div>
-
-						<br/>
-						<hr className={`col-xs-12 col-md-12`}/>
-						<h3>Address Details</h3>
-
-						<div className={`row`}>
-							<Field
-								name="streetAddress"
-								label="Street Address"
-								size="col-xs-12 col-md-12"
-								component={this.renderField}
-								placeholder="Enter a valid Street Address of the Company"
-							/>
-						</div>
-
-						<div className={`row`}>
-							<Field
-								name="city"
-								label="City"
-								size="col-xs-6 col-md-6"
-								component={this.renderField}
-								placeholder="Enter the City of the Company"
-							/>
-							<Field
-	              label="State"
-	              name="state"
-	              size="col-xs-3 col-md-3"
-	              component={this.renderDropdownField}
-	              dpField={stateOptions}
-	            />
-							<Field
-								name="zipcode"
-								label="Zipcode"
-								size="col-xs-3 col-md-3"
-								component={this.renderField}
-								placeholder="Enter a valid zipcode of the Company"
-							/>
-						</div>
-		        <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
-		        <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
-		      </form>
-					<br/>
-	        <br/>
-	        <br/>
-	        <br/>
-	        <br/>
+					</div>
 				</div>
 		    );
 	}

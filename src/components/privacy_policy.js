@@ -1,8 +1,11 @@
 import React, { Component }  from 'react';
- 
+import Header from './header';
+
 export default class Insights extends Component {
   render() {
     return (
+      <div>
+      <Header/>
       <div className="container">
       <h2 className="align-center">Bookbild Privacy Policy</h2>
       <br/>
@@ -114,6 +117,12 @@ export default class Insights extends Component {
       <h3>How We May Update Our Privacy Policy</h3>
       <p>From time to time, we may collect and use PI in ways not previously disclosed in our Privacy Policy. If our information practices change we will post any adjustments to our policy on this website and change the “Last Updated” date above. Unless additional notice or consent is required by applicable laws, this will serve as your notification of these changes. If you are concerned about how your information is used, bookmark this page and check back periodically.</p>
   
+    </div>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
     </div>
     );
   }

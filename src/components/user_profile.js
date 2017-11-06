@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
+import NavBar from './sidebar';
 import Header from './header';
 
 // const { DOM: { input, select, textarea } } = React
@@ -18,6 +19,7 @@ const stateOptions = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID
 
 const roleOptions = ['Lender', 'Financial Sponsor', 'Company', 'Legal Counsel', '3rd Part Due Diligence', 'Other'];
 
+
 class UserProfileForm extends Component{
   constructor(props){
     super(props);
@@ -26,7 +28,7 @@ class UserProfileForm extends Component{
       company : null
     };
     // console.log('state:'+JSON.stringify(this.state));
-  }
+  };
 
 	setTheValuesReceivedFromBackend(results){
 		let address = results[0].payload.data.data[0];
@@ -192,130 +194,135 @@ class UserProfileForm extends Component{
 		// console.log('yoyo:'+this.props.initialValues.fullName);
 
     return(
-      <div className="container" >
-        <Header />
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <h3>User Details</h3>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+              <h3>User Details</h3>
 
-          <div className={`row`}>
-            <Field
-              name="fullName"
-							label="Full Name"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter users full name"
-            />
-						<Field
-              label="Role of the user"
-              name="role"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdownField}
-              dpField={roleOptions}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              name="email"
-              type="email"
-              label="Email"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter a valid email"
-            />
-            <Field
-              name="phoneNumber"
-              label="Phone Number"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter a valid phone number"
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              name="password"
-              label="Password"
-              type="password"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter password"
-            />
-            <Field
-              name="phoneNumber"
-              label="Confirm Password"
-              type="password"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter password should be same as above"
-            />
-          </div>
-          <hr className={`col-xs-12 col-md-12`}/>
-          <br/>
-          <h3>Company Details</h3>
-          <div className={`row`}>
-            <Field
-              name="companyName"
-              label="Company Name"
-              size="col-xs-8 col-md-8"
-              component={this.renderField}
-              placeholder="Enter a valid Company Name"
-            />
-            <Field
-              name="ein"
-              label="Company Name"
-              size="col-xs-4 col-md-4"
-              disabled="true"
-              component={this.renderField}
-              placeholder="Enter a valid Company EIN"
-            />
-          </div>
-          <hr className={`col-xs-12 col-md-12`}/>
-          <br/>
-          <h3>Address Details</h3>
-          <div className={`row`}>
-            <Field
-              name="streetAddress"
-              label="Street Address"
-              size="col-xs-12 col-md-12"
-              component={this.renderField}
-              placeholder="Enter a valid Street Address of the Company"
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              name="city"
-              label="City"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-              placeholder="Enter the City of the Company"
-            />
-            <Field
-              label="State"
-              name="state"
-              size="col-xs-3 col-md-3"
-              component={this.renderDropdownField}
-              dpField={stateOptions}
-            />
-            <Field
-              name="zipcode"
-              label="Zipcode"
-              size="col-xs-3 col-md-3"
-              component={this.renderField}
-              placeholder="Enter a valid zipcode of the Company"
-            />
-          </div>
-          {this.state.userList && this.state.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
+              <div className={`row`}>
+                <Field
+                  name="fullName"
+                  label="Full Name"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter users full name"
+                />
+                <Field
+                  label="Role of the user"
+                  name="role"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdownField}
+                  dpField={roleOptions}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  name="email"
+                  type="email"
+                  label="Email"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter a valid email"
+                />
+                <Field
+                  name="phoneNumber"
+                  label="Phone Number"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter a valid phone number"
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  name="password"
+                  label="Password"
+                  type="password"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter password"
+                />
+                <Field
+                  name="phoneNumber"
+                  label="Confirm Password"
+                  type="password"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter password should be same as above"
+                />
+              </div>
+              <hr className={`col-xs-12 col-md-12`}/>
+              <br/>
+              <h3>Company Details</h3>
+              <div className={`row`}>
+                <Field
+                  name="companyName"
+                  label="Company Name"
+                  size="col-xs-8 col-md-8"
+                  component={this.renderField}
+                  placeholder="Enter a valid Company Name"
+                />
+                <Field
+                  name="ein"
+                  label="Company Name"
+                  size="col-xs-4 col-md-4"
+                  disabled="true"
+                  component={this.renderField}
+                  placeholder="Enter a valid Company EIN"
+                />
+              </div>
+              <hr className={`col-xs-12 col-md-12`}/>
+              <br/>
+              <h3>Address Details</h3>
+              <div className={`row`}>
+                <Field
+                  name="streetAddress"
+                  label="Street Address"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderField}
+                  placeholder="Enter a valid Street Address of the Company"
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  name="city"
+                  label="City"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter the City of the Company"
+                />
+                <Field
+                  label="State"
+                  name="state"
+                  size="col-xs-3 col-md-3"
+                  component={this.renderDropdownField}
+                  dpField={stateOptions}
+                />
+                <Field
+                  name="zipcode"
+                  label="Zipcode"
+                  size="col-xs-3 col-md-3"
+                  component={this.renderField}
+                  placeholder="Enter a valid zipcode of the Company"
+                />
+              </div>
+              {this.state.userList && this.state.userList.length>0 && this.state.user.isAdmin? this.displayUserList() : ''}
 
 
-          <br/>
-          <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
-          <Link to={constants.ROUTES_MAP.RFP_MARKETPLACE} className="btn btn-danger">Cancel</Link>&nbsp;&nbsp;
+              <br/>
+              <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
+              <Link to={constants.ROUTES_MAP.RFP_MARKETPLACE} className="btn btn-danger">Cancel</Link>&nbsp;&nbsp;
 
-        </form>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+            </form>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
     );
   }

@@ -10,6 +10,7 @@ import cUtils from '../utils/common_utils';
 import NumberFormat from 'react-number-format';
 import dateFormat from 'dateformat';
 import moment from 'moment';
+import NavBar from './sidebar';
 import Header from './header';
 
 class RFPDetail extends Component{
@@ -325,23 +326,28 @@ class RFPDetail extends Component{
   render(){
     console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
     return(
-      <div className="container" >
-        <Header />
-        {this.state.rfp ? this.displayCompanyDesc() : ''}
-        {this.state.rfp ? this.displayOutstandingRFP() : ''}
-        {this.state.rfp ? this.displayCollateralInfo() : ''}
-        <br/>
-        <br/>
-        {this.displayFavoritesButton()}
-        {this.displayIOIButton()}
-        {this.displayViewIntrestListButton()}
-        {this.displayEditRFPButton()}
-        {this.displayIndustryResearchButton()}
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            {this.state.rfp ? this.displayCompanyDesc() : ''}
+            {this.state.rfp ? this.displayOutstandingRFP() : ''}
+            {this.state.rfp ? this.displayCollateralInfo() : ''}
+            <br/>
+            <br/>
+            {this.displayFavoritesButton()}
+            {this.displayIOIButton()}
+            {this.displayViewIntrestListButton()}
+            {this.displayEditRFPButton()}
+            {this.displayIndustryResearchButton()}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
     );
   }

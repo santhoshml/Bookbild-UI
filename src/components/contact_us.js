@@ -5,10 +5,9 @@ import { Link } from "react-router-dom";
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
-
+import Header from './header';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
-import Header from './header';
 import * as actionCreators from '../actions/index';
 
 class ContactUsForm extends Component{
@@ -89,63 +88,66 @@ class ContactUsForm extends Component{
     const {handleSubmit, errors, pristine, reset, submitting} = this.props;    
 
 		return (
-			<div className="container" >
-		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-						<h3 className="align-center">Contact Us</h3>
-            <br/>
-            {this.displayError()}
-            <br/>
-						<div className={`row`}>
-							<Field
-		            name="fullName"
-								label="Full Name"
-		            size="col-xs-6 col-md-6"
-		            component={this.renderField}
-		            placeholder="Name to address you"
-		          />
-							<Field
-								name="email"
-								label="Email"
-								type="email"
-								size="col-xs-6 col-md-6"
-								component={this.renderField}
-								placeholder="Enter a valid email"
-							/>
-            </div>
-            
-						<div className={`row`}>
-							<Field
-								name="phoneNumber"
-								label="Phone Number"
-								size="col-xs-6 col-md-6"
-								type="text"
-								component={this.renderField}
-								placeholder="Phone number to reach you"
+      <div>
+        <Header/>
+        <div className="container" >
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+              <h3 className="align-center">Contact Us</h3>
+              <br/>
+              {this.displayError()}
+              <br/>
+              <div className={`row`}>
+                <Field
+                  name="fullName"
+                  label="Full Name"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Name to address you"
+                />
+                <Field
+                  name="email"
+                  label="Email"
+                  type="email"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                  placeholder="Enter a valid email"
+                />
+              </div>
+              
+              <div className={`row`}>
+                <Field
+                  name="phoneNumber"
+                  label="Phone Number"
+                  size="col-xs-6 col-md-6"
+                  type="text"
+                  component={this.renderField}
+                  placeholder="Phone number to reach you"
+                />
+                <Field
+                name="companyName"
+                label="Company Name"
+                size="col-xs-6 col-md-6"
+                type="text"
+                component={this.renderField}
+                placeholder="Company Name to assosiate with"
               />
-							<Field
-              name="companyName"
-              label="Company Name"
-              size="col-xs-6 col-md-6"
-              type="text"
-              component={this.renderField}
-              placeholder="Company Name to assosiate with"
-            />
-            </div>
-            
-            <div className={`row`}>
-              <Field
-                label="Message"
-                name="message"
-                size="col-xs-12 col-md-12"
-                component={this.renderTextArea}
-                placeholder="Message for Bookbild from the user ...."
-              />
-            </div>
-            <div className="text-center">             
-              <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
-            </div>
-		      </form>
-				</div>
+              </div>
+              
+              <div className={`row`}>
+                <Field
+                  label="Message"
+                  name="message"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderTextArea}
+                  placeholder="Message for Bookbild from the user ...."
+                />
+              </div>
+              <div className="text-center">             
+                <button type="submit" className="btn btn-primary">Submit</button>&nbsp;&nbsp;
+              </div>
+            </form>
+          </div>
+        </div>
 		    );
 	}
 }

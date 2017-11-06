@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import {getLinksWithCompanyIdAction} from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
-import Header from './header';
+import NavBar from './sidebar';
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/index';
 import DisplayDocumentTabs from './displayDocumentTabs';
-
+import Header from './header';
 
 class NonBorrowerDocumentForm extends Component{
 	constructor(props){
@@ -32,14 +32,19 @@ class NonBorrowerDocumentForm extends Component{
 		console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
-			<div className="container" >
-				<Header />
-				<br/>
-				<br/>
-				<h3>List of documents for each of your IOI</h3>
-				<br/>
-				<br/>
-				{this.props.linkList ? <DisplayDocumentTabs linkList={this.props.linkList} type={this.state.user.role}/> : ''}
+			<div>
+				<Header/>
+				<div style={{ display: 'flex' }}>
+					<NavBar history={this.props.history}/>			
+					<div className="container" >
+						<br/>
+						<br/>
+						<h3>List of documents for each of your IOI</h3>
+						<br/>
+						<br/>
+						{this.props.linkList ? <DisplayDocumentTabs linkList={this.props.linkList} type={this.state.user.role}/> : ''}
+					</div>
+				</div>
 			</div>
 		    );
 	}

@@ -8,9 +8,10 @@ import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
-import Header from './header';
 import formatCurrency from 'format-currency';
 import Dropdown from 'react-dropdown'
+import NavBar from './sidebar';
+import Header from './header';
 
 class RFPMarketPlace extends Component{
   constructor(props){
@@ -160,18 +161,23 @@ class RFPMarketPlace extends Component{
 
   render(){
     return(
-      <div className="container" >
-        <Header />
-        <br/>
-        <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>
-        <br/>
-        <br/>
-        {this.displayTermSheetActivity()}
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            <br/>
+            <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>
+            <br/>
+            <br/>
+            {this.displayTermSheetActivity()}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            </div>
+        </div>
       </div>
     );
   }

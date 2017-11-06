@@ -9,6 +9,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import Datetime from "react-datetime";
 import numeral from "numeral";
+import NavBar from './sidebar';
 import Header from './header';
 
 var gType=null;
@@ -358,165 +359,170 @@ class CreateRFP extends Component {
     // console.log('I am in create RFP render');
     const { handleSubmit } = this.props;
     return (
-      <div className="container" >
-        <Header />
-        {this.displayCompanyDropdown()}
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-          <h3>Create RFP / Request Pitch</h3>
-          <br/>
-          <div className={`row`}>
-            <Field
-              label="Request Type"
-              name="requestType"
-              size="col-xs-12 col-md-12"
-              component={this.renderDropdown}
-              options={requestTypeOptions}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Company Name"
-              name="companyName"
-              size="col-xs-12 col-md-12"
-              component={this.renderField}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Deal Size ($)"
-              name="dealSize"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              label="Tenor"
-              name="tenor"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Category"
-              name="category"
-              onBlur={this.onBlurCategory.bind(this)}
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdown}
-              options={categoryOptions}
-            />
-            <Field
-              label="Product"
-              name="product"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdown}
-              options={productOptions}
-            />
-          </div>
-          {this.displayABLDetails()}
-          <div className={`row`}>
-            <Field
-              label="Sector"
-              name="sector"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdown}
-              options={sectorOptions}
-            />
-            <Field
-              label="Region"
-              name="region"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdown}
-              options={regionOptions}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="LTM Revenue ($)"
-              name="ltmRevenue"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              label="LTM EBITDA ($)"
-              name="ltmEbitda"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Transaction Overview / Use of Funds"
-              name="txnOverview"
-              size="col-xs-12 col-md-12"
-              component={this.renderTextArea}
-              placeholder={constants.TXN_OVERVIEW_SAMPLE}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Company Description"
-              name="companyDesc"
-              size="col-xs-12 col-md-12"
-              component={this.renderTextArea}
-              placeholder={constants.COMPANY_DESC_SAMPLE}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Expiry date for this RFP"
-              name="expiryDt"
-              size="col-xs-6 col-md-6"
-              component={this.renderDatePicker}
-            />
-            <Field
-              label="Is this sponsered ?"
-              name="isSponsored"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdown}
-              options={sponsoredOptions}
-            />
-          </div>
-          <br/>
-          <hr/>
-          <h3>Company Management Contact</h3>
-          <div className={`row`}>
-            <Field
-              label="Name"
-              name="fullName"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              label="Role"
-              name="contactRole"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-          </div>
-          <div className={`row`}>
-            <Field
-              label="Phone"
-              name="phoneNumber"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              label="Email"
-              name="email"
-              type="email"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-          </div>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            {this.displayCompanyDropdown()}
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+              <h3>Create RFP / Request Pitch</h3>
+              <br/>
+              <div className={`row`}>
+                <Field
+                  label="Request Type"
+                  name="requestType"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderDropdown}
+                  options={requestTypeOptions}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Company Name"
+                  name="companyName"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderField}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Deal Size ($)"
+                  name="dealSize"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  label="Tenor"
+                  name="tenor"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Category"
+                  name="category"
+                  onBlur={this.onBlurCategory.bind(this)}
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdown}
+                  options={categoryOptions}
+                />
+                <Field
+                  label="Product"
+                  name="product"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdown}
+                  options={productOptions}
+                />
+              </div>
+              {this.displayABLDetails()}
+              <div className={`row`}>
+                <Field
+                  label="Sector"
+                  name="sector"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdown}
+                  options={sectorOptions}
+                />
+                <Field
+                  label="Region"
+                  name="region"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdown}
+                  options={regionOptions}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="LTM Revenue ($)"
+                  name="ltmRevenue"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  label="LTM EBITDA ($)"
+                  name="ltmEbitda"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Transaction Overview / Use of Funds"
+                  name="txnOverview"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderTextArea}
+                  placeholder={constants.TXN_OVERVIEW_SAMPLE}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Company Description"
+                  name="companyDesc"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderTextArea}
+                  placeholder={constants.COMPANY_DESC_SAMPLE}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Expiry date for this RFP"
+                  name="expiryDt"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDatePicker}
+                />
+                <Field
+                  label="Is this sponsered ?"
+                  name="isSponsored"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdown}
+                  options={sponsoredOptions}
+                />
+              </div>
+              <br/>
+              <hr/>
+              <h3>Company Management Contact</h3>
+              <div className={`row`}>
+                <Field
+                  label="Name"
+                  name="fullName"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  label="Role"
+                  name="contactRole"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
+              <div className={`row`}>
+                <Field
+                  label="Phone"
+                  name="phoneNumber"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  label="Email"
+                  name="email"
+                  type="email"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
 
-          <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
-          <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
-        </form>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+              <button type="submit" className="btn btn-primary">{gType === constants.RFP_EDIT ? 'Edit RFP' : 'Create RFP'}</button>
+              <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
+            </form>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
       );
     }

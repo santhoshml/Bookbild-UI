@@ -8,6 +8,7 @@ import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
+import NavBar from './sidebar';
 import Header from './header';
 
 class IOIList extends Component{
@@ -98,18 +99,23 @@ class IOIList extends Component{
 
   render(){
     return(
-      <div className="container" >
-        <Header />
-        <br/>
-        {this.displayProductCategory()}
-        <br/>
-        <br/>
-        {this.displayIOIList()}
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            <br/>
+            {this.displayProductCategory()}
+            <br/>
+            <br/>
+            {this.displayIOIList()}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+          </div>
+        </div>
       </div>
     );
   }

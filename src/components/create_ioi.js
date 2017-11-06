@@ -7,9 +7,10 @@ import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
-import Header from './header';
+import NavBar from './sidebar';
 import NumberFormat from 'react-number-format';
 import Select from 'react-select';
+import Header from './header';
 
 
 var gType=null;
@@ -495,203 +496,208 @@ class CreateIOIForm extends Component{
       // <br/>
 
     return(
-      <div className="container" >
-        <Header />
-        <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>
+          <div className="container" >
+            <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 
-          {this.displayRFPSummary()}
-          <br/>
+              {this.displayRFPSummary()}
+              <br/>
 
-          {this.displayCollateralAnalysis()}
-          <br/>
+              {this.displayCollateralAnalysis()}
+              <br/>
 
-          {this.displaySubtitle()}
-          <br/>
+              {this.displaySubtitle()}
+              <br/>
 
-          <div className={`row`}>
-            <Field
-              name="maxDebtAllowed"
-              label="Maximum Debt Allowed"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              name="loanSize"
-              label="Loan Size"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
+              <div className={`row`}>
+                <Field
+                  name="maxDebtAllowed"
+                  label="Maximum Debt Allowed"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  name="loanSize"
+                  label="Loan Size"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
+
+              <div className={`row`}>
+                <Field
+                  label="Tranche? (e.g. Delayed Draw)"
+                  name="tranche"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdownField}
+                  dpField={trancheOptions}
+                />
+                <Field
+                  label="Loan Structure"
+                  name="loanStructure"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdownField}
+                  dpField={loanStructOptions}
+                />
+              </div>
+
+              <div className={`row`}>
+                <Field
+                  name="maturity"
+                  label="Maturity (years)"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+                <Field
+                  name="upfrontFee"
+                  label="OID / Upfront Fee (%)"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderField}
+                />
+              </div>
+
+              <div className={`row`}>
+                <Field
+                  label="Governance"
+                  name="governance"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdownField}
+                  dpField={governanceOptions}
+                />
+
+                <Field
+                  label="Warrants"
+                  name="warrants"
+                  size="col-xs-6 col-md-6"
+                  component={this.renderDropdownField}
+                  dpField={governanceOptions}
+                />
+              </div>
+              <br/>
+
+              <div className={`row`}>
+                <Field
+                  name="covenants"
+                  label="Covenants"
+                  size="col-xs-12 col-md-12"
+                  component={this.renderField}
+                  placeholder={constants.COVENANTS_SAMPLE}
+                />
+              </div>
+
+              <div className={`row`}>
+                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+                  <legend className="scheduler-border">Loan Pricing(%)</legend>
+                  <Field
+                    name="cashInterest"
+                    label="Cash Interest"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="pikIntreset"
+                    label="PIK Interest"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="liborFloor"
+                    label="LIBOR Floor"
+                    component={this.renderField}
+                  />
+                </fieldset>
+
+                <div className={`form-group col-xs-1 col-md-1`}>
+                </div>
+
+                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+                  <legend className="scheduler-border">Amortization (%)</legend>
+                  <Field
+                    name="year1"
+                    label="Year 1"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="year2"
+                    label="Year 2"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="year3"
+                    label="Year 3"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="year4"
+                    label="Year 4"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="year5"
+                    label="Year 5"
+                    component={this.renderField}
+                  />
+                </fieldset>
+
+                <div className={`form-group col-xs-1 col-md-1`}>
+                </div>
+
+                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+                  <legend className="scheduler-border">Call Protection(%)</legend>
+                  <Field
+                    name="cpYear1"
+                    label="Year 1"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="cpYear2"
+                    label="Year 2"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="cpYear3"
+                    label="Year 3"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="cpYear4"
+                    label="Year 4"
+                    component={this.renderField}
+                  />
+                  <br/>
+                  <Field
+                    name="cpYear5"
+                    label="Year 5"
+                    component={this.renderField}
+                  />
+                </fieldset>
+              </div>
+              <br/>
+              <br/>
+
+              <div className={`row`}>
+                <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
+                <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
+              </div>
+
+            </form>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
           </div>
-
-          <div className={`row`}>
-            <Field
-              label="Tranche? (e.g. Delayed Draw)"
-              name="tranche"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdownField}
-              dpField={trancheOptions}
-            />
-            <Field
-              label="Loan Structure"
-              name="loanStructure"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdownField}
-              dpField={loanStructOptions}
-            />
-          </div>
-
-          <div className={`row`}>
-            <Field
-              name="maturity"
-              label="Maturity (years)"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-            <Field
-              name="upfrontFee"
-              label="OID / Upfront Fee (%)"
-              size="col-xs-6 col-md-6"
-              component={this.renderField}
-            />
-          </div>
-
-          <div className={`row`}>
-            <Field
-              label="Governance"
-              name="governance"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdownField}
-              dpField={governanceOptions}
-            />
-
-            <Field
-              label="Warrants"
-              name="warrants"
-              size="col-xs-6 col-md-6"
-              component={this.renderDropdownField}
-              dpField={governanceOptions}
-            />
-          </div>
-          <br/>
-
-          <div className={`row`}>
-            <Field
-              name="covenants"
-              label="Covenants"
-              size="col-xs-12 col-md-12"
-              component={this.renderField}
-              placeholder={constants.COVENANTS_SAMPLE}
-            />
-          </div>
-
-          <div className={`row`}>
-            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-              <legend className="scheduler-border">Loan Pricing(%)</legend>
-              <Field
-                name="cashInterest"
-                label="Cash Interest"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="pikIntreset"
-                label="PIK Interest"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="liborFloor"
-                label="LIBOR Floor"
-                component={this.renderField}
-              />
-            </fieldset>
-
-            <div className={`form-group col-xs-1 col-md-1`}>
-            </div>
-
-            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-              <legend className="scheduler-border">Amortization (%)</legend>
-              <Field
-                name="year1"
-                label="Year 1"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="year2"
-                label="Year 2"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="year3"
-                label="Year 3"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="year4"
-                label="Year 4"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="year5"
-                label="Year 5"
-                component={this.renderField}
-              />
-            </fieldset>
-
-            <div className={`form-group col-xs-1 col-md-1`}>
-            </div>
-
-            <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-              <legend className="scheduler-border">Call Protection(%)</legend>
-              <Field
-                name="cpYear1"
-                label="Year 1"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="cpYear2"
-                label="Year 2"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="cpYear3"
-                label="Year 3"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="cpYear4"
-                label="Year 4"
-                component={this.renderField}
-              />
-              <br/>
-              <Field
-                name="cpYear5"
-                label="Year 5"
-                component={this.renderField}
-              />
-            </fieldset>
-          </div>
-          <br/>
-          <br/>
-
-          <div className={`row`}>
-            <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
-            <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
-          </div>
-
-        </form>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
-        <br/>
+        </div>
       </div>
     );
   }

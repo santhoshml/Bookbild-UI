@@ -5,6 +5,7 @@ const { Toolbar, Data: { Selectors } } = require('react-data-grid-addons');
 import { Link } from 'react-router-dom';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
+import Header from './header';
 
 class DataGrid extends Component{
 

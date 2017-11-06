@@ -8,7 +8,6 @@ import constants from '../utils/constants';
 import Header from './header';
 import { connect } from "react-redux";
 import RelativeValueTool from './relative_value_tool';
-
 import * as actionCreators from '../actions/index';
 
 class LoginForm extends Component{
@@ -82,37 +81,40 @@ class LoginForm extends Component{
 	render(){
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
-				<div className="container" >
-					<br/>
-					<br/>
-		      <form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">
-		        <h3>Login to access your account</h3>
-
+				<div>
+					<Header/>
+					<div className="container" >
 						<br/>
 						<br/>
-						<Field
-		          name="email"
-							component={this.renderField}
-		          label="Email used for login"
-							placeholder = "Email used to register with Bookbild"
-							type="text"
-		        />
-						<Field
-		          name="password"
-							component={this.renderField}
-		          label="Password to login"
-							placeholder = "password used with Bookbild"
-							type="password"
-		        />
-						<Field
-		          name="tcAgreement"
-							component={this.renderCheckboxField}
-							type="checkbox"
-		        />
+						<form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">
+							<h3>Login to access your account</h3>
 
-						<button type="submit" className="btn btn-primary" disabled={submitting}>Submit</button>
-						<Link to="/" disabled={pristine || submitting} className="btn btn-danger" onClick={reset}>Cancel</Link>
-		      </form>
+							<br/>
+							<br/>
+							<Field
+								name="email"
+								component={this.renderField}
+								label="Email used for login"
+								placeholder = "Email used to register with Bookbild"
+								type="text"
+							/>
+							<Field
+								name="password"
+								component={this.renderField}
+								label="Password to login"
+								placeholder = "password used with Bookbild"
+								type="password"
+							/>
+							<Field
+								name="tcAgreement"
+								component={this.renderCheckboxField}
+								type="checkbox"
+							/>
+
+							<button type="submit" className="btn btn-primary" disabled={submitting}>Submit</button>
+							<Link to="/" disabled={pristine || submitting} className="btn btn-danger" onClick={reset}>Cancel</Link>
+						</form>
+					</div>
 				</div>
 		    );
 	}

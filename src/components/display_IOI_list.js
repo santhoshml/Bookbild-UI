@@ -8,9 +8,10 @@ import constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
-// import { FormattedDate } from 'react-intl';
+import Header from './header';
 import dateFormat from 'dateformat';
 import lsUtils from '../utils/ls_utils';
+
 
 export default class DisplayIOIList extends Component {
 
@@ -231,18 +232,18 @@ export default class DisplayIOIList extends Component {
         bgColor: "rgb(238, 193, 213)"
         };
       return (
-        <div>
-          <BootstrapTable
-            columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
-            data={this.state.ioiList}
-            headers={true}
-            striped
-            hover
-            condensed
-            pagination
-            selectRow={ selectRowProp }
-            onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
-        </div>
+          <div>
+            <BootstrapTable
+              columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
+              data={this.state.ioiList}
+              headers={true}
+              striped
+              hover
+              condensed
+              pagination
+              selectRow={ selectRowProp }
+              onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
+          </div>
       );
     }
   }
