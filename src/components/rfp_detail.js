@@ -107,11 +107,11 @@ class RFPDetail extends Component{
             </tr>
             <tr>
               <td>LTM Revenue</td>
-              <td><NumberFormat value={rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
             </tr>
             <tr>
               <td>LTM EBITDA</td>
-              <td><NumberFormat value={rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+              <td><NumberFormat value={rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
             </tr>
             <tr>
               <td>Region</td>
@@ -178,7 +178,7 @@ class RFPDetail extends Component{
       return( <span>
         &nbsp;&nbsp;&nbsp;
         <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
-          View Intrest List
+          View Interest List
         </Link>
       </span>);
     } else {
@@ -257,7 +257,7 @@ class RFPDetail extends Component{
               <label>Accounts Receivable :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.acctRecvGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.acctRecvGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.acctRecvComment}
@@ -268,7 +268,7 @@ class RFPDetail extends Component{
               <label>Inventory :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.invtryGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.invtryGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.invtryComment}
@@ -279,7 +279,7 @@ class RFPDetail extends Component{
               <label>PP&E :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.ppeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.ppeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.ppeComment}
@@ -290,7 +290,7 @@ class RFPDetail extends Component{
               <label>Machinery & Equipment :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.maeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.maeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.maeComment}
@@ -301,7 +301,7 @@ class RFPDetail extends Component{
               <label>Real Estate :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.realEstGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.realEstGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.realEstComment}
@@ -312,7 +312,7 @@ class RFPDetail extends Component{
               <label>Other :</label><br/>
             </div>
             <div className={`form-group col-xs-3 col-md-3`}>
-              <NumberFormat value={cUtils.parseNumber(rfp.otherGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+              <NumberFormat value={cUtils.parseNumber(rfp.otherGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} />
             </div>
             <div className={`form-group col-xs-6 col-md-6`}>
               {rfp.otherComment}
@@ -330,7 +330,7 @@ class RFPDetail extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             {this.state.rfp ? this.displayCompanyDesc() : ''}
             {this.state.rfp ? this.displayOutstandingRFP() : ''}
             {this.state.rfp ? this.displayCollateralInfo() : ''}

@@ -1,4 +1,4 @@
-import { FETCH_IOI_LIST_FOR_RFP, FETCH_IOI_LIST_FOR_COMPANY, GET_IOI_FOR_RFP_COMPANY } from '../actions/index';
+import { FETCH_IOI_LIST_FOR_RFP, FETCH_IOI_LIST_FOR_COMPANY, GET_IOI_FOR_RFP_COMPANY, FETCH_IOI } from '../actions/index';
 
 const INITIAL_STATE = { ioiList: null, ioiCompanyList : null, ioiUserList : null};
 
@@ -40,6 +40,19 @@ case GET_IOI_FOR_RFP_COMPANY:
     return {
       ...state
       , ioiList: action.payload.data.data.Items
+    };
+  } else {
+    return {
+        ...state
+        , errObject : action.payload.data
+    };
+  }
+  break;
+  case FETCH_IOI:
+  if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
+    return {
+      ...state
+      , ioi: action.payload.data.data.Items
     };
   } else {
     return {

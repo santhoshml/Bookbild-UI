@@ -7,6 +7,7 @@ export const UPDATE_RFP = 'UPDATE_RFP';
 export const UPDATE_IOI = 'UPDATE_IOI';
 export const FETCH_ALL_RFP = 'FETCH_ALL_RFP';
 export const FETCH_RFP = 'FETCH_RFP';
+export const FETCH_IOI = 'FETCH_IOI';
 export const FETCH_ADDRESS = 'FETCH_ADDRESS';
 export const FETCH_CONTACT = 'FETCH_CONTACT';
 export const UPDATE_USER_PROFILE = 'UPDATE_USER_PROFILE';
@@ -373,6 +374,20 @@ export function fetchFavoriteRFPListAction(userId){
 
   return{
     type: FETCH_FAV_RFP_LIST,
+    payload: request
+  }
+}
+
+export function fetchIOIAction(ioiId){
+  console.log('In actions.fetchIOI');
+  const request=axios({
+    url : '/fetchIOI?ioiId='+ioiId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_IOI,
     payload: request
   }
 }

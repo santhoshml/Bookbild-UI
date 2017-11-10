@@ -29,7 +29,19 @@ module.exports = {
         query: {
           presets: ['react', 'es2015', 'stage-1']
         }
-    }
+    },
+    {
+      test: /\.(css|less)$/,
+      use: [{
+          loader: "style-loader" // creates style nodes from JS strings
+      }, {
+          loader: "css-loader" // translates CSS into CommonJS
+      }, {
+          loader: "less-loader" // compiles Less to CSS
+      }]
+    },
+    { test: /\.(png|jpg)$/, loader: 'file-loader?name=images/[name].[ext]' },
+    { test: /\.svg$/, loader: 'svg-inline-loader' }
     ]
   },
   plugins: [

@@ -11,6 +11,15 @@ import numbro from 'numbro';
 //   return url;
 // }
 
+exports.maskCompanyName = function(clist){
+  if(clist && clist.length > 0){
+    for(var i=0; i< clist.length; i++){
+      clist[i].companyName = 'Lender '+(i+1);
+    }
+  }
+  return clist;
+}
+
 exports.getQuaterObject = function(period, startYear, startQtr){
   let qtrObject = {}, _startQtr = startQtr;
   for(let i=0; i<(period * 4); i++){

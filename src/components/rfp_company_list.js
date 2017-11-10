@@ -43,7 +43,7 @@ class RFPCompanyList extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>      
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             <br/>
             {this.checkForRFPList()}
             <br/>

@@ -28,7 +28,7 @@ class Admin extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             <Link to={constants.ROUTES_MAP.REGISTER_COMPANY} className="btn btn-primary">
               Add a company
             </Link>

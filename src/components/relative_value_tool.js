@@ -386,7 +386,7 @@ class RelativeValueTool extends Component {
     return(
       <div>
         <Header/>
-        <div className="container" >
+        <div className="container main-container-left-padding" >
           {this.state.countPercent !== null ? this.renderDealCompStats() : ''}
           <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <h1 className="align-center">Deal Comparison Tool</h1>

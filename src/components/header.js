@@ -49,7 +49,7 @@ export default class Header extends Component{
 	}
 
 	render(){
-		// console.log('I am in header render');
+		console.log('I am in header render');
 		return (
 			<header>
 			<nav className="header-nav-cust-attr">
@@ -60,7 +60,7 @@ export default class Header extends Component{
 					</a>
 				</span>
 				<span className="align-right">
-				  <a className="fa fa-home header-cust-attr anchor-spacing header-menu-items " href="/">&nbsp;HOME</a>
+				  <a className="fa fa-home header-cust-attr anchor-spacing header-menu-items" href={this.state.user ? '/rfpMarketPlace' : '/'}>&nbsp;HOME</a>
 				  <a className="fa fa-laptop header-cust-attr anchor-spacing header-menu-items " href="/contactUs">&nbsp;REQUEST DEMO</a>
 					<a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a>
 					{this.addLoginElement()}

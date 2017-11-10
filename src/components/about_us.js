@@ -8,10 +8,10 @@ export default class AboutUs extends Component {
         return(
           <div>
             <Header/>
-            <div className="container">
+            <div className="container main-container-left-padding">
             <div className="row">
               <div className="col-md-6 portfolio-item">
-                <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/bobby_aboutus_pic.jpg"/>
+                <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="../images/bobby_aboutus_pic.jpg"/>
               </div>
               <div className="col-md-6">
                 <a href="https://www.linkedin.com/in/bobbygrant"><h3>Bobby Grant, Founder and CEO</h3></a>
@@ -43,7 +43,7 @@ export default class AboutUs extends Component {
               </p>
               </div>
               <div className="col-md-6 portfolio-item">
-                <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/santhosh_aboutus_pic.jpg"/>
+                <img className="img-portfolio img-fluid img-circle aboutus-img-height" src="../images/santhosh_aboutus_pic.jpg"/>
               </div>
           </div>
           <div className="row">

@@ -363,7 +363,7 @@ class CreateRFP extends Component {
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             {this.displayCompanyDropdown()}
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
               <h3>Create RFP / Request Pitch</h3>
@@ -473,7 +473,7 @@ class CreateRFP extends Component {
                   component={this.renderDatePicker}
                 />
                 <Field
-                  label="Is this sponsered ?"
+                  label="Is this sponsored ?"
                   name="isSponsored"
                   size="col-xs-6 col-md-6"
                   component={this.renderDropdown}

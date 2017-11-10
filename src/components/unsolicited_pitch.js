@@ -114,7 +114,7 @@ class CreateIOIForm extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>      
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
               <input type="hidden" className="form-control" {...createdById} />
               <input type="hidden" className="form-control" {...createdByCompanyId} />

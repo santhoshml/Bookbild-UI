@@ -161,7 +161,7 @@ hr.small {
   display: table;
   width: 100%;
   height: 100vh;
-  background: url(//s3-us-west-2.amazonaws.com/bookbild-shared-images/bg.jpg) no-repeat center center scroll;
+  background: url(../images/bg.jpg) no-repeat center center scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

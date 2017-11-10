@@ -151,10 +151,11 @@ class DisplayDocumentTabs extends Component{
 		let inputTagStyle= {
 			'display':'inline'
 		};
+
+		// <h5>
+		// 	<span className="glyphicon glyphicon-file"/>&nbsp;&nbsp;<b>{constants.DOCS_CATEGORY_DISPLAY_NAME_MAP[type]}</b>
+		// </h5>
 		return(<div>
-			<h5>
-				<span className="glyphicon glyphicon-file"/>&nbsp;&nbsp;<b>{constants.DOCS_CATEGORY_DISPLAY_NAME_MAP[type]}</b>
-			</h5>
 			<table className="table table-bordered table-striped">
 				<thead>
 					<tr>

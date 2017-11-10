@@ -57,11 +57,11 @@ export default class DisplayIOIList extends Component {
   }
 
   pikRenderer(row){
-    return <NumberFormat value={row.pikIntreset} displayType={'text'} decimalSeparator={row.pikIntreset > 0 ? true : false} decimalPrecision={true} suffix={'%'} />
+    return <NumberFormat value={String(row.pikIntreset)} displayType={'text'} decimalSeparator={row.pikIntreset > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
   }
 
   liborFloorRenderer(row){
-    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={row.liborFloor > 0 ? true : false} decimalPrecision={true} suffix={'%'} />
+    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={row.liborFloor > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
   }
 
   upfrontFeeRenderer(row){
@@ -119,7 +119,7 @@ export default class DisplayIOIList extends Component {
       display: 'Structure'
     }, {
       name: 'liborSpread',
-      display: 'Intrest',
+      display: 'Interest',
       renderer : this.cashIntrestRenderer
     }, {
       name: 'pikIntreset',

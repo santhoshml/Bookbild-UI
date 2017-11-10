@@ -90,7 +90,7 @@ class ContactUsForm extends Component{
 		return (
       <div>
         <Header/>
-        <div className="container" >
+        <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
               <h3 className="align-center">Contact Us</h3>
               <br/>

@@ -34,6 +34,17 @@ import PrivacyPolicy from "./components/privacy_policy";
 import TermsAndConditions from "./components/terms_conditions";
 import ContactUs from "./components/contact_us";
 
+require("../style/style.css");
+require("../css/stylish-portfolio.css");
+require("../node_modules/react-dropdown/style.css");
+require("../node_modules/react-tabs/style/react-tabs.css");
+
+require("../js/stylish-portfolio.js");
+
+require("../images/santhosh_aboutus_pic.jpg");
+require("../images/bobby_aboutus_pic.jpg");
+require("../images/light-bk-grnd-01.svg");
+
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";
 import PostsShow from "./components/posts_show";

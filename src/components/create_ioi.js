@@ -206,8 +206,8 @@ class CreateIOIForm extends Component{
                 <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
               </tr>
               <tr>
-                <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
-                <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></td>
+                <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
               </tr>
             </tbody>
           </table>
@@ -283,7 +283,7 @@ class CreateIOIForm extends Component{
             <tr>
               <td>Accounts Receivable</td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -293,7 +293,7 @@ class CreateIOIForm extends Component{
   		          />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -303,16 +303,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} d/>
               </td>
             </tr>
             <tr>
               <td>Inventory</td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -322,7 +322,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -332,16 +332,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
               </td>
             </tr>
             <tr>
               <td>PP&E</td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -351,7 +351,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -361,16 +361,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
               </td>
             </tr>
             <tr>
               <td>Machinery & Equipment :</td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -380,7 +380,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -390,16 +390,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
               </td>
             </tr>
             <tr>
               <td>Real Estate</td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -409,7 +409,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -419,16 +419,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
               </td>
             </tr>
             <tr>
               <td>Other</td>
               <td>
-                <NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -438,7 +438,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
                 <Field
@@ -448,19 +448,19 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} decimalPrecision={false}/>
+                <NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
               </td>
             </tr>
             <tr>
               <td><b>Total</b></td>
-              <td><b><NumberFormat value={this.state.totalGross} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></b></td>
+              <td><b><NumberFormat value={this.state.totalGross} displayType={'text'} thousandSeparator={true} prefix={'$'} /></b></td>
               <td></td>
               <td></td>
               <td></td>
-              <td><b><NumberFormat value={this.state.totalAvailable} displayType={'text'} thousandSeparator={true} prefix={'$'} decimalPrecision={false}/></b></td>
+              <td><b><NumberFormat value={this.state.totalAvailable} displayType={'text'} thousandSeparator={true} prefix={'$'} /></b></td>
               <td></td>
             </tr>
           </tbody>
@@ -500,7 +500,7 @@ class CreateIOIForm extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 
               {this.displayRFPSummary()}

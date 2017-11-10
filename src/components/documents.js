@@ -36,12 +36,12 @@ export default class DocumentForm extends Component{
 		if(this.state.user.role === 'Company'){
 			console.log('forwading to borrower Document form');
 			return (
-				<BorrowerDocumentForm />
+				<BorrowerDocumentForm history={this.props.history}/>
 			);
 		} else {
 			console.log('forwading to Non-borrower Document form');
 			return (
-				<NonBorrowerDocumentForm />
+				<NonBorrowerDocumentForm history={this.props.history}/>
 			);
 		}
 	}

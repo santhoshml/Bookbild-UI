@@ -52,6 +52,7 @@ export default function(state = INITIAL_STATE, action) {
     }
     break;
     case FETCH_ALL_RFP:
+      // console.log('action:'+JSON.stringify(action));
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
 
         return {

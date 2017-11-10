@@ -1,3 +1,14 @@
+.sidebar-style {
+  background: #2c3e50;
+  color: #FFF;
+  height : 100% !important;
+  position: absolute;
+}
+
+.main-container-left-padding{
+  padding-left: 100px;
+}
+
 .bkbd-color{
   color: #3a4862 !important;
 }
@@ -157,7 +168,6 @@
   font-size: 17px !important;
   font-weight: 500 !important;
   color: black  !important;
-  font-family: sans-serif;
 }
 
 .header-logo-cust-height{

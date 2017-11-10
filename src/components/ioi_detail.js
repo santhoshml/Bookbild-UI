@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction } from '../actions/index';
+import { getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction, fetchIOIAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -28,6 +28,7 @@ class IOIDetail extends Component{
     console.log('In componentWillMount of IOI_DETAIL');
     // this.props.fetchAllRFPAction();
     let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+    console.log('ioi:'+JSON.stringify(ioi));
     // let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
@@ -44,6 +45,15 @@ class IOIDetail extends Component{
           rfp : this.props.rfp
         });
     });
+
+    this.props.fetchIOIAction(ioi.ioiId)
+    .then(() => {
+      console.log('I am in the get result for ioi');
+      lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
+      this.setState({
+        ioi : this.props.ioi
+      });
+  });
   }
 
   displayCompanyDesc(){
@@ -221,13 +231,13 @@ class IOIDetail extends Component{
       var yieldMatrixRender = this.state.ioi.yieldMatrix.map(function(row){
         return(<tr>
             <td>{row.period}</td>
-            <td><NumberFormat value={roundTo(Number(row.cashFlow)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
             <td>{row.startDate}</td>
-            <td><NumberFormat value={roundTo(Number(row.amtAtBegin)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={roundTo(Number(row.amort)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={roundTo(Number(row.amtAtEnd)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={roundTo(Number(row.intrestPaymet)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={roundTo(Number(row.cashFlow)/1000000, 2)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.amtAtBegin ? roundTo(Number(row.amtAtBegin)/1000000, 2): 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.amort ? roundTo(Number(row.amort)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.amtAtEnd ? roundTo(Number(row.amtAtEnd)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.intrestPaymet ? roundTo(Number(row.intrestPaymet)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
           </tr>
         );
       });
@@ -242,7 +252,7 @@ class IOIDetail extends Component{
               <th>Outstanding Amount Begining of Quater($mm)</th>
               <th>Amortization ($mm)</th>
               <th>Outstanding Amount Begining of Period($mm)</th>
-              <th>Intrest Payment($mm)</th>
+              <th>Interest Payment($mm)</th>
               <th>Cash Flow($mm)</th>
             </tr>
           </thead>
@@ -261,7 +271,7 @@ class IOIDetail extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             {this.displaySelectedIOI()}
             <br/>
             {this.displayYieldMatrix()}
@@ -284,10 +294,13 @@ class IOIDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
+  console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
   let rObject = {};
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];
+  }
+  if(state.ioiList.ioi){
+    rObject.ioi = state.ioiList.ioi[0];
   }
   return rObject;
 }
@@ -298,7 +311,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     getRFPFromFavoritesAction : getRFPFromFavoritesAction,
     fetchRFPAction            : fetchRFPAction,
-    inviteLenderAction        : inviteLenderAction
+    inviteLenderAction        : inviteLenderAction,
+    fetchIOIAction            : fetchIOIAction
   }, dispatch);
 }
 

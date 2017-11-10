@@ -36,7 +36,7 @@ class NonBorrowerDocumentForm extends Component{
 				<Header/>
 				<div style={{ display: 'flex' }}>
 					<NavBar history={this.props.history}/>			
-					<div className="container" >
+					<div className="container main-container-left-padding" >
 						<br/>
 						<br/>
 						<h3>List of documents for each of your IOI</h3>

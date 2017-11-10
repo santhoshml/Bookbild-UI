@@ -6,7 +6,7 @@ export default class Insights extends Component {
     return (
       <div>
         <Header/>
-        <div className="container">
+        <div className="container main-container-left-padding">
         <h2 className="align-center">Bookbild Terms and Conditions</h2>
         <br/>
         <br/>

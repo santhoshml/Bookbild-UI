@@ -114,7 +114,7 @@ export default class DocumentForm extends Component{
           <Header/>
           <div style={{ display: 'flex' }}>
             <NavBar history={this.props.history}/>        
-            <div className="container" >
+            <div className="container main-container-left-padding" >
               <br/>
               <br/>
               <h3>Quaterly Compliance</h3>
@@ -133,7 +133,7 @@ export default class DocumentForm extends Component{
           <Header/>
           <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-            <div className="container" >
+            <div className="container main-container-left-padding" >
               <h3>Quaterly Compliance</h3>
 
             </div>

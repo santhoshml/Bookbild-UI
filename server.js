@@ -4,7 +4,7 @@ var axios = require('axios');
 var webpack = require('webpack');
 var webpackMiddleware = require('webpack-dev-middleware');
 var webpackHotMiddleware = require('webpack-hot-middleware');
-var config = require('./webpack.prod');
+var config = require('./webpack.dev');
 var serverConstants = require('./server/constants');
 var SERVER_CONFIG = serverConstants.SERVER_CONFIG;
 // server.js
@@ -51,19 +51,19 @@ function renderDefaultTemplate(res, baseUrl) {
   });
 }
 
-app.all('*', (req, res, next) => {
-    console.log('development:'+development);
-    console.log('hostname:'+`${req.hostname}:${port}${req.url}`);
-    console.log('X-Forwarded-Proto:'+req.get('X-Forwarded-Proto'));
-  if (!development) {
-    if (req.get('X-Forwarded-Proto') === 'https' ) return next();
-    return res.redirect(`https://${req.hostname}:${port}${req.url}`);
-    // return res.redirect(`https://bookbild.com/\${req.url}`);
-  } else {
-    return next();
-  }
+// app.all('*', (req, res, next) => {
+//     console.log('development:'+development);
+//     console.log('hostname:'+`${req.hostname}:${port}${req.url}`);
+//     console.log('X-Forwarded-Proto:'+req.get('X-Forwarded-Proto'));
+//   if (!development) {
+//     if (req.get('X-Forwarded-Proto') === 'https' ) return next();
+//     return res.redirect(`https://${req.hostname}:${port}${req.url}`);
+//     // return res.redirect(`https://bookbild.com/\${req.url}`);
+//   } else {
+//     return next();
+//   }
 
-});
+// });
 
 app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');

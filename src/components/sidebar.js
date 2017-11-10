@@ -86,9 +86,10 @@ export default class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.MY_PROFILE);
         } else if(id === 'myAccount/addUser'){
             this.props.history.push(constants.ROUTES_MAP.ADD_USER);
-        } else{
-            this.props.history.push('#');
-        } 
+        }
+        //  else{
+        //     this.props.history.push('#');
+        // } 
     }
 
     displayMyRFPLink(){
@@ -297,7 +298,7 @@ export default class Sidenav extends Component {
     console.log('I am in sidenav render');
 
     return (
-    <BaseContainer style={{ background: '#2c3e50', color: '#FFF'}}>
+    <BaseContainer style={{ background: '#2c3e50', width: '200px', color: '#FFF', height:'100%', position: 'absolute'}}>
     <SideNav highlightBgColor="#00bcd4" defaultSelected="rfp" onItemSelection={this.onSelect.bind(this)}>
         {this.displayRFP()}
         {this.displayIOI()}

@@ -93,7 +93,7 @@ class RegisterCompanyForm extends Component{
 					<Header/>
 					<div style={{ display: 'flex' }}>
 						<NavBar history={this.props.history}/>			
-						<div className="container" >
+						<div className="container main-container-left-padding" >
 							<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 								<h3>Add a NEW Company </h3>
 								<br/>

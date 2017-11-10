@@ -83,7 +83,7 @@ class LoginForm extends Component{
 		return (
 				<div>
 					<Header/>
-					<div className="container" >
+					<div className="container main-container-left-padding" >
 						<br/>
 						<br/>
 						<form onSubmit={handleSubmit(this.onSubmit.bind(this))} className="login-form">

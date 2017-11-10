@@ -30,10 +30,11 @@ class IOIList extends Component{
   }
 
   displayProductCategory(){
-    if(this.props.match.params.type === constants.IOI_FOR_RFP){
+    if(this.props.match.params.type === constants.IOI_FOR_RFP
+      && this.props.ioiList && this.props.ioiList.length > 0){
       let productCategoryMap = cUtils.getProductCategories(this.props.ioiList, this.props.ioiCompanyList);
       let catKeys = Object.keys(productCategoryMap);
-      console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
+      // console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
       return(<div>
           <h3>Ranking by Product Category:</h3>
           <table className="table table-striped align-center table-bordered">
@@ -54,7 +55,8 @@ class IOIList extends Component{
 
   printHeaderForCat(list){
     return list.map(function(ele){
-      return (<td><b>{ele}</b></td>);
+      // console.log('ele:'+ele);
+      return (<td key={ele}><b>{ele}</b></td>);
     });
   }
 
@@ -73,10 +75,11 @@ class IOIList extends Component{
     if((!this.props.ioiList) || (this.props.ioiList && this.props.ioiList.length == 0)){
       return (
         <div>
-          <h3>NO Indication of intrest.</h3>
+          <h3>NO Indication of interest.</h3>
         </div>
       );
     } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
+      console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
           <DisplayIOIList
@@ -85,6 +88,7 @@ class IOIList extends Component{
         </div>
       );
     } else {
+      console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
           <DisplayIOIList
@@ -103,7 +107,7 @@ class IOIList extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container" >
+          <div className="container main-container-left-padding" >
             <br/>
             {this.displayProductCategory()}
             <br/>
@@ -126,10 +130,10 @@ function mapStateToProps(state) {
   // console.log('state:'+JSON.stringify(state));
   let rObject =  {
     ioiList: state.ioiList.ioiList,
-    ioiCompanyList : state.ioiList.ioiCompanyList,
+    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList),
     ioiUserList : state.ioiList.ioiUserList
   };
-  console.log('rObject:'+JSON.stringify(rObject));
+  // console.log('rObject:'+JSON.stringify(rObject));
   return rObject;
 }
 

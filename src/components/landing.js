@@ -14,7 +14,7 @@ export default class Landing extends Component {
               <header className="header" id="top">
                 <div className="text-vertical-center">
                   <h1>BOOKBILD</h1>
-                  <h3>Middle Market Lending Platform</h3>
+                  <h3>Enterprise Software for Private Debt Transactions</h3>
                   <br/>
                   <a href="#about" className="btn btn-dark btn-lg js-scroll-trigger">Find Out More</a>
                 </div>
