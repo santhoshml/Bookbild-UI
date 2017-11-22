@@ -19,7 +19,8 @@ class DataGrid extends Component{
     console.log('I am in DataGrid constructor');
     this._columns = this.props.columns;
 
-    this.state = { rows: this.props.dataList
+    this.state = { 
+      rows: this.props.dataList
       , filters: {}
       , sortColumn: null
       , sortDirection: null
@@ -27,10 +28,31 @@ class DataGrid extends Component{
     };
   }
 
+  componentWillMount(){
+    console.log('I am in DataGrid, componentWillMount');
+    // this._columns = this.props.columns;
+    // this.setState({
+    //   rows: this.props.dataList
+    //   , filters: {}
+    //   , sortColumn: null
+    //   , sortDirection: null
+    //   , selectedIndexes: []
+    // });
+  }
+
   componentWillReceiveProps(nextProps){
+    console.log('I am in data_grid_example, componentWillReceiveProps');
+    this._columns = nextProps.columns;
+    // console.log('this._columns:'+JSON.stringify(this._columns));
+    // console.log('nextProps.dataList:'+JSON.stringify(nextProps.dataList));
     this.setState({
       rows : nextProps.dataList
+      , filters: {}
+      , sortColumn: null
+      , sortDirection: null
+      , selectedIndexes: []      
     });
+    // this.forceUpdate();
   }
 
 
@@ -77,21 +99,37 @@ class DataGrid extends Component{
 
   render() {
     console.log('I am in render of data_grid_example');
-    return  (
-      <ReactDataGrid
-        rowKey="rfpId"
-        onGridSort={this.handleGridSort.bind(this)}
-        enableCellSelect={true}
-        columns={this._columns}
-        rowGetter={this.rowGetter.bind(this)}
-        rowsCount={this.getSize()}
-        minHeight={500}
-        toolbar={<Toolbar enableFilter={true}/>}
-        onAddFilter={this.handleFilterChange.bind(this)}
-        onClearFilters={this.onClearFilters.bind(this)}
-        onRowClick={this.onRowClick.bind(this)}
-        onGridRowsUpdated = {this.props.onGridRowsUpdated}
-      />);
+    if(this.props.showFilter === 'true'){
+      return  (
+        <ReactDataGrid
+          rowKey="rfpId"
+          onGridSort={this.handleGridSort.bind(this)}
+          enableCellSelect={true}
+          columns={this._columns}
+          rowGetter={this.rowGetter.bind(this)}
+          rowsCount={this.getSize()}
+          minHeight={500}
+          toolbar={<Toolbar enableFilter={true}/>}
+          onAddFilter={this.handleFilterChange.bind(this)}
+          onClearFilters={this.onClearFilters.bind(this)}
+          onRowClick={this.onRowClick.bind(this)}
+          onGridRowsUpdated = {this.props.onGridRowsUpdated}
+        />);
+    } else {
+      // console.log('I am here');
+      // console.log('this._columns:'+JSON.stringify(this._columns));
+      return  (
+        <ReactDataGrid
+          rowKey="rfpId"
+          enableCellSelect={true}
+          columns={this._columns}
+          rowGetter={this.rowGetter.bind(this)}
+          rowsCount={this.getSize()}
+          minHeight={500}
+          onRowClick={this.onRowClick.bind(this)}
+          onGridRowsUpdated = {this.props.onGridRowsUpdated}
+        />);
+    }
   }
 }
 

@@ -229,3 +229,11 @@ legend.scheduler-border {
   max-width : 50%;
   margin-left : 25%;
 }
+
+.thick-hr{
+  border: none;
+  height: 1px;
+  /* Set the hr color */
+  color: #333; /* old IE */
+  background-color: #333; /* Modern Browsers */
+}

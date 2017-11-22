@@ -44,6 +44,8 @@ require("../js/stylish-portfolio.js");
 require("../images/santhosh_aboutus_pic.jpg");
 require("../images/bobby_aboutus_pic.jpg");
 require("../images/light-bk-grnd-01.svg");
+require("../images/folder-close.svg");
+require("../images/folder-open.svg");
 
 import PostsIndex from "./components/posts_index";
 import PostsNew from "./components/posts_new";

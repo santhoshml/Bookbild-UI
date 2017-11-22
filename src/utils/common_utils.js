@@ -11,6 +11,49 @@ import numbro from 'numbro';
 //   return url;
 // }
 
+exports.getDisplayData = function(complianceData, cols){
+  console.log('In addRows');
+  // console.log('cols:'+JSON.stringify(cols));
+  let dataArr=[];
+  for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
+    let qrow = {};
+    for(let j=0;j<cols.length; j++){
+      qrow[cols[j].key] = (complianceData[i])[cols[j].key];
+    }
+    dataArr.push(qrow);
+  }
+  return dataArr;
+}
+
+exports.initComplianceData=function(cols){
+  console.log('In addRows');
+  // console.log('cols:'+JSON.stringify(cols));
+  let dataArr=[];
+  for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
+    let qrow = {};
+    for(let j=0;j<cols.length; j++){
+      if(cols[j].key === 'type')
+        qrow[cols[j].key] = constants.QCOMPLIANCE_ROWS[i].name;
+      else
+        qrow[cols[j].key] = 0;
+    }
+    dataArr.push(qrow);
+  }
+  return dataArr;
+}
+
+exports.getQuaterlyColoumns=function(typeCustomFormatter){
+  let cols=constants.COMPLIANCE_QUATERLY_COLS;
+  cols[0].formatter = typeCustomFormatter;
+  return cols;
+}
+
+exports.getMonthlyColoumns=function(typeCustomFormatter){
+  let cols=constants.COMPLIANCE_MONTHLY_COLS;
+  cols[0].formatter = typeCustomFormatter;
+  return cols;
+}
+
 exports.maskCompanyName = function(clist){
   if(clist && clist.length > 0){
     for(var i=0; i< clist.length; i++){

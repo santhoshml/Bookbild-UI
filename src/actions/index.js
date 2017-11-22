@@ -37,8 +37,11 @@ export const DELETE_LINK_DOCUMENT  = 'DELETE_LINK_DOCUMENT';
 export const GET_LINK_DOCUMENT = 'GET_LINK_DOCUMENT';
 export const GET_LINKS_WITH_COMPANYID = 'GET_LINKS_WITH_COMPANYID';
 export const GET_LINKS_DOCS_WITH_RFP_IOI = 'GET_LINKS_DOCS_WITH_RFP_IOI';
+export const GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY = 'GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY';
 export const SAVE_DEAL_COMPARISION_DATA = 'SAVE_DEAL_COMPARISION_DATA';
 export const SEND_CONTACT_US_EMAIL = 'SEND_CONTACT_US_EMAIL';
+export const SAVE_COMPLIANCE_DATA = 'SAVE_COMPLIANCE_DATA';
+export const GET_COMPLIANCE_DATA = 'GET_COMPLIANCE_DATA';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -46,9 +49,38 @@ export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
 
-// const ROOT_URL = 'http://127.0.0.1:1127';
+const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
-const ROOT_URL = 'https://services.bookbild.com';
+// const ROOT_URL = 'https://services.bookbild.com';
+
+export function getComplianceData(companyId){
+  console.log('In getComplianceData, companyId:'+companyId);
+  const request=axios({
+    url : '/getComplianceData?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_COMPLIANCE_DATA,
+    payload: request
+  }
+}
+
+export function saveComplianceData(data){
+  console.log('In saveComplianceData action, data: ');
+  const request=axios({
+    url : '/saveComplianceData',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: SAVE_COMPLIANCE_DATA,
+    payload: request
+  }
+}
 
 export function sendContactUsEmailAction(data){
   console.log('In sendContactUsEmailAction, data: '+JSON.stringify(data));
@@ -90,6 +122,20 @@ export function getLinkDocsWithRFPAndIOIAction(rfpId, ioiId){
 
   return{
     type: GET_LINKS_DOCS_WITH_RFP_IOI,
+    payload: request
+  }
+}
+
+export function getLinkDocsWithRFPAndIOIAndCompanyAction(rfpId, ioiId, companyId){
+  console.log('In actions.getLinkDocsWithRFPAndIOIAndCompanyAction');
+  const request=axios({
+    url : '/getLinkDocsWithRFPAndIOIAndCompany?rfpId='+rfpId+'&ioiId='+ioiId+'&companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY,
     payload: request
   }
 }

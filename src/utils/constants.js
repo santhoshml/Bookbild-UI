@@ -49,13 +49,27 @@ exports.INDUSTRY_OPTIONS = ['Auto Components', 'Automobiles', 'Distributors', 'D
 
 
 exports.QCOMPLIANCE_ROWS = [
-  'Min Adj EBITDA',
-  'Max Leverage',
-  'GAAP Revenue',
-  'GAAP Gross Margin',
-  'GAAP Operating Income',
-  'Non-GAAP EBITDA'
-];
+    {key : 'revenue', name : 'Revenue'},
+    {key : 'minimumRevenue', name : 'Minimum ($)'},
+    {key : 'ebitda', name: 'EBITDA'},
+    {key : 'minimumEbitda', name : 'Minimum ($)'},
+    {key : 'adjustedEbitda', name : 'Adjusted EBITDA'},
+    {key : 'minimumAdjustedEbitda', name : 'Minimum ($)'},
+    {key : 'seniorLeverage', name : 'Senior Leverage'},
+    {key : 'seniorLeverage', name : 'Senior Leverage(x)'},
+    {key : 'totalLeverage', name : 'Total Leverage'},
+    {key : 'totalLeverage', name : 'Total Leverage(x)'},
+    {key : 'interestCoverage', name : 'Interest Coverage'},
+    {key : 'minimumSeniorLeverage', name : 'Minimum (0.0x)'},
+    {key : 'fixedCharge', name : 'Fixed Charge'},
+    {key : 'minimumFixedCharge', name : 'Minimum (0.0x)'},   
+    {key : 'availability', name : 'Availability'},
+    {key : 'minimumAvailability', name : 'Minimum ($)'},
+    {key : 'excessAvailability', name : 'Excess Availability'},
+    {key : 'minimumExcessAvailability', name : 'Minimum ($)'},
+    {key : 'liquidity', name : 'Liquidity'},
+    {key : 'minimumLiquidity', name : 'Minimum ($)'}    
+  ];
 
 exports.ROUTES_MAP = {
   MY_PROFILE      : '/myProfile',
@@ -136,3 +150,39 @@ exports.PRODUCT_MAP = {
   'uniTranche'    : 'Uni-Tranche',
   'misc'           : 'Misc'
 };
+
+exports.COMPLIANCE_QUATERLY_COLS = [
+  {key: 'type', name: '', formatter : '', resizable: true},
+  { key : '1q', name : '1Q', resizable: true},
+  { key : '1q-ltm', name : 'LTM', resizable: true},
+  { key : '2q', name : '2Q', resizable: true},
+  { key : '2q-ltm', name : 'LTM', resizable: true},
+  { key : '3q', name : '3Q', resizable: true},
+  { key : '3q-ltm', name : 'LTM', resizable: true},
+  { key : '4q', name : '4Q', resizable: true},
+  { key : 'fy', name : 'FY', resizable: true}
+];
+
+exports.COMPLIANCE_MONTHLY_COLS = [
+  {key: 'type', name: '', formatter : '', resizable: true},
+  { key : 'jan', name : 'Jan', resizable: true},
+  { key : 'feb', name : 'Feb', resizable: true},
+  { key : 'mar', name : 'Mar', resizable: true},
+  { key : '1q', name : '1Q', resizable: true},
+  { key : '1q-ltm', name : 'LTM', resizable: true},
+  { key : 'apr', name : 'Apr', resizable: true},
+  { key : 'may', name : 'May', resizable: true},
+  { key : 'jun', name : 'Jun', resizable: true},
+  { key : '2q', name : '2Q', resizable: true},
+  { key : '2q-ltm', name : 'LTM', resizable: true},
+  { key : 'jul', name : 'Jul', resizable: true},
+  { key : 'aug', name : 'Aug', resizable: true},
+  { key : 'sep', name : 'Sep', resizable: true},
+  { key : '3q', name : '3Q', resizable: true},
+  { key : '3q-ltm', name : 'LTM', resizable: true},
+  { key : 'oct', name : 'Oct', resizable: true},
+  { key : 'nov', name : 'Nov', resizable: true},
+  { key : 'dec', name : 'Dec', resizable: true},
+  { key : '4q', name : '4Q', resizable: true},
+  { key : 'fy', name : 'FY', resizable: true}
+];

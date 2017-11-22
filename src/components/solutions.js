@@ -82,7 +82,7 @@ export default class Solutions extends Component{
 						<div className="col-md-1 solutions-card"/>
 						<div className="col-md-4 solutions-card">
 							<div className="headword"><i className="fa fa-comments-o" aria-hidden="true"></i></div>
-							<h3 className="card-title">Messaging Platform</h3>
+							<h3 className="card-title">Messaging</h3>
 							<br/>
 							<p className="card-text">Securely communicate with market participants</p>
 						</div>

@@ -10,6 +10,7 @@ import PostsReducer from "./reducer_posts";
 import WGLReducer from "./reducer_wgl";
 import LinkReducer from "./reducer_link";
 import DealCompReducer from "./reducer_deal_comparision";
+import ComplianceDataReducer from "./reducer_compliance_data";
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   posts : PostsReducer,
   wgl : WGLReducer,
   link : LinkReducer,
-  dealComp : DealCompReducer
+  dealComp : DealCompReducer,
+  complianceData : ComplianceDataReducer
 });
 
 export default rootReducer;
