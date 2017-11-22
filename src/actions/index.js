@@ -49,9 +49,9 @@ export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
 
-const ROOT_URL = 'http://127.0.0.1:1127';
+// const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
-// const ROOT_URL = 'https://services.bookbild.com';
+const ROOT_URL = 'https://services.bookbild.com';
 
 export function getComplianceData(companyId){
   console.log('In getComplianceData, companyId:'+companyId);
