@@ -100,6 +100,7 @@ class DataGrid extends Component{
   render() {
     console.log('I am in render of data_grid_example');
     if(this.props.showFilter === 'true'){
+      console.log('I am in showFiter is true');
       return  (
         <ReactDataGrid
           rowKey="rfpId"
@@ -116,7 +117,7 @@ class DataGrid extends Component{
           onGridRowsUpdated = {this.props.onGridRowsUpdated}
         />);
     } else {
-      // console.log('I am here');
+      console.log('I am here, where showFilter = false');
       // console.log('this._columns:'+JSON.stringify(this._columns));
       return  (
         <ReactDataGrid

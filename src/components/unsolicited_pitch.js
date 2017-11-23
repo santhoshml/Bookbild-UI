@@ -10,6 +10,7 @@ import cUtils from '../utils/common_utils';
 import NavBar from './sidebar';
 import NumberFormat from 'react-number-format';
 import Header from './header';
+import { connect } from 'react-redux';
 
 var gType=null;
 class CreateIOIForm extends Component{
@@ -428,4 +429,4 @@ export default reduxForm({
     , 'pikIntreset', 'liborFloor', 'maturity', 'year1', 'year2', 'year3', 'year4', 'year5'
     , 'upfrontFee', 'governance', 'warrants', 'covenants', 'rfpId', 'createdById'
     , 'createdByCompanyId', 'companyId'],
-}, mapStateToProps, mapDispatchToProps)(CreateIOIForm);
+}) (connect(mapStateToProps, mapDispatchToProps)(CreateIOIForm));

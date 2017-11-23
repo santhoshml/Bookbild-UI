@@ -9,6 +9,7 @@ import Header from './header';
 import { connect } from "react-redux";
 import RelativeValueTool from './relative_value_tool';
 import * as actionCreators from '../actions/index';
+import { Redirect } from "react-router";
 
 class LoginForm extends Component{
 

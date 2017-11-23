@@ -9,6 +9,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import NavBar from './sidebar';
 import * as actionCreators from '../actions/index';
+import { connect } from "react-redux";
 
 const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
 	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
@@ -408,4 +409,4 @@ function mapDispatchToProps(dispatch) {
 
 export default reduxForm({
   'form': 'AddUserForm',
-}, mapStateToProps, mapDispatchToProps)(AddUserForm);
+}) (connect(mapStateToProps, mapDispatchToProps)(AddUserForm));

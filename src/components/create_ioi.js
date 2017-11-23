@@ -11,7 +11,7 @@ import NavBar from './sidebar';
 import NumberFormat from 'react-number-format';
 import Select from 'react-select';
 import Header from './header';
-
+import { connect } from "react-redux";
 
 var gType=null;
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
@@ -831,4 +831,4 @@ function mapDispatchToProps(dispatch) {
 export default reduxForm({
   'form': 'CreateIOIForm',
   validate
-}, mapStateToProps, mapDispatchToProps)(CreateIOIForm);
+}) (connect(mapStateToProps, mapDispatchToProps)(CreateIOIForm));

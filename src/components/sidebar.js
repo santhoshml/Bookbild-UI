@@ -18,7 +18,7 @@ import { legal } from 'react-icons-kit/fa/legal';
 import { ic_attach_money } from 'react-icons-kit/md/ic_attach_money';       
 import { trophy } from 'react-icons-kit/icomoon/trophy';       
 import { user } from 'react-icons-kit/fa/user';       
-
+import { Redirect } from "react-router";
 
 
 
@@ -47,11 +47,11 @@ export default class Sidenav extends Component {
 	componentWillMount(){
 		// console.log('I am in header componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-		let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-		this.setState({
-			user: user,
-			company : company
-		});
+        let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+        this.setState({
+            user: user,
+            company : company
+        });
 	}
 
 	componentWillReceiveProps(nextProps){
@@ -310,7 +310,7 @@ export default class Sidenav extends Component {
         {this.displayMyAccount()}
         {this.displaySuperAdminDashBoard()}
     </SideNav>
-</BaseContainer>
+    </BaseContainer>
     );
   }
 };

@@ -162,7 +162,7 @@ export default class DisplayRFPList extends Component {
         <div>
           {this.props.isDisplayRegionDropdown ? this.createRegionDropdown() : ''}
           <br/>
-          <DataGrid columns={this.getColoumns()} dataList={this.updateWithDisplayData()} clickableRow="true" />
+          <DataGrid columns={this.getColoumns()} dataList={this.updateWithDisplayData()} clickableRow="true" showFilter="true" />
         </div>
       );
     }
