@@ -177,6 +177,10 @@ class CreateIOIForm extends Component{
           this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       });
     } else {
+      // console.log('will call createIOIAction :'+JSON.stringify(props));
+      props.ioiId = ioi.ioiId;
+      props.createdById = this.state.createdById;
+      props.createdByCompanyId = this.state.createdByCompanyId;
       this.props.createIOIAction(props)
        .then(() => {
          // blog post has been created, navigate the user to the index
