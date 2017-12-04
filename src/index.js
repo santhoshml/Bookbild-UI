@@ -33,6 +33,7 @@ import Insights from "./components/insights";
 import PrivacyPolicy from "./components/privacy_policy";
 import TermsAndConditions from "./components/terms_conditions";
 import ContactUs from "./components/contact_us";
+import BorrowerControlledAccess from './components/borrower_controlled_access';
 
 require("../style/style.css");
 require("../css/stylish-portfolio.css");
@@ -84,6 +85,7 @@ ReactDOM.render(
               <Route path="/privacyPolicy" component={PrivacyPolicy} />
               <Route path="/termsAndConditions" component={TermsAndConditions} />
               <Route path="/contactUs" component={ContactUs} />
+              <Route path="/borrowerControlledAccess" component={BorrowerControlledAccess} />
               <Route path="/" component={LandingPage} />
             </Switch>
           </div>

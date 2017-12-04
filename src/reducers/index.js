@@ -11,6 +11,7 @@ import WGLReducer from "./reducer_wgl";
 import LinkReducer from "./reducer_link";
 import DealCompReducer from "./reducer_deal_comparision";
 import ComplianceDataReducer from "./reducer_compliance_data";
+import ControlledAccessListReducer from "./reducer_controlled_access_list";
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   wgl : WGLReducer,
   link : LinkReducer,
   dealComp : DealCompReducer,
-  complianceData : ComplianceDataReducer
+  complianceData : ComplianceDataReducer,
+  controlledAccessList : ControlledAccessListReducer
 });
 
 export default rootReducer;

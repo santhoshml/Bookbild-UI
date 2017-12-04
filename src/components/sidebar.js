@@ -86,6 +86,8 @@ export default class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.MY_PROFILE);
         } else if(id === 'myAccount/addUser'){
             this.props.history.push(constants.ROUTES_MAP.ADD_USER);
+        } else if(id === 'dataRoom/borrowerControlledAccess'){
+            this.props.history.push(constants.ROUTES_MAP.BORROWER_CONTROLLED_ACCESS);
         }
         //  else{
         //     this.props.history.push('#');
@@ -235,6 +237,16 @@ export default class Sidenav extends Component {
 		);
 	}
 
+    displayAccessControlNav(){
+        if(this.state.user.role === constants.KEY_COMPANY){
+            return(
+                <Nav id="borrowerControlledAccess">
+                    <NavText>Access Control</NavText>
+                </Nav>            
+            );
+        }
+    }
+
 	displayDataRoom(){
 		return(
             <Nav id="dataRoom">
@@ -255,6 +267,7 @@ export default class Sidenav extends Component {
                 <Nav id="quaterlyCompliance">
                     <NavText>Quarterly Compliance</NavText>
                 </Nav>
+                {this.displayAccessControlNav()}
             </Nav>
 		);
 	}

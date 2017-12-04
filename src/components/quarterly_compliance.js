@@ -11,6 +11,7 @@ import * as actionCreators from '../actions/index';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DataGrid from './data_grid_example';
 import Header from './header';
+import JSAlert from "js-alert";
 
 const childRowStyle = {
   fontStyle :'italic', 
@@ -264,13 +265,19 @@ class complianceForm extends Component{
     console.log('In getComplianceDataForLender');
     // console.log('linkList :'+JSON.stringify(this.props.linkList));
     // console.log('\nselected link:'+ JSON.stringify(link));
-    for(let i=0;i< this.state.linkList.length; i++){
-      if(this.state.linkList[i].linkId === link.linkId)
-        this.state.linkList[i].view =  true;
-      else 
-      this.state.linkList[i].view =  false;
+    if((link.accessToLender && this.state.user.role !== constants.KEY_COMPANY)
+      || this.state.user.role === constants.KEY_COMPANY){
+        for(let i=0;i< this.state.linkList.length; i++){
+          if(this.state.linkList[i].linkId === link.linkId)
+            this.state.linkList[i].view =  true;
+          else 
+          this.state.linkList[i].view =  false;
+        }
+        this.props.getComplianceData(link.borrowerCompanyId);
+    } else {
+      console.log('Cannot see the Quaterly compliance data');
+      JSAlert.alert("To view this data, borrower need to grant access to you.");
     }
-    this.props.getComplianceData(link.borrowerCompanyId);
   }
 
   displayLinks(){

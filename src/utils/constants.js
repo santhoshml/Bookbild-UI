@@ -89,7 +89,8 @@ exports.ROUTES_MAP = {
   LOGOUT              : '/logout',
   WGL                 : '/wgl',
   DOCS                : '/docs',
-  QUARTERLY_COMPLIANCE : '/qCompliance'
+  QUARTERLY_COMPLIANCE        : '/qCompliance',
+  BORROWER_CONTROLLED_ACCESS  : '/borrowerControlledAccess'
 };
 
 exports.S3_BUCKET_MAP = {
@@ -97,6 +98,7 @@ exports.S3_BUCKET_MAP = {
 };
 
 exports.DOCS_CATEGORY_DISPLAY_NAME_MAP = {
+  NDA           : 'Non-Disclosure Agreement',
   TXN_OVERVIEW  : 'Transaction Overview',
   COMPANY       : 'Company',
   FINANCIAL     : 'Financial',

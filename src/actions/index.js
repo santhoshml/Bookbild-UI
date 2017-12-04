@@ -42,6 +42,9 @@ export const SAVE_DEAL_COMPARISION_DATA = 'SAVE_DEAL_COMPARISION_DATA';
 export const SEND_CONTACT_US_EMAIL = 'SEND_CONTACT_US_EMAIL';
 export const SAVE_COMPLIANCE_DATA = 'SAVE_COMPLIANCE_DATA';
 export const GET_COMPLIANCE_DATA = 'GET_COMPLIANCE_DATA';
+export const GET_BORROWER_CONTROLLED_ACCESS_LIST = 'GET_BORROWER_CONTROLLED_ACCESS_LIST';
+export const UPDATE_ACCESS_TO_LENDER_FLAG = 'UPDATE_ACCESS_TO_LENDER_FLAG';
+export const GET_LINKS_WITH_RFP_IOI = 'GET_LINKS_WITH_RFP_IOI';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -52,6 +55,50 @@ export const DELETE_POST = "delete_post";
 // const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
+
+export function getLinkWithRFPAndIOIAction(rfpId, ioiId){
+  console.log('In actions.getLinkWithRFPAndIOIAction');
+  const request=axios({
+    url : '/getLinkWithRFPAndIOIAction?rfpId='+rfpId+'&ioiId='+ioiId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_WITH_RFP_IOI,
+    payload: request
+  }
+}
+
+
+export function updateAccessToLenderFlag(data){
+  console.log('In updateAccessToLenderFlag, data:'+data);
+  const request=axios({
+    url : '/updateAccessToLenderFlag',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : data
+  });
+
+  return{
+    type: UPDATE_ACCESS_TO_LENDER_FLAG,
+    payload: request
+  }  
+}
+
+export function getBorrowerControlledAccessListAction(borrowerId){
+  console.log('In getBorrowerControlledAccessListAction, borrowerId:'+borrowerId);
+  const request=axios({
+    url : '/getBorrowerControlledAccessList?borrowerId='+borrowerId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_BORROWER_CONTROLLED_ACCESS_LIST,
+    payload: request
+  }
+}
 
 export function getComplianceData(companyId){
   console.log('In getComplianceData, companyId:'+companyId);

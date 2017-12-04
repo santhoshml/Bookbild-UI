@@ -3,13 +3,19 @@ import moment from 'moment';
 import sortJsonArray from 'sort-json-array';
 import isNumber from 'is-number';
 import numbro from 'numbro';
-// import s3 from 's3';
 
-// exports.getS3FileURL = function(key){
-//   let url = s3.getPublicUrlHttp(constants.S3_BUCKET_MAP.LINK_DOCS, key);
-//   console.log('link url:'+url);
-//   return url;
-// }
+exports.extractLenderNames = function(list){
+  console.log('In extractLenderNames');
+  let lenderMap = [];
+  for(let i=0;i< list.length; i++){
+    lenderMap.push({
+      id: list[i].lenderCompanyId,
+      name : list[i].name,
+      accessToLender : list[i].accessToLender
+    });
+  }
+  return lenderMap;
+}
 
 exports.getDisplayData = function(complianceData, cols){
   console.log('In addRows');

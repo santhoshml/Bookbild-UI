@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction, fetchIOIAction } from '../actions/index';
+import { getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction, fetchIOIAction, getLinkWithRFPAndIOIAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -20,7 +20,8 @@ class IOIDetail extends Component{
     this.state = {
 			rfp : null,
       user : null,
-      company : null
+      company : null,
+      showYieldMatrix : false
 		}
   }
 
@@ -28,7 +29,7 @@ class IOIDetail extends Component{
     console.log('In componentWillMount of IOI_DETAIL');
     // this.props.fetchAllRFPAction();
     let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-    console.log('ioi:'+JSON.stringify(ioi));
+    // console.log('ioi:'+JSON.stringify(ioi));
     // let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
@@ -53,7 +54,19 @@ class IOIDetail extends Component{
       this.setState({
         ioi : this.props.ioi
       });
-  });
+    });
+
+    console.log('rfpId:'+ioi.rfpId+', ioiId:'+ioi.ioiId);
+    this.props.getLinkWithRFPAndIOIAction(ioi.rfpId, ioi.ioiId)
+    .then((data) => {
+      // console.log('got response for getLinkDocsWithRFPAndIOIAction, data:'+JSON.stringify(data));
+      if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS' && data.payload.data.data.length === 1){
+        this.setState({
+          disableInvite : true
+        });
+      }
+    });
+
   }
 
   displayCompanyDesc(){
@@ -69,6 +82,7 @@ class IOIDetail extends Component{
 
   displaySelectedIOI(){
     let ioi = this.state.ioi;
+    // console.log('In displaySelectedIOI, ioi:'+JSON.stringify(ioi));
     return(
       <div>
         <br/>
@@ -181,8 +195,8 @@ class IOIDetail extends Component{
 
   inviteLender(values){
     // console.log('values:'+JSON.stringify(values));
-    console.log('rfpId:'+this.state.rfp.rfpId);
-    console.log('ioiId:'+this.state.ioi.ioiId);
+    // console.log('rfpId:'+this.state.rfp.rfpId);
+    // console.log('ioiId:'+this.state.ioi.ioiId);
     let data = {
       rfpId: this.state.rfp.rfpId,
       ioiId: this.state.ioi.ioiId,
@@ -190,10 +204,10 @@ class IOIDetail extends Component{
       lenderCompanyId : this.state.ioi.createdByCompanyId,
       name : this.state.rfp.companyName.substring(0, 10)+'_'
     };
-    console.log('data:'+JSON.stringify(data));
+    // console.log('data:'+JSON.stringify(data));
     this.props.inviteLenderAction(data)
       .then(data => {
-        console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
+        // console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
         this.setState({
           disableInvite : true
         });
@@ -201,7 +215,7 @@ class IOIDetail extends Component{
   }
 
   displayInviteButton(){
-    if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
+    if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId && !this.state.disableInvite){
       return( <span>
       <Link to="#" onClick={this.inviteLender.bind(this)} className="btn btn-primary">
         Invite for second round
@@ -226,10 +240,19 @@ class IOIDetail extends Component{
     }
   }
 
+  flipYieldDisplay(){
+    console.log('I am in flipYieldDisplay');
+    let flipVal = !this.state.showYieldMatrix;
+    this.setState({
+      showYieldMatrix : flipVal
+    });
+  }
+
   displayYieldMatrix(){
     if(this.state.ioi.yieldMatrix){
       var yieldMatrixRender = this.state.ioi.yieldMatrix.map(function(row){
-        return(<tr>
+        // console.log('row:'+JSON.stringify(row));
+        return(<tr key={row.period}>
             <td>{row.period}</td>
             <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow)/1000000, 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
             <td>{row.startDate}</td>
@@ -242,7 +265,7 @@ class IOIDetail extends Component{
         );
       });
       return(<div>
-        <h3>Yield Estimate</h3>
+
         <table className="table table-striped">
           <thead>
             <tr>
@@ -264,6 +287,18 @@ class IOIDetail extends Component{
     }
   }
 
+  displayYieldMatrixSubtitle(){
+    return(
+      <a onClick={this.flipYieldDisplay.bind(this)} href="#">
+      <h3>
+          <i className={this.state.showYieldMatrix ? "fa fa-folder-open-o" : "fa fa-folder-o"} aria-hidden="true">
+          <span className="indent-after">Yield Estimate</span>
+        </i>
+      </h3>
+      </a>
+    );
+  }
+
   render(){
     console.log('I am in IOI_DETAIL');
     return(
@@ -272,9 +307,10 @@ class IOIDetail extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
-            {this.displaySelectedIOI()}
+            {this.state.ioi ? this.displaySelectedIOI() : ''}
             <br/>
-            {this.displayYieldMatrix()}
+            {this.displayYieldMatrixSubtitle()}
+            {this.state.showYieldMatrix ? this.displayYieldMatrix() : ''}
             <br/>
             <br/>
             {this.displayViewAttachedRFPButton()}
@@ -285,6 +321,11 @@ class IOIDetail extends Component{
             <br/>
             <br/>
             <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>
+            <br/>            
           </div>
         </div>
       </div>
@@ -294,7 +335,7 @@ class IOIDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
+  // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
   let rObject = {};
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];
@@ -312,7 +353,8 @@ function mapDispatchToProps(dispatch) {
     getRFPFromFavoritesAction : getRFPFromFavoritesAction,
     fetchRFPAction            : fetchRFPAction,
     inviteLenderAction        : inviteLenderAction,
-    fetchIOIAction            : fetchIOIAction
+    fetchIOIAction            : fetchIOIAction,
+    getLinkWithRFPAndIOIAction : getLinkWithRFPAndIOIAction
   }, dispatch);
 }
 

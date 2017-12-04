@@ -33,7 +33,7 @@ class DisplayDocumentTabs extends Component{
 		console.log('I am in DisplayDocumentTabs.componentWillMount');
 		let that = this;
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-    let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+    	let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 		this.setState({
 			user : user,
 			company : company
@@ -208,15 +208,21 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	renderTabs(link){
+		// console.log('link :'+ JSON.stringify(link));
+		// console.log('user:'+ JSON.stringify(this.state.user));
 		return(
 			<Tabs>
 				<TabList>
-					<Tab>Transaction Overview</Tab>
-					<Tab>Company</Tab>
-					<Tab>Financial</Tab>
-					<Tab>Legal</Tab>
-					<Tab>Operations</Tab>
+					<Tab>Non-Disclosure Agreement(NDA)</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Transaction Overview</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Company</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Financial</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Legal</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Operations</Tab>
 				</TabList>
+				<TabPanel>
+					{this.renderRFPAndDocuments(link, 'TXN_NDA')}
+				</TabPanel>
 				<TabPanel>
 					{this.renderRFPAndDocuments(link, 'TXN_OVERVIEW')}
 				</TabPanel>
