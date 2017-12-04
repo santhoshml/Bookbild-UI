@@ -80,7 +80,7 @@ class IOIList extends Component{
         </div>
       );
     } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
-      console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
+      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
           <DisplayIOIList
@@ -89,7 +89,7 @@ class IOIList extends Component{
         </div>
       );
     } else {
-      console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
+      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
           <DisplayIOIList

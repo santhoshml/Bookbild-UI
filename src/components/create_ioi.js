@@ -168,6 +168,9 @@ class CreateIOIForm extends Component{
       var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
       props.ioiId = ioi.ioiId;
       props.createdById = this.state.createdById;
+      // below 2 may not be nessary
+      props.rfpId = this.state.rfp.rfpId;
+      props.createdByCompanyId = this.state.createdByCompanyId;
 
       this.props.updateIOIAction(props)
         .then(() => {
@@ -178,7 +181,8 @@ class CreateIOIForm extends Component{
       });
     } else {
       // console.log('will call createIOIAction :'+JSON.stringify(props));
-      props.ioiId = ioi.ioiId;
+      // props.ioiId = ioi.ioiId;
+      props.rfpId = this.state.rfp.rfpId;
       props.createdById = this.state.createdById;
       props.createdByCompanyId = this.state.createdByCompanyId;
       this.props.createIOIAction(props)
