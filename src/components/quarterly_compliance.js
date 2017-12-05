@@ -24,7 +24,7 @@ class complianceForm extends Component{
 
 	constructor(props){
 		super(props);
-		console.log('I am in constructor');
+		// console.log('I am in constructor');
 		this.state = {
 			user : null,
       company : null,
@@ -38,7 +38,7 @@ class complianceForm extends Component{
   }
   
 	componentWillMount() {
-    console.log('I am in documents.componentWillMount');
+    // console.log('I am in documents.componentWillMount');
     let that = this;
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -46,14 +46,14 @@ class complianceForm extends Component{
     if(user.role === constants.KEY_LENDER){
       this.props.getLinksWithCompanyIdAction(user.companyId)
       .then(function(results){
-        console.log('I am in then, results:'+JSON.stringify(results));
+        // console.log('I am in then, results:'+JSON.stringify(results));
         if(results.payload.status === 200 && results.payload.data.data.length > 0){
           let linkList = results.payload.data.data;
-          console.log('linkList:'+JSON.stringify(linkList));
+          // console.log('linkList:'+JSON.stringify(linkList));
           for(let i=0; i< linkList.length; i++){
             linkList[i].view = false;
           }
-          console.log('linkList:'+JSON.stringify(linkList));
+          // console.log('linkList:'+JSON.stringify(linkList));
 
           that.setState({
             linkList : linkList
@@ -76,21 +76,21 @@ class complianceForm extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    console.log('In componentWillReceiveProps ');
+    // console.log('In componentWillReceiveProps ');
     let data = {};
 
     if(!this.state.complianceData){
-      console.log('there is no compliance data in the state');
+      // console.log('there is no compliance data in the state');
       if(nextProps.complianceData && nextProps.complianceData.data){
         data = nextProps.complianceData.data;
         let thisYearComplianceData = data[this.state.selectedYear];
         if(!thisYearComplianceData){
           // if there data is not in the db, then do a init
-          console.log('there is no data for the selectedYear :'+this.state.selectedYear+', calling a init');
+          // console.log('there is no data for the selectedYear :'+this.state.selectedYear+', calling a init');
           data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
         }
       } else {
-        console.log('there is no data object calling a init');
+        // console.log('there is no data object calling a init');
         data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
       }
       
@@ -138,7 +138,7 @@ class complianceForm extends Component{
   }
 
   onChangeYear(event){
-    console.log('I am in onChangeYear, val:'+event.target.value);
+    // console.log('I am in onChangeYear, val:'+event.target.value);
     let selectedYear = 'YR_'+event.target.value;
     let cData = this.state.complianceData;
     if(!cData[selectedYear])
@@ -153,9 +153,9 @@ class complianceForm extends Component{
   }
 
   onChangeSelectView(val){
-    console.log('I am in onClickSelectView, val:'+val);
+    // console.log('I am in onClickSelectView, val:'+val);
     if(val === 'quaterly'){
-      console.log('I am in onClickSelectView, quaterly');
+      // console.log('I am in onClickSelectView, quaterly');
       let cols = complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter);
       this.setState({
         selectedView : 'quaterly',
@@ -163,7 +163,7 @@ class complianceForm extends Component{
         complianceDisplayData : complainceUtils.getDisplayData(this.state.complianceData[this.state.selectedYear], cols)
       });
     } else {
-      console.log('I am in onClickSelectView, monthly');
+      // console.log('I am in onClickSelectView, monthly');
       let isEditable = false;
       if(this.state.user.role === constants.KEY_COMPANY
         || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR )
@@ -179,7 +179,7 @@ class complianceForm extends Component{
   }
 
   displayComplianceView(){
-    console.log('In displayComplianceView');
+    // console.log('In displayComplianceView');
     // console.log('this.state:'+JSON.stringify(this.state));
     return(
       <div>
@@ -197,7 +197,7 @@ class complianceForm extends Component{
   }
 
   saveComplianceData(){
-    console.log('In saveComplianceData');
+    // console.log('In saveComplianceData');
     let dObject = {};
     dObject.companyId = this.state.company.companyId;
     dObject.userId = this.state.user.userId;
@@ -215,7 +215,7 @@ class complianceForm extends Component{
   }
 
   displayDropdownSelections(){
-    console.log('In displayDropdownSelections, ');
+    // console.log('In displayDropdownSelections, ');
     return(<div>
       <p>Select the year from the dropdown to view the compliance data. Switch between quaterly and monthly views to view data. </p>
       <br/>
@@ -262,11 +262,11 @@ class complianceForm extends Component{
   }
 
   getComplianceDataForLender(link){
-    console.log('In getComplianceDataForLender');
+    // console.log('In getComplianceDataForLender');
     // console.log('linkList :'+JSON.stringify(this.props.linkList));
     // console.log('\nselected link:'+ JSON.stringify(link));
-    if((link.accessToLender && this.state.user.role !== constants.KEY_COMPANY)
-      || this.state.user.role === constants.KEY_COMPANY){
+    if((link.accessToLender && this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)
+      || this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
         for(let i=0;i< this.state.linkList.length; i++){
           if(this.state.linkList[i].linkId === link.linkId)
             this.state.linkList[i].view =  true;
@@ -275,19 +275,19 @@ class complianceForm extends Component{
         }
         this.props.getComplianceData(link.borrowerCompanyId);
     } else {
-      console.log('Cannot see the Quaterly compliance data');
+      // console.log('Cannot see the Quaterly compliance data');
       JSAlert.alert("To view this data, borrower need to grant access to you.");
     }
   }
 
   displayLinks(){
-    console.log('I am displaying the links');
+    // console.log('I am displaying the links');
     let that = this;
     // console.log('In displayLinks :'+ JSON.stringify(this.props.linkList));
 		return(<ul>
       {this.state.linkList && this.state.linkList.map(function(link){
-        console.log('link :'+JSON.stringify(link));
-        console.log('link.view :'+link.view);
+        // console.log('link :'+JSON.stringify(link));
+        // console.log('link.view :'+link.view);
         return (<li key={link.linkId ? link.linkId : link.rfpId} style={{listStyleType : 'none'}}>
           <Link to="#" onClick={that.getComplianceDataForLender.bind(that, link)}>
             {link.view ? <i className="fa fa-folder-open-o fa-lg" aria-hidden="true"><span className="indent">{link.name}</span></i>
@@ -307,7 +307,7 @@ class complianceForm extends Component{
   }
 
   displayDataMatrix(){
-    console.log('I am in displayDataMatrix');
+    // console.log('I am in displayDataMatrix');
     return (
       <div>
       {this.state.complianceDisplayData.length > 0 ? this.displayDropdownSelections() : ''}
@@ -336,12 +336,12 @@ class complianceForm extends Component{
 				that.myFileInput=null;
 			});
 		} else {
-			console.log('no file to upload');
+			// console.log('no file to upload');
 		}
 	}  
 
 	render(){
-    console.log('I am in quaterly_compliance.render');
+    // console.log('I am in quaterly_compliance.render');
     if(this.state.user.role === constants.KEY_COMPANY
       || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
         return (
@@ -394,7 +394,7 @@ class complianceForm extends Component{
 }
 
 function mapStateToProps(state) {
-  console.log('In mapStateToProps');
+  // console.log('In mapStateToProps');
   // console.log('state:'+JSON.stringify(state));
   let rObject={};
   
@@ -420,7 +420,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
-  console.log('In mapDispatchToProps');
+  // console.log('In mapDispatchToProps');
   return bindActionCreators({
     saveComplianceData : saveComplianceData,
     getComplianceData : getComplianceData,

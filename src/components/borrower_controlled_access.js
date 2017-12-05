@@ -37,7 +37,7 @@ class borrowerControlledAccess extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    console.log('In componentWillReceiveProps :');
+    // console.log('In componentWillReceiveProps :');
     this.setState({
       borrowerControlledAccessList : nextProps.borrowerControlledAccessList
     });
@@ -87,7 +87,7 @@ class borrowerControlledAccess extends Component{
   }
 
   render(){
-    console.log('In render of borrowerControlledAccess');
+    // console.log('In render of borrowerControlledAccess');
     return(
       <div>
         <Header/>
@@ -119,7 +119,7 @@ class borrowerControlledAccess extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  console.log('state:'+JSON.stringify(state));
+  // console.log('state:'+JSON.stringify(state));
 
   let rObject = {
     borrowerControlledAccessList : state.controlledAccessList.borrowerControlledAccessList

@@ -25,12 +25,14 @@ class CreateRFP extends Component {
     var that = this;
     // console.log('I am in createRFP componentWillMount');
     gType = this.props.match.params.type;
+    let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
     this.setState({
       type : this.props.match.params.type,
-      renderCollateral :false
+      renderCollateral :false,
+      user : user
     });
 
-    let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
+    
     if(user.isSuperAdmin && user.isSuperAdmin === true){
       this.props.fetchAllCompanyListForRFP();
     }
@@ -54,11 +56,15 @@ class CreateRFP extends Component {
   }
 
   onSubmit(values) {
-      console.log('In onSubmit, props:'+JSON.stringify(values));
+      // console.log('In onSubmit, props:'+JSON.stringify(values));
 
-      values.createdById = this.props.createdById;
-      values.createdByCompanyId=this.props.createdByCompanyId;
-      values.numOfIOI = this.props.numOfIOI;
+      // values.createdById = this.props.createdById;
+      // values.createdByCompanyId=this.props.createdByCompanyId;
+      // values.numOfIOI = this.props.numOfIOI;
+
+      values.createdById = this.state.user.userId;
+      values.createdByCompanyId=this.state.user.companyId;
+      values.numOfIOI = this.props.numOfIOI; // I don't know what todo with this
 
       if(values.category.toUpperCase() !== 'ABL'){
         //erase the values in Collateral

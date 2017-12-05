@@ -13,6 +13,7 @@ import NumberFormat from 'react-number-format';
 import NavBar from './sidebar';
 import roundTo from 'round-to';
 import Header from './header';
+import JSAlert from "js-alert";
 
 class IOIDetail extends Component{
   constructor(props){
@@ -26,7 +27,7 @@ class IOIDetail extends Component{
   }
 
   componentWillMount() {
-    console.log('In componentWillMount of IOI_DETAIL');
+    // console.log('In componentWillMount of IOI_DETAIL');
     // this.props.fetchAllRFPAction();
     let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
     // console.log('ioi:'+JSON.stringify(ioi));
@@ -49,14 +50,14 @@ class IOIDetail extends Component{
 
     this.props.fetchIOIAction(ioi.ioiId)
     .then(() => {
-      console.log('I am in the get result for ioi');
+      // console.log('I am in the get result for ioi');
       lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
       this.setState({
         ioi : this.props.ioi
       });
     });
 
-    console.log('rfpId:'+ioi.rfpId+', ioiId:'+ioi.ioiId);
+    // console.log('rfpId:'+ioi.rfpId+', ioiId:'+ioi.ioiId);
     this.props.getLinkWithRFPAndIOIAction(ioi.rfpId, ioi.ioiId)
     .then((data) => {
       // console.log('got response for getLinkDocsWithRFPAndIOIAction, data:'+JSON.stringify(data));
@@ -194,24 +195,29 @@ class IOIDetail extends Component{
   }
 
   inviteLender(values){
-    // console.log('values:'+JSON.stringify(values));
-    // console.log('rfpId:'+this.state.rfp.rfpId);
-    // console.log('ioiId:'+this.state.ioi.ioiId);
-    let data = {
-      rfpId: this.state.rfp.rfpId,
-      ioiId: this.state.ioi.ioiId,
-      borrowerCompanyId : this.state.rfp.createdByCompanyId,
-      lenderCompanyId : this.state.ioi.createdByCompanyId,
-      name : this.state.rfp.companyName.substring(0, 10)+'_'
-    };
-    // console.log('data:'+JSON.stringify(data));
-    this.props.inviteLenderAction(data)
-      .then(data => {
-        // console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
-        this.setState({
-          disableInvite : true
-        });
-      });
+    let that=this;
+    JSAlert.confirm("Are you sure you want to invite the Lender ?")
+    .then(function(result){
+      if(!result){
+        console.log('user did not want to invite, he pressed no');
+      } else {
+        let data = {
+          rfpId: that.state.rfp.rfpId,
+          ioiId: that.state.ioi.ioiId,
+          borrowerCompanyId : that.state.rfp.createdByCompanyId,
+          lenderCompanyId : that.state.ioi.createdByCompanyId,
+          name : that.state.rfp.companyName.substring(0, 10)+'_'
+        };
+        // console.log('data:'+JSON.stringify(data));
+        that.props.inviteLenderAction(data)
+          .then(data => {
+            // console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
+            that.setState({
+              disableInvite : true
+            });
+          });
+      }
+    });
   }
 
   displayInviteButton(){
@@ -241,7 +247,7 @@ class IOIDetail extends Component{
   }
 
   flipYieldDisplay(){
-    console.log('I am in flipYieldDisplay');
+    // console.log('I am in flipYieldDisplay');
     let flipVal = !this.state.showYieldMatrix;
     this.setState({
       showYieldMatrix : flipVal
@@ -300,7 +306,7 @@ class IOIDetail extends Component{
   }
 
   render(){
-    console.log('I am in IOI_DETAIL');
+    // console.log('I am in IOI_DETAIL');
     return(
       <div>
         <Header/>

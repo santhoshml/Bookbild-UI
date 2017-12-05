@@ -78,7 +78,7 @@ class CreateIOIForm extends Component{
 
   componentWillMount() {
     gType = this.props.match.params.type;
-    console.log('gType :'+ gType);
+    // console.log('gType :'+ gType);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
@@ -151,7 +151,7 @@ class CreateIOIForm extends Component{
 
     if(gType === constants.IOI_EDIT){
       var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-      console.log('');
+      // console.log('');
       this.setState({
         ioi : ioi
       });
@@ -163,7 +163,7 @@ class CreateIOIForm extends Component{
     // <input type="hidden" className="form-control" {...createdById} />
     // <input type="hidden" className="form-control" {...createdByCompanyId} />
 
-    console.log('createIOIAction:'+JSON.stringify(props));
+    // console.log('createIOIAction:'+JSON.stringify(props));
     if(gType === constants.IOI_EDIT){
       var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
       props.ioiId = ioi.ioiId;
@@ -248,7 +248,7 @@ class CreateIOIForm extends Component{
     }
 
   onChangeCollateralValue(element, field, event){
-    console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
+    // console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
     var updValue = this.state.collateral;
     updValue[element][field] = event.target.value;
 
@@ -259,7 +259,7 @@ class CreateIOIForm extends Component{
     updValue[element]['available'] = cUtils.parseNumber(updValue[element]['netCollateral']) * cUtils.parseNumber(updValue[element]['advRate']) / 100;
     updValue[element]['netEffective'] = cUtils.parseNumber(updValue[element]['available']) / (cUtils.parseNumber(updValue[element]['gross']));
 
-    console.log('updValue:'+JSON.stringify(updValue));
+    // console.log('updValue:'+JSON.stringify(updValue));
 
     this.setState({
       collateral: updValue,
@@ -268,7 +268,7 @@ class CreateIOIForm extends Component{
   }
 
   displayCollateralAnalysis(){
-    console.log('I am in displayCollateralAnalysis');
+    // console.log('I am in displayCollateralAnalysis');
     // console.log('thisValue:'+JSON.stringify(thisValue));
     var rfp = this.state.rfp;
     if(rfp && rfp.category.toUpperCase() === 'ABL'){
@@ -478,7 +478,7 @@ class CreateIOIForm extends Component{
   }
 
   render(){
-    console.log('I am in create IOI');
+    // console.log('I am in create IOI');
     const {handleSubmit} = this.props;
 
       const covenantsOptions = [
@@ -728,7 +728,7 @@ function mapStateToProps(state) {
 
   if(gType == constants.IOI_EDIT){
     let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-    console.log('ioi to be edited :'+JSON.stringify(ioi));
+    // console.log('ioi to be edited :'+JSON.stringify(ioi));
 
     intializedData.initialValues.maxDebtAllowed = ioi.maxDebtAllowed;
     intializedData.initialValues.loanSize = ioi.loanSize;
@@ -789,7 +789,7 @@ function mapStateToProps(state) {
 }
 
 function validate(values){
-  console.log('values:'+JSON.stringify(values));
+  // console.log('values:'+JSON.stringify(values));
   const errors={};
 
   if(!values.loanSize || values.loanSize == 0){

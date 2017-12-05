@@ -4,7 +4,7 @@ import Header from './header';
 
 export default class Landing extends Component {
     render(){
-        console.log('I am in landing');
+        // console.log('I am in landing');
         return(
           <div>
             <Header/>

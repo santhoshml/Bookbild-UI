@@ -56,17 +56,17 @@ class ContactUsForm extends Component{
 
 
 	onSubmit(values){
-    console.log('values : '+JSON.stringify(values));
+    // console.log('values : '+JSON.stringify(values));
 		this.props.sendContactUsEmailAction(values)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-        console.log('email sent successfully');
+        // console.log('email sent successfully');
          this.props.reset();
          this.setState({
            'message' : 'Thank you for contacting us. We will contact you soon on this. '
          });
 			 } else {
-        console.log('could not send email');
+        // console.log('could not send email');
         this.setState({
           message : 'Error sending the email. Please try again.'
         });
@@ -170,7 +170,7 @@ function validate(values){
 }
 
 function mapStateToProps(state) {
-  console.log('In mapStateToProps');
+  // console.log('In mapStateToProps');
   return {
   };
 }
@@ -179,7 +179,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
-  console.log('In mapDispatchToProps : '+JSON.stringify(dispatch));
+  // console.log('In mapDispatchToProps : '+JSON.stringify(dispatch));
   return bindActionCreators({
     sendContactUsEmailAction   : sendContactUsEmailAction,
     getLinksWithCompanyIdAction : getLinksWithCompanyIdAction

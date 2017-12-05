@@ -222,7 +222,7 @@ export default class DisplayIOIList extends Component {
   }
 
   render() {
-    console.log('In DisplayIOIList');
+    // console.log('In DisplayIOIList');
     if (!this.state.ioiList) {
       return <div>No IOIs exist</div>;
     } else {

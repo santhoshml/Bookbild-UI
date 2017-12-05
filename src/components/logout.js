@@ -10,7 +10,7 @@ import * as actionCreators from '../actions/index';
 export default class Logout extends Component{
 
 	render(){
-		console.log('I am in logout render');
+		// console.log('I am in logout render');
 		lsUtils.deleteAll();
 		return(
 				<Redirect to='/login'/>

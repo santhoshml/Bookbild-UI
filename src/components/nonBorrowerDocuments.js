@@ -12,7 +12,7 @@ import Header from './header';
 class NonBorrowerDocumentForm extends Component{
 	constructor(props){
 		super(props);
-		console.log('I am in constructor');
+		// console.log('I am in constructor');
 		this.state = {
 			user : null,
 			displayLinkId : null
@@ -20,7 +20,7 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	componentWillMount() {
-		console.log('I am in documents.componentWillMount');
+		// console.log('I am in documents.componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 		this.setState({
 			user : user
@@ -29,7 +29,7 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	render(){
-		console.log('I am in documents.render');
+		// console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 			<div>
@@ -51,7 +51,7 @@ class NonBorrowerDocumentForm extends Component{
 }
 
 function mapStateToProps(state) {
-	console.log('In documents.mapStateToProps');
+	// console.log('In documents.mapStateToProps');
 	let rObject={};
 	if(state.link.linkList){
 		rObject.linkList = state.link.linkList;

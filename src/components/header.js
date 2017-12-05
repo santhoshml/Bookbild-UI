@@ -49,7 +49,7 @@ export default class Header extends Component{
 	}
 
 	render(){
-		console.log('I am in header render');
+		// console.log('I am in header render');
 		return (
 			<header>
 			<nav className="header-nav-cust-attr">

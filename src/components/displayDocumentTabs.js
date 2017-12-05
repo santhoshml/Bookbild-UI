@@ -20,7 +20,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 class DisplayDocumentTabs extends Component{
 	constructor(props){
 		super(props);
-		console.log('I am in constructor');
+		// console.log('I am in constructor');
 		this.state = {
 			user : null,
 			company : null,
@@ -30,7 +30,7 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	componentWillMount() {
-		console.log('I am in DisplayDocumentTabs.componentWillMount');
+		// console.log('I am in DisplayDocumentTabs.componentWillMount');
 		let that = this;
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     	let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -71,12 +71,12 @@ class DisplayDocumentTabs extends Component{
 				that.myFileInput=null;
 			});
 		} else {
-			console.log('no file to upload');
+			// console.log('no file to upload');
 		}
 	}
 
 	downloadDocument(fileName){
-		console.log('I am in downloadDocument, fileName:'+fileName);
+		// console.log('I am in downloadDocument, fileName:'+fileName);
 		// window.open(cUtils.getS3FileURL(fileName));
 		this.props.downloadLinkDocumentAction(fileName)
 		.then((data) => {
@@ -86,7 +86,7 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	deleteDocument(linkDocId, fileName){
-		console.log('I am in deleteDocument, linkDocId:'+linkDocId);
+		// console.log('I am in deleteDocument, linkDocId:'+linkDocId);
 		let that = this;
 		// console.log('this.props.linkDocList:'+JSON.stringify(this.props.linkDocList));
 		this.props.deleteLinkDocumentAction(linkDocId, fileName)
@@ -102,7 +102,7 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	addDeleteIcon(item){
-		console.log('In addDeleteIcon');
+		// console.log('In addDeleteIcon');
 		// console.log('item.uploadedCompanyId: '+item.uploadedCompanyId+', this.state.user.companyId:'+this.state.user.companyId);
 		if(item.uploadedCompanyId === this.state.user.companyId){
 			return(
@@ -185,7 +185,7 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	updateDisplayFlag(linkId, rfpId){
-		console.log('In updateDisplayFlag, linkId:'+linkId);
+		// console.log('In updateDisplayFlag, linkId:'+linkId);
 		this.props.getLinkDocsWithRFPAndIOIAction(rfpId, linkId);
 		this.setState({
 			displayLinkId : linkId,
@@ -194,9 +194,9 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	displaySubtitle(link){
-		console.log('In displaySubtitle');
+		// console.log('In displaySubtitle');
 		// console.log('link:'+JSON.stringify(link));
-		if(this.props.type === constants.KEY_COMPANY){
+		if(this.props.type === constants.KEY_COMPANY || this.props.type === constants.KEY_FINANCIAL_SPONSOR){
 			return(
 				<h4>{formatCurrency(link.dealSize, constants.CURRENCY_OPTS)+'-'+link.category+'-'+link.requestType}</h4>
 			);
@@ -214,11 +214,11 @@ class DisplayDocumentTabs extends Component{
 			<Tabs>
 				<TabList>
 					<Tab>Non-Disclosure Agreement(NDA)</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Transaction Overview</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Company</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Financial</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Legal</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY)}>Operations</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Transaction Overview</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Company</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Financial</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Legal</Tab>
+					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Operations</Tab>
 				</TabList>
 				<TabPanel>
 					{this.renderRFPAndDocuments(link, 'TXN_NDA')}
@@ -243,7 +243,7 @@ class DisplayDocumentTabs extends Component{
 	}
 
 	render(){
-		console.log('I am in renderLinkList');
+		// console.log('I am in renderLinkList');
 		let that = this;
 		return(<ul className="folder-open">
 			{this.props.linkList && this.props.linkList.map(function(link){
@@ -267,7 +267,7 @@ class DisplayDocumentTabs extends Component{
 }
 
 function mapStateToProps(state) {
-	console.log('In documents.mapStateToProps');
+	// console.log('In documents.mapStateToProps');
 	// console.log('In mapStateToProps, state:'+JSON.stringify(state));
 	let rObject={};
 

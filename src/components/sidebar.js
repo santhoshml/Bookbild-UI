@@ -238,7 +238,7 @@ export default class Sidenav extends Component {
 	}
 
     displayAccessControlNav(){
-        if(this.state.user.role === constants.KEY_COMPANY){
+        if(this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
             return(
                 <Nav id="borrowerControlledAccess">
                     <NavText>Access Control</NavText>

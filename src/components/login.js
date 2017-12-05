@@ -65,7 +65,7 @@ class LoginForm extends Component{
 				 lsUtils.setValue(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
 				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
-				 console.log('forwading now');
+				//  console.log('forwading now');
 
 				 this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
 				//  this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING

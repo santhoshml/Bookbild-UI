@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export default class Landing extends Component{
     render(){
-        console.log('I am in landing');
+        // console.log('I am in landing');
         return(
             <div>
     {/* <!-- Navigation --> */}
