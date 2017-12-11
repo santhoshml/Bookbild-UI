@@ -213,12 +213,24 @@ class DisplayDocumentTabs extends Component{
 		return(
 			<Tabs>
 				<TabList>
-					<Tab>Non-Disclosure Agreement(NDA)</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Transaction Overview</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Company</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Financial</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Legal</Tab>
-					<Tab disabled={!link.accessToLender && (this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)}>Operations</Tab>
+					<Tab>
+						Non-Disclosure Agreement(NDA)
+					</Tab>
+					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+						Transaction Overview
+					</Tab>
+					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+						Company
+					</Tab>
+					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+						Financial
+					</Tab>
+					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+						Legal
+					</Tab>
+					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+						Operations
+					</Tab>
 				</TabList>
 				<TabPanel>
 					{this.renderRFPAndDocuments(link, 'TXN_NDA')}

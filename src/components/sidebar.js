@@ -308,7 +308,7 @@ export default class Sidenav extends Component {
     }
     
   render() {
-    console.log('I am in sidenav render');
+    // console.log('I am in sidenav render');
 
     return (
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>

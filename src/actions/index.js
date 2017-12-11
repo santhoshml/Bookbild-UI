@@ -72,7 +72,7 @@ export function getLinkWithRFPAndIOIAction(rfpId, ioiId){
 
 
 export function updateAccessToLenderFlag(data){
-  // // console.log('In updateAccessToLenderFlag, data:'+data);
+  console.log('In updateAccessToLenderFlag, data:'+JSON.stringify(data));
   const request=axios({
     url : '/updateAccessToLenderFlag',
     method : 'POST',
@@ -101,7 +101,7 @@ export function getBorrowerControlledAccessListAction(borrowerId){
 }
 
 export function getComplianceData(companyId){
-  // console.log('In getComplianceData, companyId:'+companyId);
+  console.log('In getComplianceData, companyId:'+companyId);
   const request=axios({
     url : '/getComplianceData?companyId='+companyId,
     method : 'GET',
@@ -413,7 +413,7 @@ export function fetchTermSheetActivityStatsAction(sector){
 }
 
 export function fetchRFPAction(rfpId){
-  // console.log('In actions.fetchRFPAction');
+  console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
     // url : '/fetchRFP?rfpId='+rfpId,
     url : '/fetchRFPUsingCache?rfpId='+rfpId,

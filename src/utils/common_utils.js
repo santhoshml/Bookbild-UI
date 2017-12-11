@@ -4,8 +4,19 @@ import sortJsonArray from 'sort-json-array';
 import isNumber from 'is-number';
 import numbro from 'numbro';
 
+exports.computeDocumentsTabDisabled = function(a2lDocuments, role){
+  return (!a2lDocuments
+    && (role !== constants.KEY_COMPANY 
+      && role !== constants.KEY_FINANCIAL_SPONSOR));
+}
+
+exports.updateAccessControll = function(type, alObject){
+  alObject[type] = !alObject[type];
+  return alObject;
+}
+
 exports.extractLenderNames = function(list){
-  console.log('In extractLenderNames');
+  // console.log('In extractLenderNames');
   let lenderMap = [];
   for(let i=0;i< list.length; i++){
     lenderMap.push({

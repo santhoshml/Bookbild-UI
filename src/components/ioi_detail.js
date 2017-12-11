@@ -40,34 +40,57 @@ class IOIDetail extends Component{
     });
 
     this.props.fetchRFPAction(ioi.rfpId)
-      .then(() => {
-        // console.log('I am in the get result');
-        lsUtils.setValue(constants.KEY_RFP_OBJECT, this.props.rfp);
-        this.setState({
-          rfp : this.props.rfp
-        });
-    });
+    //   .then(() => {
+    //     // console.log('I am in the get result');
+    //     lsUtils.setValue(constants.KEY_RFP_OBJECT, this.props.rfp);
+    //     this.setState({
+    //       rfp : this.props.rfp
+    //     });
+    // });
 
     this.props.fetchIOIAction(ioi.ioiId)
-    .then(() => {
-      // console.log('I am in the get result for ioi');
-      lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
-      this.setState({
-        ioi : this.props.ioi
-      });
-    });
+    // .then(() => {
+    //   // console.log('I am in the get result for ioi');
+    //   lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
+    //   this.setState({
+    //     ioi : this.props.ioi
+    //   });
+    // });
 
     // console.log('rfpId:'+ioi.rfpId+', ioiId:'+ioi.ioiId);
     this.props.getLinkWithRFPAndIOIAction(ioi.rfpId, ioi.ioiId)
     .then((data) => {
       // console.log('got response for getLinkDocsWithRFPAndIOIAction, data:'+JSON.stringify(data));
-      if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS' && data.payload.data.data.length === 1){
+      if(data.payload.status === 200 
+        && data.payload.data.status === 'SUCCESS' 
+        && data.payload.data.data.length === 1){
         this.setState({
           disableInvite : true
         });
       }
     });
 
+  }
+
+  componentWillReceiveProps(nextProps){
+    console.log('In componentWillReceiveProps');
+    
+    //set ioi
+    if(this.props.ioi){
+      lsUtils.setValue(constants.KEY_SELECTED_IOI_OBJECT, this.props.ioi);
+      this.setState({
+        ioi : this.props.ioi
+      });
+    }
+
+    //set rfp
+    if(this.props.rfp){
+      // console.log('this.props.rfp:'+JSON.stringify(this.props.rfp));
+      lsUtils.setValue(constants.KEY_RFP_OBJECT, this.props.rfp);
+      this.setState({
+        rfp : this.props.rfp
+      });
+    }
   }
 
   displayCompanyDesc(){
@@ -206,7 +229,13 @@ class IOIDetail extends Component{
           ioiId: that.state.ioi.ioiId,
           borrowerCompanyId : that.state.rfp.createdByCompanyId,
           lenderCompanyId : that.state.ioi.createdByCompanyId,
-          name : that.state.rfp.companyName.substring(0, 10)+'_'
+          name : that.state.rfp.companyName.substring(0, 10)+'_',
+          accessToLender : { 
+            "DOCUMENTS" : false, 
+            "WGL" : false, 
+            "QCOMPLIANCE" :   false, 
+            "DEAL_TEAM" :   false 
+          }
         };
         // console.log('data:'+JSON.stringify(data));
         that.props.inviteLenderAction(data)
@@ -344,6 +373,7 @@ function mapStateToProps(state) {
   // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
   let rObject = {};
   if(state.rfpList.rfpList){
+    // console.log('state.rfpList.rfpList:'+JSON.stringify(state.rfpList.rfpList));
     rObject.rfp = state.rfpList.rfpList[0];
   }
   if(state.ioiList.ioi){

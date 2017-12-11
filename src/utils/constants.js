@@ -106,6 +106,12 @@ exports.DOCS_CATEGORY_DISPLAY_NAME_MAP = {
   OPERATIONS    : 'Operations'
 };
 
+exports.KEY_ACCESS_CONTROL_DOCUMENTS = 'DOCUMENTS';
+exports.KEY_ACCESS_CONTROL_WGL = 'WGL';
+exports.KEY_ACCESS_CONTROL_QCOMPLIANCE = 'QCOMPLIANCE';
+exports.KEY_ACCESS_CONTROL_DEAL_TEAM = 'DEAL_TEAM';
+
+
 exports.TXN_OVERVIEW_SAMPLE='Example: $100.0 million senior secured credit facility to refinance existing indebtedness and [fund a dividend recapitalization, tack-on acquisition, etc].';
 exports.COMPANY_DESC_SAMPLE='Example: [City], [State]-based provider of open software solutions for mobile enterprises. The company products provide secure access for the next generation of workers, applications, networks, and things. The secure access offered by the Company solutions empowers business productivity by ensuring enterprise IT applications and environments are securely available, whether these are located in the datacenter or in the cloud.';
 exports.COVENANTS_SAMPLE = 'Min Excess Availability, Max Senior Leverage, Max Total Leverage, Min EBITDA, Min Revenue, Min Recurring Revenue, Min Interest Coverage, ...';

@@ -38,6 +38,7 @@ export default function(state = INITIAL_STATE, action) {
     }
     break;
   case FETCH_RFP:
+    // console.log('In reducer, FETCH_RFP, action.payload:'+JSON.stringify(action.payload));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
 
       return {

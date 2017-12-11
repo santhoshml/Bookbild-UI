@@ -41,7 +41,6 @@ class BorrowerDocumentForm extends Component{
 	render(){
 		// console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
-		// console.log('In borrowerDocument, this.props.history:'+JSON.stringify(this.props.history));
 		return (
 			<div>
 				<Header/>
@@ -53,7 +52,9 @@ class BorrowerDocumentForm extends Component{
 						<h3>List of documents for each of your RFP</h3>
 						<br/>
 						<br/>
-						{this.props.rfpList ? <DisplayDocumentTabs linkList={this.props.rfpList} type={this.state.user.role}/> : ''}
+						{(this.props.rfpList && this.props.rfpList.length > 0) 
+							? <DisplayDocumentTabs linkList={this.props.rfpList} type={this.state.user.role}/> 
+							: 'You have not invited any Lender to share documents with'}
 					</div>
 				</div>
 			</div>

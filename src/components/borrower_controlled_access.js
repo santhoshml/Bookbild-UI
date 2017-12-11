@@ -14,6 +14,7 @@ import NavBar from './sidebar';
 import Header from './header';
 import Switch from 'react-toggle-switch'
 import Toggle from 'react-toggle';
+import Dropdown from 'react-dropdown'
 
 
 class borrowerControlledAccess extends Component{
@@ -45,45 +46,101 @@ class borrowerControlledAccess extends Component{
   }
 
   onToggleSwitch(e){
-    let targetId = e.target.id
+    console.log('In onToggleSwitch');
+    let type = e.target.id
+    let newStateValue = this.state.selectedAccessList;
+    newStateValue[type] = !newStateValue[type];
+    let updatedLinkId = null;
+
     let list = this.state.borrowerControlledAccessList;
-    let newStateValue = false;
     for(let i=0;i<list.length; i++){
-      if(list[i].lenderCompanyId === targetId){
-        list[i].accessToLender = !list[i].accessToLender;
-        newStateValue = list[i].accessToLender;
+      console.log('list[i]:'+JSON.stringify(list[i]));
+      if(list[i].linkId === this.state.selectedDropDown.value){
+        updatedLinkId = list[i].linkId;
+        list[i].accessToLender = newStateValue;
+        break;
       }
     }
     this.props.updateAccessToLenderFlag({
-      lenderCompanyId : targetId,
-      borrowerCompanyId : this.state.company.companyId,
+      linkId : updatedLinkId,
       accessToLender : newStateValue
     });
+    // console.log('updated list:'+ JSON.stringify(list));
     this.setState({
-      borrowerControlledAccessList : list
+      borrowerControlledAccessList : list,
+      selectedAccessList : newStateValue
     });
   }
 
-  displayAccessList(){
-    let that = this;
-    if(this.state.borrowerControlledAccessList && this.state.borrowerControlledAccessList.length > 0){
-      let lenderMap = cUtils.extractLenderNames(this.state.borrowerControlledAccessList);
-      return lenderMap.map(function(row){
-        return (
-          <label key={row.id}>
-          <Toggle 
-            id = {row.id}
-            onChange={that.onToggleSwitch.bind(that)}
-            checked={row.accessToLender}/>
-            <span className="indent">{row.name}</span>
-          </label>
-        );
-      });
-    } else {
-      return(<div>
-        <h3>No one other than you have access to your Data Room and Compliance data.</h3>
-        </div>);
+  _onSelectDropdown(event){
+    console.log('I am in _onSelectDropdown');
+    console.log('event:'+JSON.stringify(event));
+    let selectedAccessList = null;
+    for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
+      if(this.state.borrowerControlledAccessList[i].linkId === event.value){
+        selectedAccessList = this.state.borrowerControlledAccessList[i].accessToLender;
+        break;
+      }
     }
+    console.log('selectedAccessList:'+JSON.stringify(selectedAccessList));
+    this.setState({
+      selectedDropDown : event,
+      selectedAccessList : selectedAccessList
+    });
+
+  }
+
+  displayDrpdownList(){
+    console.log('this.state.borrowerControlledAccessList :'+ JSON.stringify(this.state.borrowerControlledAccessList));
+    let options = [];
+    for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
+      let ele = this.state.borrowerControlledAccessList[i];
+      options.push({
+        value : ele.linkId,
+        label : ele.name
+      });
+    }
+    return (
+      <div>
+      <Dropdown options={options} onChange={this._onSelectDropdown.bind(this)} value={this.state.selectedDropDown} placeholder="Select an option" />      
+      </div>
+    );
+  }
+
+  displayAccessListDetails(){
+    return(<div>
+        <label>
+          <Toggle 
+            id = {constants.KEY_ACCESS_CONTROL_QCOMPLIANCE}
+            onChange={this.onToggleSwitch.bind(this)}
+            checked={this.state.selectedAccessList.QCOMPLIANCE}/>
+          <span className="indent">Quaterly Compliance</span>
+        </label>
+        <br/>
+        <label>
+          <Toggle 
+            id = {constants.KEY_ACCESS_CONTROL_DEAL_TEAM}
+            onChange={this.onToggleSwitch.bind(this)}
+            checked={this.state.selectedAccessList.DEAL_TEAM}/>
+          <span className="indent">Deal Team</span>
+        </label>
+        <br/>
+        <label>
+          <Toggle 
+            id = {constants.KEY_ACCESS_CONTROL_DOCUMENTS}
+            onChange={this.onToggleSwitch.bind(this)}
+            checked={this.state.selectedAccessList.DOCUMENTS}/>
+          <span className="indent">Documents</span>
+        </label>
+        <br/>
+        <label>
+          <Toggle 
+            id = {constants.KEY_ACCESS_CONTROL_WGL}
+            onChange={this.onToggleSwitch.bind(this)}
+            checked={this.state.selectedAccessList.WGL}/>
+          <span className="indent">Working Group List</span>
+        </label>
+      </div>);
   }
 
   render(){
@@ -96,12 +153,15 @@ class borrowerControlledAccess extends Component{
           <div className="container main-container-left-padding" >
             <br/>
             <br/>
-            <p>Toggle the swtich to modify the acces to dataroom and other sensitive data to the lender</p>
+            <h3>select a link from the below dropdown to update the access control settings</h3>
+            <br/>
+            <br/>            
+            {this.state.borrowerControlledAccessList 
+              && this.state.borrowerControlledAccessList.length > 0 
+              ? this.displayDrpdownList() : ""}
             <br/>
             <br/>
-            {this.displayAccessList()}
-            <br/>
-            <br/>
+            {this.state.selectedAccessList ? this.displayAccessListDetails() : ""}         
             <br/>
             <br/>
             <br/>

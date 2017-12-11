@@ -184,7 +184,7 @@ class RFPMarketPlace extends Component{
 }
 
 function mapStateToProps(state) {
-  console.log('state in marketplace : '+ JSON.stringify(state));
+  // console.log('state in marketplace : '+ JSON.stringify(state));
   return {
     rfpList: state.rfpList.rfpList,
     termSheetActivity : (state.rfpList.termSheetActivity != null ? state.rfpList.termSheetActivity.data : null)

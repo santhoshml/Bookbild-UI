@@ -33,7 +33,7 @@ export default class DocumentForm extends Component{
 
 	render(){
 		// console.log('I am in documents.render');
-		if(this.state.user.role === 'Company'){
+		if(this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
 			// console.log('forwading to borrower Document form');
 			return (
 				<BorrowerDocumentForm history={this.props.history}/>

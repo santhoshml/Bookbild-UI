@@ -2,7 +2,6 @@ import React, { Component,PropTypes } from 'react';
 import { connect } from 'react-redux';
 import DataGrid from './data_grid_example';
 import cUtils from '../utils/common_utils';
-import Dropdown from 'react-dropdown'
 import formatCurrency from 'format-currency';
 import constants from '../utils/constants';
 import BootstrapTable from 'reactjs-bootstrap-table';

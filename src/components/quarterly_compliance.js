@@ -76,11 +76,11 @@ class complianceForm extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps ');
+    console.log('In componentWillReceiveProps ');
     let data = {};
 
     if(!this.state.complianceData){
-      // console.log('there is no compliance data in the state');
+      console.log('there is no compliance data in the state');
       if(nextProps.complianceData && nextProps.complianceData.data){
         data = nextProps.complianceData.data;
         let thisYearComplianceData = data[this.state.selectedYear];
@@ -101,7 +101,7 @@ class complianceForm extends Component{
         complianceDisplayData : complainceUtils.getDisplayData(data[this.state.selectedYear], this.state.coloumns)
       });
     } else {
-
+      console.log('there is a complianceData object in state');
     }
   }
 
@@ -341,7 +341,7 @@ class complianceForm extends Component{
 	}  
 
 	render(){
-    // console.log('I am in quaterly_compliance.render');
+    console.log('I am in quaterly_compliance.render');
     if(this.state.user.role === constants.KEY_COMPANY
       || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
         return (
@@ -411,9 +411,11 @@ function mapStateToProps(state) {
     // console.log('In mapStateToProps, :'+ JSON.stringify(state.complianceData.complianceData));
     let complianceData = state.complianceData.complianceData;
     rObject.complianceData = complianceData;
+    
   }
+  rObject.a = 'b';
 
-  // console.log('returning rObject :'+JSON.stringify(rObject));
+  console.log('returning rObject :'+JSON.stringify(rObject));
   return rObject;
 }
 
