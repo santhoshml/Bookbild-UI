@@ -28,6 +28,7 @@ export const RESET_TERMSHEET_ACTIVITY = 'RESET_TERMSHEET_ACTIVITY';
 export const GET_IOI_FOR_RFP_COMPANY = 'GET_IOI_FOR_RFP_COMPANY';
 export const INVITE_LENDER = 'INVITE_LENDER';
 export const GET_WGL_BY_COMPANYID = 'GET_WGL_BY_COMPANYID';
+export const GET_WGL_BY_LINKID = 'GET_WGL_BY_LINKID';
 export const ADD_CONTACT_TO_WGL = 'ADD_CONTACT_TO_WGL';
 export const DELETE_CONTACT_FROM_WGL  = 'DELETE_CONTACT_FROM_WGL';
 export const UPDATE_CONTACT_CELL_WGL  = 'UPDATE_CONTACT_CELL_WGL';
@@ -38,6 +39,7 @@ export const GET_LINK_DOCUMENT = 'GET_LINK_DOCUMENT';
 export const GET_LINKS_WITH_COMPANYID = 'GET_LINKS_WITH_COMPANYID';
 export const GET_LINKS_DOCS_WITH_RFP_IOI = 'GET_LINKS_DOCS_WITH_RFP_IOI';
 export const GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY = 'GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY';
+export const GET_LINKS_DOCS_WITH_LINK = 'GET_LINKS_DOCS_WITH_LINK';
 export const SAVE_DEAL_COMPARISION_DATA = 'SAVE_DEAL_COMPARISION_DATA';
 export const SEND_CONTACT_US_EMAIL = 'SEND_CONTACT_US_EMAIL';
 export const SAVE_COMPLIANCE_DATA = 'SAVE_COMPLIANCE_DATA';
@@ -159,10 +161,24 @@ export function saveComparisionToolData(data){
   }
 }
 
-export function getLinkDocsWithRFPAndIOIAction(rfpId, ioiId){
+export function getLinkDocsWithLinkIdAction(linkId){
+  console.log('In actions.getLinkDocsWithLinkIdAction');
+  const request=axios({
+    url : '/getLinkDocsWithLinkId?linkId='+linkId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_DOCS_WITH_LINK,
+    payload: request
+  }
+}
+
+export function getLinkDocsWithRFPAndIOIAction(ioiId){
   // console.log('In actions.getLinkDocsWithRFPAndIOIAction');
   const request=axios({
-    url : '/getLinkDocsWithRFPAndIOI?rfpId='+rfpId+'&ioiId='+ioiId,
+    url : '/getLinkDocsWithRFPAndIOI?ioiId='+ioiId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -187,10 +203,11 @@ export function getLinkDocsWithRFPAndIOIAndCompanyAction(rfpId, ioiId, companyId
   }
 }
 
-export function getLinksWithCompanyIdAction(companyId){
-  // console.log('In actions.getLinksWithCompanyIdAction');
+export function getLinksWithCompanyIdAction(companyId, type){
+  console.log('In actions.getLinksWithCompanyIdAction');
+  console.log('companyId:'+companyId+', type:'+type);
   const request=axios({
-    url : '/getLinksWithCompanyId?companyId='+companyId,
+    url : '/getLinksWithCompanyId?companyId='+companyId+'&type='+type,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -307,6 +324,20 @@ export function addContactToWGLAction(data){
 
   return{
     type: INVITE_LENDER,
+    payload: request
+  }
+}
+
+export function getWGLByLinkIdAction(linkId){
+  // console.log('In actions.getWGLByLinkIdAction');
+  const request=axios({
+    url : '/getWGLByLinkId?linkId='+linkId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_WGL_BY_LINKID,
     payload: request
   }
 }

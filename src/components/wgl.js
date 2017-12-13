@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { getWGLByCompanyIdAction, addContactToWGLAction, deleteContactFromWGLAction, updateContactCellWGLAction } from '../actions/index';
+import { getLinksWithCompanyIdAction, getWGLByCompanyIdAction, addContactToWGLAction, deleteContactFromWGLAction, updateContactCellWGLAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -10,6 +10,8 @@ import cUtils from '../utils/common_utils';
 import NavBar from './sidebar';
 import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import Header from './header';
+import DataroomDropdown from './data_room_dropdown';
+
 
 class WGL extends Component{
   constructor(props){
@@ -76,20 +78,41 @@ class WGL extends Component{
 
   }
 
+  _onSelectDropdown(event){
+		console.log('In _onSelectDropdown');
+		console.log('event:'+JSON.stringify(event));
+		this.props.linkList.forEach(link => {
+			if(link.linkId === event.value){
+				this.setState({
+					selectedLink : link,
+					selectedDropDown : event
+				});
+			}
+    });
+  }
+
   componentWillMount() {
     // this.props.fetchAllRFPAction();
     let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+    let type = null;
     this.setState({
       rfp : rfp,
       user : user,
       company : company
     });
-    this.props.getWGLByCompanyIdAction(user.role, company.companyId)
-    .then(data => {
-      // console.log('got response for getWGLByCompanyIdAction, data:'+JSON.stringify(data));
-    });
+    
+    if(user.role === constants.KEY_COMPANY || user.role === constants.KEY_FINANCIAL_SPONSOR){
+			type = 'BORROWER';
+		} else if(user.role === constants.KEY_LENDER){
+			type = 'LENDER';
+		}
+    this.props.getLinksWithCompanyIdAction(user.companyId, type);
+    // this.props.getWGLByCompanyIdAction(user.role, company.companyId)
+    // .then(data => {
+    //   // console.log('got response for getWGLByCompanyIdAction, data:'+JSON.stringify(data));
+    // });
   }
 
   toggleDisplayWGLList(id, ctx){
@@ -134,17 +157,6 @@ class WGL extends Component{
       afterSaveCell: this.afterSaveCell.bind(this)
     };
 
-    // <button onClick={this.onDelete}>Delete Selected</button>
-    // <button onClick={this.onDeselectAll}>Deselected All</button>
-    // <BootstrapTable
-    //   selected={this.state.selection}
-    //   columns={wglColoumns}
-    //   data={wglList}
-    //   headers={true}
-    //   sort={true}>
-    //   <div className="well">There are no items to show</div>
-    // </BootstrapTable>
-
     return (
       <div>
       <BootstrapTable
@@ -171,37 +183,51 @@ class WGL extends Component{
     );
   }
 
-  displayWGLFrame(wglFrameObject){
-    console.log('wglFrameObject:'+JSON.stringify(wglFrameObject));
-    return(<div key={wglFrameObject.linkId}>
-      <h3><a href="#" onClick={this.toggleDisplayWGLList.bind(this, wglFrameObject.linkId)}>{wglFrameObject.name}</a></h3>
-      {wglFrameObject.display ? this.displayWGLListElement(wglFrameObject.list) : ''}
-      <br/>
-      <br/>
-    </div>);
-  }
+  // displayWGLFrame(wglFrameObject){
+  //   console.log('wglFrameObject:'+JSON.stringify(wglFrameObject));
+  //   return(<div key={wglFrameObject.linkId}>
+  //     <h3><a href="#" onClick={this.toggleDisplayWGLList.bind(this, wglFrameObject.linkId)}>{wglFrameObject.name}</a></h3>
+  //     {wglFrameObject.display ? this.displayWGLListElement(wglFrameObject.list) : ''}
+  //     <br/>
+  //     <br/>
+  //   </div>);
+  // }
 
-  displayAllWGLData(){
-    if(this.props.wglMap){
-      var linkKeys = Object.keys(this.props.wglMap);
-      console.log('linkKeys:'+JSON.stringify(linkKeys));
-      return linkKeys.map(linkId => {
-        console.log('linkId:'+linkId);
-        return this.displayWGLFrame(this.props.wglMap[linkId]);
-      });
-    }
+  // displayAllWGLData(){
+  //   if(this.props.wglMap){
+  //     var linkKeys = Object.keys(this.props.wglMap);
+  //     console.log('linkKeys:'+JSON.stringify(linkKeys));
+  //     return linkKeys.map(linkId => {
+  //       console.log('linkId:'+linkId);
+  //       return this.displayWGLFrame(this.props.wglMap[linkId]);
+  //     });
+  //   }
+  // }
+
+  displayNotActivatedMessage(){
+    return(<div>
+      <h4>Selected link is not activated yet by the borrower</h4>
+      </div>);
   }
 
   render(){
     console.log('I am in wgl render');
-    // console.log('In wgl, this.props.history:'+JSON.stringify(this.props.history));
     return(
       <div>
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
-            {this.displayAllWGLData()}
+            <br/>
+            <br/>            
+            <DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
+            <br/>
+            <br/>
+            {this.state.selectedLink 
+              ? (this.state.selectedLink.accessToLender[constants.KEY_ACCESS_CONTROL_WGL] === true
+                ? this.displayWGLListElement(this.props.wglMap ? this.props.wglMap[this.state.selectedLink.linkId].list : null)
+                : this.displayNotActivatedMessage())
+              : ""}
           </div>
         </div>
       </div>
@@ -216,6 +242,10 @@ function mapStateToProps(state) {
   let rObject = {
     wglMap : state.wgl.wgl
   };
+  if(state.link.linkList){
+		// console.log('state.link.linkList:'+JSON.stringify(state.link.linkList));
+		rObject.linkList = state.link.linkList;
+	}
   console.log('rObject:'+JSON.stringify(rObject));
   return rObject;
 }
@@ -227,7 +257,8 @@ function mapDispatchToProps(dispatch) {
     getWGLByCompanyIdAction     : getWGLByCompanyIdAction,
     addContactToWGLAction       : addContactToWGLAction,
     deleteContactFromWGLAction  : deleteContactFromWGLAction,
-    updateContactCellWGLAction  : updateContactCellWGLAction
+    updateContactCellWGLAction  : updateContactCellWGLAction,
+    getLinksWithCompanyIdAction   : getLinksWithCompanyIdAction
   }, dispatch);
 }
 

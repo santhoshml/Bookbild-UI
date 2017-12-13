@@ -8,6 +8,8 @@ import { bindActionCreators } from 'redux';
 import * as actionCreators from '../actions/index';
 import DisplayDocumentTabs from './displayDocumentTabs';
 import Header from './header';
+import Dropdown from 'react-dropdown';
+import DataroomDropdown from './data_room_dropdown';
 
 class NonBorrowerDocumentForm extends Component{
 	constructor(props){
@@ -22,14 +24,34 @@ class NonBorrowerDocumentForm extends Component{
 	componentWillMount() {
 		// console.log('I am in documents.componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+		let type = null;
+		// console.log('user:'+JSON.stringify(user));
+		if(user.role === constants.KEY_COMPANY || user.role === constants.KEY_FINANCIAL_SPONSOR){
+			type = 'BORROWER';
+		} else if(user.role === constants.KEY_LENDER){
+			type = 'LENDER';
+		}
+		this.props.getLinksWithCompanyIdAction(user.companyId, type);
 		this.setState({
 			user : user
-		});		
-		this.props.getLinksWithCompanyIdAction(user.companyId);
+		});
+	}
+
+	_onSelectDropdown(event){
+		console.log('In _onSelectDropdown');
+		console.log('event:'+JSON.stringify(event));
+		this.props.linkList.forEach(link => {
+			if(link.linkId === event.value){
+				this.setState({
+					selectedLink : link,
+					selectedDropDown : event
+				});
+			}
+		});
 	}
 
 	render(){
-		// console.log('I am in documents.render');
+		console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 			<div>
@@ -39,10 +61,15 @@ class NonBorrowerDocumentForm extends Component{
 					<div className="container main-container-left-padding" >
 						<br/>
 						<br/>
-						<h3>List of documents for each of your IOI</h3>
+						<h3>Select the link from dropdown to see the documents</h3>
 						<br/>
 						<br/>
-						{this.props.linkList ? <DisplayDocumentTabs linkList={this.props.linkList} type={this.state.user.role}/> : ''}
+						<DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/>
+						<br/>
+						<br/>
+						{this.state.selectedLink
+							? <DisplayDocumentTabs link={this.state.selectedLink} type={this.state.user.role}/>
+							: ''}
 					</div>
 				</div>
 			</div>
@@ -54,6 +81,7 @@ function mapStateToProps(state) {
 	// console.log('In documents.mapStateToProps');
 	let rObject={};
 	if(state.link.linkList){
+		// console.log('state.link.linkList:'+JSON.stringify(state.link.linkList));
 		rObject.linkList = state.link.linkList;
 	}
   return rObject;

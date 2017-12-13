@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { getLinkDocsWithRFPAndIOIAction, uploadDocumentRequest, getLinksWithCompanyIdAction, deleteLinkDocumentAction, downloadLinkDocumentAction } from '../actions/index';
+import { getLinkDocsWithLinkIdAction, getLinkDocsWithRFPAndIOIAction, uploadDocumentRequest, getLinksWithCompanyIdAction, deleteLinkDocumentAction, downloadLinkDocumentAction } from '../actions/index';
 import { Link } from "react-router-dom";
 import validator from 'validator';
 import lsUtils from '../utils/ls_utils';
@@ -24,8 +24,7 @@ class DisplayDocumentTabs extends Component{
 		this.state = {
 			user : null,
 			company : null,
-			displayLinkId : null,
-			displayRfpId : null
+			displayLinkId : null
 		};
 	}
 
@@ -38,20 +37,17 @@ class DisplayDocumentTabs extends Component{
 			user : user,
 			company : company
 		});
-		if(this.props.linkList && this.props.linkList.length > 0){
-			// console.log('this.props.linkList:'+JSON.stringify(this.props.linkList));
-			let firstRFPId = this.props.linkList[0].rfpId;
-			let firstIOIId = this.props.linkList[0].ioiId;
-			that.props.getLinkDocsWithRFPAndIOIAction(firstRFPId, firstIOIId);
-			that.setState({
-				displayLinkId : this.props.linkList[0].linkId,
-				displayRfpId : this.props.linkList[0].rfpId
+		// console.log('this.props.link:'+JSON.stringify(this.props.link));
+		if(this.props.link){
+			this.props.getLinkDocsWithLinkIdAction(this.props.link.linkId);
+			this.setState({
+				displayLinkId : this.props.link.linkId
 			});
 		}
 	}
 
-	handleFileUpload(type, rfpId, ioiId, linkId, inputFiles) {
-		// console.log('In handleFileUpload, type:'+type+', rfpId:'+rfpId+', ioiId:'+ioiId+', linkId:'+linkId);
+	handleFileUpload(type, inputFiles) {
+		// console.log('In handleFileUpload, type:'+type);
 		// console.log('this.state:'+JSON.stringify(this.state));
 		inputFiles.persist();
 		var files = inputFiles.currentTarget.files;
@@ -59,19 +55,19 @@ class DisplayDocumentTabs extends Component{
 			let that = this;
 		  let file = files[0];
 		  this.props.uploadDocumentRequest({
-		     file,
-		     type 	: type,
-				 ioiId : ioiId,
-				 rfpId : rfpId,
-				 linkId : linkId,
-				 uploadedCompanyId : this.state.user.companyId
-		  })
-			.then((data)=>{
-				that.props.getLinkDocsWithRFPAndIOIAction(rfpId, ioiId);
+		    file,
+		    type	: type,
+			ioiId 	: this.props.link.ioiId,
+			rfpId 	: this.props.link.rfpId,
+			linkId 	: this.props.link.linkId,
+			uploadedCompanyId : this.state.user.companyId
+		  }).then((data)=>{
+			  	// console.log('file upload completed');
+				that.props.getLinkDocsWithLinkIdAction(that.props.link.linkId);
 				that.myFileInput=null;
 			});
 		} else {
-			// console.log('no file to upload');
+			console.log('no file to upload');
 		}
 	}
 
@@ -116,12 +112,11 @@ class DisplayDocumentTabs extends Component{
 		}
 	}
 
-	renderDocumentItem(type, link){
+	renderDocumentItem(type){
 		// console.log('In renderDocumentItem');
 		var that = this;
-		// console.log('this.props.linkList:'+JSON.stringify(this.props.linkList));
 		if(this.props.linkDocList && this.props.linkDocList.length > 0){
-			let list = this.props.linkDocList.filter(linkDoc => linkDoc.type === type && linkDoc.rfpId === link.rfpId);
+			let list = this.props.linkDocList.filter(linkDoc => linkDoc.type === type);
 			if(list && list.length > 0){
 				return list.map(function(item){
 					// console.log('item:'+JSON.stringify(item));
@@ -130,10 +125,10 @@ class DisplayDocumentTabs extends Component{
 						<td>{item.companyName}</td>
 						<td>{dateFormat(moment(item.timestamp), 'longDate')}</td>
 						<td>
-							{that.addDeleteIcon(item)}
 							<Link to="#" onClick={that.downloadDocument.bind(that,cUtils.getS3Filename(item.url))}>
 								<span className="glyphicon glyphicon-download-alt" aria-hidden="true" />
 							</Link>&nbsp;&nbsp;
+							{that.addDeleteIcon(item)}
 						</td>
 					</tr>);
 				});
@@ -145,16 +140,13 @@ class DisplayDocumentTabs extends Component{
 		}
 	}
 
-	renderRFPAndDocuments(link, type){
+	renderRFPAndDocuments(type){
 		// console.log('I am in renderRFPAndDocuments');
 		let that=this;
 		let inputTagStyle= {
 			'display':'inline'
 		};
 
-		// <h5>
-		// 	<span className="glyphicon glyphicon-file"/>&nbsp;&nbsp;<b>{constants.DOCS_CATEGORY_DISPLAY_NAME_MAP[type]}</b>
-		// </h5>
 		return(<div>
 			<table className="table table-bordered table-striped">
 				<thead>
@@ -165,8 +157,8 @@ class DisplayDocumentTabs extends Component{
 						<th>Action</th>
 					</tr>
 				</thead>
-				<tbody key={link.linkId+'__'+type}>
-					{this.state.displayRfpId === link.rfpId ? this.renderDocumentItem(type, link) : ''}
+				<tbody key={this.props.link.linkId+'__'+type}>
+					{this.renderDocumentItem(type)}
 					<tr>
 						<td colSpan="4">
 							<span>Select a document to upload </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -175,7 +167,7 @@ class DisplayDocumentTabs extends Component{
 								ref={(ref) => this.myFileInput = ref}
 								style={inputTagStyle}
 								type="file"
-								onChange={that.handleFileUpload.bind(this, type, link.rfpId, link.ioiId, link.linkId)} />
+								onChange={that.handleFileUpload.bind(this, type)} />
 						</td>
 					</tr>
 				</tbody>
@@ -184,31 +176,8 @@ class DisplayDocumentTabs extends Component{
 		</div>);
 	}
 
-	updateDisplayFlag(linkId, rfpId){
-		// console.log('In updateDisplayFlag, linkId:'+linkId);
-		this.props.getLinkDocsWithRFPAndIOIAction(rfpId, linkId);
-		this.setState({
-			displayLinkId : linkId,
-			displayRfpId	: rfpId
-		});
-	}
-
-	displaySubtitle(link){
-		// console.log('In displaySubtitle');
-		// console.log('link:'+JSON.stringify(link));
-		if(this.props.type === constants.KEY_COMPANY || this.props.type === constants.KEY_FINANCIAL_SPONSOR){
-			return(
-				<h4>{formatCurrency(link.dealSize, constants.CURRENCY_OPTS)+'-'+link.category+'-'+link.requestType}</h4>
-			);
-		} else {
-			return(
-				<h4>{link.name}</h4>
-			);
-		}
-	}
-
-	renderTabs(link){
-		// console.log('link :'+ JSON.stringify(link));
+	renderTabs(){
+		// console.log('link :'+ JSON.stringify(this.props.link));
 		// console.log('user:'+ JSON.stringify(this.state.user));
 		return(
 			<Tabs>
@@ -216,39 +185,39 @@ class DisplayDocumentTabs extends Component{
 					<Tab>
 						Non-Disclosure Agreement(NDA)
 					</Tab>
-					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Transaction Overview
 					</Tab>
-					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Company
 					</Tab>
-					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Financial
 					</Tab>
-					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Legal
 					</Tab>
-					<Tab disabled={cUtils.computeDocumentsTabDisabled(link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS], this.state.user.role)}>
+					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Operations
 					</Tab>
 				</TabList>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'TXN_NDA')}
+					{this.renderRFPAndDocuments('TXN_NDA')}
 				</TabPanel>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'TXN_OVERVIEW')}
+					{this.renderRFPAndDocuments('TXN_OVERVIEW')}
 				</TabPanel>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'COMPANY')}
+					{this.renderRFPAndDocuments('COMPANY')}
 				</TabPanel>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'FINANCIAL')}
+					{this.renderRFPAndDocuments('FINANCIAL')}
 				</TabPanel>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'LEGAL')}
+					{this.renderRFPAndDocuments('LEGAL')}
 				</TabPanel>
 				<TabPanel>
-					{this.renderRFPAndDocuments(link, 'OPERATIONS')}
+					{this.renderRFPAndDocuments('OPERATIONS')}
 				</TabPanel>
 			</Tabs>
 		);
@@ -256,24 +225,11 @@ class DisplayDocumentTabs extends Component{
 
 	render(){
 		// console.log('I am in renderLinkList');
-		let that = this;
-		return(<ul className="folder-open">
-			{this.props.linkList && this.props.linkList.map(function(link){
-				// console.log('key :'+link.linkId);
-				return (<li key={link.linkId ? link.linkId : link.rfpId}>
-					<Link to="#" onClick={that.updateDisplayFlag.bind(that, link.linkId, link.rfpId)}>
-						{that.displaySubtitle(link)}
-					</Link>
-						{((link.rfpId === that.state.displayRfpId && !link.linkId) || (link.linkId === that.state.displayLinkId && link.rfpId === that.state.displayRfpId)) ? that.renderTabs(link) : ''}
-					<br/>
-					<br/>
-				</li>
-				);
-			})}
-			<br/>
-			<br/>
-			</ul>
-		);
+		// let that = this;
+		// console.log('this.props.link:'+JSON.stringify(this.props.link));
+		return(<div>
+				{this.renderTabs()}
+			</div>);
 	}
 
 }
@@ -299,7 +255,8 @@ function mapDispatchToProps(dispatch) {
 		getLinksWithCompanyIdAction : getLinksWithCompanyIdAction,
 		deleteLinkDocumentAction	: deleteLinkDocumentAction,
 		downloadLinkDocumentAction	: downloadLinkDocumentAction,
-		getLinkDocsWithRFPAndIOIAction	: getLinkDocsWithRFPAndIOIAction
+		getLinkDocsWithRFPAndIOIAction	: getLinkDocsWithRFPAndIOIAction,
+		getLinkDocsWithLinkIdAction : getLinkDocsWithLinkIdAction
   }, dispatch);
 }
 

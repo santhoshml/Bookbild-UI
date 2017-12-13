@@ -14,7 +14,8 @@ import NavBar from './sidebar';
 import Header from './header';
 import Switch from 'react-toggle-switch'
 import Toggle from 'react-toggle';
-import Dropdown from 'react-dropdown'
+import Dropdown from 'react-dropdown';
+import DataroomDropdown from './data_room_dropdown';
 
 
 class borrowerControlledAccess extends Component{
@@ -75,6 +76,7 @@ class borrowerControlledAccess extends Component{
   _onSelectDropdown(event){
     console.log('I am in _onSelectDropdown');
     console.log('event:'+JSON.stringify(event));
+    console.log('borrowerControlledAccessList :'+JSON.stringify(this.state.borrowerControlledAccessList));
     let selectedAccessList = null;
     for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
       if(this.state.borrowerControlledAccessList[i].linkId === event.value){
@@ -88,23 +90,6 @@ class borrowerControlledAccess extends Component{
       selectedAccessList : selectedAccessList
     });
 
-  }
-
-  displayDrpdownList(){
-    console.log('this.state.borrowerControlledAccessList :'+ JSON.stringify(this.state.borrowerControlledAccessList));
-    let options = [];
-    for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
-      let ele = this.state.borrowerControlledAccessList[i];
-      options.push({
-        value : ele.linkId,
-        label : ele.name
-      });
-    }
-    return (
-      <div>
-      <Dropdown options={options} onChange={this._onSelectDropdown.bind(this)} value={this.state.selectedDropDown} placeholder="Select an option" />      
-      </div>
-    );
   }
 
   displayAccessListDetails(){
@@ -156,9 +141,7 @@ class borrowerControlledAccess extends Component{
             <h3>select a link from the below dropdown to update the access control settings</h3>
             <br/>
             <br/>            
-            {this.state.borrowerControlledAccessList 
-              && this.state.borrowerControlledAccessList.length > 0 
-              ? this.displayDrpdownList() : ""}
+            <DataroomDropdown linkList={this.state.borrowerControlledAccessList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
             <br/>
             <br/>
             {this.state.selectedAccessList ? this.displayAccessListDetails() : ""}         
