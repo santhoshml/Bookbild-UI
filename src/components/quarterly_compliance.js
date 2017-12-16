@@ -318,16 +318,31 @@ class complianceForm extends Component{
 		console.log('In _onSelectDropdown');
 		console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
-			if(link.linkId === event.value){
-        this.props.getComplianceDataWithLinkId(link.linkId);
-				this.setState({
-					selectedLink : link,
-          selectedDropDown : event,
-          coloumns : complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable),
-				});
+			if(link.linkId === event.value ){
+        if(link.accessToLender[constants.KEY_ACCESS_CONTROL_QCOMPLIANCE]){
+          // quaterly access activated
+          this.props.getComplianceDataWithLinkId(link.linkId);
+          this.setState({
+            selectedLink : link,
+            selectedDropDown : event,
+            coloumns : complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable),
+          });
+        } else {
+          console.log('link not activated');
+          this.setState({
+            selectedLink : link,
+            selectedDropDown : event
+          });
+        }
 			}
     });
   }
+
+  displayNotActivatedMessage(){
+    return(<div>
+      <h4>Selected link is not activated yet by the borrower</h4>
+      </div>);
+  }  
 
 	render(){
     console.log('I am in quaterly_compliance.render');
@@ -344,13 +359,28 @@ class complianceForm extends Component{
             <DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
             <br/>
             <br/>
-            {this.state.complianceDisplayData.length > 0 ? this.displayDropdownSelections() : ''}
+            {
+              this.state.complianceDisplayData.length > 0 
+              && this.state.selectedLink 
+              ? this.displayDropdownSelections() 
+              : (this.state.selectedLink ? this.displayNotActivatedMessage() : '')
+            }
             <br/>
             <br/>
-            {this.state.complianceDisplayData.length > 0 ? this.displayComplianceView() : ''}
+            {
+              this.state.complianceDisplayData.length > 0 
+              && this.state.selectedLink 
+              ? this.displayComplianceView() 
+              : ''
+            }
             <br/>
             <br/>
-            {this.state.complianceDisplayData.length && this.state.isColoumnsEditable ? this.addSubmit() : ''}
+            {
+              this.state.complianceDisplayData.length 
+              && this.state.isColoumnsEditable 
+              ? this.addSubmit() 
+              : ''
+            }
           </div>
         </div>
         <br/>

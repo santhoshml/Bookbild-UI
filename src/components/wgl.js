@@ -183,26 +183,6 @@ class WGL extends Component{
     );
   }
 
-  // displayWGLFrame(wglFrameObject){
-  //   console.log('wglFrameObject:'+JSON.stringify(wglFrameObject));
-  //   return(<div key={wglFrameObject.linkId}>
-  //     <h3><a href="#" onClick={this.toggleDisplayWGLList.bind(this, wglFrameObject.linkId)}>{wglFrameObject.name}</a></h3>
-  //     {wglFrameObject.display ? this.displayWGLListElement(wglFrameObject.list) : ''}
-  //     <br/>
-  //     <br/>
-  //   </div>);
-  // }
-
-  // displayAllWGLData(){
-  //   if(this.props.wglMap){
-  //     var linkKeys = Object.keys(this.props.wglMap);
-  //     console.log('linkKeys:'+JSON.stringify(linkKeys));
-  //     return linkKeys.map(linkId => {
-  //       console.log('linkId:'+linkId);
-  //       return this.displayWGLFrame(this.props.wglMap[linkId]);
-  //     });
-  //   }
-  // }
 
   displayNotActivatedMessage(){
     return(<div>
