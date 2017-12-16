@@ -47,6 +47,7 @@ export const GET_COMPLIANCE_DATA = 'GET_COMPLIANCE_DATA';
 export const GET_BORROWER_CONTROLLED_ACCESS_LIST = 'GET_BORROWER_CONTROLLED_ACCESS_LIST';
 export const UPDATE_ACCESS_TO_LENDER_FLAG = 'UPDATE_ACCESS_TO_LENDER_FLAG';
 export const GET_LINKS_WITH_RFP_IOI = 'GET_LINKS_WITH_RFP_IOI';
+export const GET_COMPLIANCE_DATA_WITH_LINKID = 'GET_COMPLIANCE_DATA_WITH_LINKID';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -112,6 +113,20 @@ export function getComplianceData(companyId){
 
   return{
     type: GET_COMPLIANCE_DATA,
+    payload: request
+  }
+}
+
+export function getComplianceDataWithLinkId(linkId){
+  console.log('In getComplianceDataWithLinkId, linkId:'+linkId);
+  const request=axios({
+    url : '/getComplianceDataWithLinkId?linkId='+linkId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_COMPLIANCE_DATA_WITH_LINKID,
     payload: request
   }
 }

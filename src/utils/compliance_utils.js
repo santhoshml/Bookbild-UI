@@ -32,9 +32,17 @@ exports.getDisplayData = function(complianceData, cols){
     return dataArr;
   }
   
-  exports.getQuaterlyColoumns=function(typeCustomFormatter){
+  exports.getQuaterlyColoumns=function(typeCustomFormatter, isEditable){
     let cols=constants.COMPLIANCE_QUATERLY_COLS;
     cols[0].formatter = typeCustomFormatter;
+
+    // set isEditable Flag
+    if(isEditable){
+      for(let i=1;i<cols.length;i++){
+          cols[i].editable = true;
+      }
+    }
+  
     return cols;
   }
   

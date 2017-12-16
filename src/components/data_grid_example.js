@@ -28,18 +28,6 @@ class DataGrid extends Component{
     };
   }
 
-  componentWillMount(){
-    // console.log('I am in DataGrid, componentWillMount');
-    // this._columns = this.props.columns;
-    // this.setState({
-    //   rows: this.props.dataList
-    //   , filters: {}
-    //   , sortColumn: null
-    //   , sortDirection: null
-    //   , selectedIndexes: []
-    // });
-  }
-
   componentWillReceiveProps(nextProps){
     // console.log('I am in data_grid_example, componentWillReceiveProps');
     this._columns = nextProps.columns;

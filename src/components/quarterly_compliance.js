@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { saveComplianceData, getComplianceData, getLinksWithCompanyIdAction, uploadDocumentRequest } from '../actions/index';
+import { saveComplianceData, getComplianceDataWithLinkId, getLinksWithCompanyIdAction, uploadDocumentRequest } from '../actions/index';
 import { Link } from "react-router-dom";
 import lsUtils from '../utils/ls_utils';
 import complainceUtils from '../utils/compliance_utils';
@@ -12,6 +12,7 @@ import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import DataGrid from './data_grid_example';
 import Header from './header';
 import JSAlert from "js-alert";
+import DataroomDropdown from './data_room_dropdown';
 
 const childRowStyle = {
   fontStyle :'italic', 
@@ -28,7 +29,7 @@ class complianceForm extends Component{
 		this.state = {
 			user : null,
       company : null,
-      selectedView : 'monthly',
+      selectedView : 'quaterly',
       selectedYear : 'YR_'+new Date().getFullYear(),
       coloumns : [],
       complianceData : null,
@@ -42,45 +43,34 @@ class complianceForm extends Component{
     let that = this;
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    
-    if(user.role === constants.KEY_LENDER){
-      this.props.getLinksWithCompanyIdAction(user.companyId)
-      .then(function(results){
-        // console.log('I am in then, results:'+JSON.stringify(results));
-        if(results.payload.status === 200 && results.payload.data.data.length > 0){
-          let linkList = results.payload.data.data;
-          // console.log('linkList:'+JSON.stringify(linkList));
-          for(let i=0; i< linkList.length; i++){
-            linkList[i].view = false;
-          }
-          // console.log('linkList:'+JSON.stringify(linkList));
+    let type = null;
+    if(user.role === constants.KEY_COMPANY || user.role === constants.KEY_FINANCIAL_SPONSOR){
+			type = 'BORROWER';
+		} else if(user.role === constants.KEY_LENDER){
+			type = 'LENDER';
+		}
+    this.props.getLinksWithCompanyIdAction(user.companyId, type);
 
-          that.setState({
-            linkList : linkList
-          });
-        }
-      });
-    } else {
-      this.props.getComplianceData(company.companyId);
-    }
-
-    // data should be editable only by company and financial sponsor
     let isColoumnsEditable = false;
     if(user.role === constants.KEY_COMPANY || user.role === constants.KEY_FINANCIAL_SPONSOR)
       isColoumnsEditable = true;
+
     this.setState({
 			user : user,
       company : company,
-      coloumns : complainceUtils.getMonthlyColoumns(this.typeCustomFormatter, isColoumnsEditable),
-    });    
+      isColoumnsEditable : isColoumnsEditable
+    });
   }
 
   componentWillReceiveProps(nextProps){
-    console.log('In componentWillReceiveProps ');
+    // console.log('In componentWillReceiveProps ');
     let data = {};
 
-    if(!this.state.complianceData){
-      console.log('there is no compliance data in the state');
+    // console.log('nextProps :'+JSON.stringify(nextProps));
+
+    // if(!this.state.complianceData){
+    if(nextProps.complianceData){
+      // console.log('there is no compliance data in the state');
       if(nextProps.complianceData && nextProps.complianceData.data){
         data = nextProps.complianceData.data;
         let thisYearComplianceData = data[this.state.selectedYear];
@@ -100,8 +90,17 @@ class complianceForm extends Component{
         complianceDataId : nextProps.complianceData ? nextProps.complianceData.complianceDataId : null,
         complianceDisplayData : complainceUtils.getDisplayData(data[this.state.selectedYear], this.state.coloumns)
       });
+    } else if(!nextProps.complianceData && this.state.selectedLink){
+      // link is selected but there is no compliance data, so init
+      // console.log('complianceData object is null');
+      data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
+      this.setState({
+        complianceData : data,
+        complianceDataId : nextProps.complianceData ? nextProps.complianceData.complianceDataId : null,
+        complianceDisplayData : complainceUtils.getDisplayData(data[this.state.selectedYear], this.state.coloumns)
+      });      
     } else {
-      console.log('there is a complianceData object in state');
+      // console.log('link is not selected and there is no complianceData');
     }
   }
 
@@ -156,7 +155,7 @@ class complianceForm extends Component{
     // console.log('I am in onClickSelectView, val:'+val);
     if(val === 'quaterly'){
       // console.log('I am in onClickSelectView, quaterly');
-      let cols = complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter);
+      let cols = complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable);
       this.setState({
         selectedView : 'quaterly',
         coloumns : cols,
@@ -164,12 +163,7 @@ class complianceForm extends Component{
       });
     } else {
       // console.log('I am in onClickSelectView, monthly');
-      let isEditable = false;
-      if(this.state.user.role === constants.KEY_COMPANY
-        || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR )
-        isEditable = true;
-
-      let cols = complainceUtils.getMonthlyColoumns(this.typeCustomFormatter, isEditable);
+      let cols = complainceUtils.getMonthlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable);
       this.setState({
         selectedView : 'monthly',
         coloumns : cols,
@@ -203,7 +197,11 @@ class complianceForm extends Component{
     dObject.userId = this.state.user.userId;
     dObject.data = this.state.complianceData;
     dObject.complianceDataId = this.state.complianceDataId;
-    this.props.saveComplianceData(dObject);
+    dObject.linkId = this.state.selectedLink.linkId;
+    this.props.saveComplianceData(dObject)
+    .then((data)=>{
+      this.props.getComplianceDataWithLinkId(this.state.selectedLink.linkId);
+    });
   }
 
   addSubmit(){
@@ -316,80 +314,52 @@ class complianceForm extends Component{
     );
   }
 
-  handleFileUpload(type, rfpId, ioiId, linkId, inputFiles) {
-		// console.log('In handleFileUpload, type:'+type+', rfpId:'+rfpId+', ioiId:'+ioiId+', linkId:'+linkId);
-		// console.log('this.state:'+JSON.stringify(this.state));
-		inputFiles.persist();
-		var files = inputFiles.currentTarget.files;
-		if(files && files.length > 0){
-			let that = this;
-		  let file = files[0];
-		  this.props.uploadDocumentRequest({
-		     file,
-		     type 	: type,
-				 ioiId : ioiId,
-				 rfpId : rfpId,
-				 linkId : linkId,
-				 uploadedCompanyId : this.state.user.companyId
-		  })
-			.then(()=>{
-				that.myFileInput=null;
-			});
-		} else {
-			// console.log('no file to upload');
-		}
-	}  
+  _onSelectDropdown(event){
+		console.log('In _onSelectDropdown');
+		console.log('event:'+JSON.stringify(event));
+		this.props.linkList.forEach(link => {
+			if(link.linkId === event.value){
+        this.props.getComplianceDataWithLinkId(link.linkId);
+				this.setState({
+					selectedLink : link,
+          selectedDropDown : event,
+          coloumns : complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable),
+				});
+			}
+    });
+  }
 
 	render(){
     console.log('I am in quaterly_compliance.render');
-    if(this.state.user.role === constants.KEY_COMPANY
-      || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
-        return (
-          <div>
-            <Header/>
-            <div style={{ display: 'flex' }}>
-              <NavBar history={this.props.history}/>        
-              <div className="container main-container-left-padding" >
-                <br/>
-                <br/>
-                <h3>Quarterly Compliance</h3>
-                <br/>
-                {this.state.complianceDisplayData.length > 0 ? this.displayDropdownSelections() : ''}
-                {this.state.complianceDisplayData.length > 0 ? this.displayComplianceView() : ''}
-                {this.addSubmit()}
-              </div>
-            </div>
+    return (
+      <div>
+        <Header/>
+        <div style={{ display: 'flex' }}>
+          <NavBar history={this.props.history}/>        
+          <div className="container main-container-left-padding" >
             <br/>
             <br/>
+            <h3>Quarterly Compliance</h3>
+            <br/>
+            <DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
             <br/>
             <br/>
+            {this.state.complianceDisplayData.length > 0 ? this.displayDropdownSelections() : ''}
             <br/>
+            <br/>
+            {this.state.complianceDisplayData.length > 0 ? this.displayComplianceView() : ''}
+            <br/>
+            <br/>
+            {this.state.complianceDisplayData.length && this.state.isColoumnsEditable ? this.addSubmit() : ''}
           </div>
-        );
-      } else if(this.state.user.role === constants.KEY_LENDER){
-        return (
-          <div>
-            <Header/>
-            <div style={{ display: 'flex' }}>
-              <NavBar history={this.props.history}/>        
-              <div className="container main-container-left-padding" >
-                <br/>
-                <br/>
-                <h3>Quarterly Compliance</h3>
-                <br/>
-                <p>Click on the links below to see the compliance data for the borrower.</p>
-                <br/>
-                {this.state.linkList ? this.displayLinks() : ''}
-              </div>
-            </div>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-            <br/>
-          </div>
-        );
-      }
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+      </div>
+    );
 	}
 }
 
@@ -397,35 +367,17 @@ function mapStateToProps(state) {
   // console.log('In mapStateToProps');
   // console.log('state:'+JSON.stringify(state));
   let rObject={};
-  
-	// if(state.link.linkList){
-  //   rObject.linkList = state.link.linkList;
+  rObject.linkList = state.link.linkList;
+  rObject.complianceData = state.complianceData.complianceData;
 
-  //   // set the view flag as false
-  //   for(let i=0; i<rObject.linkList.length ; i++){
-  //     rObject.linkList[i].view = false;
-  //   }
-  // }
-  
-  if(state.complianceData.complianceData){
-    // console.log('In mapStateToProps, :'+ JSON.stringify(state.complianceData.complianceData));
-    let complianceData = state.complianceData.complianceData;
-    rObject.complianceData = complianceData;
-    
-  }
-  rObject.a = 'b';
-
-  console.log('returning rObject :'+JSON.stringify(rObject));
+  // console.log('returning rObject :'+JSON.stringify(rObject));
   return rObject;
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
-  // console.log('In mapDispatchToProps');
   return bindActionCreators({
     saveComplianceData : saveComplianceData,
-    getComplianceData : getComplianceData,
+    getComplianceDataWithLinkId : getComplianceDataWithLinkId,
     getLinksWithCompanyIdAction  : getLinksWithCompanyIdAction,
     uploadDocumentRequest : uploadDocumentRequest
   }, dispatch);
