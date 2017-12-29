@@ -46,8 +46,16 @@ export const SAVE_COMPLIANCE_DATA = 'SAVE_COMPLIANCE_DATA';
 export const GET_COMPLIANCE_DATA = 'GET_COMPLIANCE_DATA';
 export const GET_BORROWER_CONTROLLED_ACCESS_LIST = 'GET_BORROWER_CONTROLLED_ACCESS_LIST';
 export const UPDATE_ACCESS_TO_LENDER_FLAG = 'UPDATE_ACCESS_TO_LENDER_FLAG';
-export const GET_LINKS_WITH_RFP_IOI = 'GET_LINKS_WITH_RFP_IOI';
+export const GET_LINKS_WITH_IOI = 'GET_LINKS_WITH_IOI';
 export const GET_COMPLIANCE_DATA_WITH_LINKID = 'GET_COMPLIANCE_DATA_WITH_LINKID';
+export const CREATE_FINAL_TERM = 'CREATE_FINAL_TERM';
+export const GET_FINAL_TERM_BY_IOI = 'GET_FINAL_TERM_BY_IOI';
+export const GET_FINAL_TERM_WITH_YIELD_MATRIX = 'GET_FINAL_TERM_WITH_YIELD_MATRIX';
+export const FETCH_FINAL_TERM_LIST_FOR_COMPANY = 'FETCH_FINAL_TERM_LIST_FOR_COMPANY';
+export const SEND_INVITE_COMPANY_EMAIL = 'SEND_INVITE_COMPANY_EMAIL';
+export const FETCH_LINK_DOCS_WITH_FINAL_TERM_ID = 'FETCH_LINK_DOCS_WITH_FINAL_TERM_ID';
+export const GET_LINK_WITH_FINAL_TERM = 'GET_LINK_WITH_FINAL_TERM';
+export const MARK_AS_EXECUTED = 'MARK_AS_EXECUTED';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -59,23 +67,151 @@ export const DELETE_POST = "delete_post";
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
-export function getLinkWithRFPAndIOIAction(rfpId, ioiId){
-  // // console.log('In actions.getLinkWithRFPAndIOIAction');
+export function markDealAsExecutedAction(props){
+  // console.log('props :'+JSON.stringify(props));
   const request=axios({
-    url : '/getLinkWithRFPAndIOIAction?rfpId='+rfpId+'&ioiId='+ioiId,
+    url : '/markDealAsExecuted',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: MARK_AS_EXECUTED,
+    payload: request
+  }  
+}
+
+export function fetchLinkDocsWithFinalTermIdAction(finalTermId){
+  const request=axios({
+    url : '/fetchLinkDocsWithFinalTermIdFilterFinalTerm?finalTermId='+finalTermId,
     method : 'GET',
     baseURL : ROOT_URL
   });
 
   return{
-    type: GET_LINKS_WITH_RFP_IOI,
+    type: FETCH_LINK_DOCS_WITH_FINAL_TERM_ID,
+    payload: request
+  }
+}
+
+export function sendInviteCompanyEmailAction(props){
+  // console.log('In actions.sendInviteCompanyEmailAction');
+  // console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/sendInviteCompanyEmail',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: SEND_INVITE_COMPANY_EMAIL,
+    payload: request
+  }
+}
+
+export function fetchFinalTermListForLenderCompany(companyId){
+  const request=axios({
+    url : '/fetchFinalTermListForLenderCompany?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_FINAL_TERM_LIST_FOR_COMPANY,
+    payload: request
+  }
+}
+
+export function fetchFinalTermListForBorrowerCompany(companyId){
+  const request=axios({
+    url : '/fetchFinalTermListForBorrowerCompany?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_FINAL_TERM_LIST_FOR_COMPANY,
+    payload: request
+  }
+}
+
+export function fetchFinalTermWithYieldMatrixAction(finalTermId){
+  // console.log('In actions.fetchFinalTermWithYieldMatrixAction');
+  const request=axios({
+    url : '/getFinalTermWithYieldMatrix?finalTermId='+finalTermId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_FINAL_TERM_WITH_YIELD_MATRIX,
+    payload: request
+  }
+}
+
+export function fetchFinalIOIAction(ioiId){
+  // console.log('In actions.fetchFinalIOIAction');
+  const request=axios({
+    url : '/getFinalIOIByIoiId?ioiId='+ioiId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_FINAL_TERM_BY_IOI,
+    payload: request
+  }
+}
+
+export function createFinalTermAction(props){
+  // console.log('In actions.createFinalTermAction');
+  // console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/createFinalTerm',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: CREATE_FINAL_TERM,
+    payload: request
+  }
+}
+
+export function getLinkWithIOIAction(ioiId){
+  // // console.log('In actions.getLinkWithRFPAndIOIAction');
+  const request=axios({
+    url : '/getLinkWithIOI?ioiId='+ioiId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_WITH_IOI,
+    payload: request
+  }
+}
+
+export function getLinkWithFinalTermAction(finalTermId){
+  // // console.log('In actions.getLinkWithRFPAndIOIAction');
+  const request=axios({
+    url : '/getLinkWithFinalTerm?finalTermId='+finalTermId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINK_WITH_FINAL_TERM,
     payload: request
   }
 }
 
 
 export function updateAccessToLenderFlag(data){
-  console.log('In updateAccessToLenderFlag, data:'+JSON.stringify(data));
+  // console.log('In updateAccessToLenderFlag, data:'+JSON.stringify(data));
   const request=axios({
     url : '/updateAccessToLenderFlag',
     method : 'POST',
@@ -104,7 +240,7 @@ export function getBorrowerControlledAccessListAction(borrowerId){
 }
 
 export function getComplianceData(companyId){
-  console.log('In getComplianceData, companyId:'+companyId);
+  // console.log('In getComplianceData, companyId:'+companyId);
   const request=axios({
     url : '/getComplianceData?companyId='+companyId,
     method : 'GET',
@@ -118,7 +254,7 @@ export function getComplianceData(companyId){
 }
 
 export function getComplianceDataWithLinkId(linkId){
-  console.log('In getComplianceDataWithLinkId, linkId:'+linkId);
+  // console.log('In getComplianceDataWithLinkId, linkId:'+linkId);
   const request=axios({
     url : '/getComplianceDataWithLinkId?linkId='+linkId,
     method : 'GET',
@@ -176,8 +312,22 @@ export function saveComparisionToolData(data){
   }
 }
 
+export function getLinkDocsWithLinkIdAndTypeAction(linkId, type){
+  // console.log('In actions.getLinkDocsWithLinkIdAndTypeAction');
+  const request=axios({
+    url : '/getLinkDocsWithLinkIdAndType?linkId='+linkId+'&type='+type,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_DOCS_WITH_LINK,
+    payload: request
+  }
+}
+
 export function getLinkDocsWithLinkIdAction(linkId){
-  console.log('In actions.getLinkDocsWithLinkIdAction');
+  // console.log('In actions.getLinkDocsWithLinkIdAction');
   const request=axios({
     url : '/getLinkDocsWithLinkId?linkId='+linkId,
     method : 'GET',
@@ -219,8 +369,8 @@ export function getLinkDocsWithRFPAndIOIAndCompanyAction(rfpId, ioiId, companyId
 }
 
 export function getLinksWithCompanyIdAction(companyId, type){
-  console.log('In actions.getLinksWithCompanyIdAction');
-  console.log('companyId:'+companyId+', type:'+type);
+  // console.log('In actions.getLinksWithCompanyIdAction');
+  // console.log('companyId:'+companyId+', type:'+type);
   const request=axios({
     url : '/getLinksWithCompanyId?companyId='+companyId+'&type='+type,
     method : 'GET',
@@ -400,6 +550,20 @@ export function getIOIForRFPAndCompanyAction(rfpId, companyId){
   }
 }
 
+export function getIOIWithFinalTermAction(finalTermId){
+  // console.log('In actions.getIOIForRFPAndCompanyAction');
+  const request=axios({
+    url : '/getIOIWithFinalTerm?finalTermId='+finalTermId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_IOI,
+    payload: request
+  }
+}
+
 export function resetActivityTermSheetStatsAction(props){
   // console.log('In actions.resetActivityTermSheetStatsAction');
   const request=axios({
@@ -458,11 +622,11 @@ export function fetchTermSheetActivityStatsAction(sector){
   }
 }
 
-export function fetchRFPAction(rfpId){
-  console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
+export function fetchRFPByIOIAction(ioiId){
+  // console.log('In actions.fetchRFPByIOIAction, ioiId:'+ioiId);
   const request=axios({
-    // url : '/fetchRFP?rfpId='+rfpId,
-    url : '/fetchRFPUsingCache?rfpId='+rfpId,
+    url : '/fetchRFPByIOI?ioiId='+ioiId,
+    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -473,11 +637,52 @@ export function fetchRFPAction(rfpId){
   }
 }
 
-export function fetchIOIListForCompanyAction(companyId){
-  // console.log('In actions.fetchIOIListForCompanyAction');
-  // console.log('In fetchIOIListForCompanyAction, companyId:'+companyId);
+export function getRFPWithFinalTermAction(finalTermId){
+  // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
-    url : '/fetchIOIListForCompany?companyId='+companyId,
+    url : '/getRFPWithFinalTerm?finalTermId='+finalTermId,
+    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_RFP,
+    payload: request
+  }
+}
+
+export function fetchRFPAction(rfpId){
+  // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
+  const request=axios({
+    url : '/fetchRFP?rfpId='+rfpId,
+    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_RFP,
+    payload: request
+  }
+}
+
+export function fetchIOIListForLenderCompanyAction(companyId){
+  const request=axios({
+    url : '/fetchIOIListForLenderCompany?companyId='+companyId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_IOI_LIST_FOR_COMPANY,
+    payload: request
+  }
+}
+
+export function fetchIOIListForBorrowerCompanyAction(companyId){
+  const request=axios({
+    url : '/fetchIOIListForBorrowerCompany?companyId='+companyId,
     method : 'GET',
     baseURL : ROOT_URL
   });

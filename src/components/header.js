@@ -5,6 +5,7 @@ import constants from '../utils/constants';
 import * as actionCreators from '../actions/index';
 import ellipsis from 'text-ellipsis';
 
+
 export default class Header extends Component{
 
 	componentWillMount(){
@@ -35,38 +36,40 @@ export default class Header extends Component{
 		window.location.replace("http://bookbild.com");
 	}
 
-	addLoginElement(){
+	displayLaunchButton(){
 		if(this.state.user){
 			return(
-				<a className="fa fa-sign-out header-cust-attr anchor-spacing header-menu-items " href="/logout">&nbsp;LOGOUT</a>
+				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.RFP_MARKETPLACE}><b>LAUNCH</b></a>
 			);
 		} else {
 			return(
-				<a className="fa fa-sign-in header-cust-attr anchor-spacing header-menu-items " href="/login">&nbsp;LOGIN</a>
+				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.LOGIN}><b>LAUNCH</b></a>
 			);
 		}
-		
 	}
 
 	render(){
 		// console.log('I am in header render');
 		return (
 			<header>
-			<nav className="header-nav-cust-attr">
-			  <div className="container-fluid">
-				<span>
-				  <a href="/">
-					  <img alt="Brand" className="header-logo-cust-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/bookbild-header.jpg"/>
-					</a>
-				</span>
-				<span className="align-right">
-				  <a className="fa fa-home header-cust-attr anchor-spacing header-menu-items" href={this.state.user ? '/rfpMarketPlace' : '/'}>&nbsp;HOME</a>
-				  <a className="fa fa-laptop header-cust-attr anchor-spacing header-menu-items " href="/contactUs">&nbsp;REQUEST DEMO</a>
-					<a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a>
-					{this.addLoginElement()}
-				</span>
-			  </div>
-			</nav>
+				<nav className="header-nav-cust-attr">
+					<div className="container-fluid">
+					<span>
+						<a href="/">
+							<img alt="Brand" className="header-logo-cust-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/bookbild-header.jpg"/>
+						</a>
+					</span>
+					<span className="align-right">
+						<a className="fa fa-cogs header-cust-attr anchor-spacing header-menu-items" href="/solutions">&nbsp;SOLUTIONS</a>
+						<a className="fa fa-bell-o header-cust-attr anchor-spacing header-menu-items" href="/inviteCompany">&nbsp;INVITE COMPANY</a>
+						<a className="fa fa-desktop header-cust-attr anchor-spacing header-menu-items" href="mailto:info@bookbild.com">&nbsp;DEMO</a>
+						<a className="fa fa-feed header-cust-attr anchor-spacing header-menu-items" href="/insights">&nbsp;INSIGHTS</a>
+						<a className="fa fa-users header-cust-attr anchor-spacing header-menu-items" href="/aboutUs">&nbsp;TEAM</a>
+						<a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a>
+						{this.displayLaunchButton()}
+					</span>
+					</div>
+				</nav>
 		  </header>			
 		    );
 	}

@@ -12,6 +12,8 @@ import LinkReducer from "./reducer_link";
 import DealCompReducer from "./reducer_deal_comparision";
 import ComplianceDataReducer from "./reducer_compliance_data";
 import ControlledAccessListReducer from "./reducer_controlled_access_list";
+import FinalTermReducer from "./reducer_final_term";
+import FinalTermListReducer from "./reducer_finalTerm_list";
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -26,7 +28,9 @@ const rootReducer = combineReducers({
   link : LinkReducer,
   dealComp : DealCompReducer,
   complianceData : ComplianceDataReducer,
-  controlledAccessList : ControlledAccessListReducer
+  controlledAccessList : ControlledAccessListReducer,
+  finalTerm : FinalTermReducer,
+  finalTermList : FinalTermListReducer
 });
 
 export default rootReducer;

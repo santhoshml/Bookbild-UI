@@ -1,3 +1,56 @@
+.services-text{
+  font-size: 30px;
+  font-weight: 300;
+  color: white;
+  font-family: sans-serif;
+}
+
+.footer-data{
+  font-size: 20px;
+}
+
+.cust-footer-left{
+  float : center;
+  text-align: center;
+}
+
+.cust-footer-right{
+  float : center;
+  text-align: center;
+}
+
+.index-bottom-text{
+  font-family: serif;
+  font-size: 30px;
+}
+
+.index-mdl-row-txt{
+  font-family: initial;
+  font-size: 25px;
+}
+
+.index-mdl-row{
+  height : 500px;
+  padding-top: 150px;
+  font-size : 50px;
+  font-family: initial;
+  width : 100%;
+  /* float : left; */
+}
+
+.launch-btn{
+    border-radius: 15px;
+    /* background: royalblue; */
+    background: #3a4862;
+    padding: 10px; 
+    width: 500px;
+    height: 50px; 
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    color: white;
+    font-size: 25px;
+}
 .sidebar-style {
   background: #2c3e50;
   color: #FFF;
@@ -58,8 +111,8 @@
 
 .our-services{
   color: white;
-  font-size: 18px;
-  font-family: sans-serif;
+  font-size: 50px;
+  font-family: initial;
   font-weight: 500;
 }
 
@@ -95,15 +148,21 @@
 }
 
 .anchor-spacing{
-    padding: 10px;
-    margin: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-top : 20px;
+    margin-bottom: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 
 .align-right{
   position: relative;
   float: right;
   /* margin-top: 25px; */
-  margin-right: 25px;
+  margin-right: 5px;
   height : 65px;
 }
 
@@ -165,7 +224,7 @@
 }
 
 .header-cust-attr{
-  font-size: 17px !important;
+  font-size: 20px !important;
   font-weight: 500 !important;
   color: black  !important;
 }
@@ -182,6 +241,7 @@
 
 .header-nav-cust-attr{
   background-color: white !important;
+  padding-bottom: 10px;
 }
 
 form a {

@@ -315,8 +315,8 @@ class complianceForm extends Component{
   }
 
   _onSelectDropdown(event){
-		console.log('In _onSelectDropdown');
-		console.log('event:'+JSON.stringify(event));
+		// console.log('In _onSelectDropdown');
+		// console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
 			if(link.linkId === event.value ){
         if(link.accessToLender[constants.KEY_ACCESS_CONTROL_QCOMPLIANCE]){
@@ -328,7 +328,7 @@ class complianceForm extends Component{
             coloumns : complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable),
           });
         } else {
-          console.log('link not activated');
+          // console.log('link not activated');
           this.setState({
             selectedLink : link,
             selectedDropDown : event
@@ -345,7 +345,7 @@ class complianceForm extends Component{
   }  
 
 	render(){
-    console.log('I am in quaterly_compliance.render');
+    // console.log('I am in quaterly_compliance.render');
     return (
       <div>
         <Header/>
@@ -397,9 +397,14 @@ function mapStateToProps(state) {
   // console.log('In mapStateToProps');
   // console.log('state:'+JSON.stringify(state));
   let rObject={};
-  rObject.linkList = state.link.linkList;
-  rObject.complianceData = state.complianceData.complianceData;
-
+  if(state.link.linkList){
+    rObject.linkList = state.link.linkList;
+  }
+  
+  if(state.complianceData.complianceData){
+    rObject.complianceData = state.complianceData.complianceData[0];
+  }
+  
   // console.log('returning rObject :'+JSON.stringify(rObject));
   return rObject;
 }

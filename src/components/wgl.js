@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { getLinksWithCompanyIdAction, getWGLByCompanyIdAction, addContactToWGLAction, deleteContactFromWGLAction, updateContactCellWGLAction } from '../actions/index';
+import { getWGLByLinkIdAction, getLinksWithCompanyIdAction, addContactToWGLAction, deleteContactFromWGLAction, updateContactCellWGLAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -17,7 +17,6 @@ class WGL extends Component{
   constructor(props){
     super(props);
     this.state = {
-			rfp : null,
       user : null,
       company : null,
       selection:{}
@@ -25,20 +24,12 @@ class WGL extends Component{
   }
 
   beforeSaveCell(row, cellName, cellValue) {
-    // if you dont want to save this editing, just return false to cancel it.
-    console.log('In beforeSaveCell');
-    console.log('row:'+JSON.stringify(row));
-    console.log('cellName:'+cellName+', cellValue:'+cellValue);
     if(cellName === 'email')
       return false;
     return true;
   }
 
   afterSaveCell(row, cellName, cellValue) {
-    // do your stuff...
-    console.log('In afterSaveCell');
-    console.log('row:'+JSON.stringify(row));
-    console.log('cellName:'+cellName+', cellValue:'+cellValue);
     let data = {
       'contactId' : row.contactId,
       'cellName'  : cellName,
@@ -49,8 +40,6 @@ class WGL extends Component{
 
   onAfterInsertRow(row) {
     let newRowStr = '';
-    console.log('row:'+JSON.stringify(row));
-    console.log('props:'+JSON.stringify(this.props));
     for (const prop in row) {
       newRowStr += prop + ': ' + row[prop] + ' \n';
     }
@@ -62,27 +51,20 @@ class WGL extends Component{
       contactRole : row.contactRole,
       phoneNumber : row.phoneNumber,
       mobile : row.mobile,
-      linkId : lsUtils.getValue(constants.KEY_SELECTED_LINK)
+      linkId : this.state.selectedLink.linkId
     };
     this.props.addContactToWGLAction(data);
     //have a hook to add to the db
   }
 
   onAfterDeleteRow(wglListIds, rows) {
-    console.log('In onAfterDeleteRow');
-    console.log('rowKeys:'+JSON.stringify(wglListIds));
-    console.log('rows:'+JSON.stringify(rows));
-
-    // alert('The rowkey you drop: ' + rowKeys);
     this.props.deleteContactFromWGLAction(wglListIds);
-
   }
 
   _onSelectDropdown(event){
-		console.log('In _onSelectDropdown');
-		console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
 			if(link.linkId === event.value){
+        this.props.getWGLByLinkIdAction(event.value);
 				this.setState({
 					selectedLink : link,
 					selectedDropDown : event
@@ -93,12 +75,10 @@ class WGL extends Component{
 
   componentWillMount() {
     // this.props.fetchAllRFPAction();
-    let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let type = null;
     this.setState({
-      rfp : rfp,
       user : user,
       company : company
     });
@@ -107,33 +87,29 @@ class WGL extends Component{
 			type = 'BORROWER';
 		} else if(user.role === constants.KEY_LENDER){
 			type = 'LENDER';
-		}
-    this.props.getLinksWithCompanyIdAction(user.companyId, type);
-    // this.props.getWGLByCompanyIdAction(user.role, company.companyId)
-    // .then(data => {
-    //   // console.log('got response for getWGLByCompanyIdAction, data:'+JSON.stringify(data));
-    // });
-  }
-
-  toggleDisplayWGLList(id, ctx){
-    // console.log('ctx:'+JSON.stringify(ctx));
-    console.log('In toggleDisplayWGLList, id:'+id);
-    // this.props.wglMap[id].display = !this.props.wglMap[id].display;
-
-    let wglMapKeys = Object.keys(this.props.wglMap);
-    for(let i=0; i<wglMapKeys.length; i++){
-      let wgl = this.props.wglMap[wglMapKeys[i]];
-
-      if(wgl.linkId !== id)
-        wgl.display = false;
-      else
-        wgl.display = !wgl.display;
-
-      if(wgl.display === true){
-        lsUtils.setValue(constants.KEY_SELECTED_LINK, wgl.linkId);
-      }
     }
+    
+    // console.log('user.companyId :'+user.companyId);
+    // console.log('type :'+type);
+    this.props.getLinksWithCompanyIdAction(user.companyId, type);
   }
+
+  // toggleDisplayWGLList(id, ctx){
+
+  //   let wglMapKeys = Object.keys(this.props.wglMap);
+  //   for(let i=0; i<wglMapKeys.length; i++){
+  //     let wgl = this.props.wglMap[wglMapKeys[i]];
+
+  //     if(wgl.linkId !== id)
+  //       wgl.display = false;
+  //     else
+  //       wgl.display = !wgl.display;
+
+  //     if(wgl.display === true){
+  //       lsUtils.setValue(constants.KEY_SELECTED_LINK, wgl.linkId);
+  //     }
+  //   }
+  // }
 
   returnTableOptions(){
     return {
@@ -143,7 +119,7 @@ class WGL extends Component{
 
 
   displayWGLListElement(wglList, ctx){
-    console.log('In displayWGLListElement, wgl:'+JSON.stringify(wglList));
+    // console.log('In displayWGLListElement, wgl:'+JSON.stringify(wglList));
 
     const options = {
       afterInsertRow: this.onAfterInsertRow.bind(this),    // A hook for after insert rows
@@ -191,7 +167,7 @@ class WGL extends Component{
   }
 
   render(){
-    console.log('I am in wgl render');
+    // console.log('I am in wgl render');
     return(
       <div>
         <Header/>
@@ -205,7 +181,7 @@ class WGL extends Component{
             <br/>
             {this.state.selectedLink 
               ? (this.state.selectedLink.accessToLender[constants.KEY_ACCESS_CONTROL_WGL] === true
-                ? this.displayWGLListElement(this.props.wglMap ? this.props.wglMap[this.state.selectedLink.linkId].list : null)
+                ? this.displayWGLListElement(this.props.wgl ? this.props.wgl : null)
                 : this.displayNotActivatedMessage())
               : ""}
           </div>
@@ -216,17 +192,17 @@ class WGL extends Component{
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // console.log('In wgl state:'+JSON.stringify(state));
+  let rObject = {};
 
-  let rObject = {
-    wglMap : state.wgl.wgl
-  };
+  if(state.wgl.wgl){
+    // console.log('state.wgl.wgl : '+ JSON.stringify(state.wgl.wgl));
+    rObject.wgl = state.wgl.wgl;
+  }
+
   if(state.link.linkList){
-		// console.log('state.link.linkList:'+JSON.stringify(state.link.linkList));
+    // console.log('In mapStateToProps, state.link.linkList :'+JSON.stringify(state.link.linkList));
 		rObject.linkList = state.link.linkList;
 	}
-  console.log('rObject:'+JSON.stringify(rObject));
   return rObject;
 }
 
@@ -234,7 +210,7 @@ function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    getWGLByCompanyIdAction     : getWGLByCompanyIdAction,
+    getWGLByLinkIdAction : getWGLByLinkIdAction,
     addContactToWGLAction       : addContactToWGLAction,
     deleteContactFromWGLAction  : deleteContactFromWGLAction,
     updateContactCellWGLAction  : updateContactCellWGLAction,

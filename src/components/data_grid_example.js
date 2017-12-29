@@ -78,7 +78,6 @@ class DataGrid extends Component{
 
   onRowClick(rowIdx, row) {
     if(this.props.clickableRow == "true" && rowIdx > -1){
-      lsUtils.setValue(constants.KEY_RFP_OBJECT, row);
       this.context.router.history.push(constants.ROUTES_MAP.RFP_DETAIL+'/'+row.rfpId);
     } else {
       return null;

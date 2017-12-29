@@ -146,9 +146,7 @@ export default class DisplayRFPList extends Component {
         </div>
         <div className='col-md-3' />
         <div className='col-md-3' />
-        <div className='col-md-3' >
-          <Link to="/#" className="btn btn-primary btn-align-right">Invite a Company</Link>
-        </div>
+        <div className='col-md-3' />
       </div>
     );
   }

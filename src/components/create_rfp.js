@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
-import { createRFPAction, fetchContactAction, updateRFPAction, fetchAllCompanyListForRFP } from '../actions/index';
+import { fetchRFPAction, createRFPAction, fetchContactAction, updateRFPAction } from '../actions/index';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import lsUtils from '../utils/ls_utils';
@@ -25,33 +25,42 @@ class CreateRFP extends Component {
     var that = this;
     // console.log('I am in createRFP componentWillMount');
     gType = this.props.match.params.type;
+    let paramId = this.props.match.params.id;
     let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
+    let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+
     this.setState({
       type : this.props.match.params.type,
       renderCollateral :false,
-      user : user
+      user : user,
+      company : company
     });
 
     
-    if(user.isSuperAdmin && user.isSuperAdmin === true){
-      this.props.fetchAllCompanyListForRFP();
-    }
-
     if(gType === constants.RFP_EDIT){
-      var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-      this.props.fetchContactAction(rfp.contactId)
-        .then(() => {
-          // console.log('I am in the get result');
-          that.setState({
-            isFavorite : this.props.isFavorite,
-            favorite : this.props.favorite,
-            renderCollateral :false
-          });
+      // if the gType is edit, then the paramId is the rfpId
+      this.props.fetchRFPAction(paramId);
 
-          // console.log('that.props.initialValues:'+JSON.stringify(that.props.initialValues));
+      // this.props.fetchContactAction(rfp.contactId)
+      //   .then(() => {
+      //     // console.log('I am in the get result');
+      //     that.setState({
+      //       isFavorite : this.props.isFavorite,
+      //       favorite : this.props.favorite,
+      //       renderCollateral :false
+      //     });
 
-          that.props.initialize(that.props.initialValues);
-        });
+      //     // console.log('that.props.initialValues:'+JSON.stringify(that.props.initialValues));
+      //     // that.props.initialize(that.props.initialValues);
+      //   });
+    }
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.rfp){
+      this.setState({
+        rfp : nextProps.rfp
+      });
     }
   }
 
@@ -83,7 +92,7 @@ class CreateRFP extends Component {
       }
 
       if(gType === constants.RFP_EDIT){
-        var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
+        var rfp = this.state.rfp;
         values.rfpId = rfp.rfpId;
         values.contactId = rfp.contactId;
 
@@ -116,26 +125,6 @@ class CreateRFP extends Component {
         });
       }
     }
-
-  displayCompanyDropdown(){
-    if(this.props.companyList){
-      const { fields: {createdForCompany}} = this.props;
-      var makeOptions = function(company){
-        return <option value={company.companyId}>{company.companyName}</option>
-      };
-
-      return(<div>
-        <div className={`row`}>
-          <div className={`form-group col-xs-12 col-md-12`}>
-            <label>Select a Company this RFP belongs to</label><br/>
-            <select className="form-control" {...createdForCompany}>
-              {this.props.companyList.map(makeOptions)}
-            </select>
-          </div>
-        </div>
-      </div>);
-    }
-  }
 
   displayABLDetails(){
     if(this.state.renderCollateral && this.state.renderCollateral === true){
@@ -370,7 +359,6 @@ class CreateRFP extends Component {
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
-            {this.displayCompanyDropdown()}
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
               <h3>Create RFP / Request Pitch</h3>
               <br/>
@@ -537,49 +525,20 @@ class CreateRFP extends Component {
 function mapStateToProps(state) {
   // console.log('In mapStateToProps, gType:'+gType);
   // console.log('In mapStateToProps, state:'+JSON.stringify(state));
+  let rObject = {};
   var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
   var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-  var intializedData = {
+  rObject.initialValues = {
     createdById           : user.userId,
     createdByCompanyId    : company.companyId
   };
 
-  if(gType === constants.RFP_EDIT){
-    var rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-    // console.log('rfp:'+JSON.stringify(rfp));
-    intializedData.requestType = rfp.requestType;
-    intializedData.dealSize = rfp.dealSize;
-    intializedData.tenor = rfp.tenor;
-    intializedData.category = rfp.category;
-    intializedData.product = rfp.product;
-    intializedData.sector = rfp.sector;
-    intializedData.txnOverview = rfp.txnOverview;
-    intializedData.companyName = rfp.companyName;
-    intializedData.companyDesc = rfp.companyDesc;
-    intializedData.ltmRevenue = rfp.ltmRevenue;
-    intializedData.ltmEbitda = rfp.ltmEbitda;
-    intializedData.fullName = rfp.fullName;
-    intializedData.contactRole = rfp.contactRole;
-    intializedData.email = rfp.email;
-    intializedData.isSponsored = rfp.isSponsored;
-    intializedData.region = rfp.region;
-    intializedData.phoneNumber = rfp.phoneNumber;
-    intializedData.expiryDt = rfp.expiryDt;
-    intializedData.numOfIOI = rfp.numOfIOI;
+  if(state.rfpList.rfpList){
+    // console.log('state.rfpList.rfpList :'+JSON.stringify(state.rfpList.rfpList));
+    rObject.rfp = state.rfpList.rfpList[0];
   }
 
-  if(gType === constants.RFP_EDIT && state.userProfile.contact && state.userProfile.contact[0]){
-    let contact = state.userProfile.contact[0];
-    intializedData.phoneNumber = contact.phoneNumber;
-    intializedData.fullName = contact.fullName;
-    intializedData.email = contact.email;
-    intializedData.contactRole = contact.contactRole;
-  }
-
-  return {
-    initialValues : intializedData,
-    companyList : state.rfpList.companyListForRFP
-  };
+  return rObject;
 }
 
 
@@ -590,7 +549,7 @@ function mapDispatchToProps(dispatch) {
     createRFPAction : createRFPAction,
     fetchContactAction : fetchContactAction,
     updateRFPAction : updateRFPAction,
-    fetchAllCompanyListForRFP : fetchAllCompanyListForRFP
+    fetchRFPAction : fetchRFPAction
   }, dispatch);
 }
 

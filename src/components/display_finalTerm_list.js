@@ -11,8 +11,7 @@ import Header from './header';
 import dateFormat from 'dateformat';
 import lsUtils from '../utils/ls_utils';
 
-
-export default class DisplayIOIList extends Component {
+export default class DisplayFinalTermList extends Component {
 
   static contextTypes = {
     router: PropTypes.object
@@ -20,22 +19,13 @@ export default class DisplayIOIList extends Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      ioiList : props.list,
-      companyList : props.companyList,
-      minimalData : (props.minimalData === undefined ? false : props.minimalData),
-      userList : props.userList
-    };
+  }
 
+  componentWillMount(){
   }
 
   componentWillReceiveProps(nextProps){
-    this.setState({
-      ioiList : nextProps.list,
-      companyList : nextProps.companyList,
-      userList : nextProps.userList,
-      minimalData : (nextProps.minimalData === undefined ? false : nextProps.minimalData)
-    });
+
   }
 
   investorRenderer(row){
@@ -102,107 +92,18 @@ export default class DisplayIOIList extends Component {
 
   getAllColoumns(){
     let colArr = [{
-      name: 'createdByCompanyId',
-      display: 'Investor',
-      renderer : this.investorRenderer.bind(this)
-    },{
-      name: 'maxDebtAllowed',
-      display: 'Max Debt Allowed',
-      renderer : this.maxDebtRenderer
+      name: 'createdByCompanyName',
+      display: 'Investor'
     }, {
       name: 'loanSize',
       display: 'Loan Size',
       renderer : this.loanSizeRenderer
-    }, {
-      name: 'loanStructure',
-      display: 'Structure'
-    }, {
-      name: 'liborSpread',
-      display: 'Interest',
-      renderer : this.cashIntrestRenderer
-    }, {
-      name: 'pikIntreset',
-      display: 'PIK',
-      renderer : this.pikRenderer
-    }, {
-      name: 'liborFloor',
-      display: 'LIBOR floor',
-      renderer : this.liborFloorRenderer
-    }, {
-      name: 'maturity',
-      display: 'Maturity',
-      renderer : this.maturityRenderer
-    }, {
-      name: 'upfrontFee',
-      display: 'OID/Upfront fee',
-      renderer : this.upfrontFeeRenderer
-    }, {
-      name: 'governance',
-      display: 'Governance'
-    }, {
-      name: 'warrants',
-      display: 'Warrants'
-    }, {
-      name: 'covenants',
-      display: 'Covenants'
     }, {
       name: 'yield',
       display: 'Yield'
     }, {
       name: 'blendedCost',
       display: 'Blended Cost'
-    }];
-
-    // check if there is value for tranche/delayedDraw
-    let delayedDrawExists = false;
-    this.state.ioiList.forEach(function(ioi){
-      if(ioi.delayedDraw && ioi.delayedDraw.trim() !== ''){
-        delayedDrawExists= true;
-      }
-    });
-    if(delayedDrawExists === true){
-      // remove delated Draw from the col list
-      let ele = {
-        name: 'delayedDraw',
-        display: 'Tranche?'
-      };
-      colArr.splice(2, 0, ele);
-    }
-
-    // check if there is value for Amort/amortization
-    let amortizationExists = false;
-    this.state.ioiList.forEach(function(ioi){
-      if(ioi.amortization && ioi.amortization.trim() !== ''){
-        amortizationExists= true;
-      }
-    });
-    if(amortizationExists === true){
-      // remove delated Draw from the col list
-      let ele = {
-        name: 'amortization',
-        display: 'Amort.'
-      };
-      colArr.splice(8, 0, ele);
-    }
-
-    return colArr;
-  }
-
-  getMinimalColoumns(){
-    let colArr= [{
-      name: 'loanSize',
-      display: 'Loan Size',
-      renderer : this.loanSizeRenderer
-    }, {
-      name: 'loanStructure',
-      display: 'Structure'
-    }, {
-      name: 'blendedCost',
-      display: 'Blended Cost'
-    }, {
-      name: 'timestamp',
-      display: 'Last Updated',
-      renderer: this.getDateFormatRenderer.bind(this)
     }];
     return colArr;
   }
@@ -211,14 +112,14 @@ export default class DisplayIOIList extends Component {
     // console.log('row clicked in IOI list :'+ row.id);
     if(row){
       // console.log('row:'+JSON.stringify(row));
-      this.context.router.history.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
+      this.context.router.history.push(constants.ROUTES_MAP.VIEW_FINAL_TERM+'/'+row.finalTermId);
     }
   }
 
   render() {
     // console.log('In DisplayIOIList');
-    if (!this.state.ioiList) {
-      return <div>No IOIs exist</div>;
+    if (!this.props.finalTermList) {
+      return <div>No Final Term sheets exist</div>;
     } else {
       const selectRowProp = {
         mode: 'checkbox',
@@ -228,9 +129,8 @@ export default class DisplayIOIList extends Component {
       return (
           <div>
             <BootstrapTable
-              bordered={ true }
-              columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
-              data={this.state.ioiList}
+              columns={this.getAllColoumns()}
+              data={this.props.finalTermList}
               headers={true}
               striped
               hover

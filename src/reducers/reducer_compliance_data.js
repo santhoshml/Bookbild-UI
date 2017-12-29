@@ -8,10 +8,10 @@ export default function(state = INITIAL_STATE, action) {
   case GET_COMPLIANCE_DATA_WITH_LINKID :
     // console.log('compliance reducer, get, action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In wgl reducer:'+JSON.stringify(action.payload));
+      // console.log('In complaince reducer:'+JSON.stringify(action.payload));
       return {
         ...state
-        , complianceData: action.payload.data.data[0]
+        , complianceData: action.payload.data.data.Items
       };
     } else {
       return {
@@ -26,7 +26,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
-        , complianceData: action.payload.data.data
+        , complianceData: action.payload.data.data.Items
       };
     } else {
       return {

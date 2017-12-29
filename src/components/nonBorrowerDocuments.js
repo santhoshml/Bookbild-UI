@@ -38,8 +38,8 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	_onSelectDropdown(event){
-		console.log('In _onSelectDropdown');
-		console.log('event:'+JSON.stringify(event));
+		// console.log('In _onSelectDropdown');
+		// console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
 			if(link.linkId === event.value){
 				this.setState({
@@ -51,7 +51,7 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	render(){
-		console.log('I am in documents.render');
+		// console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 			<div>

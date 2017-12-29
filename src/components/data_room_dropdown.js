@@ -16,8 +16,9 @@ class DataRoomDropdown extends Component{
 	}
 
 	displayDropdownList(){
-		console.log('In displayDropdownList');
+		// console.log('In displayDropdownList');
 		let options=[];
+		// console.log('In displayDropdownList, this.props.linkList:'+JSON.stringify(this.props.linkList));
 		this.props.linkList && this.props.linkList.forEach(link => {
 			options.push({
 				value : link.linkId,
@@ -31,7 +32,7 @@ class DataRoomDropdown extends Component{
 	}
 
 	render(){
-		console.log('I am in documents.render');
+		// console.log('I am in documents.render');
 		return (
 			<div>
 				{this.displayDropdownList()}

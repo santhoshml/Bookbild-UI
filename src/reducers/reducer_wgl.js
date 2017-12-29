@@ -11,7 +11,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
-        , wgl: action.payload.data.data
+        , wgl: action.payload.data.data.Items
       };
     } else {
       return {

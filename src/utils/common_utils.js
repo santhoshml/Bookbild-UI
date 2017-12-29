@@ -29,7 +29,7 @@ exports.extractLenderNames = function(list){
 }
 
 exports.getDisplayData = function(complianceData, cols){
-  console.log('In addRows');
+  // console.log('In addRows');
   // console.log('cols:'+JSON.stringify(cols));
   let dataArr=[];
   for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
@@ -43,7 +43,7 @@ exports.getDisplayData = function(complianceData, cols){
 }
 
 exports.initComplianceData=function(cols){
-  console.log('In addRows');
+  // console.log('In addRows');
   // console.log('cols:'+JSON.stringify(cols));
   let dataArr=[];
   for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
@@ -109,13 +109,13 @@ exports.getQuaterObject = function(period, startYear, startQtr){
       qtrObject[yrsArr[j]].push(k);
     }
   }
-  console.log('all done, qtrObject:'+JSON.stringify(qtrObject));
+  // console.log('all done, qtrObject:'+JSON.stringify(qtrObject));
   return qtrObject;
 }
 
 exports.didValuesChange = function(object1, object2){
   let changed=false;
-  console.log('object1.size:'+Object.keys(object1).length);
+  // console.log('object1.size:'+Object.keys(object1).length);
   if(Object.keys(object1).length !== Object.keys(object2).length)
     changed = true;
 
@@ -124,7 +124,7 @@ exports.didValuesChange = function(object1, object2){
     if(object1[keys[i]] !== object2[keys[i]])
       changed = true;
   }
-  console.log('changed:'+changed);
+  // console.log('changed:'+changed);
   return changed;
 }
 
@@ -138,8 +138,8 @@ exports.getS3Filename = function(url){
 }
 
 exports.getFileName = function(type, list){
-  console.log('list :'+JSON.stringify(list));
-  console.log('list.length :'+list.length);
+  // console.log('list :'+JSON.stringify(list));
+  // console.log('list.length :'+list.length);
   if(list){
     if(list.length > 0){
       for(let i=0; i<list.length; i++){
@@ -261,7 +261,7 @@ exports.parseNumber = (val)=>{
 				return numbro().unformat(val);
 			}
 		} catch(ex){
-			console.log('***ERR exception in sanitize the number, val:'+val+' , '+JSON.stringify(ex));
+			// console.log('***ERR exception in sanitize the number, val:'+val+' , '+JSON.stringify(ex));
       return 0;
 		}
   }

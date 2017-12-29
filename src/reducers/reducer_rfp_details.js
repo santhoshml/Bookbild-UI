@@ -39,7 +39,7 @@ export default function(state = INITIAL_STATE, action) {
         return {
           ...state
           , rfpFavoritesJSON: {
-            favoriteId : action.payload.data.data
+            favoriteId : action.payload.data.data.Items
             }
           , isFavorite: true
         };

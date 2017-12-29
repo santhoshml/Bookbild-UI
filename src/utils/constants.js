@@ -1,9 +1,10 @@
 exports.KEY_USER_OBJECT = 'KEY_USER_OBJECT';
 exports.KEY_COMPANY_OBJECT = 'KEY_COMPANY_OBJECT';
-exports.KEY_RFP_LIST_OBJECT = 'KEY_RFP_LIST_OBJECT';
-exports.KEY_RFP_OBJECT = 'KEY_RFP_OBJECT';
-exports.KEY_SELECTED_IOI_OBJECT = 'KEY_SELECTED_IOI_OBJECT';
-exports.KEY_SELECTED_LINK = 'KEY_SELECTED_LINK';
+// exports.KEY_RFP_LIST_OBJECT = 'KEY_RFP_LIST_OBJECT';
+// exports.KEY_RFP_OBJECT = 'KEY_RFP_OBJECT';
+// exports.KEY_SELECTED_IOI_OBJECT = 'KEY_SELECTED_IOI_OBJECT';
+// exports.KEY_SELECTED_LINK = 'KEY_SELECTED_LINK';
+// exports.KEY_SELECTED_FINAL_TERM_SHEET = 'KEY_SELECTED_FINAL_TERM_SHEET';
 
 exports.CURRENCY_OPTS = { format: '%s%v', symbol: '$' }
 
@@ -12,6 +13,10 @@ exports.RFP_NEW = 'RFP_NEW';
 
 exports.IOI_EDIT = 'IOI_EDIT';
 exports.IOI_NEW = 'IOI_NEW';
+
+exports.FINAL_TERM_EDIT = 'FINAL_TERM_EDIT';
+exports.FINAL_TERM_NEW = 'FINAL_TERM_NEW';
+
 exports.PITCH_NEW = 'PITCH_NEW';
 exports.PITCH_EDIT = 'PITCH_EDIT';
 
@@ -90,7 +95,10 @@ exports.ROUTES_MAP = {
   WGL                 : '/wgl',
   DOCS                : '/docs',
   QUARTERLY_COMPLIANCE        : '/qCompliance',
-  BORROWER_CONTROLLED_ACCESS  : '/borrowerControlledAccess'
+  BORROWER_CONTROLLED_ACCESS  : '/borrowerControlledAccess',
+  CREATE_FINAL_TERM           : '/createFinalTerm',
+  VIEW_FINAL_TERM             : '/finalTermDetail',
+  FINAL_TERM_LIST             : '/finalTermList'
 };
 
 exports.S3_BUCKET_MAP = {
@@ -98,12 +106,13 @@ exports.S3_BUCKET_MAP = {
 };
 
 exports.DOCS_CATEGORY_DISPLAY_NAME_MAP = {
-  NDA           : 'Non-Disclosure Agreement',
+  TXN_NDA           : 'Non-Disclosure Agreement',
   TXN_OVERVIEW  : 'Transaction Overview',
   COMPANY       : 'Company',
   FINANCIAL     : 'Financial',
   LEGAL         : 'Legal',
-  OPERATIONS    : 'Operations'
+  OPERATIONS    : 'Operations',
+  FINAL_TERM    : 'Final Term Sheet',
 };
 
 exports.KEY_ACCESS_CONTROL_DOCUMENTS = 'DOCUMENTS';

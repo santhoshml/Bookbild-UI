@@ -13,7 +13,7 @@ import Header from './header';
 class RelativeValueTool extends Component {
 
   componentWillMount() {
-    console.log('I am in relative_value_tool componentWillMount');
+    // console.log('I am in relative_value_tool componentWillMount');
     this.setState({
       countPercent : null,
       avgAmt  : null,
@@ -347,11 +347,11 @@ class RelativeValueTool extends Component {
   }
 
   onSubmit(values) {
-    console.log('In onSubmit, props:'+JSON.stringify(values));
+    // console.log('In onSubmit, props:'+JSON.stringify(values));
     this.props.reset();
     this.props.saveComparisionToolData(values)
       .then((data) => {
-        console.log('I am in then, data:'+JSON.stringify(data));
+        // console.log('I am in then, data:'+JSON.stringify(data));
         let rData = data.payload.data.data;
         if(rData){
           this.setState({

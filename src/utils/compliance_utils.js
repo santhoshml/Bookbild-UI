@@ -1,7 +1,7 @@
 import constants from './constants';
 
 exports.getDisplayData = function(complianceData, cols){
-    console.log('In addRows');
+    // console.log('In addRows');
     // console.log('cols:'+JSON.stringify(cols));
     let dataArr=[];
     for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
@@ -15,7 +15,7 @@ exports.getDisplayData = function(complianceData, cols){
   }
   
   exports.initComplianceData=function(cols){
-    console.log('In addRows');
+    // console.log('In addRows');
     // console.log('cols:'+JSON.stringify(cols));
     let dataArr=[];
     for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){

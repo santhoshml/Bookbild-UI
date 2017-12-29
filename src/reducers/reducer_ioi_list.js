@@ -6,7 +6,7 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case FETCH_IOI_LIST_FOR_RFP:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      console.log();
+      // console.log();
       return {
         ...state
         , ioiList: action.payload.data.data.IOI_LIST.Items

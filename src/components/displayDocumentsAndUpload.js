@@ -17,7 +17,7 @@ import moment from 'moment';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 
-class DisplayDocumentTabs extends Component{
+class DisplayDocumentsAndUpload extends Component{
 	constructor(props){
 		super(props);
 		// console.log('I am in constructor');
@@ -37,13 +37,6 @@ class DisplayDocumentTabs extends Component{
 			user : user,
 			company : company
 		});
-		// console.log('this.props.link:'+JSON.stringify(this.props.link));
-		if(this.props.link){
-			this.props.getLinkDocsWithLinkIdAction(this.props.link.linkId);
-			this.setState({
-				displayLinkId : this.props.link.linkId
-			});
-		}
 	}
 
 	handleFileUpload(type, inputFiles) {
@@ -200,9 +193,6 @@ class DisplayDocumentTabs extends Component{
 					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
 						Operations
 					</Tab>
-					<Tab disabled={!this.props.link.accessToLender[constants.KEY_ACCESS_CONTROL_DOCUMENTS]}>
-						Final Term Sheets
-					</Tab>
 				</TabList>
 				<TabPanel>
 					{this.renderRFPAndDocuments('TXN_NDA')}
@@ -221,9 +211,6 @@ class DisplayDocumentTabs extends Component{
 				</TabPanel>
 				<TabPanel>
 					{this.renderRFPAndDocuments('OPERATIONS')}
-				</TabPanel>
-				<TabPanel>
-					{this.renderRFPAndDocuments('FINAL_TERM')}
 				</TabPanel>
 			</Tabs>
 		);
@@ -267,4 +254,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(DisplayDocumentTabs);
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayDocumentsAndUpload);

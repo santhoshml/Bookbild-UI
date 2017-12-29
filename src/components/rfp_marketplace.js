@@ -32,8 +32,8 @@ class RFPMarketPlace extends Component{
   }
 
   onTermSheetActivityChange(option){
-    console.log('I am in onTermSheetActivityChange');
-    console.log('option:'+JSON.stringify(option));
+    // console.log('I am in onTermSheetActivityChange');
+    // console.log('option:'+JSON.stringify(option));
     this.setState({
       selectedSector : option
     });
@@ -55,7 +55,7 @@ class RFPMarketPlace extends Component{
       {value:'telecoms', label:'Telecoms'},
     ];
     const defaultOption = options[0];
-    console.log('In createTermSheetActivityDropdown, '+JSON.stringify(this.state.selectedSector));
+    // console.log('In createTermSheetActivityDropdown, '+JSON.stringify(this.state.selectedSector));
     return(
       <div className='col-md-3'>
         <Dropdown
@@ -99,7 +99,7 @@ class RFPMarketPlace extends Component{
 
 
   displayTermSheetActivity(){
-    console.log('I am in displayTermSheetActivity');
+    // console.log('I am in displayTermSheetActivity');
     if(this.props.termSheetActivity != null){
       return(<div>
         {this.createTermSheetActivityDropdown()}
@@ -184,11 +184,19 @@ class RFPMarketPlace extends Component{
 }
 
 function mapStateToProps(state) {
-  // console.log('state in marketplace : '+ JSON.stringify(state));
-  return {
-    rfpList: state.rfpList.rfpList,
-    termSheetActivity : (state.rfpList.termSheetActivity != null ? state.rfpList.termSheetActivity.data : null)
-  };
+
+  // console.log('In rfpMarketPlace : '+ JSON.stringify(state));
+  let rObject={};
+
+  if(state.rfpList.rfpList){
+    rObject.rfpList = state.rfpList.rfpList;    
+  }
+
+  if(state.rfpList.termSheetActivity){
+    rObject.termSheetActivity = state.rfpList.termSheetActivity[0];
+  }
+
+  return rObject;
 }
 
 function mapDispatchToProps(dispatch) {

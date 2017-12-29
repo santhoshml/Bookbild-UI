@@ -47,7 +47,7 @@ class borrowerControlledAccess extends Component{
   }
 
   onToggleSwitch(e){
-    console.log('In onToggleSwitch');
+    // console.log('In onToggleSwitch');
     let type = e.target.id
     let newStateValue = this.state.selectedAccessList;
     newStateValue[type] = !newStateValue[type];
@@ -55,7 +55,7 @@ class borrowerControlledAccess extends Component{
 
     let list = this.state.borrowerControlledAccessList;
     for(let i=0;i<list.length; i++){
-      console.log('list[i]:'+JSON.stringify(list[i]));
+      // console.log('list[i]:'+JSON.stringify(list[i]));
       if(list[i].linkId === this.state.selectedDropDown.value){
         updatedLinkId = list[i].linkId;
         list[i].accessToLender = newStateValue;
@@ -74,9 +74,9 @@ class borrowerControlledAccess extends Component{
   }
 
   _onSelectDropdown(event){
-    console.log('I am in _onSelectDropdown');
-    console.log('event:'+JSON.stringify(event));
-    console.log('borrowerControlledAccessList :'+JSON.stringify(this.state.borrowerControlledAccessList));
+    // console.log('I am in _onSelectDropdown');
+    // console.log('event:'+JSON.stringify(event));
+    // console.log('borrowerControlledAccessList :'+JSON.stringify(this.state.borrowerControlledAccessList));
     let selectedAccessList = null;
     for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
       if(this.state.borrowerControlledAccessList[i].linkId === event.value){
@@ -84,7 +84,7 @@ class borrowerControlledAccess extends Component{
         break;
       }
     }
-    console.log('selectedAccessList:'+JSON.stringify(selectedAccessList));
+    // console.log('selectedAccessList:'+JSON.stringify(selectedAccessList));
     this.setState({
       selectedDropDown : event,
       selectedAccessList : selectedAccessList

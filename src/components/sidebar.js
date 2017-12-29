@@ -1,10 +1,13 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import SideNav, { Nav, NavIcon, NavText } from 'react-sidenav';
 import SvgIcon from 'react-icons-kit';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import ellipsis from 'text-ellipsis';
+import { fetchContactAction } from '../actions/index';
 
 import { ic_aspect_ratio } from 'react-icons-kit/md/ic_aspect_ratio';
 import { ic_business } from 'react-icons-kit/md/ic_business';
@@ -42,30 +45,22 @@ const Title = styled.div`
   padding: 12px;
 `;
 
-export default class Sidenav extends Component {
+class Sidenav extends Component {
 
 	componentWillMount(){
 		// console.log('I am in header componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
         let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+        // get the user name
+        this.props.fetchContactAction(user.contactId);
         this.setState({
             user: user,
             company : company
         });
 	}
 
-	componentWillReceiveProps(nextProps){
-		// console.log('I am in header componentWillReceiveProps');
-		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-		let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-		this.setState({
-			user: user,
-			company : company
-		});
-	}
-
     onSelect(id, parent, ctx){
-        console.log('In onSelect, id:'+id+', parent:'+parent);
+        // console.log('In onSelect, id:'+id+', parent:'+parent);
         if(id === 'rfp/rfpList'){
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
         } else if(id === 'rfp/myFavorites'){
@@ -76,6 +71,8 @@ export default class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_NEW);
         } else if(id === 'ioi/myIOIList'){
             this.props.history.push(constants.ROUTES_MAP.IOI_LIST+"/"+this.state.company.companyId+"/"+constants.IOI_FOR_COMPANY);
+        } else if(id === 'ioi/myFinalTermList'){
+            this.props.history.push(constants.ROUTES_MAP.FINAL_TERM_LIST+"/"+this.state.company.companyId);
         } else if(id === 'dataRoom/documents'){
             this.props.history.push(constants.ROUTES_MAP.DOCS);
         } else if(id === 'dataRoom/manageWGL'){
@@ -86,6 +83,8 @@ export default class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.MY_PROFILE);
         } else if(id === 'myAccount/addUser'){
             this.props.history.push(constants.ROUTES_MAP.ADD_USER);
+        } else if(id === 'myAccount/logout'){
+            this.props.history.push(constants.ROUTES_MAP.LOGOUT);
         } else if(id === 'dataRoom/borrowerControlledAccess'){
             this.props.history.push(constants.ROUTES_MAP.BORROWER_CONTROLLED_ACCESS);
         }
@@ -134,9 +133,25 @@ export default class Sidenav extends Component {
                     <Nav id="myIOIList">
                         <NavText> My IOI List </NavText>
                     </Nav>
+                    <Nav id="myFinalTermList">
+                        <NavText> My Final Term List </NavText>
+                    </Nav>
                 </Nav>
 			);
-		}
+		} else {
+			return(
+                <Nav id="ioi">
+                    <NavIcon><Icon20 icon={ic_aspect_ratio} /></NavIcon>
+                    <NavText> IOI </NavText>
+                    <Nav id="myIOIList">
+                        <NavText>IOI List </NavText>
+                    </Nav>
+                    <Nav id="myFinalTermList">
+                        <NavText>Final Term List </NavText>
+                    </Nav>
+                </Nav>
+			);
+        }
 		//<li><Link to={"/createPitch/"+constants.PITCH_NEW}>Create a Pitch</Link></li>
 		//<li><Link to="#">Default Pitch Settings</Link></li>
 	}
@@ -165,6 +180,9 @@ export default class Sidenav extends Component {
                     <NavText> My Team </NavText>
                 </Nav>
                 {this.displayAddUserLink()}
+                <Nav id="logout">
+                    <NavText> Logout </NavText>
+                </Nav>
             </Nav>
         );
 	}
@@ -312,7 +330,8 @@ export default class Sidenav extends Component {
 
     return (
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>
-    <SideNav highlightBgColor="#00bcd4" defaultSelected="rfp" onItemSelection={this.onSelect.bind(this)}>
+    <SideNav highlightBgColor="#00bcd4" onItemSelection={this.onSelect.bind(this)}>
+        <p style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>Hey {this.props.userContact ? this.props.userContact.fullName : 'man'} !!</p>
         {this.displayRFP()}
         {this.displayIOI()}
         {this.displayConcourse()}
@@ -327,3 +346,21 @@ export default class Sidenav extends Component {
     );
   }
 };
+
+function mapStateToProps(state) {
+    let rObject = {};
+    
+    if(state.userProfile.contact){
+        // console.log('state.userProfile.contact :'+JSON.stringify(state.userProfile.contact));
+        rObject.userContact = state.userProfile.contact[0];
+    }
+    return rObject;
+  }
+  
+  function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        fetchContactAction : fetchContactAction
+    }, dispatch);
+  }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidenav);

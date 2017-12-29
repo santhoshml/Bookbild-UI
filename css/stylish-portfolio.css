@@ -22,12 +22,12 @@ body {
 }
 
 .text-vertical-center h1 {
-  font-size: 4.5em;
-  font-weight: 700;
+  font-size: 10em;
+  font-weight: bolder;
+  font-family: initial;
   margin: 0;
   padding: 0;
 }
-
 
 /* Custom Button Styles */
 
@@ -161,7 +161,7 @@ hr.small {
   display: table;
   width: 100%;
   height: 100vh;
-  background: url(../images/bg.jpg) no-repeat center center scroll;
+  background: url(//s3-us-west-2.amazonaws.com/bookbild-shared-images/index/financial_district_tononto.jpg) no-repeat center center scroll;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
@@ -173,6 +173,13 @@ hr.small {
 
 .about {
   padding: 50px 0;
+  /* background: url(//s3-us-west-2.amazonaws.com/bookbild-shared-images/index/coffee-white.jpg) no-repeat center center ; */
+  height : 50vh;
+  width: 100%;
+  /* -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;   */
 }
 
 

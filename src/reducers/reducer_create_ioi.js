@@ -9,7 +9,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log('In reducer_create_ioi, data:'+JSON.stringify(action.payload.data));
       return {
         ...state
-        , ioi: action.payload.data.data
+        , ioi: action.payload.data.data.Items
       };
     } else {
       return {

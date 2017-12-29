@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { createIOIAction, updateIOIAction } from '../actions/index';
+import { createIOIAction, updateIOIAction, fetchIOIAction, fetchRFPByIOIAction, fetchRFPAction } from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import cUtils from '../utils/common_utils';
+import ioiUtils from '../utils/ioi_utils';
 import NavBar from './sidebar';
 import NumberFormat from 'react-number-format';
 import Select from 'react-select';
@@ -78,80 +79,39 @@ class CreateIOIForm extends Component{
 
   componentWillMount() {
     gType = this.props.match.params.type;
-    // console.log('gType :'+ gType);
+    let paramId = this.props.match.params.id;
+
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
-    let collateral = {
-            acctReceivable : {
-              gross         : cUtils.parseNumber(rfp.acctRecvGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.acctReceivable.ineligible)) * (cUtils.parseNumber(rfp.acctRecvGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.acctReceivable.netCollateral) * cUtils.parseNumber(this.state.collateral.acctReceivable.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.acctReceivable.available) / (cUtils.parseNumber(rfp.acctRecvGrossAmt))) : 0
-            },
-            inventry : {
-              gross         : cUtils.parseNumber(rfp.invtryGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.inventry.ineligible)) * (cUtils.parseNumber(rfp.invtryGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.inventry.netCollateral) * cUtils.parseNumber(this.state.collateral.inventry.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.inventry.available) / (cUtils.parseNumber(rfp.invtryGrossAmt))) : 0
-            },
-            ppe : {
-              gross         : cUtils.parseNumber(rfp.ppeGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.ppe.ineligible)) * (cUtils.parseNumber(rfp.ppeGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.ppe.netCollateral) * cUtils.parseNumber(this.state.collateral.ppe.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.ppe.available) / (cUtils.parseNumber(rfp.ppeGrossAmt))) : 0
-            },
-            mae : {
-              gross         : cUtils.parseNumber(rfp.maeGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.mae.ineligible)) * (cUtils.parseNumber(rfp.maeGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.mae.netCollateral) * cUtils.parseNumber(this.state.collateral.mae.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.mae.available) / (cUtils.parseNumber(rfp.maeGrossAmt))) : 0
-            },
-            realEst : {
-              gross         : cUtils.parseNumber(rfp.realEstGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.realEst.ineligible)) * (cUtils.parseNumber(rfp.realEstGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.realEst.netCollateral) * cUtils.parseNumber(this.state.collateral.realEst.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.realEst.available) / (cUtils.parseNumber(rfp.realEstGrossAmt))) : 0
-            },
-            other : {
-              gross         : cUtils.parseNumber(rfp.otherGrossAmt),
-              ineligible    : 0,
-              netCollateral : this.state.collateral ? ((100 - cUtils.parseNumber(this.state.collateral.other.ineligible)) * (cUtils.parseNumber(rfp.otherGrossAmt)) / 100) : 0,
-              advRate       : 0,
-              available     : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.other.netCollateral) * cUtils.parseNumber(this.state.collateral.other.advRate) / 100) : 0,
-              netEffective  : this.state.collateral ? (cUtils.parseNumber(this.state.collateral.other.available) / (cUtils.parseNumber(rfp.otherGrossAmt))) : 0
-            }
-          };
-      let totalGross = cUtils.parseNumber(rfp.acctRecvGrossAmt)
-        + cUtils.parseNumber(rfp.invtryGrossAmt)
-        + cUtils.parseNumber(rfp.ppeGrossAmt)
-        + cUtils.parseNumber(rfp.maeGrossAmt)
-        + cUtils.parseNumber(rfp.realEstGrossAmt)
-        + cUtils.parseNumber(rfp.otherGrossAmt);
-      // console.log('collateral:'+JSON.stringify(collateral));
-
-    this.setState({
-      rfp                 : rfp,
-      user                : user,
-      createdById         : user.userId,
-      createdByCompanyId  : company.companyId,
-      collateral          : collateral,
-      totalGross          : totalGross
-    });
 
     if(gType === constants.IOI_EDIT){
-      var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-      // console.log('');
+      // when gType === edit, paramId = ioiId
+      this.props.fetchIOIAction(paramId);
+      this.props.fetchRFPByIOIAction(paramId);
+    } else if(gType === constants.IOI_NEW){
+      // when gType === new, paramId = rfpId
+      this.props.fetchRFPAction(paramId);
+    }
+    
+    this.setState({
+      user                : user,
+      createdById         : user.userId,
+      createdByCompanyId  : company.companyId
+    });
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.rfp){
+      let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
+      let totalGross = ioiUtils.getTotalGross(nextProps.rfp);        
+      this.setState({
+        rfp : rfp,
+        collateral : collateral,
+        totalGross : totalGross
+      });
+    }
+
+    if(nextProps.ioi){
       this.setState({
         ioi : ioi
       });
@@ -165,7 +125,7 @@ class CreateIOIForm extends Component{
 
     // console.log('createIOIAction:'+JSON.stringify(props));
     if(gType === constants.IOI_EDIT){
-      var ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
+      let ioi = this.state.ioi;
       props.ioiId = ioi.ioiId;
       props.createdById = this.state.createdById;
       // below 2 may not be nessary
@@ -185,6 +145,8 @@ class CreateIOIForm extends Component{
       props.rfpId = this.state.rfp.rfpId;
       props.createdById = this.state.createdById;
       props.createdByCompanyId = this.state.createdByCompanyId;
+      props.forCompanyId = this.state.rfp.createdByCompanyId;
+      
       this.props.createIOIAction(props)
        .then(() => {
          // blog post has been created, navigate the user to the index
@@ -715,74 +677,21 @@ class CreateIOIForm extends Component{
 function mapStateToProps(state) {
   let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
   let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-  let rfp = lsUtils.getValue(constants.KEY_RFP_OBJECT);
 
   let intializedData = {
     user : user,
     initialValues : {
-      rfpId               : rfp.rfpId,
       createdById         : user.userId,
       createdByCompanyId  : company.companyId
     }
   };
 
-  if(gType == constants.IOI_EDIT){
-    let ioi = lsUtils.getValue(constants.KEY_SELECTED_IOI_OBJECT);
-    // console.log('ioi to be edited :'+JSON.stringify(ioi));
+  if(state.ioiList.ioi){
+    intializedData.ioi = state.ioiList.ioi[0];
+  }
 
-    intializedData.initialValues.maxDebtAllowed = ioi.maxDebtAllowed;
-    intializedData.initialValues.loanSize = ioi.loanSize;
-    intializedData.initialValues.tranche = ioi.tranche;
-    intializedData.initialValues.loanStructure = ioi.loanStructure;
-    intializedData.initialValues.cashInterest = ioi.cashInterest;
-    intializedData.initialValues.pikIntreset = ioi.pikIntreset;
-    intializedData.initialValues.liborFloor = ioi.liborFloor;
-    intializedData.initialValues.maturity = ioi.maturity;
-    intializedData.initialValues.year1 = ioi.year1;
-    intializedData.initialValues.year2 = ioi.year2;
-    intializedData.initialValues.year3 = ioi.year3;
-    intializedData.initialValues.year4 = ioi.year4;
-    intializedData.initialValues.year5  = ioi.year5;
-    intializedData.initialValues.upfrontFee = ioi.upfrontFee;
-    intializedData.initialValues.governance = ioi.governance;
-    intializedData.initialValues.warrants = ioi.warrants;
-    intializedData.initialValues.covenants = ioi.covenants;
-    intializedData.initialValues.rfpId = ioi.rfpId;
-    intializedData.initialValues.createdById = ioi.createdById;
-    intializedData.initialValues.createdByCompanyId = ioi.createdByCompanyId;
-    intializedData.initialValues.cpYear1 = ioi.cpYear1 ? ioi.cpYear1 : 0;
-    intializedData.initialValues.cpYear2 = ioi.cpYear2 ? ioi.cpYear2 : 0;
-    intializedData.initialValues.cpYear3 = ioi.cpYear3 ? ioi.cpYear3 : 0;
-    intializedData.initialValues.cpYear4 = ioi.cpYear4 ? ioi.cpYear4 : 0;
-    intializedData.initialValues.cpYear5  = ioi.cpYear5 ? ioi.cpYear5 : 0;
-
-  } else {
-    intializedData.initialValues.maxDebtAllowed = 0;
-    intializedData.initialValues.loanSize = 0;
-    intializedData.initialValues.tranche = 'N/A';
-    intializedData.initialValues.loanStructure = 'N/A';
-    intializedData.initialValues.cashInterest = 0;
-    intializedData.initialValues.pikIntreset = 0;
-    intializedData.initialValues.liborFloor = 0;
-    intializedData.initialValues.maturity = 0;
-    intializedData.initialValues.year1 = 0;
-    intializedData.initialValues.year2 = 0;
-    intializedData.initialValues.year3 = 0;
-    intializedData.initialValues.year4 = 0;
-    intializedData.initialValues.year5  = 0;
-    intializedData.initialValues.upfrontFee = 0;
-    intializedData.initialValues.governance = 'N/A';
-    intializedData.initialValues.warrants = 'N/A';
-    intializedData.initialValues.covenants = 'Other';
-    // intializedData.initialValues.rfpId = '0';
-    // intializedData.initialValues.createdById = '0';
-    // intializedData.initialValues.createdByCompanyId = '0';
-    intializedData.initialValues.cpYear1 = 0;
-    intializedData.initialValues.cpYear2 = 0;
-    intializedData.initialValues.cpYear3 = 0;
-    intializedData.initialValues.cpYear4 = 0;
-    intializedData.initialValues.cpYear5  = 0;
-
+  if(state.rfpList.rfpList){
+    intializedData.rfp = state.rfpList.rfpList[0];
   }
 
   return intializedData;
@@ -832,7 +741,10 @@ function mapDispatchToProps(dispatch) {
   // to all of our reducers
   return bindActionCreators({
     createIOIAction   : createIOIAction,
-    updateIOIAction : updateIOIAction
+    updateIOIAction : updateIOIAction,
+    fetchIOIAction : fetchIOIAction,
+    fetchRFPByIOIAction : fetchRFPByIOIAction,
+    fetchRFPAction : fetchRFPAction
   }, dispatch);
 }
 

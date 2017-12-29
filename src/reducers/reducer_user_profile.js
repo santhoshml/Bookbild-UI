@@ -9,7 +9,7 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state
-        , address: action.payload.data.data
+        , address: action.payload.data.data.Items
       };
     } else {
       return {
@@ -23,7 +23,7 @@ export default function(state = INITIAL_STATE, action) {
 
       return {
         ...state
-        , contact: action.payload.data.data
+        , contact: action.payload.data.data.Items
       };
     } else {
       return {
@@ -60,7 +60,7 @@ export default function(state = INITIAL_STATE, action) {
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
       return {
         ...state
-        , userList: action.payload.data.data
+        , userList: action.payload.data.data.Items
       };
     } else {
       return {

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import DisplayIOIList from './display_IOI_list';
-import { fetchIOIListForRFPAction, fetchIOIListForLenderCompanyAction, fetchIOIListForBorrowerCompanyAction } from '../actions/index';
+import DisplayTermSheetList from './display_finalTerm_list';
+import { fetchFinalTermListForLenderCompany, fetchFinalTermListForBorrowerCompany } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
@@ -11,33 +11,28 @@ import constants from '../utils/constants';
 import NavBar from './sidebar';
 import Header from './header';
 
-class IOIList extends Component{
+class FinalTermList extends Component{
   constructor(props){
     super(props);
-    this.state = {
-			ioiList : null,
-      ioiCompanyList : null,
-      ioiUserList : null
-		}
   }
 
   componentWillMount() {
-    // console.log('In ioiList componentWillMount');
-    let user    = lsUtils.getValue(constants.KEY_USER_OBJECT);
+    // console.log('In display final term list, componentWillMount');
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    // console.log('company:'+JSON.stringify(company));
-    // console.log('user :'+JSON.stringify(user));
+    let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 
-    if(this.props.match.params.type === constants.IOI_FOR_RFP){
-      this.props.fetchIOIListForRFPAction(this.props.match.params.id);
-    } else if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
-      // console.log('calling fetchIOIListForLenderCompanyAction now');
-      this.props.fetchIOIListForLenderCompanyAction(company.companyId);
-    } else if(user.role.toLowerCase() === constants.KEY_COMPANY.toLowerCase()
+    // console.log('user:'+JSON.stringify(user));
+    // console.log('companyId :'+JSON.stringify(company));
+    if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
+      this.props.fetchFinalTermListForLenderCompany(company.companyId);
+    } else if(user.role.toLowerCase() === constants.KEY_COMPANY .toLowerCase()
       || user.role.toLowerCase() === constants.KEY_FINANCIAL_SPONSOR.toLowerCase()){
-        // console.log('calling fetchIOIListForBorrowerCompanyAction now');
-        this.props.fetchIOIListForBorrowerCompanyAction(company.companyId);
-      }
+      this.props.fetchFinalTermListForBorrowerCompany(company.companyId);
+    }
+    
+    this.setState({
+      company : company
+    });
   }
 
   displayProductCategory(){
@@ -83,31 +78,20 @@ class IOIList extends Component{
     });
   }
 
-  displayIOIList(){
-    if((!this.props.ioiList) || (this.props.ioiList && this.props.ioiList.length == 0)){
+  displayFinalTermList(){
+    if(!this.props.finalTermList || this.props.finalTermList.length === 0){
       return (
         <div>
-          <h3>NO Indication of interest.</h3>
-        </div>
-      );
-    } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
-      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
-      return(
-        <div>
-          <DisplayIOIList
-            list={this.props.ioiList}
-            companyList={this.props.ioiCompanyList}/>
+          <h3>You donot have any Final Term sheets yet.</h3>
         </div>
       );
     } else {
       // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
-          <DisplayIOIList
-            list={this.props.ioiList}
-            companyList={this.props.ioiCompanyList}
-            minimalData={true}
-            userList={this.props.ioiUserList}/>
+          <DisplayTermSheetList
+            finalTermList={this.props.finalTermList}
+          />
         </div>
       );
     }
@@ -121,10 +105,8 @@ class IOIList extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <br/>
-            {this.displayProductCategory()}
             <br/>
-            <br/>
-            {this.displayIOIList()}
+            {this.displayFinalTermList()}
             <br/>
             <br/>
             <br/>
@@ -138,25 +120,21 @@ class IOIList extends Component{
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // console.log('state:'+JSON.stringify(state));
-  let rObject =  {
-    ioiList: state.ioiList.ioiList,
-    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList),
-    ioiUserList : state.ioiList.ioiUserList
-  };
-  // console.log('rObject:'+JSON.stringify(rObject));
-  return rObject;
+  let rObject = {};
+  
+    if(state.finalTermList.finalTermList){
+      rObject.finalTermList = state.finalTermList.finalTermList;
+    }
+    return rObject;
 }
 
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    fetchIOIListForRFPAction: fetchIOIListForRFPAction,
-    fetchIOIListForLenderCompanyAction : fetchIOIListForLenderCompanyAction,
-    fetchIOIListForBorrowerCompanyAction : fetchIOIListForBorrowerCompanyAction
+    fetchFinalTermListForLenderCompany    : fetchFinalTermListForLenderCompany,
+    fetchFinalTermListForBorrowerCompany  : fetchFinalTermListForBorrowerCompany
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(IOIList);
+export default connect(mapStateToProps, mapDispatchToProps)(FinalTermList);

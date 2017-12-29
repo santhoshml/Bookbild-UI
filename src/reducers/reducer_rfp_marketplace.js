@@ -25,10 +25,10 @@ export default function(state = INITIAL_STATE, action) {
     break;
   case FETCH_TERM_SHEET_ACTIVITY_STATS:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-
+      // console.log('In marketPlace reducer, action.payload.data :'+JSON.stringify(action.payload.data));
       return {
         ...state
-        , termSheetActivity: action.payload.data
+        , termSheetActivity: action.payload.data.data.Items
       };
     } else {
       return {
@@ -86,7 +86,7 @@ export default function(state = INITIAL_STATE, action) {
         // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data));
         return {
           ...state
-          , rfpList: action.payload.data.data
+          , rfpList: action.payload.data.data.Items
         };
       } else {
         return {

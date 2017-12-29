@@ -85,7 +85,7 @@ class UserProfileForm extends Component{
 	}
 
 	componentDidMount() {
-		console.log('I am in componentWillMount');
+		// console.log('I am in componentWillMount');
 		var that = this;
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -96,7 +96,7 @@ class UserProfileForm extends Component{
     });
 
 		if(this.props.initialValues){
-			console.log('setting the initialize');
+			// console.log('setting the initialize');
 			this.props.initialize(this.props.initialValues);
 		}
 
@@ -111,7 +111,7 @@ class UserProfileForm extends Component{
 
 
   onSubmit(props){
-		console.log('In onSubmit');
+		// console.log('In onSubmit');
     this.props.updateUserProfileAction(props)
      .then(() => {
        // blog post has been created, navigate the user to the index
@@ -187,8 +187,8 @@ class UserProfileForm extends Component{
 	}
 
   render = () => {
-    console.log('I am in render');
-		console.log('props:'+JSON.stringify(this.props));
+    // console.log('I am in render');
+		// console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, load, pristine, reset, submitting } = this.props
 		// console.log('yoyo:'+this.props.initialValues.fullName);
@@ -334,7 +334,7 @@ class UserProfileForm extends Component{
 
   displayUserList(){
     // console.log('In displayUserList :'+ JSON.stringify(userListJSON));
-		console.log('I am in displayUserList');
+		// console.log('I am in displayUserList');
     return(
       <div className={`row`}>
         <br/>
