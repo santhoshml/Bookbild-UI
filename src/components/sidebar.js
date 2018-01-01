@@ -87,6 +87,8 @@ class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.LOGOUT);
         } else if(id === 'dataRoom/borrowerControlledAccess'){
             this.props.history.push(constants.ROUTES_MAP.BORROWER_CONTROLLED_ACCESS);
+        } else if(id === 'concourse/messages'){
+            this.props.history.push(constants.ROUTES_MAP.MESSAGES);
         }
         //  else{
         //     this.props.history.push('#');
@@ -331,7 +333,9 @@ class Sidenav extends Component {
     return (
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>
     <SideNav highlightBgColor="#00bcd4" onItemSelection={this.onSelect.bind(this)}>
-        <p style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>Hey {this.props.userContact ? this.props.userContact.fullName : 'man'} !!</p>
+        <p style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>
+            Hey {this.props.userContact ? this.props.userContact.fullName.substring(0, this.props.userContact.fullName.indexOf(' ')) : ''} !!
+        </p>
         {this.displayRFP()}
         {this.displayIOI()}
         {this.displayConcourse()}

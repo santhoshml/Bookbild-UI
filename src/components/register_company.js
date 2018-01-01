@@ -16,12 +16,14 @@ const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colo
 class RegisterCompanyForm extends Component{
 
 	onSubmit(props){
+		let that = this;
+		console.log('In RegisterCompanyForm, props:'+JSON.stringify(props));
 		this.props.registerCompanyAction(props)
 		 .then(() => {
 			 // blog post has been created, navigate the user to the index
 			 // We navigate by calling this.context.router.push with the
 			 // new path to navigate to.
-			 this.props.history.push(constants.ROUTES_MAP.SUPER_ADMIN);
+			 that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
 		 });
 	}
 
@@ -251,7 +253,7 @@ class RegisterCompanyForm extends Component{
 								</div>
 
 								<button type="submit" className="btn btn-primary">Submit</button>
-								<Link to={constants.ROUTES_MAP.SUPER_ADMIN} className="btn btn-danger">Cancel</Link>
+								<Link to={constants.ROUTES_MAP.RFP_MARKETPLACE} className="btn btn-danger">Cancel</Link>
 							</form>
 							<br/>
 							<br/>
@@ -326,5 +328,4 @@ function validate(values){
 
 export default reduxForm({
   'form': 'RegisterCompanyForm',
-	validate
 }) (connect(null, {registerCompanyAction})(RegisterCompanyForm));

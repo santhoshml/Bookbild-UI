@@ -14,6 +14,8 @@ import ComplianceDataReducer from "./reducer_compliance_data";
 import ControlledAccessListReducer from "./reducer_controlled_access_list";
 import FinalTermReducer from "./reducer_final_term";
 import FinalTermListReducer from "./reducer_finalTerm_list";
+import contactListReducer from './reducer_contacts';
+import MessagesReducer from './reducer_messages';
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -30,7 +32,9 @@ const rootReducer = combineReducers({
   complianceData : ComplianceDataReducer,
   controlledAccessList : ControlledAccessListReducer,
   finalTerm : FinalTermReducer,
-  finalTermList : FinalTermListReducer
+  finalTermList : FinalTermListReducer,
+  contactList : contactListReducer,
+  messages : MessagesReducer
 });
 
 export default rootReducer;

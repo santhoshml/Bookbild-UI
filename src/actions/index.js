@@ -56,6 +56,9 @@ export const SEND_INVITE_COMPANY_EMAIL = 'SEND_INVITE_COMPANY_EMAIL';
 export const FETCH_LINK_DOCS_WITH_FINAL_TERM_ID = 'FETCH_LINK_DOCS_WITH_FINAL_TERM_ID';
 export const GET_LINK_WITH_FINAL_TERM = 'GET_LINK_WITH_FINAL_TERM';
 export const MARK_AS_EXECUTED = 'MARK_AS_EXECUTED';
+export const GET_CONTACT_LIST = 'GET_CONTACT_LIST';
+export const POST_NEW_MSG = 'POST_NEW_MSG';
+export const GET_ALL_MESSAGES_FOR = 'GET_ALL_MESSAGES_FOR';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -63,9 +66,50 @@ export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
 
-// const ROOT_URL = 'http://127.0.0.1:1127';
+const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
-const ROOT_URL = 'https://services.bookbild.com';
+// const ROOT_URL = 'https://services.bookbild.com';
+
+export function fetchAllMessagesForAction(contactId){
+  const request=axios({
+    url : '/getAllMessagesFor?contactId='+contactId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_ALL_MESSAGES_FOR,
+    payload: request
+  }
+}
+
+export function postNewMsgAction(props){
+  console.log('props :'+JSON.stringify(props));
+  const request=axios({
+    url : '/postNewMsg',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: POST_NEW_MSG,
+    payload: request
+  }
+}
+
+export function fetchAllContactsToMessageAction(){
+  const request=axios({
+    url : '/fetchAllContactsToMessage',
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_CONTACT_LIST,
+    payload: request
+  }
+}
 
 export function markDealAsExecutedAction(props){
   // console.log('props :'+JSON.stringify(props));
@@ -961,7 +1005,7 @@ export function createRFPAction(props){
 }
 
 export function registerCompanyAction(props){
-  // console.log('In actions.registerCompanyAction');
+  console.log('In actions.registerCompanyAction');
   const request=axios({
     url : '/registerCompany',
     method : 'post',

@@ -37,6 +37,7 @@ import CreateFinalTerm from './components/create_final_term';
 import FinalTermDetail from './components/final_term_detail';
 import FinalTermList from './components/finalTerm_list';
 import InviteCompany from './components/invite_company';
+import Messages from './components/messages';
 
 require("../style/style.css");
 require("../css/stylish-portfolio.css");
@@ -62,6 +63,7 @@ ReactDOM.render(
       <BrowserRouter>
           <div>
             <Switch>
+              <Route path="/messages" component={Messages} />
               <Route path="/landing" component={LandingPage} />
               <Route path="/createRFP/:type/:id" component={CreateRFPForm} />
               <Route path="/createRFP/:type" component={CreateRFPForm} />

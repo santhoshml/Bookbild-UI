@@ -98,7 +98,8 @@ exports.ROUTES_MAP = {
   BORROWER_CONTROLLED_ACCESS  : '/borrowerControlledAccess',
   CREATE_FINAL_TERM           : '/createFinalTerm',
   VIEW_FINAL_TERM             : '/finalTermDetail',
-  FINAL_TERM_LIST             : '/finalTermList'
+  FINAL_TERM_LIST             : '/finalTermList',
+  MESSAGES                    : '/messages'
 };
 
 exports.S3_BUCKET_MAP = {
