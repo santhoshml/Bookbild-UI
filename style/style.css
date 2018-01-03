@@ -1,7 +1,13 @@
 /* MESSAGING style */
   .body-header{
+    margin-left: 5px;
     text-align: center;
     font-weight : bold;
+    vertical-align: middle;
+    /* padding-bottom: 5px; */
+  }
+  .body-header-companyName{
+    text-align: center;
     vertical-align: middle;
     /* padding-bottom: 5px; */
   }
@@ -31,6 +37,7 @@
 .index-bottom-text{
   font-family: serif;
   font-size: 30px;
+  color: white;
 }
 
 .index-mdl-row-txt{
@@ -60,6 +67,11 @@
     color: white;
     font-size: 25px;
 }
+
+a:hover{
+  color: white;
+}
+
 .sidebar-style {
   background: #2c3e50;
   color: #FFF;

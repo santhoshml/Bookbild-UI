@@ -59,6 +59,7 @@ export const MARK_AS_EXECUTED = 'MARK_AS_EXECUTED';
 export const GET_CONTACT_LIST = 'GET_CONTACT_LIST';
 export const POST_NEW_MSG = 'POST_NEW_MSG';
 export const GET_ALL_MESSAGES_FOR = 'GET_ALL_MESSAGES_FOR';
+export const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -66,9 +67,22 @@ export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
 
-const ROOT_URL = 'http://127.0.0.1:1127';
+// const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
-// const ROOT_URL = 'https://services.bookbild.com';
+const ROOT_URL = 'https://services.bookbild.com';
+
+export function getMsgListAction(messageId){
+  const request=axios({
+    url : '/getMsgList?messageId='+messageId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_MESSAGE_LIST,
+    payload: request
+  }
+}
 
 export function fetchAllMessagesForAction(contactId){
   const request=axios({
@@ -84,7 +98,7 @@ export function fetchAllMessagesForAction(contactId){
 }
 
 export function postNewMsgAction(props){
-  console.log('props :'+JSON.stringify(props));
+  // console.log('props :'+JSON.stringify(props));
   const request=axios({
     url : '/postNewMsg',
     method : 'POST',
@@ -1005,7 +1019,7 @@ export function createRFPAction(props){
 }
 
 export function registerCompanyAction(props){
-  console.log('In actions.registerCompanyAction');
+  // console.log('In actions.registerCompanyAction');
   const request=axios({
     url : '/registerCompany',
     method : 'post',

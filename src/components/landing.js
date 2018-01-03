@@ -13,8 +13,8 @@ export default class Landing extends Component {
               {/* <!-- Header --> */}
               <header className="header" id="top">
                 <div className="text-vertical-center">
-                  <h1>BOOKBILD</h1>
-                  <h3>Enterprise Software for Private Debt Transactions</h3>
+                  <h1 style={{marginBottom: '50px'}}>BOOKBILD</h1>
+                  <h3 style={{color : 'white'}}>Enterprise Software for Private Debt Transactions</h3>
                   <br/>
                   <br/>
                   <br/>

@@ -17,7 +17,7 @@ class RegisterCompanyForm extends Component{
 
 	onSubmit(props){
 		let that = this;
-		console.log('In RegisterCompanyForm, props:'+JSON.stringify(props));
+		// console.log('In RegisterCompanyForm, props:'+JSON.stringify(props));
 		this.props.registerCompanyAction(props)
 		 .then(() => {
 			 // blog post has been created, navigate the user to the index

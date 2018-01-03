@@ -85,6 +85,8 @@
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
+    "react-scrollbar": "^0.5.1",
+    "react-scrollbar-js": "^1.0.1",
     "react-select": "^1.0.0-rc.10",
     "react-sidebar": "^2.3.2",
     "react-sidenav": "^2.1.2",
