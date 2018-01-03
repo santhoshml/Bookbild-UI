@@ -65,7 +65,7 @@ export default class Header extends Component{
 						<a className="fa fa-desktop header-cust-attr anchor-spacing header-menu-items" href="mailto:info@bookbild.com">&nbsp;DEMO</a>
 						<a className="fa fa-feed header-cust-attr anchor-spacing header-menu-items" href="/insights">&nbsp;INSIGHTS</a>
 						<a className="fa fa-users header-cust-attr anchor-spacing header-menu-items" href="/aboutUs">&nbsp;TEAM</a>
-						<a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a>
+						{ /* <a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a> */}
 						{this.displayLaunchButton()}
 					</span>
 					</div>
