@@ -90,7 +90,7 @@ class RFPDetail extends Component{
               </tr>
               <tr>
                 <td>Deal Size</td>
-                <td><NumberFormat value={rfp.dealSize} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.dealSize)}</td>
               </tr>
               <tr>
                 <td>Tenor</td>
@@ -118,11 +118,11 @@ class RFPDetail extends Component{
               </tr>
               <tr>
                 <td>LTM Revenue</td>
-                <td><NumberFormat value={rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.ltmRevenue)}</td>
               </tr>
               <tr>
                 <td>LTM EBITDA</td>
-                <td><NumberFormat value={rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.ltmEbitda)}</td>
               </tr>
               <tr>
                 <td>Region</td>
@@ -222,7 +222,7 @@ class RFPDetail extends Component{
             </Link>
           </span>
         );
-      } else {
+      } else if(this.state.rfp){
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
@@ -273,32 +273,32 @@ class RFPDetail extends Component{
             <tbody>
               <tr>
                 <td>Accounts Receivable</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.acctRecvGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.acctRecvGrossAmt)}</td>
                 <td>{rfp.acctRecvComment}</td>
               </tr>
               <tr>
                 <td>Inventory</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.invtryGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.invtryGrossAmt)}</td>
                 <td>{rfp.invtryComment}</td>
               </tr>
               <tr>
                 <td>PP&E</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.ppeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.ppeGrossAmt)}</td>
                 <td>{rfp.ppeComment}</td>
               </tr>
               <tr>
                 <td>Machinery & Equipment</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.maeGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.maeGrossAmt)}</td>
                 <td>{rfp.maeComment}</td>
               </tr>
               <tr>
                 <td>Real Estate</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.realEstGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.realEstGrossAmt)}</td>
                 <td>{rfp.realEstComment}</td>
               </tr>
               <tr>
                 <td>Other</td>
-                <td><NumberFormat value={cUtils.parseNumber(rfp.otherGrossAmt)} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(rfp.otherGrossAmt)}</td>
                 <td>{rfp.otherComment}</td>
               </tr>
             </tbody>

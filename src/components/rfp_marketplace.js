@@ -103,7 +103,7 @@ class RFPMarketPlace extends Component{
     if(this.props.termSheetActivity != null){
       return(<div>
         {this.createTermSheetActivityDropdown()}
-        <center><h3>Term Sheet Activity</h3></center>
+        <center><h3>Summary Market Activity</h3></center>
         <br/>
         <table className="table table-striped">
           <tbody>

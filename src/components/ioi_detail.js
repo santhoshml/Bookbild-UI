@@ -15,6 +15,8 @@ import roundTo from 'round-to';
 import Header from './header';
 import JSAlert from "js-alert";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import numeral from 'numeral';
+
 
 class IOIDetail extends Component{
   constructor(props){
@@ -77,7 +79,7 @@ class IOIDetail extends Component{
             <tbody>
               <tr>
                 <td>Loan Size</td>
-                <td><NumberFormat value={ioi.loanSize} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(ioi.loanSize)}</td>
               </tr>
               <tr>
                 <td>Governance</td>
@@ -88,16 +90,16 @@ class IOIDetail extends Component{
                 <td>{ioi.covenants}</td>
               </tr>
               <tr>
-                <td>Maturity</td>
+                <td>Maturity(yrs)</td>
                 <td>{ioi.maturity}</td>
               </tr>
               <tr>
                 <td>LIBOR Floor</td>
-                <td>{ioi.liborFloor}</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.liborFloor)}</td>
               </tr>
               <tr>
                 <td>Upfront Fee</td>
-                <td>{ioi.upfrontFee}</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.upfrontFee)}</td>
               </tr>
               <tr>
                 <td>Loan Structure</td>
@@ -108,8 +110,8 @@ class IOIDetail extends Component{
                 <td>{ioi.tranche}</td>
               </tr>
               <tr>
-                <td>PIK Intreset</td>
-                <td>{ioi.pikIntreset}</td>
+                <td>PIK Interest</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.pikIntreset)}</td>
               </tr>
               <tr>
                 <td>Cash Interest</td>
@@ -117,35 +119,39 @@ class IOIDetail extends Component{
               </tr>
               <tr>
                 <td>Max. Debt Allowed</td>
-                <td><NumberFormat value={ioi.maxDebtAllowed} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>{cUtils.formatCurrencyToDisplay(ioi.maxDebtAllowed)}</td>
               </tr>
               <tr>
                 <td>Warrants</td>
                 <td>{ioi.warrants}</td>
               </tr>
               <tr>
-                <td>Year 1</td>
-                <td>{ioi.year1}</td>
+                <td><b>Amortization</b></td>
+                <td></td>
+              </tr>              
+              <tr>
+                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.year1)}</td>
               </tr>
               <tr>
-                <td>Year 2</td>
-                <td>{ioi.year2}</td>
+                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.year2)}</td>
               </tr>
               <tr>
-                <td>Year 3</td>
-                <td>{ioi.year3}</td>
+                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.year3)}</td>
               </tr>
               <tr>
-                <td>Year 4</td>
-                <td>{ioi.year4}</td>
+                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.year4)}</td>
               </tr>
               <tr>
-                <td>year 5</td>
-                <td>{ioi.year5}</td>
+                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.year5)}</td>
               </tr>
               <tr>
-                <td>Yield</td>
-                <td><b>{ioi.yield}</b></td>
+                <td>Yield Estimate</td>
+                <td><b>{cUtils.formatPercentToDisplay(ioi.yield)}</b></td>
               </tr>
               <tr>
                 <td>Created by Company</td>
@@ -238,14 +244,14 @@ class IOIDetail extends Component{
     var yieldMatrixRender = this.state.ioi.yieldMatrix.map(function(row){
       // console.log('row:'+JSON.stringify(row));
       return(<tr key={row.period}>
-          <td>{row.period}</td>
-          <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+          <td>{numeral(row.period).format('0,0.00')}</td>
+          <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
           <td>{row.startDate}</td>
-          <td><NumberFormat value={row.amtAtBegin ? roundTo(Number(row.amtAtBegin), 2): 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-          <td><NumberFormat value={row.amort ? roundTo(Number(row.amort), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-          <td><NumberFormat value={row.amtAtEnd ? roundTo(Number(row.amtAtEnd), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-          <td><NumberFormat value={row.intrestPaymet ? roundTo(Number(row.intrestPaymet), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-          <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+          <td>{cUtils.formatCurrencyToDisplay(row.amtAtBegin)}</td>
+          <td>{cUtils.formatCurrencyToDisplay(row.amort)}</td>
+          <td>{cUtils.formatCurrencyToDisplay(row.amtAtEnd)}</td>
+          <td>{cUtils.formatCurrencyToDisplay(row.intrestPaymet)}</td>
+          <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
         </tr>
       );
     });
@@ -255,13 +261,13 @@ class IOIDetail extends Component{
         <thead>
           <tr>
             <th>Period</th>
-            <th>Cash Flows($mm)</th>
+            <th>Cash Flows</th>
             <th>Date</th>
-            <th>Outstanding Amount Begining of Quater($mm)</th>
-            <th>Amortization ($mm)</th>
-            <th>Outstanding Amount Begining of Period($mm)</th>
-            <th>Interest Payment($mm)</th>
-            <th>Cash Flow($mm)</th>
+            <th>Outstanding Amount Beginning of Quarter</th>
+            <th>Amortization</th>
+            <th>Outstanding Amount Beginning of Period</th>
+            <th>Interest Payment</th>
+            <th>Cash Flow</th>
           </tr>
         </thead>
         <tbody>

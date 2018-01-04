@@ -71,51 +71,51 @@ class FinalTermDetail extends Component{
             {this.addStatus()}
             <tr>
               <td>Loan Size</td>
-              <td><NumberFormat value={finalTerm.loanSize} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+              <td>{cUtils.formatCurrencyToDisplay(finalTerm.loanSize)}</td>
             </tr>
             <tr>
-              <td>Maturity</td>
+              <td>Maturity(yrs)</td>
               <td>{finalTerm.maturity}</td>
             </tr>
             <tr>
               <td>LIBOR Floor</td>
-              <td>{finalTerm.liborFloor}</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.liborFloor)}</td>
             </tr>
             <tr>
               <td>Upfront Fee</td>
               <td>{finalTerm.upfrontFee}</td>
             </tr>
             <tr>
-              <td>PIK Intreset</td>
-              <td>{finalTerm.pikIntreset}</td>
+              <td>PIK Interest</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.pikIntreset)}</td>
             </tr>
             <tr>
               <td>Cash Interest</td>
               <td>{finalTerm.cashInterest}</td>
             </tr>
             <tr>
-              <td>Yield</td>
-              <td><b>{finalTerm.yield}</b></td>
+              <td>Yield Estimate</td>
+              <td><b>{cUtils.formatPercentToDisplay(finalTerm.yield)}</b></td>
             </tr>
             <tr>
               <td>Year 1</td>
-              <td>{finalTerm.year1}</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year1)}</td>
             </tr>
             <tr>
               <td>Year 2</td>
-              <td>{finalTerm.year2}</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year2)}</td>
             </tr>
             <tr>
               <td>Year 3</td>
-              <td>{finalTerm.year3}</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year3)}</td>
             </tr>
             <tr>
               <td>Year 4</td>
-              <td>{finalTerm.year4}</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year4)}</td>
             </tr>
             <tr>
-              <td>year 5</td>
-              <td>{finalTerm.year5}</td>
+              <td>Year 5</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year5)}</td>
             </tr>            
             <tr>
               <td>Created by</td>
@@ -169,14 +169,14 @@ class FinalTermDetail extends Component{
       var yieldMatrixRender = this.props.finalTerm.yieldMatrix.map(function(row){
         // console.log('row:'+JSON.stringify(row));
         return(<tr key={row.period}>
-            <td>{row.period}</td>
-            <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td>{numeral(row.period).format('0,0.00')}</td>
+            <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
             <td>{row.startDate}</td>
-            <td><NumberFormat value={row.amtAtBegin ? roundTo(Number(row.amtAtBegin), 2): 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={row.amort ? roundTo(Number(row.amort), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={row.amtAtEnd ? roundTo(Number(row.amtAtEnd), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={row.intrestPaymet ? roundTo(Number(row.intrestPaymet), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-            <td><NumberFormat value={row.cashFlow ? roundTo(Number(row.cashFlow), 2) : 0} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+            <td>{cUtils.formatCurrencyToDisplay(row.amtAtBegin)}</td>
+            <td>{cUtils.formatCurrencyToDisplay(row.amort)}</td>
+            <td>{cUtils.formatCurrencyToDisplay(row.amtAtEnd)}</td>
+            <td>{cUtils.formatCurrencyToDisplay(row.intrestPaymet)}</td>
+            <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
           </tr>
         );
       });
@@ -185,13 +185,13 @@ class FinalTermDetail extends Component{
           <thead>
             <tr>
               <th>Period</th>
-              <th>Cash Flows($mm)</th>
+              <th>Cash Flows</th>
               <th>Date</th>
-              <th>Outstanding Amount Begining of Quater($mm)</th>
-              <th>Amortization ($mm)</th>
-              <th>Outstanding Amount Begining of Period($mm)</th>
-              <th>Interest Payment($mm)</th>
-              <th>Cash Flow($mm)</th>
+              <th>Outstanding Amount Beginning of Quarter</th>
+              <th>Amortization</th>
+              <th>Outstanding Amount Beginning of Period</th>
+              <th>Interest Payment</th>
+              <th>Cash Flow</th>
             </tr>
           </thead>
           <tbody>

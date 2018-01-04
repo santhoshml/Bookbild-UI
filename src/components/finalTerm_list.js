@@ -31,7 +31,8 @@ class FinalTermList extends Component{
     }
     
     this.setState({
-      company : company
+      company : company,
+      user : user
     });
   }
 
@@ -87,6 +88,12 @@ class FinalTermList extends Component{
       );
     } else {
       // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
+      if(this.state.user.role === constants.KEY_LENDER){
+        // hard-code the company name for the lenders
+        for(let i=0; i< this.props.finalTermList.length; i++){
+          this.props.finalTermList[i].createdByCompanyName = this.state.company.companyName;
+        }
+      }
       return(
         <div>
           <DisplayTermSheetList

@@ -8,6 +8,7 @@ import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import ellipsis from 'text-ellipsis';
 import { fetchContactAction } from '../actions/index';
+import cUtils from '../utils/common_utils';
 
 import { ic_aspect_ratio } from 'react-icons-kit/md/ic_aspect_ratio';
 import { ic_business } from 'react-icons-kit/md/ic_business';
@@ -20,12 +21,14 @@ import { spreadsheet } from 'react-icons-kit/iconic/spreadsheet';
 import { legal } from 'react-icons-kit/fa/legal';
 import { ic_attach_money } from 'react-icons-kit/md/ic_attach_money';       
 import { trophy } from 'react-icons-kit/icomoon/trophy';       
-import { user } from 'react-icons-kit/fa/user';       
+import { user } from 'react-icons-kit/fa/user';
+import { envelop } from 'react-icons-kit/icomoon/envelop';
 import { Redirect } from "react-router";
 
 
 
 const Icon20 = props => <SvgIcon size={props.size || 25} icon={props.icon} />;
+const Icon19 = props => <SvgIcon size={props.size || 19} icon={props.icon} />;
 
 const BaseContainer = props =>
 <div
@@ -333,9 +336,9 @@ class Sidenav extends Component {
     return (
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>
     <SideNav highlightBgColor="#00bcd4" onItemSelection={this.onSelect.bind(this)}>
-        <p style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>
-            Hey {this.props.userContact ? this.props.userContact.fullName.substring(0, this.props.userContact.fullName.indexOf(' ')) : ''} !!
-        </p>
+        <div style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>
+            Hey {this.props.userContact ? cUtils.getNameToDisplayInSidebar(this.props.userContact.fullName) : ''} !! &nbsp; &nbsp;<Icon19 icon={envelop} />
+        </div>
         {this.displayRFP()}
         {this.displayIOI()}
         {this.displayConcourse()}

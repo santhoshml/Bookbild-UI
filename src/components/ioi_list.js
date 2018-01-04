@@ -47,7 +47,7 @@ class IOIList extends Component{
       let catKeys = Object.keys(productCategoryMap);
       // console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
       return(<div>
-          <h3>Ranking by Product Category:</h3>
+          <h3>Comparative Analytics - Lender Terms</h3>
           <table className="table table-striped align-center table-bordered">
             <thead>
               <tr>

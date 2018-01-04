@@ -99,7 +99,7 @@ class borrowerControlledAccess extends Component{
             id = {constants.KEY_ACCESS_CONTROL_QCOMPLIANCE}
             onChange={this.onToggleSwitch.bind(this)}
             checked={this.state.selectedAccessList.QCOMPLIANCE}/>
-          <span className="indent">Quaterly Compliance</span>
+          <span className="indent">Quarterly Compliance</span>
         </label>
         <br/>
         <label>

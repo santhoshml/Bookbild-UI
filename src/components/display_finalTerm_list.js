@@ -38,23 +38,23 @@ export default class DisplayFinalTermList extends Component {
   }
 
   maxDebtRenderer(row){
-    return <NumberFormat value={row.maxDebtAllowed} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return cUtils.formatCurrencyToDisplayAsElement(row.maxDebtAllowed); 
   }
 
   loanSizeRenderer(row){
-    return <NumberFormat value={row.loanSize} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return cUtils.formatCurrencyToDisplayAsElementrow.loanSize();
   }
 
   pikRenderer(row){
-    return <NumberFormat value={String(row.pikIntreset)} displayType={'text'} decimalSeparator={row.pikIntreset > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.pikIntreset); 
   }
 
   liborFloorRenderer(row){
-    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={row.liborFloor > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.liborFloor); 
   }
 
   upfrontFeeRenderer(row){
-    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={row.upfrontFee>0 ? true : false} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.upfrontFee);
   }
 
   maturityRenderer(row){
@@ -62,7 +62,7 @@ export default class DisplayFinalTermList extends Component {
   }
 
   cashIntrestRenderer(row){
-    return <NumberFormat value={row.cashInterest} displayType={'text'} thousandSeparator={row.cashInterest>0 ? true : false} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.cashInterest);
   }
 
   getCompanyNameRenderer(row){
@@ -100,7 +100,7 @@ export default class DisplayFinalTermList extends Component {
       renderer : this.loanSizeRenderer
     }, {
       name: 'yield',
-      display: 'Yield'
+      display: 'Yield Estimate'
     }, {
       name: 'blendedCost',
       display: 'Blended Cost'
@@ -121,6 +121,7 @@ export default class DisplayFinalTermList extends Component {
     if (!this.props.finalTermList) {
       return <div>No Final Term sheets exist</div>;
     } else {
+      console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
       const selectRowProp = {
         mode: 'checkbox',
         clickToSelect: true,

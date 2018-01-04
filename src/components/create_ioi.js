@@ -105,7 +105,7 @@ class CreateIOIForm extends Component{
       let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
       let totalGross = ioiUtils.getTotalGross(nextProps.rfp);        
       this.setState({
-        rfp : rfp,
+        rfp : nextProps.rfp,
         collateral : collateral,
         totalGross : totalGross
       });
@@ -158,7 +158,7 @@ class CreateIOIForm extends Component{
 	}
 
   displayRFPSummary(){
-    if(gType === constants.IOI_EDIT || gType === constants.IOI_NEW){
+    if((gType === constants.IOI_EDIT || gType === constants.IOI_NEW) && this.state.rfp){
       return (
         <div>
           <h4>RFP Details : </h4>
@@ -176,8 +176,8 @@ class CreateIOIForm extends Component{
                 <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
               </tr>
               <tr>
-                <td>LTM Revenue : <NumberFormat value={this.state.rfp.ltmRevenue} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
-                <td>LTM EBITDA:<NumberFormat value={this.state.rfp.ltmEbitda} displayType={'text'} thousandSeparator={true} prefix={'$'} /></td>
+                <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmRevenue)}</td>
+                <td>LTM EBITDA : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmEbitda)}</td>
               </tr>
             </tbody>
           </table>
@@ -253,7 +253,7 @@ class CreateIOIForm extends Component{
             <tr>
               <td>Accounts Receivable</td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.acctReceivable.gross)}
               </td>
               <td>
                 <Field
@@ -263,7 +263,7 @@ class CreateIOIForm extends Component{
   		          />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.acctReceivable.netCollateral)}
               </td>
               <td>
                 <Field
@@ -273,16 +273,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.acctReceivable.available)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.acctReceivable.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} d/>
+                {cUtils.formatPercentToDisplay(this.state.collateral.acctReceivable.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td>Inventory</td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.inventry.gross)}
               </td>
               <td>
                 <Field
@@ -292,7 +292,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.inventry.netCollateral)}
               </td>
               <td>
                 <Field
@@ -302,16 +302,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.inventry.available)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.inventry.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+                {cUtils.formatPercentToDisplay(this.state.collateral.inventry.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td>PP&E</td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.ppe.gross)}
               </td>
               <td>
                 <Field
@@ -321,7 +321,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.ppe.netCollateral)}
               </td>
               <td>
                 <Field
@@ -331,16 +331,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.ppe.netCollateral)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.ppe.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+                {cUtils.formatPercentToDisplay(this.state.collateral.ppe.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td>Machinery & Equipment :</td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.mae.gross)}
               </td>
               <td>
                 <Field
@@ -350,7 +350,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.mae.netCollateral)}
               </td>
               <td>
                 <Field
@@ -360,16 +360,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.mae.available)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.mae.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+                {cUtils.formatPercentToDisplay(this.state.collateral.mae.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td>Real Estate</td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.realEst.gross)}
               </td>
               <td>
                 <Field
@@ -379,7 +379,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.realEst.netCollateral)}
               </td>
               <td>
                 <Field
@@ -389,16 +389,16 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.realEst.available)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.realEst.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+                {cUtils.formatPercentToDisplay(this.state.collateral.realEst.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td>Other</td>
               <td>
-                <NumberFormat value={this.state.collateral.other.gross} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.other.gross)}
               </td>
               <td>
                 <Field
@@ -408,7 +408,7 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.netCollateral} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.other.netCollateral)}
               </td>
               <td>
                 <Field
@@ -418,19 +418,19 @@ class CreateIOIForm extends Component{
                 />
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.available} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+                {cUtils.formatCurrencyToDisplay(this.state.collateral.other.available)}
               </td>
               <td>
-                <NumberFormat value={this.state.collateral.other.netEffective * 100} displayType={'text'} thousandSeparator={true} suffix={'%'} />
+                {cUtils.formatPercentToDisplay(this.state.collateral.other.netEffective * 100)}
               </td>
             </tr>
             <tr>
               <td><b>Total</b></td>
-              <td><b><NumberFormat value={this.state.totalGross} displayType={'text'} thousandSeparator={true} prefix={'$'} /></b></td>
+              <td><b>{cUtils.formatCurrencyToDisplay(this.state.totalGross)}</b></td>
               <td></td>
               <td></td>
               <td></td>
-              <td><b><NumberFormat value={this.state.totalAvailable} displayType={'text'} thousandSeparator={true} prefix={'$'} /></b></td>
+              <td><b>{cUtils.formatCurrencyToDisplay(this.state.totalAvailable)}</b></td>
               <td></td>
             </tr>
           </tbody>

@@ -1,8 +1,36 @@
+import React, { Component } from 'react';
 import constants from './constants';
 import moment from 'moment';
 import sortJsonArray from 'sort-json-array';
 import isNumber from 'is-number';
 import numbro from 'numbro';
+import numeral from 'numeral';
+import roundTo from 'round-to';
+
+exports.formatCurrencyToDisplay=function(amt){
+  return numeral(amt).format('($0,0.00)');
+}
+
+exports.formatPercentToDisplay=function(val){
+  return numeral(val/100).format('(%0,0.00)');
+}
+
+exports.formatCurrencyToDisplayAsElement = function(amt){
+  return(<span>{exports.formatCurrencyToDisplay(amt)}</span>);
+}
+
+exports.formatPercentToDisplayAsElement = function(val){
+  return(<span>{exports.formatPercentToDisplay(val)}</span>);
+}
+
+exports.getNameToDisplayInSidebar = function(fullName){
+  let firstName = fullName.substring(0, fullName.indexOf(' '));
+  if(firstName.length > 7){
+    return firstName.substring(0, 7);
+  } else {
+    return firstName;
+  }
+}
 
 exports.computeDocumentsTabDisabled = function(a2lDocuments, role){
   return (!a2lDocuments
@@ -187,9 +215,9 @@ exports.getTopThreeSectors = function(obj, grandTotal){
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
   // console.log('In sectors, sortedList :'+JSON.stringify(sortedList));
-  return exports.getSectorDisplayName(sortedList[0].sector) + '('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
-    +', '+ exports.getSectorDisplayName(sortedList[1].sector) + '('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
-    +', '+ exports.getSectorDisplayName(sortedList[2].sector) + '('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
+  return exports.getSectorDisplayName(sortedList[0].sector) + ' ('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getSectorDisplayName(sortedList[1].sector) + ' ('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getSectorDisplayName(sortedList[2].sector) + ' ('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
 }
 
 exports.getTopThreeProducts = function(obj, grandTotal){
@@ -203,9 +231,9 @@ exports.getTopThreeProducts = function(obj, grandTotal){
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
   // console.log('In products, sortedList :'+JSON.stringify(sortedList));
-  return exports.getProductDisplayName(sortedList[0].sector) + '('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
-    +', '+ exports.getProductDisplayName(sortedList[1].sector) + '('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
-    +', '+ exports.getProductDisplayName(sortedList[2].sector) + '('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
+  return exports.getProductDisplayName(sortedList[0].sector) + ' ('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getProductDisplayName(sortedList[1].sector) + ' ('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
+    +', '+ exports.getProductDisplayName(sortedList[2].sector) + ' ('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
 }
 
 exports.getSectorDisplayName = function(name){

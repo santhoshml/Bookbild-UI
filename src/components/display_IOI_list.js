@@ -48,23 +48,23 @@ export default class DisplayIOIList extends Component {
   }
 
   maxDebtRenderer(row){
-    return <NumberFormat value={row.maxDebtAllowed} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return cUtils.formatCurrencyToDisplayAsElement(row.maxDebtAllowed);
   }
 
   loanSizeRenderer(row){
-    return <NumberFormat value={row.loanSize} displayType={'text'} thousandSeparator={true} prefix={'$'} />
+    return cUtils.formatCurrencyToDisplayAsElement(row.loanSize);
   }
 
   pikRenderer(row){
-    return <NumberFormat value={String(row.pikIntreset)} displayType={'text'} decimalSeparator={row.pikIntreset > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.pikIntreset);
   }
 
   liborFloorRenderer(row){
-    return <NumberFormat value={row.liborFloor} displayType={'text'} decimalSeparator={row.liborFloor > 0 ? '.' : ''} decimalScale={2} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.liborFloor);
   }
 
   upfrontFeeRenderer(row){
-    return <NumberFormat value={row.upfrontFee} displayType={'text'} thousandSeparator={row.upfrontFee>0 ? true : false} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.upfrontFee);
   }
 
   maturityRenderer(row){
@@ -72,7 +72,11 @@ export default class DisplayIOIList extends Component {
   }
 
   cashIntrestRenderer(row){
-    return <NumberFormat value={row.cashInterest} displayType={'text'} thousandSeparator={row.cashInterest>0 ? true : false} suffix={'%'} />
+    return cUtils.formatPercentToDisplayAsElement(row.cashInterest); 
+  }
+
+  yieldRenderer(row){
+    return cUtils.formatPercentToDisplayAsElement(row.yield); 
   }
 
   getCompanyNameRenderer(row){
@@ -122,7 +126,7 @@ export default class DisplayIOIList extends Component {
       renderer : this.cashIntrestRenderer
     }, {
       name: 'pikIntreset',
-      display: 'PIK',
+      display: 'PIK Interest',
       renderer : this.pikRenderer
     }, {
       name: 'liborFloor',
@@ -147,7 +151,8 @@ export default class DisplayIOIList extends Component {
       display: 'Covenants'
     }, {
       name: 'yield',
-      display: 'Yield'
+      display: 'Yield Estimate',
+      renderer : this.yieldRenderer
     }, {
       name: 'blendedCost',
       display: 'Blended Cost'
