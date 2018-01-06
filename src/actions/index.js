@@ -60,6 +60,7 @@ export const GET_CONTACT_LIST = 'GET_CONTACT_LIST';
 export const POST_NEW_MSG = 'POST_NEW_MSG';
 export const GET_ALL_MESSAGES_FOR = 'GET_ALL_MESSAGES_FOR';
 export const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
+export const APPEND_TO_MSG_LIST = 'APPEND_TO_MSG_LIST';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -71,7 +72,23 @@ export const DELETE_POST = "delete_post";
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
+export function appendToMsgList(props){
+  // console.log('props :'+JSON.stringify(props));
+  const request=axios({
+    url : '/appendToMsgList',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: APPEND_TO_MSG_LIST,
+    payload: request
+  }
+}
+
 export function getMsgListAction(messageId){
+  // console.log('In getMsgListAction, messageId:'+messageId);
   const request=axios({
     url : '/getMsgList?messageId='+messageId,
     method : 'GET',
@@ -98,7 +115,7 @@ export function fetchAllMessagesForAction(contactId){
 }
 
 export function postNewMsgAction(props){
-  // console.log('props :'+JSON.stringify(props));
+  // console.log('in postNewMsgAction props :'+JSON.stringify(props));
   const request=axios({
     url : '/postNewMsg',
     method : 'POST',

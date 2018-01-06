@@ -1,4 +1,31 @@
 
+exports.getMsgListData = function(msgLink, currContactId){
+    let msgListObject = {};
+    msgListObject.timestamp = msgLink.msgLink.timestamp;
+    msgListObject.messageId = msgLink.msgLink.messageId;
+
+    let contactList = Object.keys(msgLink.groupMap.contactCompanyMap);
+    let contactNames = null, companyNames = null, comma;
+    for(let i=0; i< contactList.length; i++){
+        if(contactList[i] !== currContactId){
+            if(!contactNames)
+                contactNames = msgLink.contactMap[contactList[i]];
+            else 
+                contactNames = contactNames+', '+msgLink.contactMap[contactList[i]];
+
+            // company names
+            if(!companyNames)
+                companyNames = msgLink.companyMap[msgLink.groupMap.contactCompanyMap[contactList[i]]];
+            else 
+                companyNames = companyNames+', '+msgLink.companyMap[msgLink.groupMap.contactCompanyMap[contactList[i]]];
+        }
+    }
+    msgListObject.contactNames = contactNames;
+    msgListObject.companyNames = companyNames;    
+    // console.log('msgListObject :'+JSON.stringify(msgListObject));
+
+    return msgListObject;
+}
 
 exports.getContactId = function(val, list){
     let ltIndex = val.indexOf('<');

@@ -10,8 +10,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
-        , msgLinkList : action.payload.data.data.msgLinkList
-        , msgContactMap : action.payload.data.data.contactMap
+        , msgLinkList : action.payload.data.data
       };
     } else {
       return {
