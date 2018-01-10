@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { getRFPWithFinalTermAction, getIOIWithFinalTermAction, getLinkWithFinalTermAction, getLinkWithIOIAction, fetchRFPByIOIAction, downloadLinkDocumentAction, createFinalTermAction, updateFinalTermAction, uploadDocumentRequest, deleteLinkDocumentAction, getLinkDocsWithLinkIdAndTypeAction } from '../actions/index';
+import { fetchIOIAction, getRFPWithFinalTermAction, getIOIWithFinalTermAction, getLinkWithFinalTermAction, getLinkWithIOIAction, fetchRFPByIOIAction, downloadLinkDocumentAction, createFinalTermAction, updateFinalTermAction, uploadDocumentRequest, deleteLinkDocumentAction, getLinkDocsWithLinkIdAndTypeAction } from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -105,19 +105,19 @@ class CreateFinalTermForm extends Component{
   componentWillReceiveProps(nextProps){
     if(nextProps.rfp){
       this.setState({
-        rfp : rfp
+        rfp : nextProps.rfp
       });
     }
 
     if(nextProps.link){
       this.setState({
-        link : link
+        link : nextProps.link
       });
     }
 
     if(nextProps.ioi){
       this.setState({
-        ioi : ioi
+        ioi : nextProps.ioi
       });
     }
   }
@@ -463,7 +463,7 @@ class CreateFinalTermForm extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-              {this.displayRFPSummary()}
+              {this.state.rfp ? this.displayRFPSummary() : ''}
               <br/>
               {this.displaySubtitle()}
               <br/>
@@ -557,7 +557,8 @@ function mapDispatchToProps(dispatch) {
     getLinkWithIOIAction : getLinkWithIOIAction,
     getLinkWithFinalTermAction : getLinkWithFinalTermAction,
     getIOIWithFinalTermAction : getIOIWithFinalTermAction,
-    getRFPWithFinalTermAction : getRFPWithFinalTermAction
+    getRFPWithFinalTermAction : getRFPWithFinalTermAction,
+    fetchIOIAction : fetchIOIAction
   }, dispatch);
 }
 

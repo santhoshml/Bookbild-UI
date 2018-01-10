@@ -78,20 +78,32 @@ class IOIDetail extends Component{
           <table className="table table-striped table-bordered">
             <tbody>
               <tr>
+                <td>Max. Debt Allowed</td>
+                <td>{cUtils.formatCurrencyToDisplay(ioi.maxDebtAllowed)}</td>
+              </tr>
+              <tr>
                 <td>Loan Size</td>
                 <td>{cUtils.formatCurrencyToDisplay(ioi.loanSize)}</td>
               </tr>
               <tr>
-                <td>Governance</td>
-                <td>{ioi.governance}</td>
-              </tr>
-              <tr>
-                <td>Covenants</td>
-                <td>{ioi.covenants}</td>
-              </tr>
-              <tr>
-                <td>Maturity(yrs)</td>
+                <td>Maturity (yrs)</td>
                 <td>{ioi.maturity}</td>
+              </tr>
+              <tr>
+                <td>Tranche</td>
+                <td>{ioi.tranche}</td>
+              </tr>
+              <tr>
+                <td>Loan Structure</td>
+                <td>{ioi.loanStructure}</td>
+              </tr>
+              <tr>
+                <td>Cash Interest</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.cashInterest)}</td>
+              </tr>
+              <tr>
+                <td>PIK Interest</td>
+                <td>{cUtils.formatPercentToDisplay(ioi.pikIntreset)}</td>
               </tr>
               <tr>
                 <td>LIBOR Floor</td>
@@ -102,24 +114,12 @@ class IOIDetail extends Component{
                 <td>{cUtils.formatPercentToDisplay(ioi.upfrontFee)}</td>
               </tr>
               <tr>
-                <td>Loan Structure</td>
-                <td>{ioi.loanStructure}</td>
+                <td>Covenants</td>
+                <td>{ioi.covenants}</td>
               </tr>
               <tr>
-                <td>Tranche</td>
-                <td>{ioi.tranche}</td>
-              </tr>
-              <tr>
-                <td>PIK Interest</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.pikIntreset)}</td>
-              </tr>
-              <tr>
-                <td>Cash Interest</td>
-                <td>{ioi.cashInterest}</td>
-              </tr>
-              <tr>
-                <td>Max. Debt Allowed</td>
-                <td>{cUtils.formatCurrencyToDisplay(ioi.maxDebtAllowed)}</td>
+                <td>Governance</td>
+                <td>{ioi.governance}</td>
               </tr>
               <tr>
                 <td>Warrants</td>
@@ -128,7 +128,7 @@ class IOIDetail extends Component{
               <tr>
                 <td><b>Amortization</b></td>
                 <td></td>
-              </tr>              
+              </tr>
               <tr>
                 <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td>
                 <td>{cUtils.formatPercentToDisplay(ioi.year1)}</td>
@@ -201,7 +201,8 @@ class IOIDetail extends Component{
             "WGL" : false, 
             "QCOMPLIANCE" :   false, 
             "DEAL_TEAM" :   false 
-          }
+          },
+          borrowerContactId : that.state.user.contactId
         };
         // console.log('data:'+JSON.stringify(data));
         that.props.inviteLenderAction(data)

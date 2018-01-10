@@ -266,7 +266,7 @@ class UserProfileForm extends Component{
                 />
                 <Field
                   name="ein"
-                  label="Company Name"
+                  label="EIN of the Company"
                   size="col-xs-4 col-md-4"
                   disabled="true"
                   component={this.renderField}

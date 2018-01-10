@@ -17,7 +17,7 @@ import { connect } from "react-redux";
 var gType=null;
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
-const governanceOptions = ['YES', 'NO'];
+const governanceOptions = ['Yes', 'No'];
 class CreateIOIForm extends Component{
 
   constructor(props){
@@ -113,7 +113,7 @@ class CreateIOIForm extends Component{
 
     if(nextProps.ioi){
       this.setState({
-        ioi : ioi
+        ioi : nextProps.ioi
       });
     }
   }
@@ -146,7 +146,7 @@ class CreateIOIForm extends Component{
       props.createdById = this.state.createdById;
       props.createdByCompanyId = this.state.createdByCompanyId;
       props.forCompanyId = this.state.rfp.createdByCompanyId;
-      
+      props.createdByContactId = this.state.user.contactId;
       this.props.createIOIAction(props)
        .then(() => {
          // blog post has been created, navigate the user to the index

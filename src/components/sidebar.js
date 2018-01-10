@@ -330,6 +330,10 @@ class Sidenav extends Component {
         );
     }
     
+    linkToMsgs(){
+        this.props.history.push(constants.ROUTES_MAP.MESSAGES);
+    }
+
   render() {
     // console.log('I am in sidenav render');
 
@@ -337,7 +341,8 @@ class Sidenav extends Component {
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>
     <SideNav highlightBgColor="#00bcd4" onItemSelection={this.onSelect.bind(this)}>
         <div style={{margin: '20px', fontStyle : 'italic', fontSize:'20px'}}>
-            Hey {this.props.userContact ? cUtils.getNameToDisplayInSidebar(this.props.userContact.fullName) : ''} !! &nbsp; &nbsp;<Icon19 icon={envelop} />
+            Hey {this.props.userContact ? cUtils.getNameToDisplayInSidebar(this.props.userContact.fullName) : ''} !! &nbsp; &nbsp;
+            <a href="#" onClick={this.linkToMsgs.bind(this)}><Icon19 icon={envelop} /></a>
         </div>
         {this.displayRFP()}
         {this.displayIOI()}

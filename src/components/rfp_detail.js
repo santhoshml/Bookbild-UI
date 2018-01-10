@@ -171,7 +171,11 @@ class RFPDetail extends Component{
 
   removeFromFavorites(){
     // console.log('I am in removeFromFavorites ');
-    this.props.removeRFPFromFavoritesAction(this.props.favorite.favoriteId)
+    let props= {
+      favoriteId : this.props.favorite.favoriteId,
+      contactId : this.state.user.contactId
+    };
+    this.props.removeRFPFromFavoritesAction(props)
       .then(() => {
         this.setState({isFavorite : false, favorite : null})
       });
@@ -179,7 +183,12 @@ class RFPDetail extends Component{
 
   addToFavorites(){
     // console.log('I am in addToFavorites ');
-    this.props.addRFPToFavoritesAction(this.state.user.userId, this.state.rfp.rfpId)
+    var props={
+      userId : this.state.user.userId,
+      rfpId : this.state.rfp.rfpId,
+      contactId : this.state.user.contactId
+    };
+    this.props.addRFPToFavoritesAction(props)
       .then(() => {
         this.setState({isFavorite : true, favorite : this.state.favorite})
       });

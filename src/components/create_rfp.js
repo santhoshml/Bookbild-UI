@@ -103,9 +103,6 @@ class CreateRFP extends Component {
 
         this.props.updateRFPAction(values)
           .then(() => {
-            // blog post has been created, navigate the user to the index
-            // We navigate by calling this.context.router.push with the
-            // new path to navigate to.
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
             // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });
@@ -114,12 +111,9 @@ class CreateRFP extends Component {
         if(user.isSuperAdmin && user.isSuperAdmin === true){
           values.createdByCompanyId = values.createdForCompany;
         }
+        values.createdByContactId = this.state.user.contactId;
         this.props.createRFPAction(values)
           .then(() => {
-            // blog post has been created, navigate the user to the index
-            // We navigate by calling this.context.router.push with the
-            // new path to navigate to.
-
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
             // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
         });

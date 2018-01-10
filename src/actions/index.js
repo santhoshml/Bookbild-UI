@@ -67,6 +67,7 @@ export const FETCH_POST = "fetch_post";
 export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
+const USE_CACHE = true;
 
 // const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
@@ -671,8 +672,7 @@ export function createUnsolicitedPitchAction(props){
 export function fetchAllCompanyListForRFP(){
   // console.log('In actions.fetchCompanyListForRFP');
   const request=axios({
-    // url : '/fetchAllCompanyListForRFP', // FOR TESTING ONLY
-    url : '/fetchAllCompanyListForRFPUsingCache',
+    url : (USE_CACHE ? '/fetchAllCompanyListForRFPUsingCache' : '/fetchAllCompanyListForRFP'),
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -701,7 +701,6 @@ export function fetchRFPByIOIAction(ioiId){
   // console.log('In actions.fetchRFPByIOIAction, ioiId:'+ioiId);
   const request=axios({
     url : '/fetchRFPByIOI?ioiId='+ioiId,
-    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -716,7 +715,6 @@ export function getRFPWithFinalTermAction(finalTermId){
   // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
     url : '/getRFPWithFinalTerm?finalTermId='+finalTermId,
-    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -730,8 +728,7 @@ export function getRFPWithFinalTermAction(finalTermId){
 export function fetchRFPAction(rfpId){
   // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
-    url : '/fetchRFP?rfpId='+rfpId,
-    // url : '/fetchRFPUsingCache?rfpId='+rfpId,
+    url : (USE_CACHE ? '/fetchRFPUsingCache?rfpId='+rfpId : '/fetchRFP?rfpId='+rfpId),
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -829,8 +826,7 @@ export function createIOIAction(props){
   // console.log('In actions.createIOIAction');
   // console.log('props:'+JSON.stringify(props));
   const request=axios({
-    // url : '/createIOI',
-    url : '/createIOIUsingCache',
+    url : (USE_CACHE ? '/createIOIUsingCache' : '/createIOI'),
     method : 'POST',
     baseURL : ROOT_URL,
     data : props
@@ -872,15 +868,13 @@ export function getRFPFromFavoritesAction(userId, rfpId){
   }
 }
 
-export function removeRFPFromFavoritesAction(favoriteId){
+export function removeRFPFromFavoritesAction(props){
   // console.log('In actions.removeRFPFromFavoritesAction');
   const request=axios({
     url : '/removeRFPFromFavorites',
     method : 'post',
     baseURL : ROOT_URL,
-    data : {
-      favoriteId : favoriteId
-    }
+    data : props
   });
 
   return{
@@ -889,16 +883,13 @@ export function removeRFPFromFavoritesAction(favoriteId){
   }
 }
 
-export function addRFPToFavoritesAction(userId, rfpId){
+export function addRFPToFavoritesAction(props){
   // console.log('In actions.addToFavoritesAction');
   const request=axios({
     url : '/addRFPToFavorites',
     method : 'post',
     baseURL : ROOT_URL,
-    data : {
-      rfpId : rfpId,
-      userId : userId
-    }
+    data : props
   });
 
   return{
@@ -983,8 +974,7 @@ export function fetchContactAction(contactId){
 export function fetchAllRFPAction(){
   // console.log('In actions.fetchAllRFPAction');
   const request=axios({
-    // url : '/fetchAllRFPs',
-    url : '/fetchAllRFPsUsingCache',
+    url : (USE_CACHE ? '/fetchAllRFPsUsingCache' : '/fetchAllRFPs'),
     method : 'get',
     baseURL : ROOT_URL
   });
@@ -999,8 +989,7 @@ export function updateRFPAction(props){
   // console.log('In actions.updateRFPAction');
   // console.log('props:'+JSON.stringify(props));
   const request=axios({
-    // url : '/updateRFP',
-    url : '/updateRFPUsingCache',
+    url : (USE_CACHE ? '/updateRFPUsingCache' : '/updateRFP'),
     method : 'post',
     baseURL : ROOT_URL,
     headers : {
@@ -1019,8 +1008,7 @@ export function createRFPAction(props){
   // console.log('In actions.createRFPAction');
   // console.log('props:'+JSON.stringify(props));
   const request=axios({
-    // url : '/createRFP',
-    url : '/createRFPUsingCache',
+    url : (USE_CACHE ? '/createRFPUsingCache' : '/createRFP'),
     method : 'post',
     baseURL : ROOT_URL,
     headers : {

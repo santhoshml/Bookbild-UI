@@ -74,8 +74,16 @@ class FinalTermDetail extends Component{
               <td>{cUtils.formatCurrencyToDisplay(finalTerm.loanSize)}</td>
             </tr>
             <tr>
-              <td>Maturity(yrs)</td>
+              <td>Maturity (yrs)</td>
               <td>{finalTerm.maturity}</td>
+            </tr>
+            <tr>
+              <td>Cash Interest</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.cashInterest)}</td>
+            </tr>
+            <tr>
+              <td>PIK Interest</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.pikIntreset)}</td>
             </tr>
             <tr>
               <td>LIBOR Floor</td>
@@ -86,45 +94,41 @@ class FinalTermDetail extends Component{
               <td>{finalTerm.upfrontFee}</td>
             </tr>
             <tr>
-              <td>PIK Interest</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.pikIntreset)}</td>
+              <td><b>Amortization</b></td>
+              <td></td>
             </tr>
             <tr>
-              <td>Cash Interest</td>
-              <td>{finalTerm.cashInterest}</td>
+              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year1)}</td>
+            </tr>
+            <tr>
+              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year2)}</td>
+            </tr>
+            <tr>
+              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year3)}</td>
+            </tr>
+            <tr>
+              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year4)}</td>
+            </tr>
+            <tr>
+              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td>
+              <td>{cUtils.formatPercentToDisplay(finalTerm.year5)}</td>
             </tr>
             <tr>
               <td>Yield Estimate</td>
               <td><b>{cUtils.formatPercentToDisplay(finalTerm.yield)}</b></td>
             </tr>
             <tr>
-              <td>Year 1</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year1)}</td>
+              <td>Created by Company</td>
+              <td>{finalTerm.createdByCompanyName}</td>
             </tr>
-            <tr>
-              <td>Year 2</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year2)}</td>
-            </tr>
-            <tr>
-              <td>Year 3</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year3)}</td>
-            </tr>
-            <tr>
-              <td>Year 4</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year4)}</td>
-            </tr>
-            <tr>
-              <td>Year 5</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year5)}</td>
-            </tr>            
             <tr>
               <td>Created by</td>
               <td>{finalTerm.createdByName}</td>
             </tr>
-            <tr>
-              <td>Created by Company</td>
-              <td>{finalTerm.createdByCompanyName}</td>
-            </tr>            
             <tr>
               <td>Last Updated on</td>
               <td>{dateFormat(moment(finalTerm.timestamp), 'longDate')}</td>

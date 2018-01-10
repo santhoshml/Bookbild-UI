@@ -99,6 +99,9 @@ class AddUserForm extends Component{
 	}
 
 	onSubmit(props){
+		if(this.state.user){
+			props.addedByContactId = this.state.user.contactId;
+		}
 		this.props.addUserAction(props)
 		 .then((data) => {
 			 // blog post has been created, navigate the user to the index
@@ -263,7 +266,7 @@ class AddUserForm extends Component{
 									/>
 									<Field
 										name="ein"
-										label="Company Name"
+										label="EIN of the Company"
 										size="col-xs-4 col-md-4"
 										disabled="true"
 										component={this.renderField}
