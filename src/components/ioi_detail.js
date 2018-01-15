@@ -232,7 +232,7 @@ class IOIDetail extends Component{
   displayEditIOIButton(){
     if(this.state.ioi && this.state.company.companyId === this.state.ioi.createdByCompanyId){
       return( <span>
-        <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_EDIT+'/'+this.state.ioi.ioiId} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.EDIT_IOI+'/'+this.state.ioi.ioiId} className="btn btn-primary">
           Edit IOI
         </Link>
         &nbsp;&nbsp;&nbsp;
@@ -293,7 +293,7 @@ class IOIDetail extends Component{
       && this.state.company.companyId === this.state.ioi.createdByCompanyId
       && this.state.link){
       return( <span>
-      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+constants.FINAL_TERM_NEW+"/"+this.state.ioi.ioiId} className="btn btn-primary">
+      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+this.state.ioi.ioiId} className="btn btn-primary">
         Submit Final Term Sheet
       </Link>
       &nbsp;&nbsp;&nbsp;

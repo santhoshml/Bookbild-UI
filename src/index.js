@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import LoginForm from './components/login';
 import Logout from './components/logout';
 import CreateRFPForm from './components/create_rfp';
+import EditRFPForm from './components/edit_rfp';
 import RegisterCompanyForm from './components/register_company';
 import RFPMarketPlace from './components/rfp_marketplace';
 import MyProfile from './components/user_profile';
@@ -17,6 +18,7 @@ import AddUser from './components/add_user';
 import RFPDetail from './components/rfp_detail';
 import IOIDetail from './components/ioi_detail';
 import CreateIOI from './components/create_ioi';
+import EditIOI from './components/edit_ioi';
 import IOIList from './components/ioi_list';
 import RFPCompanyList from './components/rfp_company_list';
 import RFPFavoriteList from './components/rfp_favorite_list';
@@ -34,10 +36,12 @@ import TermsAndConditions from "./components/terms_conditions";
 import ContactUs from "./components/contact_us";
 import BorrowerControlledAccess from './components/borrower_controlled_access';
 import CreateFinalTerm from './components/create_final_term';
+import EditFinalTerm from './components/edit_final_term';
 import FinalTermDetail from './components/final_term_detail';
 import FinalTermList from './components/finalTerm_list';
 import InviteCompany from './components/invite_company';
 import Messages from './components/messages';
+import Initializefromstate from './components/initializefromstate';
 
 require("../style/style.css");
 require("../css/stylish-portfolio.css");
@@ -63,10 +67,11 @@ ReactDOM.render(
       <BrowserRouter>
           <div>
             <Switch>
+              <Route path="/initializefromstate" component={Initializefromstate} />
               <Route path="/messages" component={Messages} />
               <Route path="/landing" component={LandingPage} />
-              <Route path="/createRFP/:type/:id" component={CreateRFPForm} />
-              <Route path="/createRFP/:type" component={CreateRFPForm} />
+              <Route path="/editRFP/:id" component={EditRFPForm} />
+              <Route path="/createRFP" component={CreateRFPForm} />
               <Route path="/login" component={LoginForm} />
               <Route path="/wgl" component={WGL} />
               <Route path="/registerCompany" component={RegisterCompanyForm} />
@@ -74,10 +79,10 @@ ReactDOM.render(
               <Route path="/myProfile" component={MyProfile} />
               <Route path="/addUser" component={AddUser} />
               <Route path="/rfpDetail/:id" component={RFPDetail} />
-              <Route path="/createIOI/:type/:id" component={CreateIOI} />
-              <Route path="/createIOI/:type" component={CreateIOI} />
-              <Route path="/createFinalTerm/:type/:id" component={CreateFinalTerm} />
-              <Route path="/createFinalTerm/:type" component={CreateFinalTerm} />
+              <Route path="/createIOI/:id" component={CreateIOI} />
+              <Route path="/editIOI/:id" component={EditIOI} />
+              <Route path="/editFinalTerm/:id" component={EditFinalTerm} />
+              <Route path="/createFinalTerm/:id" component={CreateFinalTerm} />
               <Route path="/finalTermDetail/:id" component={FinalTermDetail} />
               <Route path="/ioiDetail/:id" component={IOIDetail} />
               <Route path="/ioiList/:id/:type" component={IOIList} />

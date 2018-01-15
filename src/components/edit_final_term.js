@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { fetchIOIAction
-  , getLinkWithIOIAction
-  , fetchRFPByIOIAction
+import { fetchFinalTerm
+  , getRFPWithFinalTermAction
+  , getIOIWithFinalTermAction
+  , getLinkWithFinalTermAction
   , downloadLinkDocumentAction
-  , createFinalTermAction
+  , updateFinalTermAction
   , uploadDocumentRequest
   , deleteLinkDocumentAction
   , getLinkDocsWithLinkIdAndTypeAction
@@ -24,8 +25,7 @@ import JSAlert from "js-alert";
 import dateFormat from 'dateformat';
 import moment from 'moment';
 
-
-class CreateFinalTermForm extends Component{
+class EditFinalTermForm extends Component{
 
   constructor(props){
     super(props);
@@ -33,8 +33,7 @@ class CreateFinalTermForm extends Component{
       user : null,
       rfp : null,
       type : props.match.params.type,
-      link : null,
-      ioi : null
+      link : null
     };
   }
 
@@ -88,11 +87,10 @@ class CreateFinalTermForm extends Component{
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 
-    Promise.all([
-      this.props.fetchIOIAction(paramId),
-      this.props.fetchRFPByIOIAction(paramId),
-      this.props.getLinkWithIOIAction(paramId)
-    ]);
+    // this.props.getIOIWithFinalTermAction(paramId);
+    this.props.getLinkWithFinalTermAction(paramId);
+    this.props.getRFPWithFinalTermAction(paramId);
+    this.props.fetchFinalTerm(paramId);
 
     this.setState({
       company             : company,
@@ -113,49 +111,46 @@ class CreateFinalTermForm extends Component{
       });
     }
 
-    if(nextProps.ioi){
-      this.setState({
-        ioi : nextProps.ioi
-      });
-    }
+    // if(nextProps.ioi){
+    //   this.setState({
+    //     ioi : nextProps.ioi
+    //   });
+    // }
   }
 
 
   onSubmit(props){
     let that = this;
-    JSAlert.confirm("Are you sure you want to submit the Final Term Sheet ?")
-    .then(function(result){
-      if(!result){
-        // console.log('user did cancel before submitting the final term');
-      } else {
-        props.linkId = that.state.link.linkId;
-        props.rfpId = that.state.rfp.rfpId;
-        props.createdById = that.state.user.userId;
-        props.createdByCompanyId = that.state.company.companyId;
-        props.ioiId = that.state.ioi.ioiId;
-        props.forCompanyId = that.state.rfp.createdByCompanyId;
-        // console.log('will make createFinalTermAction call :'+JSON.stringify(props));
-        that.props.createFinalTermAction(props)
-        .then((data) => {
-          // send a msg to lender's company
-          let lProps = {
-            companyId : that.state.user.companyId,
-            msg : constants.MESSAGES.FINAL_TERM_CREATED_LENDER,
-            ID : data.payload.data.data
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
-          // now send msg to the borrower's company
-          let bProps={
-            companyId : that.state.rfp.createdByCompanyId,
-            msg : constants.MESSAGES.FINAL_TERM_CREATED_BORROWER,
-            ID : data.payload.data.data
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(bProps);
+    // console.log('createIOIAction:'+JSON.stringify(props));
 
-          that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-        });
-      }
+    // props.linkId = this.state.link.linkId
+    // props.ioiId = this.state.link.ioiId;
+    // props.createdById = this.state.user.userId;
+    // below 2 may not be nessary
+    // props.rfpId = this.state.link.rfpId;
+    // props.createdByCompanyId = this.state.createdByCompanyId;
+    props.lastEditedById = this.state.user.userId;
+    props.finalTermId = this.props.initialValues.finalTermId;
+    console.log('edit final Term:'+JSON.stringify(props));
+    this.props.updateFinalTermAction(props)
+      .then(() => {
+        // send a msg to lender's company
+        let lProps = {
+          companyId : that.state.user.companyId,
+          msg : constants.MESSAGES.FINAL_TERM_EDITED,
+          ID : that.props.initialValues.finalTermId
+        };
+        that.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+        // now send msg to the borrower's company
+        let bProps={
+          companyId : this.state.rfp.createdByCompanyId,
+          msg : constants.MESSAGES.FINAL_TERM_EDITED,
+          ID : that.props.initialValues.finaltermId
+        };
+        that.props.sendAMsgFromAdminWithCompanyId(bProps);
+        this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
     });
 	}
 
@@ -316,7 +311,7 @@ class CreateFinalTermForm extends Component{
 		  this.props.uploadDocumentRequest({
 		    file,
 		    type	: type,
-        ioiId 	: this.state.ioi.ioiId,
+        ioiId 	: this.state.link.ioiId,
         rfpId 	: this.state.rfp.rfpId,
         linkId 	: this.state.link.linkId,
         uploadedCompanyId : this.state.user.companyId
@@ -472,19 +467,37 @@ class CreateFinalTermForm extends Component{
 
 
 function mapStateToProps(state) {
-  let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-  let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-
-  let intializedData = {};
+  let intializedData = { }
 
   if(state.link.linkDocList){
-    intializedData.linkDocList = state.link.linkDocList;
+    intializedData.linkDocList = state.link.linkDocList
   }
 
-  if(state.ioiList.ioi){
-    intializedData.ioi = state.ioiList.ioi[0];
-  }
+  // if(state.ioiList.ioi){
+  //   intializedData.ioi = state.ioiList.ioi[0];
+  // }
 
+  if(state.finalTerm.finalTerm){
+    // console.log('state.finalTerm.finalTerm : '+ JSON.stringify(state.finalTerm.finalTerm));
+    let finalTerm = state.finalTerm.finalTerm[0];
+    let initData ={
+      finalTermId : finalTerm.finalTermId,
+      loanSize : finalTerm.loanSize,
+      yield : finalTerm.yield,
+      maturity : finalTerm.maturity,
+      liborFloor : finalTerm.liborFloor,
+      upfrontFee : finalTerm.upfrontFee,
+      pikIntreset : finalTerm.pikIntreset,
+      cashInterest : finalTerm.cashInterest,
+      year1 : finalTerm.year1,
+      year2 : finalTerm.year2,
+      year3 : finalTerm.year3,
+      year4 : finalTerm.year4,
+      year5 : finalTerm.year5
+    }
+    intializedData.initialValues = initData;
+  }
+  
   if(state.rfpList.rfpList){
     intializedData.rfp = state.rfpList.rfpList[0];
   }
@@ -524,25 +537,27 @@ function validate(values){
 }
 
 function mapDispatchToProps(dispatch) {
+  // Whenever selectBook is called, the result shoudl be passed
+  // to all of our reducers
   return bindActionCreators({
-    createFinalTermAction   : createFinalTermAction,
+    updateFinalTermAction   : updateFinalTermAction,
     uploadDocumentRequest   : uploadDocumentRequest,
     deleteLinkDocumentAction : deleteLinkDocumentAction,
     getLinkDocsWithLinkIdAndTypeAction : getLinkDocsWithLinkIdAndTypeAction,
     downloadLinkDocumentAction : downloadLinkDocumentAction,
-    fetchRFPByIOIAction : fetchRFPByIOIAction,
-    getLinkWithIOIAction : getLinkWithIOIAction,
-    fetchIOIAction : fetchIOIAction,
+    getLinkWithFinalTermAction : getLinkWithFinalTermAction,
+    getIOIWithFinalTermAction : getIOIWithFinalTermAction,
+    getRFPWithFinalTermAction : getRFPWithFinalTermAction,
+    fetchFinalTerm : fetchFinalTerm,
     sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
   }, dispatch);
 }
 
-CreateFinalTermForm = reduxForm({
-  form : 'CreateFinalTermForm',
-  enableReinitialize  : true,
+EditFinalTermForm = reduxForm({
+  'form': 'EditFinalTermForm',
   validate
-}) (CreateFinalTermForm)
+}) (EditFinalTermForm)
 
-CreateFinalTermForm = connect(mapStateToProps, mapDispatchToProps)(CreateFinalTermForm)
+EditFinalTermForm = connect(mapStateToProps, mapDispatchToProps)(EditFinalTermForm)
 
-export default CreateFinalTermForm
+export default EditFinalTermForm

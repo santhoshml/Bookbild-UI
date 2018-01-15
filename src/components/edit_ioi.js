@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { createIOIAction, fetchRFPAction, sendAMsgFromAdminWithCompanyId } from '../actions/index';
+import { updateIOIAction, fetchIOIAction, fetchRFPByIOIAction, sendAMsgFromAdminWithCompanyId } from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -17,7 +17,8 @@ import { connect } from "react-redux";
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
 const governanceOptions = ['Yes', 'No'];
-class CreateIOIForm extends Component{
+
+class EditIOIForm extends Component{
 
   constructor(props){
     super(props);
@@ -81,11 +82,14 @@ class CreateIOIForm extends Component{
 
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    this.props.fetchRFPAction(paramId);
+    this.props.fetchIOIAction(paramId);
+    this.props.fetchRFPByIOIAction(paramId);
 
     this.setState({
       user    : user,
       company : company
+      // createdById         : user.userId,
+      // createdByCompanyId  : company.companyId
     });
   }
 
@@ -109,35 +113,37 @@ class CreateIOIForm extends Component{
 
   onSubmit(props){
     let that = this;
-    // console.log('createIOIAction:'+JSON.stringify(props));
+    // <input type="hidden" className="form-control" {...rfpId} />
+    // <input type="hidden" className="form-control" {...createdById} />
+    // <input type="hidden" className="form-control" {...createdByCompanyId} />
 
-    // console.log('will call createIOIAction :'+JSON.stringify(props));
-    // props.ioiId = ioi.ioiId;
-    props.rfpId = this.state.rfp.rfpId;
+    // console.log('createIOIAction:'+JSON.stringify(props));
+    props.ioiId = this.props.initialValues.ioiId;
     props.createdById = this.state.user.userId;
+    // below 2 may not be nessary
+    props.rfpId = this.state.rfp.rfpId;
     props.createdByCompanyId = this.state.company.companyId;
-    props.forCompanyId = this.state.rfp.createdByCompanyId;
-    props.createdByContactId = this.state.user.contactId;
-    this.props.createIOIAction(props)
-      .then((data) => {
+
+    this.props.updateIOIAction(props)
+      .then(() => {
         // send a msg to lender's company
         let lProps = {
           companyId : that.state.user.companyId,
-          msg : constants.MESSAGES.IOI_CREATED_LENDER,
-          ID : data.payload.data.data
+          msg : constants.MESSAGES.IOI_EDITED,
+          ID : that.props.initialValues.ioiId
         };
         that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
         // now send msg to the borrower's company
         let bProps={
           companyId : this.state.rfp.createdByCompanyId,
-          msg : constants.MESSAGES.IOI_CREATED_BORROWER,
-          ID : data.payload.data.data
+          msg : constants.MESSAGES.IOI_EDITED,
+          ID : that.props.initialValues.ioiId
         };
         that.props.sendAMsgFromAdminWithCompanyId(bProps);
-        
+
         that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-      });
+    });
 	}
 
   displayRFPSummary(){
@@ -433,6 +439,14 @@ class CreateIOIForm extends Component{
         {value: 'Other', label: 'Other'}
       ];
 
+      // console.log('this.state.selectedCovenants:'+JSON.stringify(this.state.selectedCovenant));
+
+      // <div className={`row`}>
+      //   <label>Covenants</label>
+      //   <Select multi={true} simpleValue={true} value={this.state.selectedCovenant} options={covenantsOptions} onChange={this.onSelectCovenant.bind(this)} />
+      // </div>
+      // <br/>
+
     return(
       <div>
         <Header/>
@@ -643,11 +657,37 @@ class CreateIOIForm extends Component{
 
 
 function mapStateToProps(state) {
-
   let intializedData = {};
 
   if(state.ioiList.ioi){
-    intializedData.ioi = state.ioiList.ioi[0];
+    let ioi = state.ioiList.ioi[0];
+    let initData={
+      ioiId : ioi.ioiId,
+      loanSize : ioi.loanSize,
+      liborFloor : ioi.liborFloor,
+      pikIntreset : ioi.pikIntreset,
+      maxDebtAllowed : ioi.maxDebtAllowed,
+      warrants : ioi.warrants,
+      governance : ioi.governance,
+      covenants : ioi.covenants,
+      upfrontFee : ioi.upfrontFee,
+      maturity : ioi.maturity,
+      tranche : ioi.tranche,
+      loanStructure : ioi.loanStructure,
+      cashInterest : ioi.cashInterest,
+      cpYear1 : ioi.cpYear1,
+      cpYear2 : ioi.cpYear2,
+      cpYear3 : ioi.cpYear3,
+      cpYear4 : ioi.cpYear4,
+      cpYear5 : ioi.cpYear5,
+      year1 : ioi.year1,
+      year2 : ioi.year2,
+      year3 : ioi.year3,
+      year4 : ioi.year4,
+      year5 : ioi.year5,
+    };
+    // console.log('initData :'+JSON.stringify(initData));
+    intializedData.initialValues = initData;
   }
 
   if(state.rfpList.rfpList){
@@ -700,17 +740,19 @@ function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    createIOIAction   : createIOIAction,
-    fetchRFPAction : fetchRFPAction,
-    sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
+    sendAMsgFromAdminWithCompanyId   : sendAMsgFromAdminWithCompanyId,
+    updateIOIAction : updateIOIAction,
+    fetchIOIAction : fetchIOIAction,
+    fetchRFPByIOIAction : fetchRFPByIOIAction
   }, dispatch);
 }
 
-CreateIOIForm = reduxForm({
-  'form': 'CreateIOIForm',
+EditIOIForm = reduxForm({
+  'form': 'EditIOIForm',
+  enableReinitialize  : true,
   validate
-}) (CreateIOIForm)
+}) (EditIOIForm)
 
-CreateIOIForm = connect(mapStateToProps, mapDispatchToProps)(CreateIOIForm);
+EditIOIForm = connect(mapStateToProps, mapDispatchToProps)(EditIOIForm);
 
-export default CreateIOIForm;
+export default EditIOIForm;

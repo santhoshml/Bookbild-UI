@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { bindActionCreators } from 'redux';
-import { createRFPAction, 
+import { fetchRFPAction, 
+  fetchContactAction, 
+  updateRFPAction, 
+  updateContactAction,
   sendAMsgFromAdminWithCompanyId } from '../actions/index';
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -19,7 +22,8 @@ const sectorOptions = ['IT', 'Financials', 'Health Care', 'Energy', 'Consumer St
 const regionOptions=['West Coast', 'Mid Atlantic', 'Great Lakes', 'South', 'Mountain', 'Southeast', 'New England', 'Midwest'];
 const sponsoredOptions=['yes', 'no'];
 const requestTypeOptions=['New Financing', 'Refinancing', 'Restructuring', 'M&A', 'LBO', 'Market Check'];
-class CreateRFPForm extends Component {
+
+class EditRFPForm extends Component {
 
   componentWillMount() {
     var that = this;
@@ -27,6 +31,7 @@ class CreateRFPForm extends Component {
     let paramId = this.props.match.params.id;
     let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+    this.props.fetchRFPAction(paramId);
 
     this.setState({
       type : this.props.match.params.type,
@@ -64,23 +69,79 @@ class CreateRFPForm extends Component {
         values.otherComment      = '';
       }
 
-      
-      let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
-      values.createdByContactId = this.state.user.contactId;
-      // console.log('values before creating RFP :'+ JSON.stringify(values));
-      this.props.createRFPAction(values)
-        .then((data) => {
-          // console.log('rfp created : '+ JSON.stringify(data));
-          let mProps = {
-            companyId : that.state.company.companyId,
-            msg : constants.MESSAGES.RFP_CREATED,
-            ID : data.payload.data.data
+      let promiseArr = [];
+      let initValues = this.props.initialValues;
+      values.rfpId = initValues.rfpId;
+      values.contactId = initValues.contactId;
+
+      // sanitize the currency values
+      values.dealSize = numeral(values.dealSize).value();
+      values.ltmRevenue = numeral(values.ltmRevenue).value();
+      values.ltmEbitda = numeral(values.ltmEbitda).value();
+
+      // check if the contact values have changed
+      if(initValues.phoneNumber !== values.phoneNumber
+        || initValues.fullName !== values.fullName
+        || initValues.email !== values.email
+        || initValues.contactRole !== values.contactRole){
+          let uProps = {
+            email : values.email,
+            contactId : initValues.contactId,
+            fullName : values.fullName,
+            phoneNumber : values.phoneNumber,
+            contactRole : values.contactRole
           };
-          this.props.sendAMsgFromAdminWithCompanyId(mProps);
-          this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-          // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
-      });
-      
+          promiseArr.push(this.props.updateContactAction(uProps));
+        }
+
+      // check if the rfp field values changed
+      if(initValues.requestType !== values.requestType
+        || initValues.companyName !== values.companyName
+        || initValues.dealSize !== values.dealSize
+        || initValues.tenor !== values.tenor
+        || initValues.category !== values.category
+        || initValues.product !== values.product
+        || initValues.sector !== values.sector
+        || initValues.region !== values.region
+        || initValues.ltmRevenue !== values.ltmRevenue
+        || initValues.ltmEbitda !== values.ltmEbitda
+        || initValues.txnOverview !== values.txnOverview
+        || initValues.companyDesc !== values.companyDesc
+        || initValues.expiryDt !== values.expiryDt
+        || initValues.isSponsored !== values.isSponsored){
+          let uProps = {
+            rfpId : initValues.rfpId,
+            contactId : initValues.contactId,
+            requestType : values.requestType,
+            companyName : values.companyName,
+            dealSize : values.dealSize,
+            tenor : values.tenor,
+            category : values.category,
+            product : values.product,
+            sector : values.sector,
+            region : values.region,
+            ltmRevenue : values.ltmRevenue,
+            ltmEbitda : values.ltmEbitda,
+            txnOverview : values.txnOverview,
+            companyDesc : values.companyDesc,
+            expiryDt : values.expiryDt,
+            isSponsored : values.isSponsored
+          }
+          promiseArr.push(this.props.updateRFPAction(values));
+        }
+
+        if(promiseArr.length > 0){
+          Promise.all(promiseArr)
+          .then((data)=> {
+            let mProps = {
+              companyId : that.state.company.companyId,
+              msg : constants.MESSAGES.RFP_UPDATED,
+              ID : that.props.initialValues.rfpId
+            };
+            this.props.sendAMsgFromAdminWithCompanyId(mProps);
+            this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          });
+        }
     }
 
   displayABLDetails(){
@@ -464,7 +525,7 @@ class CreateRFPForm extends Component {
                 />
               </div>
 
-              <button type="submit" className="btn btn-primary">Create RFP</button>
+              <button type="submit" className="btn btn-primary">Edit RFP</button>
               <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
             </form>
             <br/>
@@ -479,12 +540,55 @@ class CreateRFPForm extends Component {
     }
   }
 
+function mapStateToProps(state) {
+  // console.log('In mapStateToProps, gType:'+gType);
+  // console.log('In mapStateToProps, state:'+JSON.stringify(state));
+  let initialValues = {};
+  
+  if(state.rfpList.rfpList){
+    let rfp = state.rfpList.rfpList[0];
+    console.log('rfp :'+JSON.stringify(rfp));
+
+    initialValues.rfpId = rfp.rfpId;
+    initialValues.requestType = rfp.requestType;
+    initialValues.companyName = rfp.companyName;
+    initialValues.dealSize = rfp.dealSize;
+    initialValues.tenor = rfp.tenor;
+    initialValues.category = rfp.category;
+    initialValues.product = rfp.product;
+    initialValues.sector = rfp.sector;
+    initialValues.region = rfp.region;
+    initialValues.ltmRevenue = rfp.ltmRevenue;
+    initialValues.ltmEbitda = rfp.ltmEbitda;
+    initialValues.txnOverview = rfp.txnOverview;
+    initialValues.companyDesc = rfp.companyDesc
+    initialValues.expiryDt = rfp.expiryDt;
+    initialValues.isSponsored = rfp.isSponsored;
+    
+    // set the company management contact values
+    initialValues.fullName = rfp.contactObject.fullName;
+    initialValues.contactRole = rfp.contactObject.contactRole;
+    initialValues.phoneNumber = rfp.contactObject.phoneNumber;
+    initialValues.email = rfp.contactObject.email;
+    initialValues.contactId = rfp.contactId;
+
+    return {
+      initialValues : initialValues
+    };
+  }
+
+  return {};
+}
+
 
 function mapDispatchToProps(dispatch) {
   // Whenever selectBook is called, the result shoudl be passed
   // to all of our reducers
   return bindActionCreators({
-    createRFPAction : createRFPAction,
+    fetchContactAction : fetchContactAction,
+    updateRFPAction : updateRFPAction,
+    fetchRFPAction : fetchRFPAction,
+    updateContactAction : updateContactAction,
     sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
   }, dispatch);
 }
@@ -552,12 +656,12 @@ function validate(values) {
   return errors;
 }
 
-CreateRFPForm = reduxForm({
+EditRFPForm = reduxForm({
   validate,
-  form: 'CreateRFPForm',
+  form: 'EditRFPForm',
   enableReinitialize: true
-}) (CreateRFPForm)
+}) (EditRFPForm)
 
-CreateRFPForm = connect(null, mapDispatchToProps)(CreateRFPForm);
+EditRFPForm = connect(mapStateToProps, mapDispatchToProps)(EditRFPForm);
 
-export default CreateRFPForm;
+export default EditRFPForm;

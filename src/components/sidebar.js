@@ -71,7 +71,7 @@ class Sidenav extends Component {
         } else if(id === 'rfp/myRFPList'){
             this.props.history.push(constants.ROUTES_MAP.RFP_COMPANY_LIST+"/"+this.state.company.companyId);
         } else if(id === 'rfp/createRFP'){
-            this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_NEW);
+            this.props.history.push(constants.ROUTES_MAP.CREATE_RFP);
         } else if(id === 'ioi/myIOIList'){
             this.props.history.push(constants.ROUTES_MAP.IOI_LIST+"/"+this.state.company.companyId+"/"+constants.IOI_FOR_COMPANY);
         } else if(id === 'ioi/myFinalTermList'){

@@ -42,7 +42,7 @@ export default class DisplayFinalTermList extends Component {
   }
 
   loanSizeRenderer(row){
-    return cUtils.formatCurrencyToDisplayAsElementrow.loanSize();
+    return cUtils.formatCurrencyToDisplayAsElement(row.loanSize);
   }
 
   pikRenderer(row){
@@ -121,7 +121,7 @@ export default class DisplayFinalTermList extends Component {
     if (!this.props.finalTermList) {
       return <div>No Final Term sheets exist</div>;
     } else {
-      console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
+      // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
       const selectRowProp = {
         mode: 'checkbox',
         clickToSelect: true,

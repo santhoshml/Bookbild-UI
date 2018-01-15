@@ -211,7 +211,7 @@ class RFPDetail extends Component{
     if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={constants.ROUTES_MAP.CREATE_RFP+"/"+constants.RFP_EDIT+"/"+this.state.rfp.rfpId} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.EDIT_RFP+"/"+this.state.rfp.rfpId} className="btn btn-primary">
           Edit RFP
         </Link>
       </span>);
@@ -226,7 +226,7 @@ class RFPDetail extends Component{
         return(
           <span>
             &nbsp;&nbsp;&nbsp;
-            <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_EDIT+"/"+this.props.ioi.ioiId} className="btn btn-primary">
+            <Link to={constants.ROUTES_MAP.EDIT_IOI+"/"+this.props.ioi.ioiId} className="btn btn-primary">
               EDIT IOI
             </Link>
           </span>
@@ -235,7 +235,7 @@ class RFPDetail extends Component{
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
-          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+constants.IOI_NEW+"/"+this.state.rfp.rfpId} className="btn btn-primary">
+          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+this.state.rfp.rfpId} className="btn btn-primary">
             CREATE IOI
           </Link>
         </span>
@@ -317,6 +317,40 @@ class RFPDetail extends Component{
     }
   }
 
+  displayCompanyManagementContact(){
+    if(this.state.rfp && this.state.rfp.contactObject){
+      let {rfp} = this.state;
+      // console.log('rfp :'+JSON.stringify(rfp));
+      return(
+        <div>
+          <br/>
+          <table className="table table-striped table-bordered">
+            <tbody>
+              <tr>
+                <td>Full Name</td>
+                <td>{rfp.contactObject.fullName}</td>
+              </tr>
+              <tr>
+                <td>Email</td>
+                <td>{rfp.contactObject.email}</td>
+              </tr>
+              <tr>
+                <td>Phone Number</td>
+                <td>{rfp.contactObject.phoneNumber}</td>
+              </tr>
+              <tr>
+                <td>Role</td>
+                <td>{rfp.contactObject.contactRole}</td>
+              </tr>
+            </tbody>
+          </table>
+          <br/>
+          <br/>
+        </div>
+      );
+    }    
+  }
+
   render(){
     // console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
     // console.log('In render :'+ JSON.stringify(this.state.rfp));
@@ -336,6 +370,10 @@ class RFPDetail extends Component{
                 <Tab disabled={this.state.rfp ? false : true}>
                   Company Overview
                 </Tab>
+                <Tab 
+                  disabled={this.state.rfp && (this.state.rfp.createdByCompanyId === this.state.company.companyId) ? false : true}>
+                  Company Management Contact
+                </Tab>
                 <Tab disabled={this.state.rfp && this.state.rfp.category.toUpperCase() === 'ABL' ? false : true}>
                   Collateral Information
                 </Tab>
@@ -345,6 +383,9 @@ class RFPDetail extends Component{
               </TabPanel>
               <TabPanel>
                 {this.displayCompanyDesc()}
+              </TabPanel>
+              <TabPanel>
+                {this.displayCompanyManagementContact()}
               </TabPanel>
               <TabPanel>
                 {this.displayCollateralInfo()}

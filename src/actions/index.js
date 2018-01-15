@@ -61,17 +61,54 @@ export const POST_NEW_MSG = 'POST_NEW_MSG';
 export const GET_ALL_MESSAGES_FOR = 'GET_ALL_MESSAGES_FOR';
 export const GET_MESSAGE_LIST = 'GET_MESSAGE_LIST';
 export const APPEND_TO_MSG_LIST = 'APPEND_TO_MSG_LIST';
+export const UPDATE_USER = 'UPDATE_USER';
+export const UPDATE_CONTACT = 'UPDATE_CONTACT';
+export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
+export const SEND_MSG_FROM_ADMIN = 'SEND_MSG_FROM_ADMIN';
+export const GET_FINAL_TERM = 'GET_FINAL_TERM';
+export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
 export const CREATE_POST = "create_post";
 export const DELETE_POST = "delete_post";
 
-const USE_CACHE = true;
+const USE_CACHE = false;
 
 // const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
+
+
+export function sendAMsgFromAdmin(props){
+  console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
+  const request=axios({
+    url : '/sendAMsgFromAdmin',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: SEND_MSG_FROM_ADMIN,
+    payload: request
+  }
+}
+
+export function sendAMsgFromAdminWithCompanyId(props){
+  // console.log('props :'+JSON.stringify(props));
+  const request=axios({
+    url : '/sendAMsgFromAdminWithCompanyId',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: SEND_MSG_FROM_ADMIN,
+    payload: request
+  }
+}
 
 export function appendToMsgList(props){
   // console.log('props :'+JSON.stringify(props));
@@ -227,6 +264,20 @@ export function fetchFinalTermWithYieldMatrixAction(finalTermId){
   }
 }
 
+export function fetchFinalTerm(finalTermId){
+  // console.log('In actions.fetchFinalTermWithYieldMatrixAction');
+  const request=axios({
+    url : '/getFinalTerm?finalTermId='+finalTermId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_FINAL_TERM,
+    payload: request
+  }
+}
+
 export function fetchFinalIOIAction(ioiId){
   // console.log('In actions.fetchFinalIOIAction');
   const request=axios({
@@ -253,6 +304,22 @@ export function createFinalTermAction(props){
 
   return{
     type: CREATE_FINAL_TERM,
+    payload: request
+  }
+}
+
+export function updateFinalTermAction(props){
+  // console.log('In actions.updateIOIAction');
+  // console.log('props:'+ JSON.stringify(props));
+  const request=axios({
+    url : '/updateFinalTerm',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_FINAL_TERM,
     payload: request
   }
 }
@@ -669,19 +736,19 @@ export function createUnsolicitedPitchAction(props){
   }
 }
 
-export function fetchAllCompanyListForRFP(){
-  // console.log('In actions.fetchCompanyListForRFP');
-  const request=axios({
-    url : (USE_CACHE ? '/fetchAllCompanyListForRFPUsingCache' : '/fetchAllCompanyListForRFP'),
-    method : 'GET',
-    baseURL : ROOT_URL
-  });
+// export function fetchAllCompanyListForRFP(){
+//   // console.log('In actions.fetchCompanyListForRFP');
+//   const request=axios({
+//     url : (USE_CACHE ? '/fetchAllCompanyListForRFPUsingCache' : '/fetchAllCompanyListForRFP'),
+//     method : 'GET',
+//     baseURL : ROOT_URL
+//   });
 
-  return{
-    type: FETCH_COMPANY_LIST_FOR_RFP,
-    payload: request
-  }
-}
+//   return{
+//     type: FETCH_COMPANY_LIST_FOR_RFP,
+//     payload: request
+//   }
+// }
 
 export function fetchTermSheetActivityStatsAction(sector){
   // console.log('In actions.fetchTermSheetActivityStatsAction');
@@ -728,7 +795,7 @@ export function getRFPWithFinalTermAction(finalTermId){
 export function fetchRFPAction(rfpId){
   // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
-    url : (USE_CACHE ? '/fetchRFPUsingCache?rfpId='+rfpId : '/fetchRFP?rfpId='+rfpId),
+    url : '/fetchRFP?rfpId='+rfpId,
     method : 'GET',
     baseURL : ROOT_URL
   });
@@ -824,9 +891,9 @@ export function fetchIOIListForRFPAction(rfpId){
 
 export function createIOIAction(props){
   // console.log('In actions.createIOIAction');
-  // console.log('props:'+JSON.stringify(props));
+  console.log('createIOIAction, props:'+JSON.stringify(props));
   const request=axios({
-    url : (USE_CACHE ? '/createIOIUsingCache' : '/createIOI'),
+    url : '/createIOI',
     method : 'POST',
     baseURL : ROOT_URL,
     data : props
@@ -943,6 +1010,54 @@ export function updateUserProfileAction(props){
   }
 }
 
+export function updateUserAction(props){
+  // console.log('In actions.updateProfileAction');
+  // console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateUser',
+    method : 'post',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_USER,
+    payload: request
+  }
+}
+
+export function updateAddressAction(props){
+  // console.log('In actions.updateProfileAction');
+  // console.log('props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateAddress',
+    method : 'post',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_ADDRESS,
+    payload: request
+  }
+}
+
+export function updateContactAction(props){
+  // console.log('In actions.updateProfileAction');
+  console.log('updateContactAction, props:'+JSON.stringify(props));
+  const request=axios({
+    url : '/updateContact',
+    method : 'post',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: UPDATE_CONTACT,
+    payload: request
+  }
+}
+
 export function fetchAddressAction(addressId){
   // console.log('In actions.fetchAddressAction');
   const request=axios({
@@ -989,7 +1104,7 @@ export function updateRFPAction(props){
   // console.log('In actions.updateRFPAction');
   // console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : (USE_CACHE ? '/updateRFPUsingCache' : '/updateRFP'),
+    url : '/updateRFP',
     method : 'post',
     baseURL : ROOT_URL,
     headers : {
@@ -1008,7 +1123,7 @@ export function createRFPAction(props){
   // console.log('In actions.createRFPAction');
   // console.log('props:'+JSON.stringify(props));
   const request=axios({
-    url : (USE_CACHE ? '/createRFPUsingCache' : '/createRFP'),
+    url : '/createRFP',
     method : 'post',
     baseURL : ROOT_URL,
     headers : {

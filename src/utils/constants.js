@@ -81,6 +81,7 @@ exports.ROUTES_MAP = {
   ADD_USER        : '/addUser',
   RFP_MARKETPLACE : '/rfpMarketPlace',
   CREATE_RFP      : '/createRFP',
+  EDIT_RFP        : '/editRFP',
   RFP_COMPANY_LIST  : '/rfpCompanyList',
   IOI_LIST        : '/ioiList',
   LOGIN           : '/login',
@@ -88,6 +89,7 @@ exports.ROUTES_MAP = {
   RFP_FAVORITES_LIST  : '/rfpFavoriteList',
   RFP_DETAIL          : '/rfpDetail',
   CREATE_IOI          : '/createIOI',
+  EDIT_IOI            : '/editIOI',
   INDUSTRY_RESEARCH   : '/industryResearch',
   REGISTER_COMPANY    : '/registerCompany',
   IOI_DETAIL          : '/ioiDetail',
@@ -97,6 +99,7 @@ exports.ROUTES_MAP = {
   QUARTERLY_COMPLIANCE        : '/qCompliance',
   BORROWER_CONTROLLED_ACCESS  : '/borrowerControlledAccess',
   CREATE_FINAL_TERM           : '/createFinalTerm',
+  EDIT_FINAL_TERM             : '/editFinalTerm',
   VIEW_FINAL_TERM             : '/finalTermDetail',
   FINAL_TERM_LIST             : '/finalTermList',
   MESSAGES                    : '/messages'
@@ -167,6 +170,18 @@ exports.PRODUCT_MAP = {
   'multiTranche'  : 'Multi-Tranche',
   'uniTranche'    : 'Uni-Tranche',
   'misc'           : 'Misc'
+};
+
+exports.MESSAGES = {
+  RFP_UPDATED : 'RFP_UPDATED',
+  RFP_CREATED : 'RFP_CREATED',
+  PROFILE_UPDATED : 'PROFILE_UPDATED',
+  IOI_CREATED_LENDER : 'IOI_CREATED_LENDER',
+  IOI_CREATED_BORROWER : 'IOI_CREATED_BORROWER',
+  IOI_EDITED : 'IOI_EDITED',
+  FINAL_TERM_CREATED_LENDER : 'FINAL_TERM_CREATED_LENDER',
+  FINAL_TERM_CREATED_BORROWER : 'FINAL_TERM_CREATED_BORROWER',
+  FINAL_TERM_EDITED : 'FINAL_TERM_EDITED'
 };
 
 exports.COMPLIANCE_QUATERLY_COLS = [

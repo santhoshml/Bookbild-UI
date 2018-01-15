@@ -15,6 +15,7 @@ import roundTo from 'round-to';
 import Header from './header';
 import JSAlert from "js-alert";
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import numeral from "numeral";
 
 class FinalTermDetail extends Component{
   constructor(props){
@@ -160,7 +161,7 @@ class FinalTermDetail extends Component{
   displayEditFinalTermButton(){
     if(this.state.company.companyId === this.props.finalTerm.createdByCompanyId){
       return( <span>
-      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+constants.FINAL_TERM_EDIT+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
+      <Link to={constants.ROUTES_MAP.EDIT_FINAL_TERM+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
         Edit Final Term Sheet
       </Link>
       &nbsp;&nbsp;&nbsp;
