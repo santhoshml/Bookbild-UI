@@ -547,7 +547,7 @@ function mapStateToProps(state) {
   
   if(state.rfpList.rfpList){
     let rfp = state.rfpList.rfpList[0];
-    console.log('rfp :'+JSON.stringify(rfp));
+    // console.log('rfp :'+JSON.stringify(rfp));
 
     initialValues.rfpId = rfp.rfpId;
     initialValues.requestType = rfp.requestType;

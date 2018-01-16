@@ -81,7 +81,7 @@ const ROOT_URL = 'https://services.bookbild.com';
 
 
 export function sendAMsgFromAdmin(props){
-  console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
+  // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
   const request=axios({
     url : '/sendAMsgFromAdmin',
     method : 'POST',
@@ -891,7 +891,7 @@ export function fetchIOIListForRFPAction(rfpId){
 
 export function createIOIAction(props){
   // console.log('In actions.createIOIAction');
-  console.log('createIOIAction, props:'+JSON.stringify(props));
+  // console.log('createIOIAction, props:'+JSON.stringify(props));
   const request=axios({
     url : '/createIOI',
     method : 'POST',
@@ -1044,7 +1044,7 @@ export function updateAddressAction(props){
 
 export function updateContactAction(props){
   // console.log('In actions.updateProfileAction');
-  console.log('updateContactAction, props:'+JSON.stringify(props));
+  // console.log('updateContactAction, props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateContact',
     method : 'post',

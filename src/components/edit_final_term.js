@@ -132,7 +132,7 @@ class EditFinalTermForm extends Component{
     // props.createdByCompanyId = this.state.createdByCompanyId;
     props.lastEditedById = this.state.user.userId;
     props.finalTermId = this.props.initialValues.finalTermId;
-    console.log('edit final Term:'+JSON.stringify(props));
+    // console.log('edit final Term:'+JSON.stringify(props));
     this.props.updateFinalTermAction(props)
       .then(() => {
         // send a msg to lender's company

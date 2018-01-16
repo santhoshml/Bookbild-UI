@@ -121,13 +121,13 @@ class UserProfileForm extends Component{
   }
   
   onSubmit(props){
-    console.log('In onSubmit, props :'+ JSON.stringify(props));
+    // console.log('In onSubmit, props :'+ JSON.stringify(props));
     let that = this;
     let promiseArr=[];
 
     // check if the userobject has changed 
     if(this.props.initialValues.password !== props.password){
-      console.log('user object has changed, update it');
+      // console.log('user object has changed, update it');
       let uProps = {
         email : props.email,
         password : props.password,
@@ -141,7 +141,7 @@ class UserProfileForm extends Component{
     // check if the contactObject has changed
     if(this.props.initialValues.fullName !== props.fullName
       || this.props.initialValues.phoneNumber !== props.phoneNumber){
-      console.log('user object has changed, update it');
+      // console.log('user object has changed, update it');
       let uProps = {
         email : props.email,
         contactId : this.state.user.contactId,
@@ -158,7 +158,7 @@ class UserProfileForm extends Component{
       || this.props.initialValues.state !== props.state
       || this.props.initialValues.streetAddress !== props.streetAddress
       || this.props.initialValues.zipcode !== props.zipcode){
-      console.log('user object has changed, update it');
+      // console.log('user object has changed, update it');
       let uProps = {
         contactId : this.state.user.contactId,
         addressId : this.state.user.addressId,
@@ -182,20 +182,10 @@ class UserProfileForm extends Component{
 				// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
       });
     }
-
-
-    // this.props.updateUserProfileAction(props)
-    //  .then(() => {
-    //    // blog post has been created, navigate the user to the index
-    //    // We navigate by calling this.context.router.push with the
-    //    // new path to navigate to.
-    //    	this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-		// 		// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
-    //  });
 	}
 
   render = () => {
-    console.log('I am in render');
+    // console.log('I am in render');
 		// console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props

@@ -34,7 +34,7 @@ class Messages extends Component{
   }
 
   onComponseNewMessage(){
-    console.log('I am in onComponseNewMessage');
+    // console.log('I am in onComponseNewMessage');
     if(!this.state.isComposeNewMsg){
       this.setState({
         isComposeNewMsg : true

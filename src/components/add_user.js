@@ -43,6 +43,7 @@ class AddUserForm extends Component{
 	renderField(field) {
 		const { meta: { touched, error } } = field;
 		const { size } = field;
+		const disabled = field.disabled;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
 		// console.log('className:'+JSON.stringify(className));
 		// console.log('field:'+JSON.stringify(field));
@@ -53,7 +54,9 @@ class AddUserForm extends Component{
 					className="form-control"
 					placeholder={field.placeholder}
 					type={field.type}
-					{...field.input} />
+					{...field.input}
+					disabled = {disabled}
+				/>
 				<div className="text-help">
 					{touched ? error : ""}
 				</div>
@@ -263,6 +266,7 @@ class AddUserForm extends Component{
 										size="col-xs-8 col-md-8"
 										component={this.renderField}
 										placeholder="Enter a valid Company Name"
+										disabled
 									/>
 									<Field
 										name="ein"
@@ -271,6 +275,7 @@ class AddUserForm extends Component{
 										disabled="true"
 										component={this.renderField}
 										placeholder="Enter a valid Company EIN"
+										disabled
 									/>
 								</div>
 
@@ -386,30 +391,29 @@ function validate(values){
 }
 
 function mapStateToProps(state) {
-  var userJSON = lsUtils.getValue(constants.KEY_USER_OBJECT);
-  var companyJSON = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+  var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+  var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 
   return {
     initialValues : {
-      // user info
-			addedByUserId : userJSON.userId,
-			companyId : userJSON.companyId,
-
-      // company info
-      ein :companyJSON.ein,
-      companyName : companyJSON.companyName
+      ein 				: company.ein,
+      companyName : company.companyName
     }
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
     addUserAction   : addUserAction
   }, dispatch);
 }
 
-export default reduxForm({
-  'form': 'AddUserForm',
-}) (connect(mapStateToProps, mapDispatchToProps)(AddUserForm));
+AddUserForm = reduxForm({
+	form : 'AddUserForm',
+	enableReinitialize  : true,
+  validate
+}) (AddUserForm)
+
+AddUserForm = connect(mapStateToProps, mapDispatchToProps)(AddUserForm)
+
+export default AddUserForm

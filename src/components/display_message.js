@@ -41,7 +41,7 @@ class DisplayMessage extends Component{
     // console.log('In display_messages, componentWillReceiveProps');
     if((this.state.isComposeNewMsg && nextProps.isComposeNewMsg && this.state.isComposeNewMsg !== nextProps.isComposeNewMsg)
       || (!this.state.isComposeNewMsg && nextProps.isComposeNewMsg)){
-      console.log('will compose a new msg');
+      // console.log('will compose a new msg');
       this.props.fetchAllContactsToMessageAction();
       this.setState({
         isComposeNewMsg : nextProps.isComposeNewMsg
@@ -78,7 +78,7 @@ class DisplayMessage extends Component{
     };
     props.contactCompanyMap[props.fromId] = this.state.user.companyId;
     props.contactCompanyMap[props.toId] = msgUtils.getCompanyId(props.toId, this.props.contactList);
-    console.log('will do postNewMsgAction, props :'+ JSON.stringify(props));
+    // console.log('will do postNewMsgAction, props :'+ JSON.stringify(props));
     this.props.postNewMsgAction(props)
     this.props.resetComposeNewMessage();
   }
@@ -153,7 +153,7 @@ class DisplayMessage extends Component{
   }
 
   displayMessageBody(){
-    console.log('this.props.isComposeNewMsg :'+this.props.isComposeNewMsg);
+    // console.log('this.props.isComposeNewMsg :'+this.props.isComposeNewMsg);
     if(this.state.isComposeNewMsg){
       return(
         <div>
