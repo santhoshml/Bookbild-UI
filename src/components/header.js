@@ -37,16 +37,45 @@ export default class Header extends Component{
 	}
 
 	displayLaunchButton(){
-		if(this.state.user){
-			return(
-				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.RFP_MARKETPLACE}><b>LAUNCH</b></a>
-			);
-		} else {
+		if(!this.state.user){
 			return(
 				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.LOGIN}><b>LAUNCH</b></a>
 			);
 		}
 	}
+
+	displaySolutions(){
+		if(!this.state.user){
+			return(
+				<a className="fa fa-cogs header-cust-attr anchor-spacing header-menu-items" href="/solutions">&nbsp;SOLUTIONS</a>
+			);
+		}
+	}
+
+	displayDemo(){
+		if(!this.state.user){
+			return(
+				<a className="fa fa-desktop header-cust-attr anchor-spacing header-menu-items" href="mailto:info@bookbild.com">&nbsp;DEMO</a>
+			);
+		}
+	}
+
+	displayInsights(){
+		if(!this.state.user){
+			return(
+				<a className="fa fa-feed header-cust-attr anchor-spacing header-menu-items" href="/insights">&nbsp;INSIGHTS</a>
+			);
+		}
+	}
+
+	displayTeam(){
+		if(!this.state.user){
+			return(
+				<a className="fa fa-users header-cust-attr anchor-spacing header-menu-items" href="/aboutUs">&nbsp;TEAM</a>
+			);
+		}
+	}
+
 
 	render(){
 		// console.log('I am in header render');
@@ -55,16 +84,16 @@ export default class Header extends Component{
 				<nav className="header-nav-cust-attr">
 					<div className="container-fluid">
 					<span>
-						<a href="/">
+						<a href={this.state.user ? constants.ROUTES_MAP.RFP_MARKETPLACE : "/"}>
 							<img alt="Brand" className="header-logo-cust-height" src="//s3-us-west-2.amazonaws.com/bookbild-shared-images/bookbild-header.jpg"/>
 						</a>
 					</span>
 					<span className="align-right">
-						<a className="fa fa-cogs header-cust-attr anchor-spacing header-menu-items" href="/solutions">&nbsp;SOLUTIONS</a>
+						{this.displaySolutions()}
 						<a className="fa fa-bell-o header-cust-attr anchor-spacing header-menu-items" href="/inviteCompany">&nbsp;INVITE COMPANY</a>
-						<a className="fa fa-desktop header-cust-attr anchor-spacing header-menu-items" href="mailto:info@bookbild.com">&nbsp;DEMO</a>
-						<a className="fa fa-feed header-cust-attr anchor-spacing header-menu-items" href="/insights">&nbsp;INSIGHTS</a>
-						<a className="fa fa-users header-cust-attr anchor-spacing header-menu-items" href="/aboutUs">&nbsp;TEAM</a>
+						{this.displayDemo()}
+						{this.displayInsights()}
+						{this.displayTeam()}
 						{ /* <a className="fa fa-bar-chart header-cust-attr anchor-spacing header-menu-items " href="/rvtool">&nbsp;DEAL COMPARISON TOOL</a> */}
 						{this.displayLaunchButton()}
 					</span>

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { addUserAction } from '../actions/index';
+import { addUserAction
+	, sendAMsgFromAdmin
+	, sendAMsgFromAdminWithCompanyId
+	, fetchAddressAction } from '../actions/index';
 import { Link } from "react-router-dom";
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -11,9 +14,9 @@ import NavBar from './sidebar';
 import * as actionCreators from '../actions/index';
 import { connect } from "react-redux";
 
-const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
-	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
-	,'South Carolina','South Dakota','Tennessee','Texas','Utah','Vermont','Virginia','Washington','West Virginia','Wisconsin','Wyoming'];
+const stateOptions = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI'
+,'MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI'
+,'SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
 
 class AddUserForm extends Component{
 
@@ -102,20 +105,35 @@ class AddUserForm extends Component{
 	}
 
 	onSubmit(props){
-		if(this.state.user){
-			props.addedByContactId = this.state.user.contactId;
-		}
+		let that = this;
+
+		props.addedByUserId = this.state.user.userId;
+		props.companyId = this.state.user.companyId;
+		props.role = this.state.user.role;
+		console.log('props : '+JSON.stringify(props));
 		this.props.addUserAction(props)
 		 .then((data) => {
-			 // blog post has been created, navigate the user to the index
-			 // We navigate by calling this.context.router.push with the
-			 // new path to navigate to.
-			//  console.log('In onSubmit data :'+JSON.stringify(data));
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
-				 this.props.history.push(constants.ROUTES_MAP.MY_PROFILE);
+				// console.log('data :'+JSON.stringify(data));
+					// send msgs to all in the company
+					let mProps={
+						companyId : that.state.user.companyId,
+						msg : constants.MESSAGES.ADD_NEW_USER,
+						NAME : props.fullName
+					};
+					that.props.sendAMsgFromAdminWithCompanyId(mProps);
+
+					// send a welcome message to the user
+					let uProps={
+						toId : data.payload.data.data.contactId,
+						msg : constants.MESSAGES.WELCOME
+					};
+					that.props.sendAMsgFromAdmin(uProps);
+					
+					that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
 			 } else {
-				 this.props.history.push(constants.ROUTES_MAP.ADD_USER);
-				 this.setState({errMsg : data.payload.data.data.errMsg});
+					that.props.history.push(constants.ROUTES_MAP.ADD_USER);
+					that.setState({errMsg : data.payload.data.data.errMsg});
 			 }
 		 });
 	}
@@ -131,8 +149,15 @@ class AddUserForm extends Component{
 	}
 
 	componentWillMount(){
+		var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+		var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
+		
+
+		this.props.fetchAddressAction(user.addressId);
 		this.setState({
-      errMsg : null
+			errMsg : null,
+			user : user,
+			company : company
     });
 	}
 
@@ -185,7 +210,7 @@ class AddUserForm extends Component{
 										placeholder="Enter password"
 									/>
 									<Field
-										name="phoneNumber"
+										name="confirmPassword"
 										label="Confirm Password"
 										size="col-xs-6 col-md-6"
 										type="password"
@@ -195,88 +220,21 @@ class AddUserForm extends Component{
 								</div>
 
 								<div className={`row`}>
-									<div className={`form-group col-xs-12 col-md-12 }`}>
-										<label>Role of the user</label><br/>
-										<Field
-											name="lender"
-											label="Lender"
-											value="Lender"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="financialSponsor"
-											label="Financial Sponsor"
-											value="Financial Sponsor"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="company"
-											label="Company"
-											value="Company"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="legalCounsel"
-											label="Legal Counsel"
-											value="Legal Counsel"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="3pdd"
-											label="3rd Part Due Diligence"
-											value="3rd Part Due Diligence"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="other"
-											label="Other"
-											value="Other"
-											component={this.renderRadioField}
-										/>
-									</div>
-								</div>
-
-								<div className={`row`}>
 									<div className={`form-group col-xs-12 col-md-12`}>
 										<label>Admin privileges</label><br/>
 										<Field
 											name="isAdmin"
-											value={true}
-											label="Will be a ADMIN"
+											value="true"
+											label="Will have ADMIN privileges"
 											component={this.renderRadioField}
 										/>
 										<Field
 											name="isAdmin"
-											value={false}
-											label="NOT an ADMIN"
+											value="false"
+											label="Will NOT have ADMIN privileges"
 											component={this.renderRadioField}
 										/>
 									</div>
-								</div>
-
-								<br/>
-								<hr className={`col-xs-12 col-md-12`}/>
-
-								<h3>Company Details</h3>
-
-								<div className={`row`}>
-									<Field
-										name="companyName"
-										label="Company Name"
-										size="col-xs-8 col-md-8"
-										component={this.renderField}
-										placeholder="Enter a valid Company Name"
-										disabled
-									/>
-									<Field
-										name="ein"
-										label="EIN of the Company"
-										size="col-xs-4 col-md-4"
-										disabled="true"
-										component={this.renderField}
-										placeholder="Enter a valid Company EIN"
-										disabled
-									/>
 								</div>
 
 								<br/>
@@ -334,16 +292,8 @@ class AddUserForm extends Component{
 function validate(values){
   const errors={};
 
-  if(!values.companyName){
-    errors.companyName='Enter a company name';
-  }
-
-  if(!values.ein){
-    errors.ein='Enter company EIN';
-  }
-
-  if(!values.role){
-    errors.role='Enter company role';
+	if(!values.isAdmin){
+    errors.isAdmin='Select an option if the user should have admin privileges';
   }
 
   if(!values.email || !validator.isEmail(values.email)){
@@ -390,21 +340,30 @@ function validate(values){
   return errors;
 }
 
-function mapStateToProps(state) {
-  var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-  var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-
-  return {
-    initialValues : {
-      ein 				: company.ein,
-      companyName : company.companyName
-    }
-  };
+function mapStateToProps(state){
+	if(state.userProfile.address){
+		let address = state.userProfile.address[0];
+		// console.log('address :'+JSON.stringify(address));
+		let initData = {
+			streetAddress : address.streetAddress,
+			city : address.city,
+			state : address.state,
+			zipcode : address.zipcode
+		};
+		return {
+			initialValues : initData
+		}
+	} else {
+		return {}
+	}
 }
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    addUserAction   : addUserAction
+		addUserAction   : addUserAction,
+		fetchAddressAction : fetchAddressAction,
+		sendAMsgFromAdmin : sendAMsgFromAdmin,
+		sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
   }, dispatch);
 }
 

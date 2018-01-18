@@ -119,6 +119,7 @@ class InviteCompanyForm extends Component{
       <div>
         <Header/>
         <div style={{ display: 'flex' }}>
+          {this.state.user ? <NavBar history={this.props.history}/> : ''}
           <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
             <h3 className="align-center">Invite a friend/company to Bookbild platform</h3>
@@ -165,10 +166,10 @@ class InviteCompanyForm extends Component{
 function mapStateToProps(state) {
   let initValues = {
       // // user info
-      subject : 'Inviting you to use Bookbild - new middle market lending platform',
-      message : 'Hey, \n\nI am using Bookbild for business. '
-        +' \n\nIts a new middle market lending platform. I would love for you to checkit out. https://bookbild.com '
-        + ' \n\nThanks,'
+      subject : 'Invitation To Join Bookbild',
+      message : 'Hi there, \n\nGoing forward, we will be using Bookbild for select transactions. We invite you to engage with us on this platform. '
+        +' \n\nBookbild contact: sales@bookbild.com.'
+        + ' \n\nBest regards,'
 
   };
 

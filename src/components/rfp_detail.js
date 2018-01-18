@@ -199,7 +199,7 @@ class RFPDetail extends Component{
       return( <span>
         &nbsp;&nbsp;&nbsp;
         <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
-          View Interest List
+          View Book
         </Link>
       </span>);
     } else {

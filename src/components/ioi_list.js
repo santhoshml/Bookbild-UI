@@ -31,11 +31,11 @@ class IOIList extends Component{
     if(this.props.match.params.type === constants.IOI_FOR_RFP){
       this.props.fetchIOIListForRFPAction(this.props.match.params.id);
     } else if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
-      // console.log('calling fetchIOIListForLenderCompanyAction now');
+      console.log('calling fetchIOIListForLenderCompanyAction now');
       this.props.fetchIOIListForLenderCompanyAction(company.companyId);
     } else if(user.role.toLowerCase() === constants.KEY_COMPANY.toLowerCase()
       || user.role.toLowerCase() === constants.KEY_FINANCIAL_SPONSOR.toLowerCase()){
-        // console.log('calling fetchIOIListForBorrowerCompanyAction now');
+        console.log('calling fetchIOIListForBorrowerCompanyAction now');
         this.props.fetchIOIListForBorrowerCompanyAction(company.companyId);
       }
   }

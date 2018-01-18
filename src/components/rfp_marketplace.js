@@ -13,6 +13,7 @@ import Dropdown from 'react-dropdown'
 import NavBar from './sidebar';
 import Header from './header';
 
+
 class RFPMarketPlace extends Component{
   constructor(props){
     super(props);
@@ -105,7 +106,7 @@ class RFPMarketPlace extends Component{
         {this.createTermSheetActivityDropdown()}
         <center><h3>Summary Market Activity</h3></center>
         <br/>
-        <table className="table table-striped">
+        <table className="table table-striped table-bordered">
           <tbody>
             <tr>
               <td className="col-md-6">

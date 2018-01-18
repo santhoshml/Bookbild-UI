@@ -139,6 +139,7 @@ class EditRFPForm extends Component {
               ID : that.props.initialValues.rfpId
             };
             this.props.sendAMsgFromAdminWithCompanyId(mProps);
+            NotificationManager.info("RFP updated.");
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
           });
         }

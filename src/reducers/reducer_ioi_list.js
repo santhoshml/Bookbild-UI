@@ -24,7 +24,7 @@ export default function(state = INITIAL_STATE, action) {
       // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data.data));
       return {
         ...state
-        , ioiList: action.payload.data.data.Items
+        , ioiList: action.payload.data.data.IOI_LIST.Items
         // , ioiCompanyList : action.payload.data.data.COMPANY_DETAILS_LIST
         // , ioiUserList : action.payload.data.data.USER_DETAILS_LIST
       };

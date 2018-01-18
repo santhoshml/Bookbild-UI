@@ -236,11 +236,11 @@ export default class DisplayIOIList extends Component {
               bordered={ true }
               columns={this.state.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
               data={this.state.ioiList}
-              headers={true}
-              striped
-              hover
-              condensed
-              pagination
+              headers = {true}
+              striped = {true}
+              hover ={true}
+              condensed = {true}
+              pagination = {true}
               selectRow={ selectRowProp }
               onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
           </div>

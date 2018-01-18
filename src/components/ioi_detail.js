@@ -2,7 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { fetchRFPByIOIAction, fetchFinalIOIAction, getRFPFromFavoritesAction, fetchRFPAction, inviteLenderAction, fetchIOIAction, getLinkWithIOIAction } from '../actions/index';
+import { fetchRFPByIOIAction
+  , fetchFinalIOIAction
+  , getRFPFromFavoritesAction
+  , fetchRFPAction
+  , inviteLenderAction
+  , fetchIOIAction
+  , getLinkWithIOIAction
+  , revokeIOI } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -66,6 +73,30 @@ class IOIDetail extends Component{
       this.setState({
         rfp : nextProps.rfp
       });
+    }
+  }
+
+  displayCreatedByCompanyNameElement(){
+    if(this.state.ioi && this.state.link){
+      return(
+        <tr>
+          <td>Created by</td>
+          <td>{this.state.ioi.createdByName}</td>
+        </tr>
+      );
+    }    
+  }
+
+  displayCreatedByNameElement(){
+    if(this.state.ioi 
+      && (this.state.user.companyId === this.state.ioi.createdByCompanyId
+        || this.state.link)){
+      return(
+        <tr>
+          <td>Created by</td>
+          <td>{this.state.ioi.createdByName}</td>
+        </tr>
+      );
     }
   }
 
@@ -153,14 +184,8 @@ class IOIDetail extends Component{
                 <td>Yield Estimate</td>
                 <td><b>{cUtils.formatPercentToDisplay(ioi.yield)}</b></td>
               </tr>
-              <tr>
-                <td>Created by Company</td>
-                <td>{ioi.createdByCompanyName}</td>
-              </tr>
-              <tr>
-                <td>Created by</td>
-                <td>{ioi.createdByName}</td>
-              </tr>
+              {this.displayCreatedByNameElement()}
+              {this.displayCreatedByCompanyNameElement()}
               <tr>
                 <td>Last Updated on</td>
                 <td>{dateFormat(moment(ioi.timestamp), 'longDate')}</td>
@@ -238,6 +263,17 @@ class IOIDetail extends Component{
         &nbsp;&nbsp;&nbsp;
         </span>);
     }
+  }
+
+  displayRevokeIOIButton(){
+    let that = this;
+    JSAlert.confirm("Are you sure you want to revoke the IOI, this action cannot be REVERSED ?")
+    .then(function(result){
+      that.props.revokeIOI(that.state.ioi.ioiId)
+      .then(() => {
+        that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+      })
+    });
   }
 
   displayYieldMatrix(){
@@ -328,6 +364,7 @@ class IOIDetail extends Component{
             </Tabs>      
             {this.displayViewAttachedRFPButton()}
             {this.displayEditIOIButton()}
+            {this.displayRevokeIOIButton()}
             {this.displayInviteButton()}
             {this.displayFinalTermButton()}
           </div>
@@ -372,7 +409,8 @@ function mapDispatchToProps(dispatch) {
     fetchIOIAction            : fetchIOIAction,
     getLinkWithIOIAction  : getLinkWithIOIAction,
     fetchFinalIOIAction         : fetchFinalIOIAction,
-    fetchRFPByIOIAction : fetchRFPByIOIAction
+    fetchRFPByIOIAction         : fetchRFPByIOIAction,
+    revokeIOI                   : revokeIOI
   }, dispatch);
 }
 

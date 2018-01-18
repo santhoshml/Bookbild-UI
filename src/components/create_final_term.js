@@ -254,7 +254,7 @@ class CreateFinalTermForm extends Component{
         <br/>
         <Field
           name="intrestCoverage"
-          label="Intrest Coverage"
+          label="Interest Coverage"
           component={this.renderField}
         />
         <br/>
@@ -482,7 +482,23 @@ function mapStateToProps(state) {
   }
 
   if(state.ioiList.ioi){
-    intializedData.ioi = state.ioiList.ioi[0];
+    let ioi = state.ioiList.ioi[0];
+    intializedData.ioi = ioi;
+    let initData ={
+      loanSize : ioi.loanSize,
+      yield : ioi.yield,
+      maturity : ioi.maturity,
+      liborFloor : ioi.liborFloor,
+      upfrontFee : ioi.upfrontFee,
+      pikIntreset : ioi.pikIntreset,
+      cashInterest : ioi.cashInterest,
+      year1 : ioi.year1,
+      year2 : ioi.year2,
+      year3 : ioi.year3,
+      year4 : ioi.year4,
+      year5 : ioi.year5      
+    };
+    intializedData.initialValues = initData;
   }
 
   if(state.rfpList.rfpList){

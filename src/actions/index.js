@@ -67,6 +67,7 @@ export const UPDATE_ADDRESS = 'UPDATE_ADDRESS';
 export const SEND_MSG_FROM_ADMIN = 'SEND_MSG_FROM_ADMIN';
 export const GET_FINAL_TERM = 'GET_FINAL_TERM';
 export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
+export const REVOKE_IOI = 'REVOKE_IOI';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -79,6 +80,19 @@ const USE_CACHE = false;
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
+export function revokeIOI(ioiId){
+  // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
+  const request=axios({
+    url : '/revokeIOI?ioiId='+ ioiId,
+    method : 'DELETE',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: REVOKE_IOI,
+    payload: request
+  }
+}
 
 export function sendAMsgFromAdmin(props){
   // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
