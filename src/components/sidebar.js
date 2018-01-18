@@ -162,7 +162,7 @@ class Sidenav extends Component {
 	}
 
 	displayAddUserLink(){
-		if((this.state.user && this.state.user.isAdmin && this.state.user.isAdmin=== true)
+		if((this.state.user && this.state.user.isAdmin && this.state.user.isAdmin=== 'Yes')
 			||(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true)
 		){
 			return(

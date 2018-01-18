@@ -18,6 +18,8 @@ const stateOptions = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID
 ,'MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI'
 ,'SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
 
+const isAdminOptions = ['Yes', 'No'];
+
 class AddUserForm extends Component{
 
 	renderDropdownField(field) {
@@ -178,10 +180,17 @@ class AddUserForm extends Component{
 									<Field
 										name="fullName"
 										label="Full Name"
-										size="col-xs-12 col-md-12"
+										size="col-xs-8 col-md-8"
 										component={this.renderField}
 										placeholder="Enter users full name"
 									/>
+									<Field
+										label="Admin Privileges"
+										name="isAdmin"
+										size="col-xs-3 col-md-3"
+										component={this.renderDropdownField}
+										dpField={isAdminOptions}
+									/>									
 								</div>
 								<div className={`row`}>
 									<Field
@@ -217,24 +226,6 @@ class AddUserForm extends Component{
 										component={this.renderField}
 										placeholder="Enter password should be same as above"
 									/>
-								</div>
-
-								<div className={`row`}>
-									<div className={`form-group col-xs-12 col-md-12`}>
-										<label>Admin privileges</label><br/>
-										<Field
-											name="isAdmin"
-											value="true"
-											label="Will have ADMIN privileges"
-											component={this.renderRadioField}
-										/>
-										<Field
-											name="isAdmin"
-											value="false"
-											label="Will NOT have ADMIN privileges"
-											component={this.renderRadioField}
-										/>
-									</div>
 								</div>
 
 								<br/>

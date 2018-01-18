@@ -186,7 +186,7 @@ class UserProfileForm extends Component{
 
   render = () => {
     // console.log('I am in render');
-		// console.log('props:'+JSON.stringify(this.props));
+		console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props
 		// console.log('yoyo:'+JSON.stringify(this.props.initialValues));
@@ -309,7 +309,10 @@ class UserProfileForm extends Component{
                 placeholder="Enter a valid zipcode of the Company"
               />
             </div>
-            {this.props.initialValues && this.props.initialValues.userList && this.props.initialValues.userList.length>0 && this.props.initialValues.isAdmin? this.displayUserList() : ''}
+            {this.props.initialValues 
+              && this.props.initialValues.userList 
+              && this.props.initialValues.userList.length>0 
+              && this.props.initialValues.isAdmin.toLowerCase() == 'yes' ? this.displayUserList() : ''}
 
 
             <br/>
@@ -354,7 +357,7 @@ class UserProfileForm extends Component{
         <tr key={user.contactId}>
           <td> {index+1}</td>
           <td> {user.email} </td>
-          <td> {user.isAdmin+''} </td>
+          <td> {user.isAdmin} </td>
           <td> {user.role} </td>
         </tr>
       );
