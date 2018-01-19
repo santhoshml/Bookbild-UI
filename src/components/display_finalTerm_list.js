@@ -90,7 +90,70 @@ export default class DisplayFinalTermList extends Component {
     // return  <FormattedDate value={row.timestamp} format="short" />
   }
 
+  maxDebtRenderer(row){
+    return cUtils.formatCurrencyToDisplayAsElement(row.maxDebtAllowed);
+  }
+
+  cashIntrestRenderer(row){
+    return cUtils.formatPercentToDisplayAsElement(row.cashInterest); 
+  }
+
+  pikRenderer(row){
+    return cUtils.formatPercentToDisplayAsElement(row.pikIntreset);
+  }
+
+  liborFloorRenderer(row){
+    return cUtils.formatPercentToDisplayAsElement(row.liborFloor);
+  }
+
+  maturityRenderer(row){
+    return <NumberFormat value={row.maturity} displayType={'text'} suffix={'yrs'} />
+  }
+
+  upfrontFeeRenderer(row){
+    return cUtils.formatPercentToDisplayAsElement(row.upfrontFee);
+  }
+
   getAllColoumns(){
+    let colArr = [{
+      name: 'createdByCompanyName',
+      display: 'Investor'
+    },{
+      name: 'loanSize',
+      display: 'Loan Size',
+      renderer : this.loanSizeRenderer
+    }, {
+      name: 'cashInterest',
+      display: 'Interest',
+      renderer : this.cashIntrestRenderer
+    }, {
+      name: 'pikIntreset',
+      display: 'PIK Interest',
+      renderer : this.pikRenderer
+    }, {
+      name: 'liborFloor',
+      display: 'LIBOR floor',
+      renderer : this.liborFloorRenderer
+    }, {
+      name: 'maturity',
+      display: 'Maturity',
+      renderer : this.maturityRenderer
+    }, {
+      name: 'upfrontFee',
+      display: 'OID/Upfront fee',
+      renderer : this.upfrontFeeRenderer
+    }, {
+      name: 'yield',
+      display: 'Yield Estimate'
+    }, {
+      name: 'blendedCost',
+      display: 'Blended Cost'
+    }
+  ];
+    return colArr;
+  }
+
+  getMinimalColoumns(){
     let colArr = [{
       name: 'createdByCompanyName',
       display: 'Investor'
@@ -130,13 +193,13 @@ export default class DisplayFinalTermList extends Component {
       return (
           <div>
             <BootstrapTable
-              columns={this.getAllColoumns()}
+              columns={this.props.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
               data={this.props.finalTermList}
               headers={true}
-              striped
-              hover
-              condensed
-              pagination
+              striped = {true}
+              hover = {true}
+              condensed = {true}
+              pagination = {true}
               selectRow={ selectRowProp }
               onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
           </div>

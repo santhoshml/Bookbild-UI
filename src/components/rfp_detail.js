@@ -2,7 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { fetchRFPAction, addRFPToFavoritesAction, removeRFPFromFavoritesAction, getRFPFromFavoritesAction, getIOIForRFPAndCompanyAction } from '../actions/index';
+import { fetchRFPAction
+  , addRFPToFavoritesAction
+  , removeRFPFromFavoritesAction
+  , getRFPFromFavoritesAction
+  , getIOIForRFPAndCompanyAction
+  , fetchFinalTermListForRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -29,6 +34,7 @@ class RFPDetail extends Component{
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let paramId = this.props.match.params.id;
     this.props.fetchRFPAction(paramId);
+    this.props.fetchFinalTermListForRFPAction(paramId);
 
     this.props.getRFPFromFavoritesAction(user.userId, paramId)
 
@@ -200,6 +206,21 @@ class RFPDetail extends Component{
         &nbsp;&nbsp;&nbsp;
         <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
           View Book
+        </Link>
+      </span>);
+    } else {
+      return(<span></span>);
+    }
+  }
+
+  displayFinalTermListButton(){
+    if(this.state.rfp 
+        && this.state.rfp.createdByCompanyId === this.state.company.companyId
+        && this.props.finalTermList && this.props.finalTermList.length > 0){
+      return( <span>
+        &nbsp;&nbsp;&nbsp;
+        <Link to={constants.ROUTES_MAP.FINAL_TERM_LIST+"/"+this.state.rfp.rfpId+"/"+constants.FT_FOR_RFP} className="btn btn-primary">
+          View Final Book
         </Link>
       </span>);
     } else {
@@ -394,6 +415,7 @@ class RFPDetail extends Component{
             {this.displayFavoritesButton()}
             {this.displayIOIButton()}
             {this.displayViewIntrestListButton()}
+            {this.displayFinalTermListButton()}
             {this.displayEditRFPButton()}
             {this.displayIndustryResearchButton()}
             <br/>
@@ -425,6 +447,10 @@ function mapStateToProps(state) {
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];
   }
+
+  if(state.finalTermList.finalTermList){
+    rObject.finalTermList = state.finalTermList.finalTermList;
+  }  
   
   return rObject;
 }
@@ -437,7 +463,8 @@ function mapDispatchToProps(dispatch) {
     removeRFPFromFavoritesAction : removeRFPFromFavoritesAction,
     getRFPFromFavoritesAction : getRFPFromFavoritesAction,
     getIOIForRFPAndCompanyAction : getIOIForRFPAndCompanyAction,
-    fetchRFPAction : fetchRFPAction
+    fetchRFPAction : fetchRFPAction,
+    fetchFinalTermListForRFPAction : fetchFinalTermListForRFPAction
   }, dispatch);
 }
 

@@ -86,6 +86,7 @@ ReactDOM.render(
               <Route path="/finalTermDetail/:id" component={FinalTermDetail} />
               <Route path="/ioiDetail/:id" component={IOIDetail} />
               <Route path="/ioiList/:id/:type" component={IOIList} />
+              <Route path="/finalTermList/:id/:type" component={FinalTermList} />
               <Route path="/rfpFavoriteList/:id" component={RFPFavoriteList} />
               <Route path="/rfpCompanyList/:id" component={RFPCompanyList} />
               <Route path="/superAdmin" component={SuperAdminBoard} />

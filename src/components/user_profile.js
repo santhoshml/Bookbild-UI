@@ -186,7 +186,7 @@ class UserProfileForm extends Component{
 
   render = () => {
     // console.log('I am in render');
-		console.log('props:'+JSON.stringify(this.props));
+		// console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props
 		// console.log('yoyo:'+JSON.stringify(this.props.initialValues));

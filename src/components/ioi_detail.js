@@ -364,7 +364,9 @@ class IOIDetail extends Component{
             </Tabs>      
             {this.displayViewAttachedRFPButton()}
             {this.displayEditIOIButton()}
-            {this.displayRevokeIOIButton()}
+            {
+              // this.displayRevokeIOIButton()
+            }
             {this.displayInviteButton()}
             {this.displayFinalTermButton()}
           </div>

@@ -37,7 +37,11 @@ export default class Header extends Component{
 	}
 
 	displayLaunchButton(){
-		if(!this.state.user){
+		if(this.state.user){
+			return(
+				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.RFP_MARKETPLACE}><b>LAUNCH</b></a>
+			);
+		} else if(!this.state.user){
 			return(
 				<a className="anchor-spacing launch-btn" href={constants.ROUTES_MAP.LOGIN}><b>LAUNCH</b></a>
 			);

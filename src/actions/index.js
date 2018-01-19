@@ -68,6 +68,7 @@ export const SEND_MSG_FROM_ADMIN = 'SEND_MSG_FROM_ADMIN';
 export const GET_FINAL_TERM = 'GET_FINAL_TERM';
 export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
 export const REVOKE_IOI = 'REVOKE_IOI';
+export const FETCH_FT_LIST_FOR_RFP = 'FETCH_FT_LIST_FOR_RFP';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -252,6 +253,7 @@ export function fetchFinalTermListForLenderCompany(companyId){
 }
 
 export function fetchFinalTermListForBorrowerCompany(companyId){
+  // console.log('In fetchFinalTermListForBorrowerCompany, companyId:'+companyId);
   const request=axios({
     url : '/fetchFinalTermListForBorrowerCompany?companyId='+companyId,
     method : 'GET',
@@ -889,8 +891,22 @@ export function fetchIOIAction(ioiId){
   }
 }
 
+export function fetchFinalTermListForRFPAction(rfpId){
+  // console.log('In actions.fetchFinalTermListForRFPAction');
+  const request=axios({
+    url : '/fetchFinalTermListForRFP?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: FETCH_FT_LIST_FOR_RFP,
+    payload: request
+  }
+}
+
 export function fetchIOIListForRFPAction(rfpId){
-  // console.log('In actions.fetchIOIListForRFPAction');
+  // console.log('In actions.fetchIOIListForRFPAction, rfpId :'+ rfpId);
   const request=axios({
     url : '/fetchIOIListForRFP?rfpId='+rfpId,
     method : 'GET',

@@ -3,7 +3,9 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
 import DisplayTermSheetList from './display_finalTerm_list';
-import { fetchFinalTermListForLenderCompany, fetchFinalTermListForBorrowerCompany } from '../actions/index';
+import { fetchFinalTermListForLenderCompany
+  , fetchFinalTermListForBorrowerCompany
+  , fetchFinalTermListForRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
@@ -20,10 +22,14 @@ class FinalTermList extends Component{
     // console.log('In display final term list, componentWillMount');
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
+    let displayMinimalData = true;
 
     // console.log('user:'+JSON.stringify(user));
     // console.log('companyId :'+JSON.stringify(company));
-    if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
+    if(this.props.match.params.type === constants.FT_FOR_RFP){
+      this.props.fetchFinalTermListForRFPAction(this.props.match.params.id);
+      displayMinimalData = false;
+    } else if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
       this.props.fetchFinalTermListForLenderCompany(company.companyId);
     } else if(user.role.toLowerCase() === constants.KEY_COMPANY .toLowerCase()
       || user.role.toLowerCase() === constants.KEY_FINANCIAL_SPONSOR.toLowerCase()){
@@ -32,14 +38,15 @@ class FinalTermList extends Component{
     
     this.setState({
       company : company,
-      user : user
+      user : user,
+      displayMinimalData : displayMinimalData
     });
   }
 
   displayProductCategory(){
-    if(this.props.match.params.type === constants.IOI_FOR_RFP
-      && this.props.ioiList && this.props.ioiList.length > 0){
-      let productCategoryMap = cUtils.getProductCategories(this.props.ioiList, this.props.ioiCompanyList);
+    if(this.props.match.params.type === constants.FT_FOR_RFP
+      && this.props.finalTermList && this.props.finalTermList.length > 0){
+      let productCategoryMap = cUtils.getProductCategories(this.props.finalTermList, this.props.finalTermCompanyList);
       let catKeys = Object.keys(productCategoryMap);
       // console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
       return(<div>
@@ -87,17 +94,24 @@ class FinalTermList extends Component{
         </div>
       );
     } else {
-      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       if(this.state.user.role === constants.KEY_LENDER){
         // hard-code the company name for the lenders
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = this.state.company.companyName;
         }
+      } else if(this.state.user.role === constants.KEY_COMPANY
+        || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
+        for(let i=0; i< this.props.finalTermList.length; i++){
+          this.props.finalTermList[i].createdByCompanyName = cUtils.getCompanyNameById(this.props.finalTermList[i].createdByCompanyId
+              , this.props.finalTermCompanyList);
+        }
       }
+
       return(
         <div>
           <DisplayTermSheetList
             finalTermList={this.props.finalTermList}
+            minimalData = {this.state.displayMinimalData}
           />
         </div>
       );
@@ -111,6 +125,13 @@ class FinalTermList extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
+            <br/>
+            <div>
+              <h3>Comparative Analytics - Final Lender Terms</h3>
+            </div>
+            {
+              // this.displayProductCategory()
+            }
             <br/>
             <br/>
             {this.displayFinalTermList()}
@@ -132,15 +153,19 @@ function mapStateToProps(state) {
     if(state.finalTermList.finalTermList){
       rObject.finalTermList = state.finalTermList.finalTermList;
     }
+
+    if(state.finalTermList.finalTermCompanyList){
+      rObject.finalTermCompanyList = state.finalTermList.finalTermCompanyList;
+    }
+
     return rObject;
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
     fetchFinalTermListForLenderCompany    : fetchFinalTermListForLenderCompany,
-    fetchFinalTermListForBorrowerCompany  : fetchFinalTermListForBorrowerCompany
+    fetchFinalTermListForBorrowerCompany  : fetchFinalTermListForBorrowerCompany,
+    fetchFinalTermListForRFPAction        : fetchFinalTermListForRFPAction
   }, dispatch);
 }
 

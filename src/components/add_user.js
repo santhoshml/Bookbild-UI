@@ -112,7 +112,7 @@ class AddUserForm extends Component{
 		props.addedByUserId = this.state.user.userId;
 		props.companyId = this.state.user.companyId;
 		props.role = this.state.user.role;
-		console.log('props : '+JSON.stringify(props));
+		// console.log('props : '+JSON.stringify(props));
 		this.props.addUserAction(props)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
