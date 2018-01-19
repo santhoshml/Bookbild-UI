@@ -99,8 +99,10 @@ class FinalTermList extends Component{
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = this.state.company.companyName;
         }
-      } else if(this.state.user.role === constants.KEY_COMPANY
-        || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
+      } else if((this.state.user.role === constants.KEY_COMPANY
+        || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR)
+        && this.props.finalTermCompanyList){
+          // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = cUtils.getCompanyNameById(this.props.finalTermList[i].createdByCompanyId
               , this.props.finalTermCompanyList);
