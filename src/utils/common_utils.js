@@ -6,6 +6,7 @@ import isNumber from 'is-number';
 import numbro from 'numbro';
 import numeral from 'numeral';
 import roundTo from 'round-to';
+import ioi_list from '../components/ioi_list';
 
 exports.formatCurrencyToDisplay=function(amt){
   return numeral(amt).format('($0,0.00)');
@@ -99,13 +100,27 @@ exports.getMonthlyColoumns=function(typeCustomFormatter){
   return cols;
 }
 
-exports.maskCompanyName = function(clist){
-  if(clist && clist.length > 0){
+exports.maskCompanyName = function(clist, ioiList){
+  let counter = 1;
+  if(clist && clist.length > 0 && ioiList && ioiList.length > 0){
     for(var i=0; i< clist.length; i++){
-      clist[i].companyName = 'Lender '+(i+1);
+      if(isLenderCompany(clist[i].companyId, ioiList)){
+        clist[i].companyName = 'Lender '+counter;
+        counter++;
+      }
     }
   }
+  // console.log('clist :'+ JSON.stringify(clist));
   return clist;
+}
+
+function isLenderCompany(cId, ioiList){
+  for(let i=0; i<ioiList.length; i++){
+    if(ioiList[i].createdByCompanyId === cId){
+      return true;
+    }
+  }
+  return false;
 }
 
 exports.getQuaterObject = function(period, startYear, startQtr){

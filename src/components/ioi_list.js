@@ -142,7 +142,7 @@ function mapStateToProps(state) {
   // console.log('state:'+JSON.stringify(state));
   let rObject =  {
     ioiList: state.ioiList.ioiList,
-    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList),
+    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList, state.ioiList.ioiList),
     ioiUserList : state.ioiList.ioiUserList
   };
   // console.log('rObject:'+JSON.stringify(rObject));

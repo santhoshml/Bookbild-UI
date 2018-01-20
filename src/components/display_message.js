@@ -38,16 +38,30 @@ class DisplayMessage extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In display_messages, componentWillReceiveProps');
-    if((this.state.isComposeNewMsg && nextProps.isComposeNewMsg && this.state.isComposeNewMsg !== nextProps.isComposeNewMsg)
-      || (!this.state.isComposeNewMsg && nextProps.isComposeNewMsg)){
+    console.log('In display_messages, componentWillReceiveProps');
+    // if((this.state.isComposeNewMsg && nextProps.isComposeNewMsg && this.state.isComposeNewMsg !== nextProps.isComposeNewMsg)
+    //   || (!this.state.isComposeNewMsg && nextProps.isComposeNewMsg)){
+    //   // console.log('will compose a new msg');
+    //   this.props.fetchAllContactsToMessageAction();
+    //   this.setState({
+    //     isComposeNewMsg : nextProps.isComposeNewMsg
+    //   });
+    // } else if((this.state.activeMessageId &&  nextProps.activeMessageId && this.state.activeMessageId !==nextProps.activeMessageId)
+    //   || (!this.state.activeMessageId && nextProps.activeMessageId)){
+    //   // console.log('will get msgs list for msgId:'+nextProps.activeMessageId);
+    //   this.props.getMsgListAction(nextProps.activeMessageId);
+    //   this.setState({
+    //     activeMessageId : nextProps.activeMessageId
+    //   });
+    // }
+
+    if(nextProps.isComposeNewMsg && nextProps.isComposeNewMsg !== this.state.isComposeNewMsg){
       // console.log('will compose a new msg');
       this.props.fetchAllContactsToMessageAction();
       this.setState({
         isComposeNewMsg : nextProps.isComposeNewMsg
       });
-    } else if((this.state.activeMessageId &&  nextProps.activeMessageId && this.state.activeMessageId !==nextProps.activeMessageId)
-      || (!this.state.activeMessageId && nextProps.activeMessageId)){
+    } else if(nextProps.activeMessageId && nextProps.activeMessageId !== this.state.activeMessageId){
       // console.log('will get msgs list for msgId:'+nextProps.activeMessageId);
       this.props.getMsgListAction(nextProps.activeMessageId);
       this.setState({
@@ -88,13 +102,14 @@ class DisplayMessage extends Component{
     let that = this;
     event.preventDefault();
     let props = {
-      messageId : this.state.activeMessageId,
+      messageId : this.props.activeMessageId,
       msg : this.state.newContent,
       fromId : this.state.user.contactId
     };
+    console.log('In display_message.handleSubmit, props:'+ JSON.stringify(props));
     this.props.appendToMsgList(props)
     .then(() => {
-      that.props.getMsgListAction(that.state.activeMessageId);
+      that.props.getMsgListAction(that.props.activeMessageId);
     });
     this.setState({
       newContent : ''
@@ -154,7 +169,7 @@ class DisplayMessage extends Component{
 
   displayMessageBody(){
     // console.log('this.props.isComposeNewMsg :'+this.props.isComposeNewMsg);
-    if(this.state.isComposeNewMsg){
+    if(this.props.isComposeNewMsg){
       return(
         <div>
           <div className="body-header">New Message</div>

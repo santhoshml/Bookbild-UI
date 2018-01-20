@@ -37,17 +37,24 @@ class Messages extends Component{
     // console.log('I am in onComponseNewMessage');
     if(!this.state.isComposeNewMsg){
       this.setState({
-        isComposeNewMsg : true
+        isComposeNewMsg : true,
+        activeMessageId : null,
+        contactName : null,
+        companyName : null,  
       });
     }
   }
 
   setActiveMessage(activeMessageId, contactName, companyName){
-    // console.log('I am in setActiveMessage');
+    console.log('I am in setActiveMessage');
+    console.log('activeMessageId :'+ activeMessageId);
+    console.log('contactName :'+contactName);
+    console.log('companyName :'+ companyName);
     this.setState({
       activeMessageId : activeMessageId,
       contactName : contactName,
-      companyName : companyName
+      companyName : companyName,
+      isComposeNewMsg : false
     });
   }
 

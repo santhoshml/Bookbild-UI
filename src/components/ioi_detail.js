@@ -80,8 +80,8 @@ class IOIDetail extends Component{
     if(this.state.ioi && this.state.link){
       return(
         <tr>
-          <td>Created by</td>
-          <td>{this.state.ioi.createdByName}</td>
+          <td>Created by Company</td>
+          <td>{this.state.ioi.createdByCompanyName}</td>
         </tr>
       );
     }    
