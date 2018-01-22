@@ -47,6 +47,7 @@ require("../style/style.css");
 require("../css/stylish-portfolio.css");
 require("../node_modules/react-dropdown/style.css");
 require("../node_modules/react-tabs/style/react-tabs.css");
+require("../node_modules/react-bootstrap-table/dist/react-bootstrap-table.min.css");
 
 require("../js/stylish-portfolio.js");
 

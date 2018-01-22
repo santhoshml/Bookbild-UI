@@ -46,10 +46,10 @@ class Messages extends Component{
   }
 
   setActiveMessage(activeMessageId, contactName, companyName){
-    console.log('I am in setActiveMessage');
-    console.log('activeMessageId :'+ activeMessageId);
-    console.log('contactName :'+contactName);
-    console.log('companyName :'+ companyName);
+    // console.log('I am in setActiveMessage');
+    // console.log('activeMessageId :'+ activeMessageId);
+    // console.log('contactName :'+contactName);
+    // console.log('companyName :'+ companyName);
     this.setState({
       activeMessageId : activeMessageId,
       contactName : contactName,

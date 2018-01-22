@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Link } from 'react-router-dom';
-import { getBorrowerControlledAccessListAction, updateAccessToLenderFlag } from '../actions/index';
+import { getBorrowerControlledAccessListAction
+  , updateAccessToLenderFlag
+  , sendAMsgFromAdminWithCompanyIdAndCompanyName } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -48,24 +50,44 @@ class borrowerControlledAccess extends Component{
 
   onToggleSwitch(e){
     // console.log('In onToggleSwitch');
+    let that = this;
     let type = e.target.id
     let newStateValue = this.state.selectedAccessList;
     newStateValue[type] = !newStateValue[type];
-    let updatedLinkId = null;
+    let updatedLink = null;
 
     let list = this.state.borrowerControlledAccessList;
     for(let i=0;i<list.length; i++){
       // console.log('list[i]:'+JSON.stringify(list[i]));
       if(list[i].linkId === this.state.selectedDropDown.value){
-        updatedLinkId = list[i].linkId;
+        updatedLink = list[i];
         list[i].accessToLender = newStateValue;
         break;
       }
     }
     this.props.updateAccessToLenderFlag({
-      linkId : updatedLinkId,
+      linkId : updatedLink.linkId,
       accessToLender : newStateValue
+    })
+    .then((data)=> {
+
+      let bProps = {
+        companyId : updatedLink.borrowerCompanyId,
+        msg : cUtils.getMsgNameForAccess(type),
+        lenderCompanyId : updatedLink.lenderCompanyId
+      };
+      that.props.sendAMsgFromAdminWithCompanyIdAndCompanyName(bProps);
+
+      // send a msg to lender
+      let lProps = {
+        companyId : updatedLink.lenderCompanyId,
+        msg : cUtils.getMsgNameForAccess(type),
+        lenderCompanyId : updatedLink.lenderCompanyId
+      };
+      that.props.sendAMsgFromAdminWithCompanyIdAndCompanyName(lProps);
+
     });
+
     // console.log('updated list:'+ JSON.stringify(list));
     this.setState({
       borrowerControlledAccessList : list,
@@ -176,7 +198,8 @@ function mapDispatchToProps(dispatch) {
   // to all of our reducers
   return bindActionCreators({
     getBorrowerControlledAccessListAction : getBorrowerControlledAccessListAction,
-    updateAccessToLenderFlag : updateAccessToLenderFlag
+    updateAccessToLenderFlag : updateAccessToLenderFlag,
+    sendAMsgFromAdminWithCompanyIdAndCompanyName : sendAMsgFromAdminWithCompanyIdAndCompanyName
   }, dispatch);
 }
 

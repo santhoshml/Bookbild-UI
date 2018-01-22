@@ -4,7 +4,7 @@ import DataGrid from './data_grid_example';
 import cUtils from '../utils/common_utils';
 import formatCurrency from 'format-currency';
 import constants from '../utils/constants';
-import BootstrapTable from 'reactjs-bootstrap-table';
+import { BootstrapTable, TableHeaderColumn } from 'react-bootstrap-table';
 import NumberFormat from 'react-number-format';
 import moment from 'moment';
 import Header from './header';
@@ -22,13 +22,16 @@ export default class DisplayFinalTermList extends Component {
   }
 
   componentWillMount(){
+    this.setState({
+      minimalData : (this.props.minimalData === undefined ? false : this.props.minimalData)
+    });
   }
 
   componentWillReceiveProps(nextProps){
 
   }
 
-  investorRenderer(row){
+  investorRenderer(cell, row){
     if(this.state.companyList){
       // console.log('row.createdByCompanyId:'+row.createdByCompanyId);
       // console.log('this.state.companyList:'+JSON.stringify(this.state.companyList));
@@ -37,35 +40,35 @@ export default class DisplayFinalTermList extends Component {
       return null;
   }
 
-  maxDebtRenderer(row){
+  maxDebtRenderer(cell, row){
     return cUtils.formatCurrencyToDisplayAsElement(row.maxDebtAllowed); 
   }
 
-  loanSizeRenderer(row){
+  loanSizeRenderer(cell, row){
     return cUtils.formatCurrencyToDisplayAsElement(row.loanSize);
   }
 
-  pikRenderer(row){
+  pikRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.pikIntreset); 
   }
 
-  liborFloorRenderer(row){
+  liborFloorRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.liborFloor); 
   }
 
-  upfrontFeeRenderer(row){
+  upfrontFeeRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.upfrontFee);
   }
 
-  maturityRenderer(row){
+  maturityRenderer(cell, row){
     return <NumberFormat value={row.maturity} displayType={'text'} suffix={'yrs'} />
   }
 
-  cashIntrestRenderer(row){
+  cashIntrestRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.cashInterest);
   }
 
-  getCompanyNameRenderer(row){
+  getCompanyNameRenderer(cell, row){
     let list = (this.state ? this.state.companyList : null);
     for(var i=0; list && i<list.length; i++){
       if(list[i].companyId === row.createdByCompanyId){
@@ -75,7 +78,7 @@ export default class DisplayFinalTermList extends Component {
     return 'N/A';
   }
 
-  getCreatedByNameRenderer(row){
+  getCreatedByNameRenderer(cell, row){
     let list = (this.state ? this.state.userList : null);
     for(var i=0; list && i<list.length; i++){
       if(list[i].userId === row.createdById){
@@ -85,91 +88,53 @@ export default class DisplayFinalTermList extends Component {
     return 'N/A';
   }
 
-  getDateFormatRenderer(row){
+  getDateFormatRenderer(cell, row){
     return <span>{dateFormat(moment(row.timestamp), 'longDate')}</span>
     // return  <FormattedDate value={row.timestamp} format="short" />
   }
 
-  maxDebtRenderer(row){
+  maxDebtRenderer(cell, row){
     return cUtils.formatCurrencyToDisplayAsElement(row.maxDebtAllowed);
   }
 
-  cashIntrestRenderer(row){
+  cashIntrestRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.cashInterest); 
   }
 
-  pikRenderer(row){
+  pikRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.pikIntreset);
   }
 
-  liborFloorRenderer(row){
+  liborFloorRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.liborFloor);
   }
 
-  maturityRenderer(row){
+  maturityRenderer(cell, row){
     return <NumberFormat value={row.maturity} displayType={'text'} suffix={'yrs'} />
   }
 
-  upfrontFeeRenderer(row){
+  upfrontFeeRenderer(cell, row){
     return cUtils.formatPercentToDisplayAsElement(row.upfrontFee);
   }
 
-  getAllColoumns(){
-    let colArr = [{
-      name: 'createdByCompanyName',
-      display: 'Investor'
-    },{
-      name: 'loanSize',
-      display: 'Loan Size',
-      renderer : this.loanSizeRenderer
-    }, {
-      name: 'cashInterest',
-      display: 'Interest',
-      renderer : this.cashIntrestRenderer
-    }, {
-      name: 'pikIntreset',
-      display: 'PIK Interest',
-      renderer : this.pikRenderer
-    }, {
-      name: 'liborFloor',
-      display: 'LIBOR floor',
-      renderer : this.liborFloorRenderer
-    }, {
-      name: 'maturity',
-      display: 'Maturity',
-      renderer : this.maturityRenderer
-    }, {
-      name: 'upfrontFee',
-      display: 'OID/Upfront fee',
-      renderer : this.upfrontFeeRenderer
-    }, {
-      name: 'yield',
-      display: 'Yield Estimate'
-    }, {
-      name: 'blendedCost',
-      display: 'Blended Cost'
-    }
-  ];
-    return colArr;
+  yieldRenderer(cell, row){
+    return cUtils.formatPercentToDisplayAsElement(row.yield); 
   }
 
-  getMinimalColoumns(){
-    let colArr = [{
-      name: 'createdByCompanyName',
-      display: 'Investor'
-    }, {
-      name: 'loanSize',
-      display: 'Loan Size',
-      renderer : this.loanSizeRenderer
-    }, {
-      name: 'yield',
-      display: 'Yield Estimate'
-    }, {
-      name: 'blendedCost',
-      display: 'Blended Cost'
-    }];
-    return colArr;
+  blendedCostRenderer(cell, row){
+    if(row.blendedCost){
+      return(
+        <div>
+        {
+          row.blendedCost.map((bc) => {
+            return <p key={bc.yield}>{bc.yield + ' with '+ bc.otherLender}</p>
+          })
+        }
+        </div>
+      ); 
+    }
   }
+
 
   onDoubleClicked(row){
     // console.log('row clicked in IOI list :'+ row.id);
@@ -180,29 +145,60 @@ export default class DisplayFinalTermList extends Component {
   }
 
   render() {
-    // console.log('In DisplayIOIList');
+
     if (!this.props.finalTermList) {
       return <div>No Final Term sheets exist</div>;
-    } else {
-      // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
-      const selectRowProp = {
-        mode: 'checkbox',
-        clickToSelect: true,
-        bgColor: "rgb(238, 193, 213)"
-        };
+    } else if(this.state.minimalData){
+      // console.log('will display minimal Data now');
+      const options = {
+        onRowClick : this.onDoubleClicked.bind(this),
+        onRowDoubleClick : this.onDoubleClicked.bind(this)
+      }
       return (
-          <div>
-            <BootstrapTable
-              columns={this.props.minimalData ? this.getMinimalColoumns() : this.getAllColoumns()}
-              data={this.props.finalTermList}
-              headers={true}
-              striped = {true}
-              hover = {true}
-              condensed = {true}
-              pagination = {true}
-              selectRow={ selectRowProp }
-              onRowDoubleClicked={this.onDoubleClicked.bind(this)}/>
-          </div>
+        <div>
+          <BootstrapTable 
+            data={this.props.finalTermList} 
+            striped={true} 
+            bordered={true} 
+            hover 
+            condensed 
+            options={options}
+            headerStyle={ { background: '#00ff00' } }
+            tableContainerClass='my-custom-class'>
+              <TableHeaderColumn dataField="createdByCompanyName" isKey={true} dataAlign="center">Investor</TableHeaderColumn>
+              <TableHeaderColumn dataField="loanSize" dataFormat={this.loanSizeRenderer} dataSort={true}>Loan Size</TableHeaderColumn>
+              <TableHeaderColumn dataField="yield" dataFormat={this.yieldRenderer} dataSort={true}>Yield Est.</TableHeaderColumn>
+              <TableHeaderColumn dataField="timestamp" dataFormat={this.getDateFormatRenderer.bind(this)}>Last Updated</TableHeaderColumn>
+          </BootstrapTable>
+        </div>
+      );
+    } else {
+      const options = {
+        onRowClick : this.onDoubleClicked.bind(this),
+        onRowDoubleClick : this.onDoubleClicked.bind(this)
+      }
+      return (
+        <div>
+          <BootstrapTable 
+            data={this.props.finalTermList} 
+            striped={true} 
+            bordered={true} 
+            hover 
+            condensed 
+            options={options}
+            headerStyle={ { background: '#00ff00' } }
+            tableContainerClass='my-custom-class'>
+              <TableHeaderColumn dataField="createdByCompanyName" isKey={true} dataAlign="center">Investor</TableHeaderColumn>
+              <TableHeaderColumn dataField="loanSize" dataFormat={this.loanSizeRenderer} dataSort={true} >Loan Size</TableHeaderColumn>
+              <TableHeaderColumn dataField="liborSpread" dataFormat={this.cashIntrestRenderer} dataSort={true} >Interest</TableHeaderColumn>
+              <TableHeaderColumn dataField="pikIntreset" dataFormat={this.pikRenderer} dataSort={true}>PIK</TableHeaderColumn>
+              <TableHeaderColumn dataField="liborFloor" dataFormat={this.liborFloorRenderer} dataSort={true} >LIBOR Floor</TableHeaderColumn>
+              <TableHeaderColumn dataField="maturity" dataFormat={this.maturityRenderer} dataSort={true} >Maturity</TableHeaderColumn>
+              <TableHeaderColumn dataField="upfrontFee" dataFormat={this.upfrontFeeRenderer} dataSort={true} >OID</TableHeaderColumn>
+              <TableHeaderColumn dataField="yield" dataFormat={this.yieldRenderer} dataSort={true} >Yield Est.</TableHeaderColumn>
+              <TableHeaderColumn dataField="blendedCost" dataFormat={this.blendedCostRenderer}>Blended Cost</TableHeaderColumn>
+          </BootstrapTable>
+        </div>
       );
     }
   }

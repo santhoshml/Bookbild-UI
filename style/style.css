@@ -1,5 +1,11 @@
 /* MESSAGING style */
-  .body-header{
+.my-custom-class{
+font-size : 10px;
+margin-right: -150px;
+margin-left : 1px;
+}
+
+.body-header{
     margin-left: 5px;
     text-align: center;
     font-weight : bold;

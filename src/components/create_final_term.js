@@ -201,23 +201,40 @@ class CreateFinalTermForm extends Component{
         <Field
           name="loanSize"
           label="Final Loan Size"
-          size="col-xs-4 col-md-4"
+          size="col-xs-6 col-md-6"
           component={this.renderField}
         />
         <Field
+          name="loanStructure"
+          label="Loan Structure"
+          size="col-xs-6 col-md-6"
+          component={this.renderField}
+        />
+      </div>
+      <br/>
+      <div className={`row`}>
+        <Field
           name="upfrontFee"
           label="Final OID / Upfront Fee (%)"
-          size="col-xs-4 col-md-4"
+          size="col-xs-6 col-md-6"
           component={this.renderField}
         />
         <Field
           name="maturity"
           label="Final Maturity (years)"
-          size="col-xs-4 col-md-4"
+          size="col-xs-6 col-md-6"
           component={this.renderField}
         />
       </div>
       <br/>
+      <div className={`row`}>
+        <Field
+          name="warrants"
+          label="Warrants"
+          size="col-xs-12 col-md-12"
+          component={this.renderField}
+        />
+      </div>
 
       <div className={`row`}>
         <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
@@ -492,6 +509,8 @@ function mapStateToProps(state) {
       upfrontFee : ioi.upfrontFee,
       pikIntreset : ioi.pikIntreset,
       cashInterest : ioi.cashInterest,
+      loanStructure : ioi.loanStructure,
+      warrants : ioi.warrants,
       year1 : ioi.year1,
       year2 : ioi.year2,
       year3 : ioi.year3,

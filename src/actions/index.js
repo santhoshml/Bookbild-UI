@@ -81,6 +81,20 @@ const USE_CACHE = false;
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
+export function sendAMsgFromAdminWithCompanyIdAndCompanyName(props){
+  const request=axios({
+    url : '/sendAMsgFromAdminWithCompanyIdAndCompanyName',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: SEND_MSG_FROM_ADMIN,
+    payload: request
+  }
+}
+
 export function revokeIOI(ioiId){
   // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
   const request=axios({

@@ -8,6 +8,21 @@ import numeral from 'numeral';
 import roundTo from 'round-to';
 import ioi_list from '../components/ioi_list';
 
+
+
+exports.getMsgNameForAccess = function(type){
+  if(type === constants.KEY_ACCESS_CONTROL_DEAL_TEAM){
+    return constants.MESSAGES.ACCESS_DEAL_TEAM;
+  } else if(type === constants.KEY_ACCESS_CONTROL_QCOMPLIANCE){
+    return constants.MESSAGES.ACCESS_QUATERLY_COMPLIANCE;
+  } else if(type === constants.KEY_ACCESS_CONTROL_DOCUMENTS){
+    return constants.MESSAGES.ACCESS_DOCUMENTS;
+  } else if(type === constants.KEY_ACCESS_CONTROL_WGL){
+    return constants.MESSAGES.ACCESS_WGL;
+  } 
+  return null;
+}
+
 exports.formatCurrencyToDisplay=function(amt){
   return numeral(amt).format('($0,0.00)');
 }
@@ -212,6 +227,8 @@ exports.getProductCategories = function(ioiList, companyList){
 }
 
 exports.getCompanyNameById = function(id, cmpyList){
+  // console.log('id :'+id);
+  // console.log('cmpyList :'+ JSON.stringify(cmpyList));
   for(let company of cmpyList){
     if(company.companyId === id)
       return company.companyName;

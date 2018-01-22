@@ -5,10 +5,12 @@ import { Link } from 'react-router-dom';
 import DisplayTermSheetList from './display_finalTerm_list';
 import { fetchFinalTermListForLenderCompany
   , fetchFinalTermListForBorrowerCompany
-  , fetchFinalTermListForRFPAction } from '../actions/index';
+  , fetchFinalTermListForRFPAction
+  , fetchRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import cUtils from '../utils/common_utils';
+import ioiUtils from '../utils/ioi_utils';
 import constants from '../utils/constants';
 import NavBar from './sidebar';
 import Header from './header';
@@ -28,6 +30,7 @@ class FinalTermList extends Component{
     // console.log('companyId :'+JSON.stringify(company));
     if(this.props.match.params.type === constants.FT_FOR_RFP){
       this.props.fetchFinalTermListForRFPAction(this.props.match.params.id);
+      this.props.fetchRFPAction(this.props.match.params.id);
       displayMinimalData = false;
     } else if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
       this.props.fetchFinalTermListForLenderCompany(company.companyId);
@@ -41,6 +44,24 @@ class FinalTermList extends Component{
       user : user,
       displayMinimalData : displayMinimalData
     });
+  }
+
+  componentWillReceiveProps(nextProps){
+    // console.log('I am in componentWillReceiveProps');
+    if(this.props.match.params.type === constants.FT_FOR_RFP
+      && nextProps.finalTermList 
+      && nextProps.finalTermList != this.props.finalTermList
+      && nextProps.rfp ){
+        // console.log('will build the clubdeal section');
+        let clubDealList = ioiUtils.makeClubDealList(nextProps.finalTermList, nextProps.rfp);
+        this.setState({
+          clubDealList : clubDealList
+        });
+      } else {
+        this.setState({
+          clubDealList : null
+        });
+      }
   }
 
   displayProductCategory(){
@@ -86,6 +107,41 @@ class FinalTermList extends Component{
     });
   }
 
+  updateWithBlendedCost(){
+    // console.log('this.props.finalTermList :'+ JSON.stringify(this.props.finalTermList))
+    for(let i=0; i<this.props.finalTermList.length; i++){
+      let blendedCostStr = [];      
+      let fTerm = this.props.finalTermList[i];
+      for(let j=0; j< this.state.clubDealList.length; j++){
+        if(this.inClubDeal(fTerm.createdByCompanyId, this.state.clubDealList[j])){
+          blendedCostStr.push({
+            yield : cUtils.formatPercentToDisplay(this.state.clubDealList[j].yield),
+            otherLender : this.getOtherLenderFromClubDeal(fTerm.createdByCompanyId, this.state.clubDealList[j])
+          });
+        }
+      }
+      this.props.finalTermList[i].blendedCost = blendedCostStr;
+    }
+  }
+
+  getOtherLenderFromClubDeal(cId, cDeal){
+    let otherLender=cDeal.lenders[0];
+    if(cDeal.lenders[0] === cId)
+      otherLender = cDeal.lenders[1];
+    
+    for(let i=0; i< this.props.finalTermCompanyList.length; i++){
+      if(this.props.finalTermCompanyList[i].companyId === otherLender)
+        return this.props.finalTermCompanyList[i].companyName;
+    }
+    return null;
+  }
+
+  inClubDeal(cId, cDeal){
+    if(cDeal.lenders[0] === cId || cDeal.lenders[1] === cId)
+      return true;
+    return false;
+  }
+  
   displayFinalTermList(){
     if(!this.props.finalTermList || this.props.finalTermList.length === 0){
       return (
@@ -106,9 +162,16 @@ class FinalTermList extends Component{
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = cUtils.getCompanyNameById(this.props.finalTermList[i].createdByCompanyId
               , this.props.finalTermCompanyList);
+          console    
         }
       }
 
+      if(this.props.match.params.type === constants.FT_FOR_RFP 
+        && this.state.clubDealList 
+        && this.state.clubDealList.length > 0){
+        this.updateWithBlendedCost();
+      }      
+      // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
       return(
         <div>
           <DisplayTermSheetList
@@ -120,7 +183,59 @@ class FinalTermList extends Component{
     }
   }
 
+  displayClubDealData(){
+    if(this.state.clubDealList){
+      return this.state.clubDealList.map((cDeal) =>{
+        return(
+          <tr key={JSON.stringify(cDeal.lenders)}>
+            <td>{this.displayLendersInClubDeal(cDeal.lenders)}</td>
+            <td>{cUtils.formatCurrencyToDisplayAsElement(cDeal.loanSize)}</td>
+            <td>{cUtils.formatPercentToDisplayAsElement(cDeal.yield)}</td>
+          </tr>
+        );
+      });
+    }
+  }
+
+  displayLendersInClubDeal(list){
+    // console.log('this.props.finalTermCompanyList :'+JSON.stringify(this.props.finalTermCompanyList));
+    let lName=null;
+    for(let i=0; i<this.props.finalTermCompanyList.length; i++){
+      if(this.props.finalTermCompanyList[i].companyId === list[0]
+        || this.props.finalTermCompanyList[i].companyId === list[1]){
+        // console.log('yoyo, i='+i);
+        if(!lName) lName=this.props.finalTermCompanyList[i].companyName;
+        else lName=lName+', '+this.props.finalTermCompanyList[i].companyName
+      }
+    }
+    return lName;
+  }
+
+  displayClubDealList(){
+    // console.log('In displayClubDealList');
+    return(
+      <div>
+        <h3>Potential Club Pairings</h3>
+        <p>Below is the list of possible club deals with yield and loan size</p>
+        <br/>
+        <table className='table table-bordered table-striped'>
+          <thead>
+            <tr>
+              <th>Club Participants</th>
+              <th>Total Debt Provided</th>
+              <th>Blended Cost of Capital</th>
+            </tr>
+          </thead>
+          <tbody>
+            {this.displayClubDealData()}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
   render(){
+    // console.log('I am in render');
     return(
       <div>
         <Header/>
@@ -131,14 +246,12 @@ class FinalTermList extends Component{
             <div>
               <h3>Comparative Analytics - Final Lender Terms</h3>
             </div>
-            {
-              // this.displayProductCategory()
-            }
             <br/>
             <br/>
             {this.displayFinalTermList()}
             <br/>
             <br/>
+            {this.displayClubDealList()}
             <br/>
             <br/>
             <br/>
@@ -160,6 +273,11 @@ function mapStateToProps(state) {
       rObject.finalTermCompanyList = state.finalTermList.finalTermCompanyList;
     }
 
+    if(state.rfpList.rfpList){
+      rObject.rfp = state.rfpList.rfpList[0];
+    }
+
+    // console.log('rObject :'+ JSON.stringify(rObject));
     return rObject;
 }
 
@@ -167,7 +285,8 @@ function mapDispatchToProps(dispatch) {
   return bindActionCreators({
     fetchFinalTermListForLenderCompany    : fetchFinalTermListForLenderCompany,
     fetchFinalTermListForBorrowerCompany  : fetchFinalTermListForBorrowerCompany,
-    fetchFinalTermListForRFPAction        : fetchFinalTermListForRFPAction
+    fetchFinalTermListForRFPAction        : fetchFinalTermListForRFPAction,
+    fetchRFPAction : fetchRFPAction
   }, dispatch);
 }
 

@@ -1,6 +1,12 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { getLinkDocsWithLinkIdAction, getLinkDocsWithRFPAndIOIAction, uploadDocumentRequest, getLinksWithCompanyIdAction, deleteLinkDocumentAction, downloadLinkDocumentAction } from '../actions/index';
+import { getLinkDocsWithLinkIdAction
+	, getLinkDocsWithRFPAndIOIAction
+	, uploadDocumentRequest
+	, getLinksWithCompanyIdAction
+	, deleteLinkDocumentAction
+	, downloadLinkDocumentAction
+	, sendAMsgFromAdminWithCompanyId } from '../actions/index';
 import { Link } from "react-router-dom";
 import validator from 'validator';
 import lsUtils from '../utils/ls_utils';
@@ -49,11 +55,12 @@ class DisplayDocumentTabs extends Component{
 	handleFileUpload(type, inputFiles) {
 		// console.log('In handleFileUpload, type:'+type);
 		// console.log('this.state:'+JSON.stringify(this.state));
+		let that = this;
 		inputFiles.persist();
 		var files = inputFiles.currentTarget.files;
+		let file = null;
 		if(files && files.length > 0){
-			let that = this;
-		  let file = files[0];
+			file = files[0];
 		  this.props.uploadDocumentRequest({
 		    file,
 		    type	: type,
@@ -62,7 +69,23 @@ class DisplayDocumentTabs extends Component{
 			linkId 	: this.props.link.linkId,
 			uploadedCompanyId : this.state.user.companyId
 		  }).then((data)=>{
-			  	// console.log('file upload completed');
+				  // console.log('file upload completed');
+				// send a msg that a file is been uploaded
+				let bProps = {
+					companyId : that.props.link.borrowerCompanyId,
+					msg : constants.MESSAGES.FILE_UPLOADED,
+					FILENAME : file.name
+				};
+				that.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+				// send a msg to lender
+				let lProps = {
+					companyId : that.props.link.lenderCompanyId,
+					msg : constants.MESSAGES.FILE_UPLOADED,
+					FILENAME : file.name
+				};
+				that.props.sendAMsgFromAdminWithCompanyId(lProps);
+
 				that.props.getLinkDocsWithLinkIdAction(that.props.link.linkId);
 				that.myFileInput=null;
 			});
@@ -262,7 +285,8 @@ function mapDispatchToProps(dispatch) {
 		deleteLinkDocumentAction	: deleteLinkDocumentAction,
 		downloadLinkDocumentAction	: downloadLinkDocumentAction,
 		getLinkDocsWithRFPAndIOIAction	: getLinkDocsWithRFPAndIOIAction,
-		getLinkDocsWithLinkIdAction : getLinkDocsWithLinkIdAction
+		getLinkDocsWithLinkIdAction : getLinkDocsWithLinkIdAction,
+		sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
   }, dispatch);
 }
 
