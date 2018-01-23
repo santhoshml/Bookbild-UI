@@ -12,6 +12,7 @@ import Datetime from "react-datetime";
 import numeral from "numeral";
 import NavBar from './sidebar';
 import Header from './header';
+import { ToastContainer, toast } from 'react-toastify';
 
 const categoryOptions = ['Open', 'ABL', 'Cash Flow'];
 const productOptions = ['Revolver', 'Term Loan', 'Mezzanine', 'Multi-Tranche', 'Uni-Tranche'];
@@ -30,9 +31,9 @@ class CreateRFPForm extends Component {
 
     this.setState({
       type : this.props.match.params.type,
-      renderCollateral :false,
       user : user,
-      company : company
+      company : company,
+      showCollateral : false
     });    
   }
 
@@ -48,43 +49,50 @@ class CreateRFPForm extends Component {
       values.createdByCompanyId=this.state.user.companyId;
       values.numOfIOI = this.props.numOfIOI; // I don't know what todo with this
 
-      if(values.category.toUpperCase() !== 'ABL'){
-        //erase the values in Collateral
-        values.acctRecvGrossAmt  = '';
-        values.acctRecvComment   = '';
-        values.invtryGrossAmt    = '';
-        values.invtryComment     = '';
-        values.ppeGrossAmt       = '';
-        values.ppeComment        = '';
-        values.maeGrossAmt       = '';
-        values.maeComment        = '';
-        values.realEstGrossAmt   = '';
-        values.realEstComment    = '';
-        values.otherGrossAmt     = '';
-        values.otherComment      = '';
-      }
-
+      // if(values.category.toUpperCase() !== 'ABL'){
+      //   //erase the values in Collateral
+      //   values.acctRecvGrossAmt  = '';
+      //   values.acctRecvComment   = '';
+      //   values.invtryGrossAmt    = '';
+      //   values.invtryComment     = '';
+      //   values.ppeGrossAmt       = '';
+      //   values.ppeComment        = '';
+      //   values.maeGrossAmt       = '';
+      //   values.maeComment        = '';
+      //   values.realEstGrossAmt   = '';
+      //   values.realEstComment    = '';
+      //   values.otherGrossAmt     = '';
+      //   values.otherComment      = '';
+      // }
       
       let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
       values.createdByContactId = this.state.user.contactId;
       // console.log('values before creating RFP :'+ JSON.stringify(values));
       this.props.createRFPAction(values)
         .then((data) => {
-          // console.log('rfp created : '+ JSON.stringify(data));
-          let mProps = {
-            companyId : that.state.company.companyId,
-            msg : constants.MESSAGES.RFP_CREATED,
-            ID : data.payload.data.data
-          };
-          this.props.sendAMsgFromAdminWithCompanyId(mProps);
-          this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-          // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+            // console.log('rfp created : '+ JSON.stringify(data));
+            let mProps = {
+              companyId : that.state.company.companyId,
+              msg : constants.MESSAGES.RFP_CREATED,
+              ID : data.payload.data.data
+            };
+            this.props.sendAMsgFromAdminWithCompanyId(mProps);
+            this.props.history.push({
+              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+              state : constants.NOTIFICATIONS.CREATE_RFP_SUCCESS
+            });
+            // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+          } else {
+            toast(constants.NOTIFICATIONS.CREATE_RFP_FAILED, {
+              className : "notification-error"
+            });                
+          }
       });
       
     }
 
   displayABLDetails(){
-    if(this.state.renderCollateral && this.state.renderCollateral === true){
       return(<div className="div-border">
         <h4 className="display-center">Collateral</h4>
         <br/>
@@ -192,7 +200,6 @@ class CreateRFPForm extends Component {
         </div>
         <br/>
       </div>);
-    }
   }
 
   renderField(field) {
@@ -293,18 +300,12 @@ class CreateRFPForm extends Component {
         })}
       </div>
 		);
-	}
-
-  onBlurCategory(values){
-    if(values.currentTarget.value === 'ABL'){
-      this.setState({
-        'renderCollateral' : true
-      });
-    } else {
-      this.setState({
-        'renderCollateral' : false
-      });
-    }
+  }
+  
+  flipCollateralLink(){
+    this.setState({
+      showCollateral : !this.state.showCollateral
+    });
   }
 
   render() {
@@ -312,6 +313,7 @@ class CreateRFPForm extends Component {
     const { handleSubmit } = this.props;
     return (
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
@@ -354,7 +356,6 @@ class CreateRFPForm extends Component {
                 <Field
                   label="Category"
                   name="category"
-                  onBlur={this.onBlurCategory.bind(this)}
                   size="col-xs-6 col-md-6"
                   component={this.renderDropdown}
                   options={categoryOptions}
@@ -367,7 +368,6 @@ class CreateRFPForm extends Component {
                   options={productOptions}
                 />
               </div>
-              {this.displayABLDetails()}
               <div className={`row`}>
                 <Field
                   label="Sector"
@@ -431,6 +431,9 @@ class CreateRFPForm extends Component {
                   options={sponsoredOptions}
                 />
               </div>
+              <br/>
+              <h3><a onClick={this.flipCollateralLink.bind(this)} href="#">Click here to enter data for Collateral</a></h3>
+              {this.state.showCollateral ? this.displayABLDetails() : ''}
               <br/>
               <hr/>
               <h3>Company Management Contact</h3>

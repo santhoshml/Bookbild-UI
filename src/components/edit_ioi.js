@@ -13,6 +13,7 @@ import NumberFormat from 'react-number-format';
 import Select from 'react-select';
 import Header from './header';
 import { connect } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
@@ -125,24 +126,33 @@ class EditIOIForm extends Component{
     props.createdByCompanyId = this.state.company.companyId;
 
     this.props.updateIOIAction(props)
-      .then(() => {
-        // send a msg to lender's company
-        let lProps = {
-          companyId : that.state.user.companyId,
-          msg : constants.MESSAGES.IOI_EDITED,
-          ID : that.props.initialValues.ioiId
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(lProps);
+      .then((data) => {
+        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+          // send a msg to lender's company
+          let lProps = {
+            companyId : that.state.user.companyId,
+            msg : constants.MESSAGES.IOI_EDITED,
+            ID : that.props.initialValues.ioiId
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
-        // now send msg to the borrower's company
-        let bProps={
-          companyId : this.state.rfp.createdByCompanyId,
-          msg : constants.MESSAGES.IOI_EDITED,
-          ID : that.props.initialValues.ioiId
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(bProps);
+          // now send msg to the borrower's company
+          let bProps={
+            companyId : this.state.rfp.createdByCompanyId,
+            msg : constants.MESSAGES.IOI_EDITED,
+            ID : that.props.initialValues.ioiId
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(bProps);
 
-        that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          that.props.history.push({
+            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+            state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+          });
+        } else {
+          toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
+            className : "notification-error"
+          });
+        }
     });
 	}
 
@@ -449,6 +459,7 @@ class EditIOIForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

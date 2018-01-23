@@ -23,6 +23,7 @@ import { connect } from "react-redux";
 import JSAlert from "js-alert";
 import dateFormat from 'dateformat';
 import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
 
 
 class CreateFinalTermForm extends Component{
@@ -137,23 +138,32 @@ class CreateFinalTermForm extends Component{
         // console.log('will make createFinalTermAction call :'+JSON.stringify(props));
         that.props.createFinalTermAction(props)
         .then((data) => {
-          // send a msg to lender's company
-          let lProps = {
-            companyId : that.state.user.companyId,
-            msg : constants.MESSAGES.FINAL_TERM_CREATED_LENDER,
-            ID : data.payload.data.data
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(lProps);
+          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
+            // send a msg to lender's company
+            let lProps = {
+              companyId : that.state.user.companyId,
+              msg : constants.MESSAGES.FINAL_TERM_CREATED_LENDER,
+              ID : data.payload.data.data
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
-          // now send msg to the borrower's company
-          let bProps={
-            companyId : that.state.rfp.createdByCompanyId,
-            msg : constants.MESSAGES.FINAL_TERM_CREATED_BORROWER,
-            ID : data.payload.data.data
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(bProps);
+            // now send msg to the borrower's company
+            let bProps={
+              companyId : that.state.rfp.createdByCompanyId,
+              msg : constants.MESSAGES.FINAL_TERM_CREATED_BORROWER,
+              ID : data.payload.data.data
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(bProps);
 
-          that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            that.props.history.push({
+              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+              state : constants.NOTIFICATIONS.CREATE_FINAL_TERM_SUCCESS
+            });
+          } else {
+            toast(constants.NOTIFICATIONS.CREATE_FINAL_TERM_FAILED, {
+              className : "notification-error"
+            });    
+          }
         });
       }
     });
@@ -458,6 +468,7 @@ class CreateFinalTermForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

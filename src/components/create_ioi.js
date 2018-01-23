@@ -13,6 +13,7 @@ import NumberFormat from 'react-number-format';
 import Select from 'react-select';
 import Header from './header';
 import { connect } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
@@ -120,23 +121,32 @@ class CreateIOIForm extends Component{
     props.createdByContactId = this.state.user.contactId;
     this.props.createIOIAction(props)
       .then((data) => {
-        // send a msg to lender's company
-        let lProps = {
-          companyId : that.state.user.companyId,
-          msg : constants.MESSAGES.IOI_CREATED_LENDER,
-          ID : data.payload.data.data
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(lProps);
+        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+          // send a msg to lender's company
+          let lProps = {
+            companyId : that.state.user.companyId,
+            msg : constants.MESSAGES.IOI_CREATED_LENDER,
+            ID : data.payload.data.data
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
-        // now send msg to the borrower's company
-        let bProps={
-          companyId : this.state.rfp.createdByCompanyId,
-          msg : constants.MESSAGES.IOI_CREATED_BORROWER,
-          ID : data.payload.data.data
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(bProps);
-        
-        that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          // now send msg to the borrower's company
+          let bProps={
+            companyId : this.state.rfp.createdByCompanyId,
+            msg : constants.MESSAGES.IOI_CREATED_BORROWER,
+            ID : data.payload.data.data
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(bProps);
+          
+          that.props.history.push({
+            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+            state : constants.NOTIFICATIONS.CREATE_IOI_SUCCESS
+          });
+        } else {
+          toast(constants.NOTIFICATIONS.CREATE_IOI_FAILED, {
+            className : "notification-error"
+          });  
+        }
       });
 	}
 
@@ -435,6 +445,7 @@ class CreateIOIForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

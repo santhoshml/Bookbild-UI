@@ -10,6 +10,7 @@ import constants from '../utils/constants';
 import NavBar from './sidebar';
 import Header from './header';
 
+
 class RFPFavoriteList extends Component{
   constructor(props){
     super(props);

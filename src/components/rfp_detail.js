@@ -18,6 +18,7 @@ import moment from 'moment';
 import NavBar from './sidebar';
 import Header from './header';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import { ToastContainer, toast } from 'react-toastify';
 
 class RFPDetail extends Component{
   constructor(props){
@@ -82,6 +83,16 @@ class RFPDetail extends Component{
     }
   }
 
+  displayCompanyName(){
+    let {rfp} = this.state;
+    if(rfp.createdByCompanyId === this.state.user.companyId){
+      return(<tr>
+        <td>Company Name</td>
+        <td>{rfp.companyName}</td>
+        </tr>);
+    }
+  }
+
   displayOutstandingRFP(){
     let rfp = this.state.rfp;
     if(rfp){
@@ -94,6 +105,7 @@ class RFPDetail extends Component{
                 <td>Status</td>
                 <td>{cUtils.computeStatus(rfp.expiryDt)}</td>
               </tr>
+              {this.displayCompanyName()}
               <tr>
                 <td>Deal Size</td>
                 <td>{cUtils.formatCurrencyToDisplay(rfp.dealSize)}</td>
@@ -182,8 +194,17 @@ class RFPDetail extends Component{
       contactId : this.state.user.contactId
     };
     this.props.removeRFPFromFavoritesAction(props)
-      .then(() => {
-        this.setState({isFavorite : false, favorite : null})
+      .then((data) => {
+        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+          toast(constants.NOTIFICATIONS.REMOVE_FROM_FAVORITES_SUCCESS, {
+            className : "notification-success"
+          });
+          this.setState({isFavorite : false, favorite : null})
+        } else {
+          toast(constants.NOTIFICATIONS.REMOVE_FROM_FAVORITES_FAILED, {
+            className : "notification-error"
+          });          
+        }
       });
   }
 
@@ -195,8 +216,18 @@ class RFPDetail extends Component{
       contactId : this.state.user.contactId
     };
     this.props.addRFPToFavoritesAction(props)
-      .then(() => {
-        this.setState({isFavorite : true, favorite : this.state.favorite})
+      .then((data) => {
+        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+          toast(constants.NOTIFICATIONS.ADD_TO_FAVORITES_SUCCESS, {
+            className : "notification-success"
+          });
+          this.props.getRFPFromFavoritesAction(this.state.user.userId, this.props.match.params.id)
+          this.setState({isFavorite : true, favorite : this.state.favorite})
+        }else {
+          toast(constants.NOTIFICATIONS.ADD_TO_FAVORITES_FAILED, {
+            className : "notification-error"
+          });
+        }
       });
   }
 
@@ -377,6 +408,7 @@ class RFPDetail extends Component{
     // console.log('In render :'+ JSON.stringify(this.state.rfp));
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>          
           <NavBar history={this.props.history}/>

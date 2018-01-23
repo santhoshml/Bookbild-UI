@@ -24,6 +24,7 @@ import { connect } from "react-redux";
 import JSAlert from "js-alert";
 import dateFormat from 'dateformat';
 import moment from 'moment';
+import { ToastContainer, toast } from 'react-toastify';
 
 class EditFinalTermForm extends Component{
 
@@ -134,23 +135,32 @@ class EditFinalTermForm extends Component{
     props.finalTermId = this.props.initialValues.finalTermId;
     // console.log('edit final Term:'+JSON.stringify(props));
     this.props.updateFinalTermAction(props)
-      .then(() => {
-        // send a msg to lender's company
-        let lProps = {
-          companyId : that.state.user.companyId,
-          msg : constants.MESSAGES.FINAL_TERM_EDITED,
-          ID : that.props.initialValues.finalTermId
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(lProps);
+      .then((data) => {
+        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+          // send a msg to lender's company
+          let lProps = {
+            companyId : that.state.user.companyId,
+            msg : constants.MESSAGES.FINAL_TERM_EDITED,
+            ID : that.props.initialValues.finalTermId
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
-        // now send msg to the borrower's company
-        let bProps={
-          companyId : this.state.rfp.createdByCompanyId,
-          msg : constants.MESSAGES.FINAL_TERM_EDITED,
-          ID : that.props.initialValues.finaltermId
-        };
-        that.props.sendAMsgFromAdminWithCompanyId(bProps);
-        this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+          // now send msg to the borrower's company
+          let bProps={
+            companyId : this.state.rfp.createdByCompanyId,
+            msg : constants.MESSAGES.FINAL_TERM_EDITED,
+            ID : that.props.initialValues.finaltermId
+          };
+          that.props.sendAMsgFromAdminWithCompanyId(bProps);
+          this.props.history.push({
+            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+            state : constants.NOTIFICATIONS.EDIT_FINAL_TERM_SUCCESS
+          });
+        } else {
+          toast(constants.NOTIFICATIONS.EDIT_FINAL_TERM_FAILED, {
+            className : "notification-error"
+          });  
+        }
     });
 	}
 
@@ -436,6 +446,7 @@ class EditFinalTermForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

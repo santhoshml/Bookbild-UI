@@ -8,6 +8,7 @@ import * as actionCreators from '../actions/index';
 import constants from '../utils/constants';
 import Header from './header';
 import { connect } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 
 const stateOptions = ['Alabama','Alaska','Arizona','Arkansas','California','Colorado','Connecticut','Delaware','District Of Columbia','Florida','Georgia','Hawaii','Idaho','Illinois','Indiana','Iowa','Kansas','Kentucky','Louisiana','Maine','Maryland','Massachusetts','Michigan'
 	,'Minnesota','Mississippi','Missouri','Montana','Nebraska','Nevada','New Hampshire','New Jersey','New Mexico','New York','North Carolina','North Dakota','Ohio','Oklahoma','Oregon','Pennsylvania','Rhode Island'
@@ -19,11 +20,18 @@ class RegisterCompanyForm extends Component{
 		let that = this;
 		// console.log('In RegisterCompanyForm, props:'+JSON.stringify(props));
 		this.props.registerCompanyAction(props)
-		 .then(() => {
-			 // blog post has been created, navigate the user to the index
-			 // We navigate by calling this.context.router.push with the
-			 // new path to navigate to.
-			 that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+		 .then((data) => {
+			if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+				that.props.history.push({
+					pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+					state : constants.NOTIFICATIONS.REGISTER_COMPANY_SUCCESS
+				});
+			} else {
+				that.props.history.push({
+					pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+					state : constants.NOTIFICATIONS.REGISTER_COMPANY_FAILED
+				});
+			}
 		 });
 	}
 
@@ -93,6 +101,7 @@ class RegisterCompanyForm extends Component{
 
 		return (
 				<div>
+					<ToastContainer />
 					<Header/>
 					<div style={{ display: 'flex' }}>
 						<NavBar history={this.props.history}/>			

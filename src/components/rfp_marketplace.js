@@ -12,7 +12,7 @@ import formatCurrency from 'format-currency';
 import Dropdown from 'react-dropdown'
 import NavBar from './sidebar';
 import Header from './header';
-
+import { ToastContainer, toast } from 'react-toastify';
 
 class RFPMarketPlace extends Component{
   constructor(props){
@@ -30,6 +30,15 @@ class RFPMarketPlace extends Component{
     this.setState({
       selectedSector : {value:'overall', label:'All Sectors'}
     });
+  }
+
+  componentDidMount(){
+    if(this.props.location.state){
+      // console.log('this.props.location.state :'+this.props.location.state);
+      toast(this.props.location.state, {
+        className : "notification-success"
+      });
+    }
   }
 
   onTermSheetActivityChange(option){
@@ -163,6 +172,7 @@ class RFPMarketPlace extends Component{
   render(){
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

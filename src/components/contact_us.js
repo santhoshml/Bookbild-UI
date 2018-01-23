@@ -9,6 +9,7 @@ import Header from './header';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
 import * as actionCreators from '../actions/index';
+import { ToastContainer, toast } from 'react-toastify';
 
 class ContactUsForm extends Component{
 
@@ -62,14 +63,17 @@ class ContactUsForm extends Component{
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
         // console.log('email sent successfully');
          this.props.reset();
-         this.setState({
-           'message' : 'Thank you for contacting us. We will contact you soon on this. '
-         });
+         toast(constants.NOTIFICATIONS.CONTACTUS_SUCCESS, {
+					className : "notification-success"
+				});
+        //  this.setState({
+        //    'message' : 'Thank you for contacting us. We will contact you soon on this. '
+        //  });
 			 } else {
         // console.log('could not send email');
-        this.setState({
-          message : 'Error sending the email. Please try again.'
-        });
+				toast(constants.NOTIFICATIONS.CONTACTUS_FAILED, {
+					className : "notification-error"
+				});
 			 }
 		 });
   }
@@ -89,6 +93,7 @@ class ContactUsForm extends Component{
 
 		return (
       <div>
+        <ToastContainer />
         <Header/>
         <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>

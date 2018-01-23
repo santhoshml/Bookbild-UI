@@ -227,3 +227,36 @@ exports.COMPLIANCE_MONTHLY_COLS = [
   { key : '4q', name : '4Q', resizable: true},
   { key : 'fy', name : 'FY', resizable: true}
 ];
+
+// notifications 
+
+exports.NOTIFICATIONS = {
+  LOGIN_FAILED : 'Oops login failed, try again !',
+  ADD_USER_SUCCESS : 'User added successfully.',
+  ADD_USER_FAILED : 'Failed to add user to the platform, try again.',
+  CONTACTUS_FAILED : 'Error sending the email. Please try again.',
+  CONTACTUS_SUCCESS : 'Thanks for sending the email. We received it.',
+  CREATE_FINAL_TERM_SUCCESS : 'Final term sheet created successfully.',
+  CREATE_FINAL_TERM_FAILED : 'Error creating Final term sheet, try again.',
+  CREATE_IOI_SUCCESS : 'IOI created successfully.',
+  CREATE_IOI_FAILED : 'Error creating IOI, try again.',
+  CREATE_RFP_SUCCESS : 'Request for Proposal created successfully.',
+  CREATE_RFP_FAILED : 'Error creating your Request for Proposal, try again.',  
+  EDIT_FINAL_TERM_FAILED : 'Error editing your Final Term sheet, try again.',
+  EDIT_FINAL_TERM_SUCCESS : 'Your Final Term sheet updated.',
+  EDIT_IOI_FAILED : 'Error editing your IOI, try again',
+  EDIT_IOI_SUCCESS : 'Your IOI updated.',
+  EDIT_RFP_FAILED : 'Error editing your Request for Proposal, try again',
+  EDIT_RFP_SUCCESS : 'Your Request for Proposal updated.',
+  INVITE_COMPANY_FAILED : 'Invite Company failed, try again',
+  INVITE_COMPANY_SUCCESS : 'Invite Company email sent',
+  REGISTER_COMPANY_FAILED : 'Register Company failed, try again',
+  REGISTER_COMPANY_SUCCESS : 'Register Company successful',
+  ADD_TO_FAVORITES_SUCCESS : 'Added to your favorites',
+  ADD_TO_FAVORITES_FAILED : 'Error adding to your favorites',
+  REMOVE_FROM_FAVORITES_SUCCESS : 'Removed from your favorites',
+  REMOVE_FROM_FAVORITES_FAILED : 'Error removing from your favorites',
+  USER_PROFILE_SUCCESS : 'User Profile updated.',
+  USER_PROFILE_FAILED : 'Error updating your profile, try again.',
+
+};

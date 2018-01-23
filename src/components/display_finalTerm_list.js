@@ -28,7 +28,6 @@ export default class DisplayFinalTermList extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-
   }
 
   investorRenderer(cell, row){
@@ -164,7 +163,7 @@ export default class DisplayFinalTermList extends Component {
             condensed 
             options={options}
             headerStyle={ { background: '#00ff00' } }
-            tableContainerClass='my-custom-class'>
+            tableContainerClass='display-club-deal'>
               <TableHeaderColumn dataField="createdByCompanyName" isKey={true} dataAlign="center">Investor</TableHeaderColumn>
               <TableHeaderColumn dataField="loanSize" dataFormat={this.loanSizeRenderer} dataSort={true}>Loan Size</TableHeaderColumn>
               <TableHeaderColumn dataField="yield" dataFormat={this.yieldRenderer} dataSort={true}>Yield Est.</TableHeaderColumn>
@@ -187,7 +186,7 @@ export default class DisplayFinalTermList extends Component {
             condensed 
             options={options}
             headerStyle={ { background: '#00ff00' } }
-            tableContainerClass='my-custom-class'>
+            tableContainerClass='display-club-deal'>
               <TableHeaderColumn dataField="createdByCompanyName" isKey={true} dataAlign="center">Investor</TableHeaderColumn>
               <TableHeaderColumn dataField="loanSize" dataFormat={this.loanSizeRenderer} dataSort={true} >Loan Size</TableHeaderColumn>
               <TableHeaderColumn dataField="liborSpread" dataFormat={this.cashIntrestRenderer} dataSort={true} >Interest</TableHeaderColumn>

@@ -11,6 +11,7 @@ import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
 import NavBar from './sidebar';
 import Header from './header';
+import { ToastContainer, toast } from 'react-toastify';
 
 class InviteCompanyForm extends Component{
   constructor(props){
@@ -77,23 +78,29 @@ class InviteCompanyForm extends Component{
   
   onSubmit(props){
     if(this.state.user){
-      values.userEmail = this.state.user.email;
+      props.userEmail = this.state.user.email;
     }
     
     // console.log('values : '+JSON.stringify(values));
-		this.props.sendInviteCompanyEmailAction(values)
+		this.props.sendInviteCompanyEmailAction(props)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
         // console.log('email sent successfully');
          this.props.reset();
+         toast(constants.NOTIFICATIONS.INVITE_COMPANY_SUCCESS, {
+            className : "notification-success"
+          });         
          this.setState({
            'message' : 'Your message sent. Thank you for doing this for us.'
          });
 			 } else {
         // console.log('could not send email');
-        this.setState({
-          message : 'Error sending the email. Please try again.'
-        });
+        toast(constants.NOTIFICATIONS.INVITE_COMPANY_FAILED, {
+					className : "notification-error"
+				});
+        // this.setState({
+        //   message : 'Error sending the email. Please try again.'
+        // });
 			 }
 		 });
   }
@@ -117,6 +124,7 @@ class InviteCompanyForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           {this.state.user ? <NavBar history={this.props.history}/> : ''}

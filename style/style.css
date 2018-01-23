@@ -1,8 +1,23 @@
+/* notification styles */
+.notification-success {
+  background : #BDE5F8;
+  color : #00529B;
+}
+.notification-warning {
+  color: #9F6000;
+  background-color: #FEEFB3;
+}
+.notification-error {
+  color: #D8000C;
+  background-color: #FFD2D2;
+}
+
+
 /* MESSAGING style */
-.my-custom-class{
-font-size : 10px;
-margin-right: -150px;
-margin-left : 1px;
+.display-club-deal{
+  font-size : 10px;
+  margin-right: -150px;
+  margin-left : 1px;
 }
 
 .body-header{

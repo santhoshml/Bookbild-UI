@@ -14,6 +14,7 @@ import Header from './header';
 import Autosuggest from 'react-bootstrap-autosuggest';
 import dateFormat from 'dateformat';
 import ScrollArea from 'react-scrollbar';
+import { CircleLoader } from 'react-spinners';
 
 
 
@@ -29,7 +30,8 @@ class DisplayMessageLinkList extends Component{
     this.props.fetchAllMessagesForAction(user.contactId);
     this.setState({
       user : user,
-      company : company
+      company : company,
+      loading : true
     });
   }
 
@@ -38,6 +40,10 @@ class DisplayMessageLinkList extends Component{
     if(nextProps.msgLinkList && nextProps.msgLinkList != this.props.msgLinkList){
       let msgObject = msgUtils.getMsgListData(nextProps.msgLinkList[0], this.state.user.contactId);
       this.props.setActiveMessage(msgObject.messageId, msgObject.contactNames, msgObject.companyNames);
+
+      this.setState({
+        loading : false
+      });
     }    
   }
 

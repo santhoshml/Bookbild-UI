@@ -10,8 +10,17 @@ import { connect } from "react-redux";
 import RelativeValueTool from './relative_value_tool';
 import * as actionCreators from '../actions/index';
 import { Redirect } from "react-router";
+import { ToastContainer, toast } from 'react-toastify';
+import { CircleLoader } from 'react-spinners';
+
 
 class LoginForm extends Component{
+
+	componentWillMount(){
+		this.setState({
+			loading: false
+		});
+	}
 
 	renderField(field) {
 		const { meta: { touched, error } } = field;
@@ -66,15 +75,23 @@ class LoginForm extends Component{
 				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
 				//  console.log('forwading now');
-
-				 this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+				// toast("Wow login success !")
+				// this.props.history.push({
+				// 	pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+				// 	state : 'this is a test msg'
+				// });
+				
 				//  this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
 			 } else {	// login failed
 				//empty the username and password
 				// resetForm();
-				this.setState({
-					errorObject : data.payload.data
-				})
+				toast(constants.NOTIFICATIONS.LOGIN_FAILED, {
+					className : "notification-error"
+				});
+				// this.setState({
+				// 	errorObject : data.payload.data
+				// })
 			 }
 		 });
 	}
@@ -83,6 +100,7 @@ class LoginForm extends Component{
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 				<div>
+					<ToastContainer />
 					<Header/>
 					<div className="container main-container-left-padding" >
 						<br/>

@@ -980,7 +980,7 @@ export function getRFPFromFavoritesAction(userId, rfpId){
 }
 
 export function removeRFPFromFavoritesAction(props){
-  // console.log('In actions.removeRFPFromFavoritesAction');
+  // console.log('In actions.removeRFPFromFavoritesAction :'+JSON.stringify(props));
   const request=axios({
     url : '/removeRFPFromFavorites',
     method : 'post',

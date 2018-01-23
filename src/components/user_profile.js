@@ -17,6 +17,7 @@ import cUtils from '../utils/common_utils';
 import constants from '../utils/constants';
 import NavBar from './sidebar';
 import Header from './header';
+import { ToastContainer, toast } from 'react-toastify';
 
 // const { DOM: { input, select, textarea } } = React
 
@@ -172,14 +173,24 @@ class UserProfileForm extends Component{
 
     if(promiseArr.length > 0){
       Promise.all(promiseArr)
-      .then(() => {
-        let mProps = {
-          toId : that.state.user.contactId,
-          msg : constants.MESSAGES.PROFILE_UPDATED
-        };
-        this.props.sendAMsgFromAdmin(mProps);
-       	this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-				// this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+      .then((data) => {
+        console.log('data:'+JSON.stringify(data));
+        if(data[0].payload.status === 200 && data[0].payload.data.status === 'SUCCESS'){
+          let mProps = {
+            toId : that.state.user.contactId,
+            msg : constants.MESSAGES.PROFILE_UPDATED
+          };
+          this.props.sendAMsgFromAdmin(mProps);
+           this.props.history.push({
+             pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+             state : constants.NOTIFICATIONS.USER_PROFILE_SUCCESS
+           });
+          // this.props.history.push(constants.ROUTES_MAP.MY_PROFILE); // FOR LOCAL_TESTING
+        } else {
+          toast(constants.NOTIFICATIONS.USER_PROFILE_FAILED, {
+            className : "notification-error"
+          });
+        }
       });
     }
 	}
@@ -193,6 +204,7 @@ class UserProfileForm extends Component{
 
     return(
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>

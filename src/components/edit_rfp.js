@@ -15,6 +15,8 @@ import Datetime from "react-datetime";
 import numeral from "numeral";
 import NavBar from './sidebar';
 import Header from './header';
+import { ToastContainer, toast } from 'react-toastify';
+import { CircleLoader } from 'react-spinners';
 
 const categoryOptions = ['Open', 'ABL', 'Cash Flow'];
 const productOptions = ['Revolver', 'Term Loan', 'Mezzanine', 'Multi-Tranche', 'Uni-Tranche'];
@@ -35,9 +37,10 @@ class EditRFPForm extends Component {
 
     this.setState({
       type : this.props.match.params.type,
-      renderCollateral :false,
       user : user,
-      company : company
+      company : company,
+      loading : true,
+      showCollateral : false
     });    
   }
 
@@ -53,21 +56,21 @@ class EditRFPForm extends Component {
       values.createdByCompanyId=this.state.user.companyId;
       values.numOfIOI = this.props.numOfIOI; // I don't know what todo with this
 
-      if(values.category.toUpperCase() !== 'ABL'){
-        //erase the values in Collateral
-        values.acctRecvGrossAmt  = '';
-        values.acctRecvComment   = '';
-        values.invtryGrossAmt    = '';
-        values.invtryComment     = '';
-        values.ppeGrossAmt       = '';
-        values.ppeComment        = '';
-        values.maeGrossAmt       = '';
-        values.maeComment        = '';
-        values.realEstGrossAmt   = '';
-        values.realEstComment    = '';
-        values.otherGrossAmt     = '';
-        values.otherComment      = '';
-      }
+      // if(values.category.toUpperCase() !== 'ABL'){
+      //   //erase the values in Collateral
+      //   values.acctRecvGrossAmt  = '';
+      //   values.acctRecvComment   = '';
+      //   values.invtryGrossAmt    = '';
+      //   values.invtryComment     = '';
+      //   values.ppeGrossAmt       = '';
+      //   values.ppeComment        = '';
+      //   values.maeGrossAmt       = '';
+      //   values.maeComment        = '';
+      //   values.realEstGrossAmt   = '';
+      //   values.realEstComment    = '';
+      //   values.otherGrossAmt     = '';
+      //   values.otherComment      = '';
+      // }
 
       let promiseArr = [];
       let initValues = this.props.initialValues;
@@ -133,20 +136,27 @@ class EditRFPForm extends Component {
         if(promiseArr.length > 0){
           Promise.all(promiseArr)
           .then((data)=> {
-            let mProps = {
-              companyId : that.state.company.companyId,
-              msg : constants.MESSAGES.RFP_UPDATED,
-              ID : that.props.initialValues.rfpId
-            };
-            this.props.sendAMsgFromAdminWithCompanyId(mProps);
-            NotificationManager.info("RFP updated.");
-            this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+            if(data[0].payload.status === 200 && data[0].payload.data.status === 'SUCCESS'){
+              let mProps = {
+                companyId : that.state.company.companyId,
+                msg : constants.MESSAGES.RFP_UPDATED,
+                ID : that.props.initialValues.rfpId
+              };
+              this.props.sendAMsgFromAdminWithCompanyId(mProps);
+              this.props.history.push({
+                pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+                state : constants.NOTIFICATIONS.EDIT_RFP_SUCCESS
+              });
+            } else {
+              toast(constants.NOTIFICATIONS.EDIT_RFP_FAILED, {
+                className : "notification-error"
+              });
+            }
           });
         }
     }
 
   displayABLDetails(){
-    if(this.state.renderCollateral && this.state.renderCollateral === true){
       return(<div className="div-border">
         <h4 className="display-center">Collateral</h4>
         <br/>
@@ -254,7 +264,6 @@ class EditRFPForm extends Component {
         </div>
         <br/>
       </div>);
-    }
   }
 
   renderField(field) {
@@ -357,16 +366,10 @@ class EditRFPForm extends Component {
 		);
 	}
 
-  onBlurCategory(values){
-    if(values.currentTarget.value === 'ABL'){
-      this.setState({
-        'renderCollateral' : true
-      });
-    } else {
-      this.setState({
-        'renderCollateral' : false
-      });
-    }
+  flipCollateralLink(){
+    this.setState({
+      showCollateral : !this.state.showCollateral
+    });
   }
 
   render() {
@@ -374,6 +377,7 @@ class EditRFPForm extends Component {
     const { handleSubmit } = this.props;
     return (
       <div>
+        <ToastContainer />
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
@@ -416,7 +420,6 @@ class EditRFPForm extends Component {
                 <Field
                   label="Category"
                   name="category"
-                  onBlur={this.onBlurCategory.bind(this)}
                   size="col-xs-6 col-md-6"
                   component={this.renderDropdown}
                   options={categoryOptions}
@@ -429,7 +432,6 @@ class EditRFPForm extends Component {
                   options={productOptions}
                 />
               </div>
-              {this.displayABLDetails()}
               <div className={`row`}>
                 <Field
                   label="Sector"
@@ -493,6 +495,9 @@ class EditRFPForm extends Component {
                   options={sponsoredOptions}
                 />
               </div>
+              <br/>
+              <h3><a onClick={this.flipCollateralLink.bind(this)} href="#">Click here to enter data for Collateral</a></h3>
+              {this.state.showCollateral ? this.displayABLDetails() : ''}
               <br/>
               <hr/>
               <h3>Company Management Contact</h3>

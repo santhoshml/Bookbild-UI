@@ -15,6 +15,7 @@ import Autosuggest from 'react-bootstrap-autosuggest';
 import dateFormat from 'dateformat';
 import ScrollArea from 'react-scrollbar';
 import Text from 'react-format-text';
+import { CircleLoader } from 'react-spinners';
 
 
 class DisplayMessage extends Component{
@@ -33,7 +34,8 @@ class DisplayMessage extends Component{
     this.setState({
       user : user,
       company : company,
-      activeMessageId : null
+      activeMessageId : null,
+      loading : true
     });
   }
 
@@ -42,13 +44,15 @@ class DisplayMessage extends Component{
       // console.log('will compose a new msg');
       this.props.fetchAllContactsToMessageAction();
       this.setState({
-        isComposeNewMsg : nextProps.isComposeNewMsg
+        isComposeNewMsg : nextProps.isComposeNewMsg,
+        loading : false
       });
     } else if(nextProps.activeMessageId && nextProps.activeMessageId !== this.state.activeMessageId){
       // console.log('will get msgs list for msgId:'+nextProps.activeMessageId);
       this.props.getMsgListAction(nextProps.activeMessageId);
       this.setState({
-        activeMessageId : nextProps.activeMessageId
+        activeMessageId : nextProps.activeMessageId,
+        loading : false
       });
     }
   }

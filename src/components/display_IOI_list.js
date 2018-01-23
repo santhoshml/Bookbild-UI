@@ -157,7 +157,7 @@ export default class DisplayIOIList extends Component {
             condensed 
             options={options}
             headerStyle={ { background: '#00ff00' } }
-            tableContainerClass='my-custom-class'>
+            tableContainerClass='display-club-deal'>
               <TableHeaderColumn dataField="loanSize" isKey={true} dataFormat={this.loanSizeRenderer} dataSort={true}>Loan Size</TableHeaderColumn>
               <TableHeaderColumn dataField="loanStructure" dataSort={true}>Structure</TableHeaderColumn>
               <TableHeaderColumn dataField="yield" dataFormat={this.yieldRenderer} dataSort={true}>Yield Est.</TableHeaderColumn>
@@ -180,7 +180,7 @@ export default class DisplayIOIList extends Component {
             condensed 
             options={options}
             headerStyle={ { background: '#00ff00' } }
-            tableContainerClass='my-custom-class'>
+            tableContainerClass='display-club-deal'>
               <TableHeaderColumn dataField="createdByCompanyId" isKey={true} dataFormat={this.investorRenderer.bind(this)} width='65px' dataAlign="center">Investor</TableHeaderColumn>
               <TableHeaderColumn dataField="maxDebtAllowed" dataFormat={this.maxDebtRenderer} dataSort={true} width='100px'>Max Debt</TableHeaderColumn>
               <TableHeaderColumn dataField="loanSize" dataFormat={this.loanSizeRenderer} dataSort={true} width='100px'>Loan Size</TableHeaderColumn>

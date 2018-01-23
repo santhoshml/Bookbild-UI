@@ -13,6 +13,7 @@ import constants from '../utils/constants';
 import NavBar from './sidebar';
 import * as actionCreators from '../actions/index';
 import { connect } from "react-redux";
+import { ToastContainer, toast } from 'react-toastify';
 
 const stateOptions = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI'
 ,'MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI'
@@ -130,12 +131,18 @@ class AddUserForm extends Component{
 						toId : data.payload.data.data.contactId,
 						msg : constants.MESSAGES.WELCOME
 					};
-					that.props.sendAMsgFromAdmin(uProps);
-					
-					that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
+					that.props.sendAMsgFromAdmin(uProps);					
+					that.props.history.push({
+						pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+						state : constants.NOTIFICATIONS.ADD_USER_SUCCESS
+					});
 			 } else {
+
 					that.props.history.push(constants.ROUTES_MAP.ADD_USER);
-					that.setState({errMsg : data.payload.data.data.errMsg});
+					toast(constants.NOTIFICATIONS.ADD_USER_FAILED, {
+						className : "notification-error"
+					});
+					// that.setState({errMsg : data.payload.data.data.errMsg});
 			 }
 		 });
 	}
@@ -151,10 +158,14 @@ class AddUserForm extends Component{
 	}
 
 	componentWillMount(){
+		if(this.props.location.state){
+			toast(this.props.location.state, {
+				className : "notification-success"
+			});
+		}
 		var user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 		var company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 		
-
 		this.props.fetchAddressAction(user.addressId);
 		this.setState({
 			errMsg : null,
@@ -168,12 +179,12 @@ class AddUserForm extends Component{
 
 		return (
 			<div>
+				<ToastContainer />
 				<Header/>
 				<div style={{ display: 'flex' }}>
 					<NavBar history={this.props.history}/>
 					<div className="container main-container-left-padding" >
 							<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-								{this.displayErrMsg()}
 								<h3>User Details</h3>
 
 								<div className={`row`}>

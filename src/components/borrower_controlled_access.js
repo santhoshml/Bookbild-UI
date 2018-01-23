@@ -18,6 +18,7 @@ import Switch from 'react-toggle-switch'
 import Toggle from 'react-toggle';
 import Dropdown from 'react-dropdown';
 import DataroomDropdown from './data_room_dropdown';
+import { CircleLoader } from 'react-spinners';
 
 
 class borrowerControlledAccess extends Component{
@@ -25,7 +26,8 @@ class borrowerControlledAccess extends Component{
     super(props);
     this.state = {
       user : null,
-      company : null
+      company : null,
+      loading : true
 		}
   }
 
@@ -36,14 +38,16 @@ class borrowerControlledAccess extends Component{
     this.props.getBorrowerControlledAccessListAction(user.companyId);
     this.setState({
       user : user,
-      company : company
+      company : company,
+      loading : true
     });
   }
 
   componentWillReceiveProps(nextProps){
     // console.log('In componentWillReceiveProps :');
     this.setState({
-      borrowerControlledAccessList : nextProps.borrowerControlledAccessList
+      borrowerControlledAccessList : nextProps.borrowerControlledAccessList,
+      loading : false
     });
     
   }
@@ -65,6 +69,14 @@ class borrowerControlledAccess extends Component{
         break;
       }
     }
+
+    // console.log('updated list:'+ JSON.stringify(list));
+    this.setState({
+      borrowerControlledAccessList : list,
+      selectedAccessList : newStateValue,
+      loading : true
+    });
+
     this.props.updateAccessToLenderFlag({
       linkId : updatedLink.linkId,
       accessToLender : newStateValue
@@ -86,12 +98,9 @@ class borrowerControlledAccess extends Component{
       };
       that.props.sendAMsgFromAdminWithCompanyIdAndCompanyName(lProps);
 
-    });
-
-    // console.log('updated list:'+ JSON.stringify(list));
-    this.setState({
-      borrowerControlledAccessList : list,
-      selectedAccessList : newStateValue
+      this.setState({
+        loading : false
+      });
     });
   }
 
