@@ -251,7 +251,7 @@ class FinalTermList extends Component{
             {this.displayFinalTermList()}
             <br/>
             <br/>
-            {this.displayClubDealList()}
+            {this.state.clubDealList ? this.displayClubDealList() : ''}
             <br/>
             <br/>
             <br/>

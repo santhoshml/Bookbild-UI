@@ -186,7 +186,7 @@ class DisplayMessage extends Component{
                 name="newContent"
                 value = {this.state.newContent}
                 onChange = {this.handleNewContentChange}
-                placeholder = "Write a message here ..."
+                placeholder = "Write a message here to reply ..."
                 />
             </div>
             <div>
@@ -218,7 +218,7 @@ class DisplayMessage extends Component{
                 name="newContent"
                 value = {this.state.newContent}
                 onChange = {this.handleNewContentChange}
-                placeholder = "Write a message here ..."
+                placeholder = "Write a message here to reply ..."
                 />
             </div>
             <div>

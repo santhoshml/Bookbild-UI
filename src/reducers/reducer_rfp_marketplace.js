@@ -85,7 +85,7 @@ export default function(state = INITIAL_STATE, action) {
         // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data));
         return {
           ...state
-          , rfpList: action.payload.data.data.Items
+          , rfpList: action.payload.data.data
         };
       } else {
         return {

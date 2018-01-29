@@ -14,10 +14,25 @@ import Select from 'react-select';
 import Header from './header';
 import { connect } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
 const governanceOptions = ['Yes', 'No'];
+const covenantsOptions = [
+  {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
+  {value: 'Max Total Leverage', label: 'Max Total Leverage'},
+  {value: 'Minimum EBITDA', label: 'Minimum EBITDA'},
+  {value: 'Minimum Revenue', label: 'Minimum Revenue'},
+  {value: 'Minimum Recurring Revenue', label: 'Minimum Recurring Revenue'},
+  {value: 'Minimum Interest Coverage', label: 'Minimum Interest Coverage'},
+  {value: 'Fixed Charge Coverage', label: 'Fixed Charge Coverage'},
+  {value: 'Springing Fixed Charge Coverage', label: 'Springing Fixed Charge Coverage'},
+  {value: 'Minimum Liquidity', label: 'Minimum Liquidity'},
+  {value: 'Minimum Excess Availability', label: 'Minimum Excess Availability'},
+  {value: 'Other', label: 'Other'}
+];
+
 class CreateIOIForm extends Component{
 
   constructor(props){
@@ -34,6 +49,7 @@ class CreateIOIForm extends Component{
   }
 
   renderDropdownField(field) {
+    // console.log('field :'+JSON.stringify(field))
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -86,14 +102,18 @@ class CreateIOIForm extends Component{
 
     this.setState({
       user    : user,
-      company : company
+      company : company,
+      displayCollateralAnalysis : false,
+      displayTwoLoanStructures : false
     });
   }
 
   componentWillReceiveProps(nextProps){
+    // console.log('In componentWillReceiveProps');
     if(nextProps.rfp){
       let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
-      let totalGross = ioiUtils.getTotalGross(nextProps.rfp);        
+      let totalGross = ioiUtils.getTotalGross(nextProps.rfp);  
+      // console.log('will set the rfp');      
       this.setState({
         rfp : nextProps.rfp,
         collateral : collateral,
@@ -110,15 +130,58 @@ class CreateIOIForm extends Component{
 
   onSubmit(props){
     let that = this;
-    // console.log('createIOIAction:'+JSON.stringify(props));
-
-    // console.log('will call createIOIAction :'+JSON.stringify(props));
-    // props.ioiId = ioi.ioiId;
-    props.rfpId = this.state.rfp.rfpId;
+    props.rfpId = this.props.rfp.rfpId;
     props.createdById = this.state.user.userId;
     props.createdByCompanyId = this.state.company.companyId;
-    props.forCompanyId = this.state.rfp.createdByCompanyId;
+    props.forCompanyId = this.props.rfp.createdByCompanyId;
     props.createdByContactId = this.state.user.contactId;
+
+    if(this.state.displayTwoLoanStructures){
+      // copy props into 2 diffrent datastructures
+      let props_1 = {}, props_2 = {};
+      let keys = Object.keys(props);
+      for(let i=0; i<keys.length; i++){        
+        if(keys[i].indexOf("_1") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_1[eKey] = props[keys[i]];
+          delete props[keys[i]];
+        } else if(keys[i].indexOf("_2") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_2[eKey] = props[keys[i]];
+          delete props[keys[i]];
+        }
+      }
+      // populate Id's
+      props_1.rfpId = this.props.rfp.rfpId;
+      props_1.createdById = this.state.user.userId;
+      props_1.createdByCompanyId = this.state.company.companyId;
+      props_1.forCompanyId = this.props.rfp.createdByCompanyId;
+      props_1.createdByContactId = this.state.user.contactId;
+
+      props_2.rfpId = this.props.rfp.rfpId;
+      props_2.createdById = this.state.user.userId;
+      props_2.createdByCompanyId = this.state.company.companyId;
+      props_2.forCompanyId = this.props.rfp.createdByCompanyId;
+      props_2.createdByContactId = this.state.user.contactId;
+
+      props.childIOIList = [props_1, props_2];
+      // console.log('props_1 :'+ JSON.stringify(props_1));
+      // console.log('props_2 :'+ JSON.stringify(props_2));
+    } else {
+      let keys = Object.keys(props);      
+      for(let key of keys){
+        if(key.indexOf("_1") >= 0){
+          let eKey = key.substr(0, key.length-2);
+          props[eKey] = props[key];
+          delete props[key];
+        }
+      }
+    }
+
+    //remove _1 from the props object
+
+    // console.log('props :'+JSON.stringify(props));
+
     this.props.createIOIAction(props)
       .then((data) => {
         if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
@@ -132,7 +195,7 @@ class CreateIOIForm extends Component{
 
           // now send msg to the borrower's company
           let bProps={
-            companyId : this.state.rfp.createdByCompanyId,
+            companyId : that.props.rfp.createdByCompanyId,
             msg : constants.MESSAGES.IOI_CREATED_BORROWER,
             ID : data.payload.data.data
           };
@@ -148,44 +211,39 @@ class CreateIOIForm extends Component{
           });  
         }
       });
+
 	}
 
   displayRFPSummary(){
-    if(this.state.rfp){
+    // console.log(' In displayRFPSummary, this.state.rfp : '+ JSON.stringify(this.state.rfp));
+    // console.log(' In displayRFPSummary, this.props.rfp : '+ JSON.stringify(this.props.rfp));
+    let {rfp} = this.props;
+    if(rfp){
       return (
         <div>
           <h4>RFP Details : </h4>
           <br/>
-          {this.state.rfp.companyDesc}
+          {rfp.companyDesc}
           <br/>
           <br/>
-          {this.state.rfp.txnOverview}
+          {rfp.txnOverview}
           <br/>
           <br/>
           <table className="table table-bordered">
             <tbody>
               <tr>
-                <td>Sector: {this.state.rfp.sector}</td>
-                <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+                <td>Sector: {rfp.sector}</td>
+                <td>Deal Size : {rfp.dealSize} &nbsp; {cUtils.getDisplayValue(rfp.product)}</td>
               </tr>
               <tr>
-                <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmRevenue)}</td>
-                <td>LTM EBITDA : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmEbitda)}</td>
+                <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(rfp.ltmRevenue)}</td>
+                <td>LTM EBITDA : {cUtils.formatCurrencyToDisplay(rfp.ltmEbitda)}</td>
               </tr>
             </tbody>
           </table>
         </div>
       );
     }
-  }
-
-  displaySubtitle(){
-    return (
-      <div>
-        <h4>Indication of Interest</h4>
-        <br/>
-      </div>
-    );
   }
 
   onSelectCovenant(option) {
@@ -195,7 +253,8 @@ class CreateIOIForm extends Component{
       });
     }
 
-  onChangeCollateralValue(element, field, event){
+
+    onChangeCollateralValue(element, field, event){
     // console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
     var updValue = this.state.collateral;
     updValue[element][field] = event.target.value;
@@ -215,11 +274,11 @@ class CreateIOIForm extends Component{
     });
   }
 
-  displayCollateralAnalysis(){
+  displayCollateralAnalysis(suffix){
     // console.log('I am in displayCollateralAnalysis');
     // console.log('thisValue:'+JSON.stringify(thisValue));
-    var rfp = this.state.rfp;
-    if(rfp && rfp.category.toUpperCase() === 'ABL'){
+    var {rfp} = this.props;
+    if(rfp){
       // console.log('rfp:'+JSON.stringify(rfp));
       return(<div>
         <h3>Borrowing Base</h3>
@@ -243,7 +302,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-  		            name="acctRecvIneligiblePercent"
+  		            name={"acctRecvIneligiblePercent"+suffix}
   		            component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'ineligible')}
   		          />
@@ -253,7 +312,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="acctRecvAdvRate"
+                  name={"acctRecvAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'advRate')}
                 />
@@ -272,7 +331,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="invtryIneligiblePercent"
+                  name={"invtryIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'ineligible')}
                 />
@@ -282,7 +341,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="invtryAdvRate"
+                  name={"invtryAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'advRate')}
                 />
@@ -301,7 +360,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="ppeIneligiblePercent"
+                  name={"ppeIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'ineligible')}
                 />
@@ -311,7 +370,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="ppeAdvRate"
+                  name={"ppeAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'advRate')}
                 />
@@ -330,7 +389,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="maeIneligiblePercent"
+                  name={"maeIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'ineligible')}
                 />
@@ -340,7 +399,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="maeAdvRate"
+                  name={"maeAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'advRate')}
                 />
@@ -359,7 +418,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="realEstIneligiblePercent"
+                  name={"realEstIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'ineligible')}
                 />
@@ -369,7 +428,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="realEstAdvRate"
+                  name={"realEstAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'advRate')}
                 />
@@ -388,7 +447,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="otherIneligiblePercent"
+                  name={"otherIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'other', 'ineligible')}
                 />
@@ -398,7 +457,7 @@ class CreateIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="otherAdvRate"
+                  name={"otherAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'other', 'advRate')}
                 />
@@ -425,23 +484,272 @@ class CreateIOIForm extends Component{
     }
   }
 
+  flipDisplayCollateralAnalysis(){
+    this.setState({
+      displayCollateralAnalysis : !this.state.displayCollateralAnalysis
+    });
+  }
+
+  displayStructureFor2Loans(suffix){
+    if(this.state.displayTwoLoanStructures){
+      return(<span>
+        <div className={`row`}>
+          <Field
+            label="Tranche? (e.g. Delayed Draw)"
+            name={"tranche"+suffix}
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={trancheOptions}
+          />
+          <Field
+            label="Loan Structure"
+            name={"loanStructure"+suffix}
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={loanStructOptions}
+            />
+        </div>
+
+        <div className={`row`}>
+          <Field
+            name={"maturity"+suffix}
+            label="Maturity (years)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="OID / Upfront Fee (%)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+        </div>        
+        </span>);
+    } else {
+      // there is only 1 IOI
+      return (
+        <div className={`row`}>
+          <Field
+            label="Tranche? (e.g. Delayed Draw)"
+            name={"tranche"+suffix}
+            size="col-xs-4 col-md-4"
+            component={this.renderDropdownField}
+            dpField={trancheOptions}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Maturity (years)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="OID / Upfront Fee (%)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+        </div>
+      )
+    }
+  }
+
+  displayIOIFields(suffix){
+    return(<div>
+      {
+        this.state.displayCollateralAnalysis 
+        ? <a href="#" onClick={this.flipDisplayCollateralAnalysis.bind(this)}> Hide Collateral Analysis</a> 
+        : <a href="#" onClick={this.flipDisplayCollateralAnalysis.bind(this)}> Show Collateral Analysis</a> 
+      }
+      <br/>
+      {this.state.displayCollateralAnalysis ? this.displayCollateralAnalysis(suffix) : ''}
+      <br/>
+
+      <h3>Indication of Interest</h3>
+      <br/>
+      <div className={`row`}>
+        <Field
+          name={"maxDebtAllowed"+suffix}
+          label="Maximum Debt Allowed"
+          size="col-xs-6 col-md-6"
+          component={this.renderField}
+        />
+        <Field
+          name={"loanSize"+suffix}
+          label="Loan Size"
+          size="col-xs-6 col-md-6"
+          component={this.renderField}
+        />
+      </div>
+
+      {this.displayStructureFor2Loans(suffix)}
+
+      <div className={`row`}>
+        <Field
+          label="Governance"
+          name={"governance"+suffix}
+          size="col-xs-6 col-md-6"
+          component={this.renderDropdownField}
+          dpField={governanceOptions}
+        />
+
+        <Field
+          label="Warrants"
+          name={"warrants"+suffix}
+          size="col-xs-6 col-md-6"
+          component={this.renderDropdownField}
+          dpField={governanceOptions}
+        />
+      </div>
+      <br/>
+
+      <div className={`row`}>
+        <Field
+          name={"covenants"+suffix}
+          label="Covenants"
+          size="col-xs-12 col-md-12"
+          component={this.renderField}
+          placeholder={constants.COVENANTS_SAMPLE}
+        />
+      </div>
+
+      <div className={`row`}>
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Loan Pricing(%)</legend>
+          <Field
+            name={"cashInterest"+suffix}
+            label="Cash Interest"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"pikIntreset"+suffix}
+            label="PIK Interest"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"liborFloor"+suffix}
+            label="LIBOR Floor"
+            component={this.renderField}
+          />
+        </fieldset>
+
+        <div className={`form-group col-xs-1 col-md-1`}>
+        </div>
+
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Amortization (%)</legend>
+          <Field
+            name={"year1"+suffix}
+            label="Year 1"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year2"+suffix}
+            label="Year 2"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year3"+suffix}
+            label="Year 3"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year4"+suffix}
+            label="Year 4"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year5"+suffix}
+            label="Year 5"
+            component={this.renderField}
+          />
+        </fieldset>
+
+        <div className={`form-group col-xs-1 col-md-1`}>
+        </div>
+
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Call Protection(%)</legend>
+          <Field
+            name={"cpYear1"+suffix}
+            label="Year 1"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear2"+suffix}
+            label="Year 2"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear3"+suffix}
+            label="Year 3"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear4"+suffix}
+            label="Year 4"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear5"+suffix}
+            label="Year 5"
+            component={this.renderField}
+          />
+        </fieldset>
+      </div>
+      <br/>
+      <br/>
+    </div>);
+  }
+
+  displayTwoIOIFields(){
+    // console.log('displayTwoIOIFields started');
+    return(
+      <Tabs>
+        <TabList>
+          <Tab>
+            First Loan
+          </Tab>
+          <Tab>
+            SecondLoan
+          </Tab>
+        </TabList>
+        <TabPanel>
+          {this.displayIOIFields("_1")}
+        </TabPanel>
+        <TabPanel>
+          {this.displayIOIFields("_2")}
+        </TabPanel>
+      </Tabs>
+    );
+  }
+
+  onSelectLoanStructure(props){
+    if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') && !this.state.displayTwoLoanStructures) {
+      // console.log('will set displayTwoLoanStructures = true');
+      this.setState({
+        displayTwoLoanStructures : true
+      });
+    } else if(this.state.displayTwoLoanStructures){
+      // console.log('will set displayTwoLoanStructures = false');
+      this.setState({
+        displayTwoLoanStructures : false
+      });
+    }
+  }
+
   render(){
     // console.log('I am in create IOI');
     const {handleSubmit} = this.props;
-
-      const covenantsOptions = [
-        {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
-        {value: 'Max Total Leverage', label: 'Max Total Leverage'},
-        {value: 'Minimum EBITDA', label: 'Minimum EBITDA'},
-        {value: 'Minimum Revenue', label: 'Minimum Revenue'},
-        {value: 'Minimum Recurring Revenue', label: 'Minimum Recurring Revenue'},
-        {value: 'Minimum Interest Coverage', label: 'Minimum Interest Coverage'},
-        {value: 'Fixed Charge Coverage', label: 'Fixed Charge Coverage'},
-        {value: 'Springing Fixed Charge Coverage', label: 'Springing Fixed Charge Coverage'},
-        {value: 'Minimum Liquidity', label: 'Minimum Liquidity'},
-        {value: 'Minimum Excess Availability', label: 'Minimum Excess Availability'},
-        {value: 'Other', label: 'Other'}
-      ];
 
     return(
       <div>
@@ -451,194 +759,24 @@ class CreateIOIForm extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-
               {this.displayRFPSummary()}
               <br/>
-
-              {this.displayCollateralAnalysis()}
-              <br/>
-
-              {this.displaySubtitle()}
-              <br/>
-
               <div className={`row`}>
-                <Field
-                  name="maxDebtAllowed"
-                  label="Maximum Debt Allowed"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-                <Field
-                  name="loanSize"
-                  label="Loan Size"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-              </div>
-
-              <div className={`row`}>
-                <Field
-                  label="Tranche? (e.g. Delayed Draw)"
-                  name="tranche"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={trancheOptions}
-                />
                 <Field
                   label="Loan Structure"
                   name="loanStructure"
-                  size="col-xs-6 col-md-6"
+                  size="col-xs-12 col-md-12"
+                  onChange={this.onSelectLoanStructure.bind(this)}
                   component={this.renderDropdownField}
                   dpField={loanStructOptions}
                 />
               </div>
-
-              <div className={`row`}>
-                <Field
-                  name="maturity"
-                  label="Maturity (years)"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-                <Field
-                  name="upfrontFee"
-                  label="OID / Upfront Fee (%)"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-              </div>
-
-              <div className={`row`}>
-                <Field
-                  label="Governance"
-                  name="governance"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={governanceOptions}
-                />
-
-                <Field
-                  label="Warrants"
-                  name="warrants"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={governanceOptions}
-                />
-              </div>
               <br/>
-
-              <div className={`row`}>
-                <Field
-                  name="covenants"
-                  label="Covenants"
-                  size="col-xs-12 col-md-12"
-                  component={this.renderField}
-                  placeholder={constants.COVENANTS_SAMPLE}
-                />
-              </div>
-
-              <div className={`row`}>
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Loan Pricing(%)</legend>
-                  <Field
-                    name="cashInterest"
-                    label="Cash Interest"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="pikIntreset"
-                    label="PIK Interest"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="liborFloor"
-                    label="LIBOR Floor"
-                    component={this.renderField}
-                  />
-                </fieldset>
-
-                <div className={`form-group col-xs-1 col-md-1`}>
-                </div>
-
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Amortization (%)</legend>
-                  <Field
-                    name="year1"
-                    label="Year 1"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year2"
-                    label="Year 2"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year3"
-                    label="Year 3"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year4"
-                    label="Year 4"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year5"
-                    label="Year 5"
-                    component={this.renderField}
-                  />
-                </fieldset>
-
-                <div className={`form-group col-xs-1 col-md-1`}>
-                </div>
-
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Call Protection(%)</legend>
-                  <Field
-                    name="cpYear1"
-                    label="Year 1"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear2"
-                    label="Year 2"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear3"
-                    label="Year 3"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear4"
-                    label="Year 4"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear5"
-                    label="Year 5"
-                    component={this.renderField}
-                  />
-                </fieldset>
-              </div>
-              <br/>
-              <br/>
-
+              {this.state.displayTwoLoanStructures ? this.displayTwoIOIFields() : this.displayIOIFields("_1")}
               <div className={`row`}>
                 <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
                 <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
               </div>
-
             </form>
             <br/>
             <br/>
@@ -663,6 +801,7 @@ function mapStateToProps(state) {
 
   if(state.rfpList.rfpList){
     intializedData.rfp = state.rfpList.rfpList[0];
+    // console.log('intializedData.rfp : '+JSON.stringify(intializedData.rfp));
   }
 
   return intializedData;
@@ -708,8 +847,6 @@ function validate(values){
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
     createIOIAction   : createIOIAction,
     fetchRFPAction : fetchRFPAction,
@@ -718,8 +855,8 @@ function mapDispatchToProps(dispatch) {
 }
 
 CreateIOIForm = reduxForm({
-  'form': 'CreateIOIForm',
-  validate
+  'form': 'CreateIOIForm'
+  // validate
 }) (CreateIOIForm)
 
 CreateIOIForm = connect(mapStateToProps, mapDispatchToProps)(CreateIOIForm);

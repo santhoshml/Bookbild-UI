@@ -383,9 +383,11 @@ class FinalTermDetail extends Component{
         <Header/>
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
-          <div className="container main-container-left-padding" >
+          <div className="container main-container-left-padding" >            
             <br/>
             <h2>Final Term Sheet</h2>
+            <br/>
+            <p> Details of the final Term sheet are as below. Navigate thru the tabs to find the yield estimate for this term sheet and the documents uplaoded for the same.</p>
             <br/>
             <Tabs>
               <TabList>

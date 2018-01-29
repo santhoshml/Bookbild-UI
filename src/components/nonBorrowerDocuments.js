@@ -61,8 +61,9 @@ class NonBorrowerDocumentForm extends Component{
 					<div className="container main-container-left-padding" >
 						<br/>
 						<br/>
-						<h3>Select the link from dropdown to see the documents</h3>
+						<h3>Documents</h3>
 						<br/>
+						<p>Select the link from dropdown to see the documents related to the deal.</p>
 						<br/>
 						<DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/>
 						<br/>

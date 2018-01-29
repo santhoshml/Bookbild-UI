@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Field, reduxForm} from 'redux-form';
-import { updateIOIAction, fetchIOIAction, fetchRFPByIOIAction, sendAMsgFromAdminWithCompanyId } from '../actions/index';
+import { createIOIAction, deleteIOIAction, updateIOIAction, fetchIOIAction, fetchRFPByIOIAction, sendAMsgFromAdminWithCompanyId } from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
 import { bindActionCreators } from 'redux';
@@ -14,10 +14,24 @@ import Select from 'react-select';
 import Header from './header';
 import { connect } from "react-redux";
 import { ToastContainer, toast } from 'react-toastify';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
 const trancheOptions = ['Delayed Draw', 'Accordion', 'Fixed Asset Subline', 'Uni-Tranche', 'Multi-Tranche', 'None'];
 const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
 const governanceOptions = ['Yes', 'No'];
+const covenantsOptions = [
+  {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
+  {value: 'Max Total Leverage', label: 'Max Total Leverage'},
+  {value: 'Minimum EBITDA', label: 'Minimum EBITDA'},
+  {value: 'Minimum Revenue', label: 'Minimum Revenue'},
+  {value: 'Minimum Recurring Revenue', label: 'Minimum Recurring Revenue'},
+  {value: 'Minimum Interest Coverage', label: 'Minimum Interest Coverage'},
+  {value: 'Fixed Charge Coverage', label: 'Fixed Charge Coverage'},
+  {value: 'Springing Fixed Charge Coverage', label: 'Springing Fixed Charge Coverage'},
+  {value: 'Minimum Liquidity', label: 'Minimum Liquidity'},
+  {value: 'Minimum Excess Availability', label: 'Minimum Excess Availability'},
+  {value: 'Other', label: 'Other'}
+];
 
 class EditIOIForm extends Component{
 
@@ -79,25 +93,37 @@ class EditIOIForm extends Component{
 	}
 
   componentWillMount() {
+    let that = this;
     let paramId = this.props.match.params.id;
 
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    this.props.fetchIOIAction(paramId);
+    this.props.fetchIOIAction(paramId)
+    .then(data => {
+      if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+        let ioiList = data.payload.data.data.Items;
+        if(Array.isArray(ioiList) && ioiList.length > 1){
+          that.setState({
+            displayTwoLoanStructures : true
+          });
+        }
+      }
+    });
     this.props.fetchRFPByIOIAction(paramId);
 
     this.setState({
       user    : user,
-      company : company
-      // createdById         : user.userId,
-      // createdByCompanyId  : company.companyId
+      company : company,
+      displayCollateralAnalysis : false,
+      displayTwoLoanStructures : false
     });
   }
 
   componentWillReceiveProps(nextProps){
     if(nextProps.rfp){
       let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
-      let totalGross = ioiUtils.getTotalGross(nextProps.rfp);        
+      let totalGross = ioiUtils.getTotalGross(nextProps.rfp);
+
       this.setState({
         rfp : nextProps.rfp,
         collateral : collateral,
@@ -105,63 +131,251 @@ class EditIOIForm extends Component{
       });
     }
 
-    if(nextProps.ioi){
-      this.setState({
-        ioi : nextProps.ioi
-      });
-    }
+    // if(nextProps.ioi){
+    //   if(nextProps.ioi.childIOIList && !this.state.displayTwoLoanStructures){
+    //     this.setState({
+    //       displayTwoLoanStructures : true
+    //     });
+    //   }
+    // }
   }
 
   onSubmit(props){
     let that = this;
-    // <input type="hidden" className="form-control" {...rfpId} />
-    // <input type="hidden" className="form-control" {...createdById} />
-    // <input type="hidden" className="form-control" {...createdByCompanyId} />
 
     // console.log('createIOIAction:'+JSON.stringify(props));
-    props.ioiId = this.props.initialValues.ioiId;
-    props.createdById = this.state.user.userId;
-    // below 2 may not be nessary
     props.rfpId = this.state.rfp.rfpId;
+    props.createdById = this.state.user.userId;
     props.createdByCompanyId = this.state.company.companyId;
+    props.ioiId = this.props.ioi.ioiId;
+    props.forCompanyId = this.state.rfp.createdByCompanyId;
+    props.createdByContactId = this.state.user.contactId;
 
-    this.props.updateIOIAction(props)
-      .then((data) => {
-        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-          // send a msg to lender's company
-          let lProps = {
-            companyId : that.state.user.companyId,
-            msg : constants.MESSAGES.IOI_EDITED,
-            ID : that.props.initialValues.ioiId
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(lProps);
-
-          // now send msg to the borrower's company
-          let bProps={
-            companyId : this.state.rfp.createdByCompanyId,
-            msg : constants.MESSAGES.IOI_EDITED,
-            ID : that.props.initialValues.ioiId
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(bProps);
-
-          that.props.history.push({
-            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-            state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
-          });
-        } else {
-          toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
-            className : "notification-error"
-          });
+    if(this.state.displayTwoLoanStructures){
+      // copy props into 2 diffrent datastructures
+      let props_1 = {}, props_2 = {};
+      let keys = Object.keys(props);
+      for(let i=0; i<keys.length; i++){        
+        if(keys[i].indexOf("_1") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_1[eKey] = props[keys[i]];
+          delete props[keys[i]];
+        } else if(keys[i].indexOf("_2") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_2[eKey] = props[keys[i]];
+          delete props[keys[i]];
         }
-    });
-	}
+      }
+      // populate Id's
+      props_1.rfpId = this.state.rfp.rfpId;
+      props_1.createdById = this.state.user.userId;
+      props_1.createdByCompanyId = this.state.company.companyId;
+      props_1.forCompanyId = this.state.rfp.createdByCompanyId;
+      props_1.createdByContactId = this.state.user.contactId;
+
+      props_2.rfpId = this.state.rfp.rfpId;
+      props_2.createdById = this.state.user.userId;
+      props_2.createdByCompanyId = this.state.company.companyId;
+      props_2.forCompanyId = this.state.rfp.createdByCompanyId;
+      props_2.createdByContactId = this.state.user.contactId;
+
+      props.childIOIList = [props_1, props_2];
+      // console.log('props_1 :'+ JSON.stringify(props_1));
+      // console.log('props_2 :'+ JSON.stringify(props_2));
+    } else {
+      let keys = Object.keys(props);      
+      for(let key of keys){
+        if(key.indexOf("_1") >= 0){
+          let eKey = key.substr(0, key.length-2);
+          if(eKey !== 'loanStructure'){ // this is an exception
+            props[eKey] = props[key];
+          }
+          delete props[key];
+        }
+      }
+    }
+
+    let updateDBData = false;
+    // find if any fields changed and then set the flags
+    if(this.state.displayTwoLoanStructures){
+
+      if(this.isValuesUpdated(props.childIOIList[0], "_1")){
+        props.childIOIList[0].updateData = true;
+        updateDBData = true;
+      } else {
+        props.childIOIList[0].updateData = false;
+      }
+
+      if(this.isValuesUpdated(props.childIOIList[1], "_2")){
+        props.childIOIList[1].updateData = true;
+        updateDBData = true;
+      } else {
+        props.childIOIList[1].updateData = false;
+      }
+
+      if(props.loanStructure !== this.props.initialValues.loanStructure
+        || updateDBData){
+        props.updateData = true;
+        updateDBData = true;
+      }
+    } else {
+      // there is only 1 IOI, so just check the main props
+      if(this.isValuesUpdated(props, "_1")
+        || props.loanStructure !== this.props.initialValues.loanStructure){
+        props.updateData = true;
+        updateDBData = true;
+      } else {
+        props.updateData = false;
+      }      
+    }
+
+    // console.log('props :'+JSON.stringify(props));
+    
+    if(updateDBData){
+      if(this.props.ioi.childIOIList && !props.childIOIList){
+        // console.log('initially there were 2 IOIs, now has only 1 IOI');
+        // initially there were 2 IOI's, now has only 1 IOI
+        // delete the first one and create a new one
+        this.props.deleteIOIAction(this.props.ioi.ioiId);
+        this.props.deleteIOIAction(this.props.ioi.childIOIList[0]);
+        this.props.deleteIOIAction(this.props.ioi.childIOIList[1]);
+        // use the id of the parent IOI which got deleted, since it may have links to other things
+        props.ioiId=this.props.ioi.ioiId;
+        this.props.createIOIAction(props)
+        .then((data) => {
+          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+            // send a msg to lender's company
+            let lProps = {
+              companyId : that.state.user.companyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+            // now send msg to the borrower's company
+            let bProps={
+              companyId : this.state.rfp.createdByCompanyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+            that.props.history.push({
+              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+            });
+          } else {
+            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
+              className : "notification-error"
+            });
+          }
+        });
+      } else if(!this.props.ioi.childIOIList && props.childIOIList){
+        // console.log('initially there was 1 IOI, now has 2 IOIs');
+        // initially there was 1 IOI, now has 2 IOI's
+        // delete the first one and create 3 new one's
+        this.props.deleteIOIAction(this.props.ioi.ioiId);
+        // use the id of the parent IOI which got deleted, since it may have links to other things
+        props.ioiId=this.props.ioi.ioiId;
+        this.props.createIOIAction(props)
+        .then((data) => {
+          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+            // send a msg to lender's company
+            let lProps = {
+              companyId : that.state.user.companyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+            // now send msg to the borrower's company
+            let bProps={
+              companyId : this.state.rfp.createdByCompanyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+            that.props.history.push({
+              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+            });
+          } else {
+            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
+              className : "notification-error"
+            });
+          }
+        });
+      } else {
+        // initially there were 2 and now we have 2
+        // console.log('updating the IOIs');
+        this.props.updateIOIAction(props)  
+        .then((data) => {
+          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+            // send a msg to lender's company
+            let lProps = {
+              companyId : that.state.user.companyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+            // now send msg to the borrower's company
+            let bProps={
+              companyId : this.state.rfp.createdByCompanyId,
+              msg : constants.MESSAGES.IOI_EDITED,
+              ID : that.props.initialValues.ioi.ioiId
+            };
+            that.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+            that.props.history.push({
+              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+            });
+          } else {
+            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
+              className : "notification-error"
+            });
+          }
+        });
+      }
+    } else {
+      // console.log('Nothing changed, they just pressed submit');
+      that.props.history.push({
+        pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+        state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+      });
+    }
+  }
+  
+  isValuesUpdated(ioi, suffix){
+    if(ioi.maxDebtAllowed !== this.props.initialValues['maxDebtAllowed'+suffix]
+      || ioi.loanSize !== this.props.initialValues['loanSize'+suffix]
+      || ioi.tranche !== this.props.initialValues['tranche'+suffix]
+      || ioi.loanStructure !== this.props.initialValues['loanStructure'+suffix]
+      || ioi.maturity !== this.props.initialValues['maturity'+suffix]
+      || ioi.upfrontFee !== this.props.initialValues['upfrontFee'+suffix]
+      || ioi.governance !== this.props.initialValues['governance'+suffix]
+      || ioi.warrants !== this.props.initialValues['warrants'+suffix]
+      || ioi.covenants !== this.props.initialValues['covenants'+suffix]
+      || ioi.cashInterest !== this.props.initialValues['cashInterest'+suffix]
+      || ioi.pikIntreset !== this.props.initialValues['pikIntreset'+suffix]
+      || ioi.liborFloor !== this.props.initialValues['liborFloor'+suffix]
+      || ioi.year1 !== this.props.initialValues['year1'+suffix]
+      || ioi.year2 !== this.props.initialValues['year2'+suffix]
+      || ioi.year3 !== this.props.initialValues['year3'+suffix]
+      || ioi.year4 !== this.props.initialValues['year4'+suffix]
+      || ioi.year5 !== this.props.initialValues['year5'+suffix]
+    )
+    return true;
+    return false;
+  }
 
   displayRFPSummary(){
     if(this.state.rfp){
       return (
         <div>
-          <h4>RFP Details : </h4>
-          <br/>
+          <h4>Related RFP Details : </h4>
           {this.state.rfp.companyDesc}
           <br/>
           <br/>
@@ -183,15 +397,6 @@ class EditIOIForm extends Component{
         </div>
       );
     }
-  }
-
-  displaySubtitle(){
-    return (
-      <div>
-        <h4>Indication of Interest</h4>
-        <br/>
-      </div>
-    );
   }
 
   onSelectCovenant(option) {
@@ -221,11 +426,11 @@ class EditIOIForm extends Component{
     });
   }
 
-  displayCollateralAnalysis(){
+  displayCollateralAnalysis(suffix){
     // console.log('I am in displayCollateralAnalysis');
     // console.log('thisValue:'+JSON.stringify(thisValue));
     var rfp = this.state.rfp;
-    if(rfp && rfp.category.toUpperCase() === 'ABL'){
+    if(rfp){
       // console.log('rfp:'+JSON.stringify(rfp));
       return(<div>
         <h3>Borrowing Base</h3>
@@ -249,7 +454,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-  		            name="acctRecvIneligiblePercent"
+  		            name={"acctRecvIneligiblePercent"+suffix}
   		            component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'ineligible')}
   		          />
@@ -259,7 +464,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="acctRecvAdvRate"
+                  name={"acctRecvAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'acctReceivable', 'advRate')}
                 />
@@ -278,7 +483,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="invtryIneligiblePercent"
+                  name={"invtryIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'ineligible')}
                 />
@@ -288,7 +493,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="invtryAdvRate"
+                  name={"invtryAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'inventry', 'advRate')}
                 />
@@ -307,7 +512,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="ppeIneligiblePercent"
+                  name={"ppeIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'ineligible')}
                 />
@@ -317,7 +522,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="ppeAdvRate"
+                  name={"ppeAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'ppe', 'advRate')}
                 />
@@ -336,7 +541,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="maeIneligiblePercent"
+                  name={"maeIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'ineligible')}
                 />
@@ -346,7 +551,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="maeAdvRate"
+                  name={"maeAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'mae', 'advRate')}
                 />
@@ -365,7 +570,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="realEstIneligiblePercent"
+                  name={"realEstIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'ineligible')}
                 />
@@ -375,7 +580,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="realEstAdvRate"
+                  name={"realEstAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'realEst', 'advRate')}
                 />
@@ -394,7 +599,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="otherIneligiblePercent"
+                  name={"otherIneligiblePercent"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'other', 'ineligible')}
                 />
@@ -404,7 +609,7 @@ class EditIOIForm extends Component{
               </td>
               <td>
                 <Field
-                  name="otherAdvRate"
+                  name={"otherAdvRate"+suffix}
                   component={this.renderField}
                   onBlur={this.onChangeCollateralValue.bind(this, 'other', 'advRate')}
                 />
@@ -431,32 +636,276 @@ class EditIOIForm extends Component{
     }
   }
 
+  flipDisplayCollateralAnalysis(){
+    // console.log('will flip the collateralAnalysis');
+    this.setState({
+      displayCollateralAnalysis : !this.state.displayCollateralAnalysis
+    });
+  }
+
+  displayStructureFor2Loans(suffix){
+    if(this.state.displayTwoIOIFields){
+      return(<span>
+        <div className={`row`}>
+          <Field
+            label="Tranche? (e.g. Delayed Draw)"
+            name={"tranche"+suffix}
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={trancheOptions}
+          />
+          <Field
+            label="Loan Structure"
+            name={"loanStructure"+suffix}
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={loanStructOptions}
+            />
+        </div>
+
+        <div className={`row`}>
+          <Field
+            name={"maturity"+suffix}
+            label="Maturity (years)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="OID / Upfront Fee (%)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+        </div>        
+        </span>);
+    } else {
+      // there is only 1 IOI
+      return (
+        <div className={`row`}>
+          <Field
+            label="Tranche? (e.g. Delayed Draw)"
+            name={"tranche"+suffix}
+            size="col-xs-4 col-md-4"
+            component={this.renderDropdownField}
+            dpField={trancheOptions}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Maturity (years)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="OID / Upfront Fee (%)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+        </div>
+      )
+    }
+  }  
+
+  displayIOIFields(suffix){
+    // console.log('displayIOIFields started, suffix :'+suffix);
+    return(<div>
+      {
+        this.state.displayCollateralAnalysis 
+        ? <a href="#" onClick={this.flipDisplayCollateralAnalysis.bind(this)}> Hide Collateral Analysis</a> 
+        : <a href="#" onClick={this.flipDisplayCollateralAnalysis.bind(this)}> Show Collateral Analysis</a> 
+      }
+      <br/>
+      {this.state.displayCollateralAnalysis ? this.displayCollateralAnalysis(suffix) : ''}
+      <br/>
+
+      <h3>Indication of Interest</h3>
+      <br/>
+      <div className={`row`}>
+        <Field
+          name={"maxDebtAllowed"+suffix}
+          label="Maximum Debt Allowed"
+          size="col-xs-6 col-md-6"
+          component={this.renderField}
+        />
+        <Field
+          name={"loanSize"+suffix}
+          label="Loan Size"
+          size="col-xs-6 col-md-6"
+          component={this.renderField}
+        />
+      </div>
+
+      {this.displayStructureFor2Loans(suffix)}
+
+      <div className={`row`}>
+        <Field
+          label="Governance"
+          name={"governance"+suffix}
+          size="col-xs-6 col-md-6"
+          component={this.renderDropdownField}
+          dpField={governanceOptions}
+        />
+
+        <Field
+          label="Warrants"
+          name={"warrants"+suffix}
+          size="col-xs-6 col-md-6"
+          component={this.renderDropdownField}
+          dpField={governanceOptions}
+        />
+      </div>
+      <br/>
+
+      <div className={`row`}>
+        <Field
+          name={"covenants"+suffix}
+          label="Covenants"
+          size="col-xs-12 col-md-12"
+          component={this.renderField}
+          placeholder={constants.COVENANTS_SAMPLE}
+        />
+      </div>
+
+      <div className={`row`}>
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Loan Pricing(%)</legend>
+          <Field
+            name={"cashInterest"+suffix}
+            label="Cash Interest"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"pikIntreset"+suffix}
+            label="PIK Interest"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"liborFloor"+suffix}
+            label="LIBOR Floor"
+            component={this.renderField}
+          />
+        </fieldset>
+
+        <div className={`form-group col-xs-1 col-md-1`}>
+        </div>
+
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Amortization (%)</legend>
+          <Field
+            name={"year1"+suffix}
+            label="Year 1"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year2"+suffix}
+            label="Year 2"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year3"+suffix}
+            label="Year 3"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year4"+suffix}
+            label="Year 4"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"year5"+suffix}
+            label="Year 5"
+            component={this.renderField}
+          />
+        </fieldset>
+
+        <div className={`form-group col-xs-1 col-md-1`}>
+        </div>
+
+        <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
+          <legend className="scheduler-border">Call Protection(%)</legend>
+          <Field
+            name={"cpYear1"+suffix}
+            label="Year 1"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear2"+suffix}
+            label="Year 2"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear3"+suffix}
+            label="Year 3"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear4"+suffix}
+            label="Year 4"
+            component={this.renderField}
+          />
+          <br/>
+          <Field
+            name={"cpYear5"+suffix}
+            label="Year 5"
+            component={this.renderField}
+          />
+        </fieldset>
+      </div>
+      <br/>
+      <br/>
+    </div>);
+  }
+
+  displayTwoIOIFields(){
+    // console.log('displayTwoIOIFields started');
+    return(
+      <Tabs>
+        <TabList>
+          <Tab>
+            First Loan
+          </Tab>
+          <Tab>
+            SecondLoan
+          </Tab>
+        </TabList>
+        <TabPanel>
+          {this.displayIOIFields("_1")}
+        </TabPanel>
+        <TabPanel>
+          {this.displayIOIFields("_2")}
+        </TabPanel>
+      </Tabs>
+    );
+  }
+
+  onSelectLoanStructure(props){
+    if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') && !this.state.displayTwoLoanStructures) {
+      // console.log('will set displayTwoLoanStructures = true');
+      this.setState({
+        displayTwoLoanStructures : true
+      });
+    } else if(this.state.displayTwoLoanStructures){
+      // console.log('will set displayTwoLoanStructures = false');
+      // console.log('this.state :'+JSON.stringify(this.state));
+      this.setState({
+        displayTwoLoanStructures : false
+      });
+    }
+  }
+
   render(){
-    // console.log('I am in create IOI');
+    // console.log('I am in render');
+    // console.log('this.state.displayTwoLoanStructures : '+this.state.displayTwoLoanStructures);
     const {handleSubmit} = this.props;
-
-      const covenantsOptions = [
-        {value: 'Max Senior Leverage', label: 'Max Senior Leverage'},
-        {value: 'Max Total Leverage', label: 'Max Total Leverage'},
-        {value: 'Minimum EBITDA', label: 'Minimum EBITDA'},
-        {value: 'Minimum Revenue', label: 'Minimum Revenue'},
-        {value: 'Minimum Recurring Revenue', label: 'Minimum Recurring Revenue'},
-        {value: 'Minimum Interest Coverage', label: 'Minimum Interest Coverage'},
-        {value: 'Fixed Charge Coverage', label: 'Fixed Charge Coverage'},
-        {value: 'Springing Fixed Charge Coverage', label: 'Springing Fixed Charge Coverage'},
-        {value: 'Minimum Liquidity', label: 'Minimum Liquidity'},
-        {value: 'Minimum Excess Availability', label: 'Minimum Excess Availability'},
-        {value: 'Other', label: 'Other'}
-      ];
-
-      // console.log('this.state.selectedCovenants:'+JSON.stringify(this.state.selectedCovenant));
-
-      // <div className={`row`}>
-      //   <label>Covenants</label>
-      //   <Select multi={true} simpleValue={true} value={this.state.selectedCovenant} options={covenantsOptions} onChange={this.onSelectCovenant.bind(this)} />
-      // </div>
-      // <br/>
-
     return(
       <div>
         <ToastContainer />
@@ -464,189 +913,28 @@ class EditIOIForm extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
+            <h3>Edit your Indication of Interest (IOI)</h3>
+            <br/>
+            <p>Make the nessary changes to your IOI and Click submit. Use Collateral Analysis section to ....</p>
+            <br/>
+            <hr/>
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-
               {this.displayRFPSummary()}
               <br/>
-
-              {this.displayCollateralAnalysis()}
-              <br/>
-
-              {this.displaySubtitle()}
-              <br/>
-
+              <hr/>
               <div className={`row`}>
-                <Field
-                  name="maxDebtAllowed"
-                  label="Maximum Debt Allowed"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-                <Field
-                  name="loanSize"
-                  label="Loan Size"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-              </div>
-
-              <div className={`row`}>
-                <Field
-                  label="Tranche? (e.g. Delayed Draw)"
-                  name="tranche"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={trancheOptions}
-                />
                 <Field
                   label="Loan Structure"
                   name="loanStructure"
-                  size="col-xs-6 col-md-6"
+                  size="col-xs-12 col-md-12"
+                  onChange={this.onSelectLoanStructure.bind(this)}
                   component={this.renderDropdownField}
                   dpField={loanStructOptions}
                 />
               </div>
-
-              <div className={`row`}>
-                <Field
-                  name="maturity"
-                  label="Maturity (years)"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-                <Field
-                  name="upfrontFee"
-                  label="OID / Upfront Fee (%)"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderField}
-                />
-              </div>
-
-              <div className={`row`}>
-                <Field
-                  label="Governance"
-                  name="governance"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={governanceOptions}
-                />
-
-                <Field
-                  label="Warrants"
-                  name="warrants"
-                  size="col-xs-6 col-md-6"
-                  component={this.renderDropdownField}
-                  dpField={governanceOptions}
-                />
-              </div>
               <br/>
-
-              <div className={`row`}>
-                <Field
-                  name="covenants"
-                  label="Covenants"
-                  size="col-xs-12 col-md-12"
-                  component={this.renderField}
-                  placeholder={constants.COVENANTS_SAMPLE}
-                />
-              </div>
-
-              <div className={`row`}>
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Loan Pricing(%)</legend>
-                  <Field
-                    name="cashInterest"
-                    label="Cash Interest"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="pikIntreset"
-                    label="PIK Interest"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="liborFloor"
-                    label="LIBOR Floor"
-                    component={this.renderField}
-                  />
-                </fieldset>
-
-                <div className={`form-group col-xs-1 col-md-1`}>
-                </div>
-
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Amortization (%)</legend>
-                  <Field
-                    name="year1"
-                    label="Year 1"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year2"
-                    label="Year 2"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year3"
-                    label="Year 3"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year4"
-                    label="Year 4"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="year5"
-                    label="Year 5"
-                    component={this.renderField}
-                  />
-                </fieldset>
-
-                <div className={`form-group col-xs-1 col-md-1`}>
-                </div>
-
-                <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
-                  <legend className="scheduler-border">Call Protection(%)</legend>
-                  <Field
-                    name="cpYear1"
-                    label="Year 1"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear2"
-                    label="Year 2"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear3"
-                    label="Year 3"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear4"
-                    label="Year 4"
-                    component={this.renderField}
-                  />
-                  <br/>
-                  <Field
-                    name="cpYear5"
-                    label="Year 5"
-                    component={this.renderField}
-                  />
-                </fieldset>
-              </div>
-              <br/>
-              <br/>
+              <hr/>
+              {this.state.displayTwoLoanStructures ? this.displayTwoIOIFields() : this.displayIOIFields("_1")}
 
               <div className={`row`}>
                 <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
@@ -671,32 +959,30 @@ function mapStateToProps(state) {
   let intializedData = {};
 
   if(state.ioiList.ioi){
-    let ioi = state.ioiList.ioi[0];
-    let initData={
-      ioiId : ioi.ioiId,
-      loanSize : ioi.loanSize,
-      liborFloor : ioi.liborFloor,
-      pikIntreset : ioi.pikIntreset,
-      maxDebtAllowed : ioi.maxDebtAllowed,
-      warrants : ioi.warrants,
-      governance : ioi.governance,
-      covenants : ioi.covenants,
-      upfrontFee : ioi.upfrontFee,
-      maturity : ioi.maturity,
-      tranche : ioi.tranche,
-      loanStructure : ioi.loanStructure,
-      cashInterest : ioi.cashInterest,
-      cpYear1 : ioi.cpYear1,
-      cpYear2 : ioi.cpYear2,
-      cpYear3 : ioi.cpYear3,
-      cpYear4 : ioi.cpYear4,
-      cpYear5 : ioi.cpYear5,
-      year1 : ioi.year1,
-      year2 : ioi.year2,
-      year3 : ioi.year3,
-      year4 : ioi.year4,
-      year5 : ioi.year5,
-    };
+    let initData= {};
+    let ioi = {};
+    if(Array.isArray(state.ioiList.ioi)){
+      ioi = state.ioiList.ioi[0];
+      intializedData.ioi = ioi;
+  
+      let childIOIList = [];
+      if(state.ioiList.ioi[1])
+        childIOIList.push(state.ioiList.ioi[1]);
+  
+      if(state.ioiList.ioi[2])
+        childIOIList.push(state.ioiList.ioi[2]);
+      
+      initData = {
+        ...setInitData(childIOIList[0], "_1"),
+        ...setInitData(childIOIList[1], "_2")
+      }
+    } else {
+      ioi = state.ioiList.ioi;
+      intializedData.ioi = ioi;
+      initData = setInitData(state.ioiList.ioi, "_1");
+    }
+
+    initData.loanStructure = ioi.loanStructure;
     // console.log('initData :'+JSON.stringify(initData));
     intializedData.initialValues = initData;
   }
@@ -706,6 +992,35 @@ function mapStateToProps(state) {
   }
 
   return intializedData;
+}
+
+function setInitData(ioi, suffix){
+  let params = {};
+  params['ioiId'+suffix] = ioi.ioiId;
+  params['loanSize'+suffix] = ioi.loanSize;
+  params['liborFloor'+suffix] = ioi.liborFloor;
+  params['pikIntreset'+suffix] = ioi.pikIntreset;
+  params['maxDebtAllowed'+suffix] = ioi.maxDebtAllowed;
+  params['warrants'+suffix] = ioi.warrants;
+  params['governance'+suffix] = ioi.governance;
+  params['covenants'+suffix] = ioi.covenants;
+  params['upfrontFee'+suffix] = ioi.upfrontFee;
+  params['maturity'+suffix] = ioi.maturity;
+  params['tranche'+suffix] = ioi.tranche;
+  params['loanStructure'+suffix] = ioi.loanStructure;
+  params['cashInterest'+suffix] = ioi.cashInterest;
+  params['cpYear1'+suffix] = ioi.cpYear1;
+  params['cpYear2'+suffix] = ioi.cpYear2;
+  params['cpYear3'+suffix] = ioi.cpYear3;
+  params['cpYear4'+suffix] = ioi.cpYear4;
+  params['cpYear5'+suffix] = ioi.cpYear5;
+  params['year1'+suffix] = ioi.year1;
+  params['year2'+suffix] = ioi.year2;
+  params['year3'+suffix] = ioi.year3;
+  params['year4'+suffix] = ioi.year4;
+  params['year5'+suffix] = ioi.year5;
+
+  return params;
 }
 
 function validate(values){
@@ -748,13 +1063,13 @@ function validate(values){
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
     sendAMsgFromAdminWithCompanyId   : sendAMsgFromAdminWithCompanyId,
     updateIOIAction : updateIOIAction,
     fetchIOIAction : fetchIOIAction,
-    fetchRFPByIOIAction : fetchRFPByIOIAction
+    fetchRFPByIOIAction : fetchRFPByIOIAction,
+    createIOIAction   : createIOIAction,
+    deleteIOIAction   : deleteIOIAction
   }, dispatch);
 }
 

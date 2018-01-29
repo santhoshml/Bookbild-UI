@@ -76,6 +76,7 @@ class Messages extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <br/>
+            <h3>Messages</h3>
             <br/>
             <div style={{width: '100%', overflow : 'auto'}}>
               <DisplayMessageLinkList 

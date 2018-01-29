@@ -55,131 +55,165 @@ class IOIDetail extends Component{
   componentWillReceiveProps(nextProps){
     // console.log('In componentWillReceiveProps');
     
-    //set ioi
-    if(nextProps.ioi){
-      this.setState({
-        ioi : nextProps.ioi
-      });
-    }
-
     if(nextProps.link){
       this.setState({
-        disableInvite : true,
-        link : nextProps.link
-      });
-    }
-
-    if(nextProps.rfp){
-      this.setState({
-        rfp : nextProps.rfp
+        disableInvite : true
       });
     }
   }
 
   displayCreatedByCompanyNameElement(){
-    if(this.state.ioi && this.state.link){
+    if(this.props.ioi && this.props.link){
       return(
         <tr>
           <td>Created by Company</td>
-          <td>{this.state.ioi.createdByCompanyName}</td>
+          <td>{this.props.ioi.createdByCompanyName}</td>
         </tr>
       );
     }    
   }
 
   displayCreatedByNameElement(){
-    if(this.state.ioi 
-      && (this.state.user.companyId === this.state.ioi.createdByCompanyId
-        || this.state.link)){
+    if(this.props.ioi 
+      && (this.state.user.companyId === this.props.ioi.createdByCompanyId
+        || this.props.link)){
       return(
         <tr>
           <td>Created by</td>
-          <td>{this.state.ioi.createdByName}</td>
+          <td>{this.props.ioi.createdByName}</td>
         </tr>
       );
     }
   }
 
-  displaySelectedIOI(){
-    let ioi = this.state.ioi;
+  displayMaxDebtElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Max. Debt Allowed</td><td>{cUtils.formatCurrencyToDisplay(ioi.maxDebtAllowed)}</td></tr>);
+    }
+  }
+
+  displayMaturityElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Maturity (yrs)</td><td>{ioi.maturity}</td></tr>);
+    }
+  }
+
+  displayTrancheElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Tranche</td><td>{ioi.tranche}</td></tr>);
+    }
+  }
+
+  displayCashInterestElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Cash Interest</td><td>{cUtils.formatPercentToDisplay(ioi.cashInterest)}</td></tr>);
+    }
+  }  
+
+  displayPIKInterestElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>PIK Interest</td><td>{cUtils.formatPercentToDisplay(ioi.pikIntreset)}</td></tr>);
+    }
+  }
+
+  displayLIBORFloorElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>LIBOR Floor</td><td>{cUtils.formatPercentToDisplay(ioi.liborFloor)}</td></tr>);
+    }
+  }
+
+  displayUpfrontFeeElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Upfront Fee</td><td>{cUtils.formatPercentToDisplay(ioi.upfrontFee)}</td></tr>);
+    }
+  }
+
+  displayCovenantsElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Covenants</td><td>{ioi.covenants}</td></tr>);
+    }
+  }
+
+  displayGovernanceElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Governance</td><td>{ioi.governance}</td></tr>);
+    }
+  }
+
+  displayWarrantsElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Warrants</td><td>{ioi.warrants}</td></tr>);
+    }
+  }
+
+  displayAmortizationElement(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>Amortization</td><td></td></tr>);
+    }
+  }
+
+  displayYear1Element(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td><td>{cUtils.formatPercentToDisplay(ioi.year1)}</td></tr>);
+    }
+  }
+
+  displayYear2Element(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td><td>{cUtils.formatPercentToDisplay(ioi.year2)}</td></tr>);
+    }
+  }
+
+  displayYear3Element(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td><td>{cUtils.formatPercentToDisplay(ioi.year3)}</td></tr>);
+    }
+  }
+
+  displayYear4Element(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td><td>{cUtils.formatPercentToDisplay(ioi.year4)}</td></tr>);
+    }
+  }
+
+  displayYear5Element(ioi, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td><td>{cUtils.formatPercentToDisplay(ioi.year5)}</td></tr>);
+    }
+  }
+
+  displaySelectedIOI(ioi, isParent){
+    // let ioi = this.props.ioi;
     if(ioi){
       return(
         <div>
           <br/>
           <table className="table table-striped table-bordered">
             <tbody>
-              <tr>
-                <td>Max. Debt Allowed</td>
-                <td>{cUtils.formatCurrencyToDisplay(ioi.maxDebtAllowed)}</td>
-              </tr>
+              {this.displayMaxDebtElement(ioi, isParent)}
               <tr>
                 <td>Loan Size</td>
                 <td>{cUtils.formatCurrencyToDisplay(ioi.loanSize)}</td>
               </tr>
-              <tr>
-                <td>Maturity (yrs)</td>
-                <td>{ioi.maturity}</td>
-              </tr>
-              <tr>
-                <td>Tranche</td>
-                <td>{ioi.tranche}</td>
-              </tr>
+              {this.displayMaturityElement(ioi, isParent)}
+              {this.displayTrancheElement(ioi, isParent)}
               <tr>
                 <td>Loan Structure</td>
                 <td>{ioi.loanStructure}</td>
               </tr>
-              <tr>
-                <td>Cash Interest</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.cashInterest)}</td>
-              </tr>
-              <tr>
-                <td>PIK Interest</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.pikIntreset)}</td>
-              </tr>
-              <tr>
-                <td>LIBOR Floor</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.liborFloor)}</td>
-              </tr>
-              <tr>
-                <td>Upfront Fee</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.upfrontFee)}</td>
-              </tr>
-              <tr>
-                <td>Covenants</td>
-                <td>{ioi.covenants}</td>
-              </tr>
-              <tr>
-                <td>Governance</td>
-                <td>{ioi.governance}</td>
-              </tr>
-              <tr>
-                <td>Warrants</td>
-                <td>{ioi.warrants}</td>
-              </tr>
-              <tr>
-                <td><b>Amortization</b></td>
-                <td></td>
-              </tr>
-              <tr>
-                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.year1)}</td>
-              </tr>
-              <tr>
-                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.year2)}</td>
-              </tr>
-              <tr>
-                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.year3)}</td>
-              </tr>
-              <tr>
-                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.year4)}</td>
-              </tr>
-              <tr>
-                <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td>
-                <td>{cUtils.formatPercentToDisplay(ioi.year5)}</td>
-              </tr>
+              {this.displayCashInterestElement(ioi, isParent)}
+              {this.displayPIKInterestElement(ioi, isParent)}
+              {this.displayLIBORFloorElement(ioi, isParent)}
+              {this.displayUpfrontFeeElement(ioi, isParent)}
+              {this.displayCovenantsElement(ioi, isParent)}
+              {this.displayGovernanceElement(ioi, isParent)}
+              {this.displayWarrantsElement(ioi, isParent)}
+              {this.displayAmortizationElement(ioi, isParent)}
+              {this.displayYear1Element(ioi, isParent)}
+              {this.displayYear2Element(ioi, isParent)}
+              {this.displayYear3Element(ioi, isParent)}
+              {this.displayYear4Element(ioi, isParent)}
+              {this.displayYear5Element(ioi, isParent)}
               <tr>
                 <td>Yield Estimate</td>
                 <td><b>{cUtils.formatPercentToDisplay(ioi.yield)}</b></td>
@@ -198,9 +232,9 @@ class IOIDetail extends Component{
   }
 
   displayViewAttachedRFPButton(){
-    if(this.state.ioi){
+    if(this.props.ioi){
       return( <span>
-        <Link to={constants.ROUTES_MAP.RFP_DETAIL+"/"+this.state.ioi.rfpId} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.RFP_DETAIL+"/"+this.props.ioi.rfpId} className="btn btn-primary">
           View Attached RFP
         </Link>
         &nbsp;&nbsp;&nbsp;
@@ -242,8 +276,8 @@ class IOIDetail extends Component{
   }
 
   displayInviteButton(){
-    if(this.state.ioi 
-      && this.state.company.companyId === this.state.ioi.forCompanyId 
+    if(this.props.ioi 
+      && this.state.company.companyId === this.props.ioi.forCompanyId 
       && !this.state.disableInvite){
       return( <span>
       <Link to="#" onClick={this.inviteLender.bind(this)} className="btn btn-primary">
@@ -255,9 +289,9 @@ class IOIDetail extends Component{
   }
 
   displayEditIOIButton(){
-    if(this.state.ioi && this.state.company.companyId === this.state.ioi.createdByCompanyId){
+    if(this.props.ioi && this.state.company.companyId === this.props.ioi.createdByCompanyId){
       return( <span>
-        <Link to={constants.ROUTES_MAP.EDIT_IOI+'/'+this.state.ioi.ioiId} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.EDIT_IOI+'/'+this.props.ioi.ioiId} className="btn btn-primary">
           Edit IOI
         </Link>
         &nbsp;&nbsp;&nbsp;
@@ -276,9 +310,8 @@ class IOIDetail extends Component{
     });
   }
 
-  displayYieldMatrix(){
-    if(this.state.ioi && this.state.ioi.yieldMatrix){
-    var yieldMatrixRender = this.state.ioi.yieldMatrix.map(function(row){
+  displayYieldMatrix(yieldMatrix){
+    var yieldMatrixRender = yieldMatrix.map(function(row){
       // console.log('row:'+JSON.stringify(row));
       return(<tr key={row.period}>
           <td>{numeral(row.period).format('0,0.00')}</td>
@@ -312,29 +345,101 @@ class IOIDetail extends Component{
         </tbody>
       </table>
       </div>);
-    }
+    
   }
 
   displayFinalTermButton(){
-    if(this.state.ioi 
-      && (this.state.company.companyId === this.state.ioi.createdByCompanyId 
-        || this.state.company.companyId === this.state.ioi.forCompanyId )
+    if(this.props.ioi 
+      && (this.state.company.companyId === this.props.ioi.createdByCompanyId 
+        || this.state.company.companyId === this.props.ioi.forCompanyId )
       && this.props.finalTerm){
       return(<span>
         <Link to={constants.ROUTES_MAP.VIEW_FINAL_TERM+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
           View Final Term Sheet
         </Link>
         </span>);
-    } else if(this.state.ioi 
-      && this.state.company.companyId === this.state.ioi.createdByCompanyId
-      && this.state.link){
+    } else if(this.props.ioi 
+      && this.state.company.companyId === this.props.ioi.createdByCompanyId
+      && this.props.link){
       return( <span>
-      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+this.state.ioi.ioiId} className="btn btn-primary">
+      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+this.props.ioi.ioiId} className="btn btn-primary">
         Submit Final Term Sheet
       </Link>
       &nbsp;&nbsp;&nbsp;
       </span>);
     }
+  }
+
+  displayTabListForIOI(){
+    return(
+      <TabList>
+        <Tab disabled={this.props.ioi ? false : true}>
+          IOI Details
+        </Tab>
+        <Tab disabled={this.props.ioi && this.props.ioi.yieldMatrix ? false : true}>
+          IOI Yield Estimate
+        </Tab>
+      </TabList>
+    );
+  }
+
+  displayTabListWithChildIOI(){
+    return(
+      <TabList>
+        <Tab disabled={this.props.ioi ? false : true}>
+          Composite IOI Details
+        </Tab>
+        <Tab disabled={this.props.childIOIList && this.props.childIOIList[0] ? false : true}>
+          First IOI Details
+        </Tab>        
+        <Tab disabled={this.props.childIOIList && this.props.childIOIList[0] && this.props.childIOIList[0].yieldMatrix ? false : true}>
+          First IOI Yield Estimate
+        </Tab>
+        <Tab disabled={this.props.childIOIList && this.props.childIOIList[1] ? false : true}>
+          Second IOI Details
+        </Tab>        
+        <Tab disabled={this.props.childIOIList && this.props.childIOIList[1] && this.props.childIOIList[1].yieldMatrix ? false : true}>
+          Second IOI Yield Estimate
+        </Tab>
+      </TabList>
+    );
+  }
+
+  displayTabPanelForIOI(){
+    return(
+      <span>
+        <TabPanel>
+          {this.displaySelectedIOI(this.props.ioi, false)}
+        </TabPanel>
+        <TabPanel>
+          {this.props.ioi && this.props.ioi.yieldMatrix ? this.displayYieldMatrix(this.props.ioi.yieldMatrix) : ''}
+        </TabPanel>
+      </span>
+    );
+  }
+
+  displayTabPanelWithChildIOI(){
+    // console.log('In displayTabPanelWithChildIOI');
+    // console.log('this.props.childIOIList :'+JSON.stringify(this.props.childIOIList));
+    return(
+      <span>
+        <TabPanel>
+          {this.displaySelectedIOI(this.props.ioi, true)}
+        </TabPanel>
+        <TabPanel>
+          {this.props.childIOIList && this.props.childIOIList[0] ? this.displaySelectedIOI(this.props.childIOIList[0], false) : ''}
+        </TabPanel>                
+        <TabPanel>
+          {this.props.childIOIList && this.props.childIOIList[0] && this.props.childIOIList[0].yieldMatrix ? this.displayYieldMatrix(this.props.childIOIList[0].yieldMatrix) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.childIOIList && this.props.childIOIList[1] ? this.displaySelectedIOI(this.props.childIOIList[1], false) : ''}
+        </TabPanel>                
+        <TabPanel>
+          {this.props.childIOIList && this.props.childIOIList[1] && this.props.childIOIList[1].yieldMatrix ? this.displayYieldMatrix(this.props.childIOIList[1].yieldMatrix) : ''}
+        </TabPanel>        
+      </span>
+    );
   }
 
   render(){
@@ -346,21 +451,13 @@ class IOIDetail extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <br/>
+            <h2>Indication of Interest (IOI)</h2>
+            <br/>
+            <p> Details of the Indication of Interest (IOI) are as below. Navigate thru the tabs to find the yield estimate for this IOI.</p>
+            <br/>
             <Tabs>
-              <TabList>
-                <Tab disabled={this.state.ioi ? false : true}>
-                  IOI Details
-                </Tab>
-                <Tab disabled={this.state.ioi && this.state.ioi.yieldMatrix ? false : true}>
-                  IOI Yield Estimate
-                </Tab>
-              </TabList>
-              <TabPanel>
-                {this.displaySelectedIOI()}
-              </TabPanel>
-              <TabPanel>
-                {this.displayYieldMatrix()}
-              </TabPanel>
+              {this.props.ioi && this.props.ioi.childIOIList ? this.displayTabListWithChildIOI() : this.displayTabListForIOI()}
+              {this.props.ioi && this.props.ioi.childIOIList ? this.displayTabPanelWithChildIOI() : this.displayTabPanelForIOI()}
             </Tabs>      
             {this.displayViewAttachedRFPButton()}
             {this.displayEditIOIButton()}
@@ -379,10 +476,27 @@ class IOIDetail extends Component{
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
   // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
-  let rObject = {};
+  let rObject = {
+    childIOIList : []
+  };
 
   if(state.ioiList.ioi){
-    rObject.ioi = state.ioiList.ioi[0];
+    // console.log('state.ioiList.ioi :'+JSON.stringify(state.ioiList.ioi));
+    if(Array.isArray(state.ioiList.ioi)){
+      rObject.ioi = state.ioiList.ioi[0];
+  
+      if(state.ioiList.ioi[1])
+        rObject.childIOIList.push(state.ioiList.ioi[1]);
+  
+      if(state.ioiList.ioi[2])
+        rObject.childIOIList.push(state.ioiList.ioi[2]);
+      
+        // console.log('rObject.childIOIList : '+JSON.stringify(rObject.childIOIList));
+      // rObject.childIOIList = childIOIList;
+    } else {
+      rObject.ioi = state.ioiList.ioi;
+    }
+
   }
 
   if(state.link.linkList){

@@ -68,6 +68,7 @@ export const SEND_MSG_FROM_ADMIN = 'SEND_MSG_FROM_ADMIN';
 export const GET_FINAL_TERM = 'GET_FINAL_TERM';
 export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
 export const REVOKE_IOI = 'REVOKE_IOI';
+export const DELETE_IOI = 'DELETE_IOI';
 export const FETCH_FT_LIST_FOR_RFP = 'FETCH_FT_LIST_FOR_RFP';
 
 export const FETCH_POSTS = "fetch_posts";
@@ -80,6 +81,20 @@ const USE_CACHE = false;
 // const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
+
+export function deleteIOIAction(ioiId){
+  // console.log('In deleteIOIAction, ioiId:'+ioiId);
+  const request=axios({
+    url : '/deleteIOI?ioiId='+ ioiId,
+    method : 'DELETE',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: DELETE_IOI,
+    payload: request
+  }
+}
 
 export function sendAMsgFromAdminWithCompanyIdAndCompanyName(props){
   const request=axios({
@@ -710,7 +725,7 @@ export function inviteLenderAction(data){
 }
 
 export function getIOIForRFPAndCompanyAction(rfpId, companyId){
-  // console.log('In actions.getIOIForRFPAndCompanyAction');
+  // console.log('In actions.getIOIForRFPAndCompanyAction, rfpId:'+ rfpId+', companyId:'+companyId);
   const request=axios({
     url : '/getIOIForRFPAndCompany?rfpId='+rfpId+'&companyId='+companyId,
     method : 'GET',

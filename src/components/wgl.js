@@ -175,7 +175,11 @@ class WGL extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <br/>
-            <br/>            
+            <br/>
+            <h3>Working Group List (WGL)</h3>
+						<br/>
+            <p>Select the link from dropdown to see the working group list related to the deal.</p>
+            <br/>                        
             <DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
             <br/>
             <br/>

@@ -174,7 +174,7 @@ class UserProfileForm extends Component{
     if(promiseArr.length > 0){
       Promise.all(promiseArr)
       .then((data) => {
-        console.log('data:'+JSON.stringify(data));
+        // console.log('data:'+JSON.stringify(data));
         if(data[0].payload.status === 200 && data[0].payload.data.status === 'SUCCESS'){
           let mProps = {
             toId : that.state.user.contactId,

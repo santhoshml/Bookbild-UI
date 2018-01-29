@@ -356,6 +356,8 @@ class complianceForm extends Component{
             <br/>
             <h3>Quarterly Compliance</h3>
             <br/>
+            <p>Select the link from dropdown to see the working group list related to the deal.</p>
+            <br/>
             <DataroomDropdown linkList={this.props.linkList} onChange={this._onSelectDropdown.bind(this)} selectedDropDown={this.state.selectedDropDown}/> 
             <br/>
             <br/>

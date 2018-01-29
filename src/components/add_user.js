@@ -186,7 +186,9 @@ class AddUserForm extends Component{
 					<div className="container main-container-left-padding" >
 							<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 								<h3>User Details</h3>
-
+								<br/>
+								<p>To add a new user from your company, enter the below details and Click submit.</p>
+								<br/>
 								<div className={`row`}>
 									<Field
 										name="fullName"

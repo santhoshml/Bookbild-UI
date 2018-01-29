@@ -28,6 +28,8 @@ class RFPFavoriteList extends Component{
     if(this.props.rfpList && this.props.rfpList.length > 0){
       return (<div>
           <h3> Open/Active RFP's in Favorites list</h3>
+          <br/>
+          <p>Click on any RFP to see more details. Use the filter/sort to help you find.</p>
           <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={false}/>
         </div>);
     } else {
@@ -60,8 +62,6 @@ class RFPFavoriteList extends Component{
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // console.log('state:'+JSON.stringify(state));
   return {
     rfpList: state.rfpList.rfpList
   };

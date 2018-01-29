@@ -56,26 +56,14 @@ class RFPDetail extends Component{
         isFavorite : nextProps.isFavorite
       });
     }
-
-    if(nextProps.favorite){
-      this.setState({
-        favorite : nextProps.favorite
-      });
-    }
-
-    if(nextProps.rfp){
-      this.setState({
-        rfp : nextProps.rfp
-      });
-    }
   }
 
   displayCompanyDesc(){
-    if(this.state.rfp){
+    if(this.props.rfp){
       return(
         <div>
           <br/>
-          <p>{this.state.rfp.companyDesc}</p>
+          <p>{this.props.rfp.companyDesc}</p>
           <br/>
           <br/>
         </div>
@@ -84,7 +72,7 @@ class RFPDetail extends Component{
   }
 
   displayCompanyName(){
-    let {rfp} = this.state;
+    let {rfp} = this.props;
     if(rfp.createdByCompanyId === this.state.user.companyId){
       return(<tr>
         <td>Company Name</td>
@@ -94,7 +82,7 @@ class RFPDetail extends Component{
   }
 
   displayOutstandingRFP(){
-    let rfp = this.state.rfp;
+    let {rfp} = this.props;
     if(rfp){
       return(
         <div>
@@ -212,7 +200,7 @@ class RFPDetail extends Component{
     // console.log('I am in addToFavorites ');
     var props={
       userId : this.state.user.userId,
-      rfpId : this.state.rfp.rfpId,
+      rfpId : this.props.rfp.rfpId,
       contactId : this.state.user.contactId
     };
     this.props.addRFPToFavoritesAction(props)
@@ -222,7 +210,7 @@ class RFPDetail extends Component{
             className : "notification-success"
           });
           this.props.getRFPFromFavoritesAction(this.state.user.userId, this.props.match.params.id)
-          this.setState({isFavorite : true, favorite : this.state.favorite})
+          this.setState({isFavorite : true, favorite : this.props.favorite})
         }else {
           toast(constants.NOTIFICATIONS.ADD_TO_FAVORITES_FAILED, {
             className : "notification-error"
@@ -232,10 +220,10 @@ class RFPDetail extends Component{
   }
 
   displayViewIntrestListButton(){
-    if(this.state.rfp && this.state.rfp.createdByCompanyId === this.state.company.companyId){
+    if(this.props.rfp && this.props.rfp.createdByCompanyId === this.state.company.companyId){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.state.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.IOI_LIST+"/"+this.props.rfp.rfpId+"/"+constants.IOI_FOR_RFP} className="btn btn-primary">
           View Book
         </Link>
       </span>);
@@ -245,12 +233,12 @@ class RFPDetail extends Component{
   }
 
   displayFinalTermListButton(){
-    if(this.state.rfp 
-        && this.state.rfp.createdByCompanyId === this.state.company.companyId
+    if(this.props.rfp 
+        && this.props.rfp.createdByCompanyId === this.state.company.companyId
         && this.props.finalTermList && this.props.finalTermList.length > 0){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={constants.ROUTES_MAP.FINAL_TERM_LIST+"/"+this.state.rfp.rfpId+"/"+constants.FT_FOR_RFP} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.FINAL_TERM_LIST+"/"+this.props.rfp.rfpId+"/"+constants.FT_FOR_RFP} className="btn btn-primary">
           View Final Book
         </Link>
       </span>);
@@ -260,10 +248,10 @@ class RFPDetail extends Component{
   }
 
   displayEditRFPButton(){
-    if(this.state.rfp && this.state.company.companyId === this.state.rfp.createdByCompanyId){
+    if(this.props.rfp && this.state.company.companyId === this.props.rfp.createdByCompanyId){
       return( <span>
         &nbsp;&nbsp;&nbsp;
-        <Link to={constants.ROUTES_MAP.EDIT_RFP+"/"+this.state.rfp.rfpId} className="btn btn-primary">
+        <Link to={constants.ROUTES_MAP.EDIT_RFP+"/"+this.props.rfp.rfpId} className="btn btn-primary">
           Edit RFP
         </Link>
       </span>);
@@ -278,16 +266,16 @@ class RFPDetail extends Component{
         return(
           <span>
             &nbsp;&nbsp;&nbsp;
-            <Link to={constants.ROUTES_MAP.EDIT_IOI+"/"+this.props.ioi.ioiId} className="btn btn-primary">
-              EDIT IOI
+            <Link to={constants.ROUTES_MAP.IOI_DETAIL+"/"+this.props.ioi.ioiId} className="btn btn-primary">
+              VIEW IOI
             </Link>
           </span>
         );
-      } else if(this.state.rfp){
+      } else if(this.props.rfp){
       return(
         <span>
           &nbsp;&nbsp;&nbsp;
-          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+this.state.rfp.rfpId} className="btn btn-primary">
+          <Link to={constants.ROUTES_MAP.CREATE_IOI+"/"+this.props.rfp.rfpId} className="btn btn-primary">
             CREATE IOI
           </Link>
         </span>
@@ -318,7 +306,7 @@ class RFPDetail extends Component{
   }
 
   displayCollateralInfo(){
-    let rfp = this.state.rfp;
+    let rfp = this.props.rfp;
     if(rfp){
       return (
         <div >
@@ -370,8 +358,8 @@ class RFPDetail extends Component{
   }
 
   displayCompanyManagementContact(){
-    if(this.state.rfp && this.state.rfp.contactObject){
-      let {rfp} = this.state;
+    if(this.props.rfp && this.props.rfp.contactObject){
+      let {rfp} = this.props;
       // console.log('rfp :'+JSON.stringify(rfp));
       return(
         <div>
@@ -405,7 +393,7 @@ class RFPDetail extends Component{
 
   render(){
     // console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
-    // console.log('In render :'+ JSON.stringify(this.state.rfp));
+    // console.log('In render :'+ JSON.stringify(this.props.rfp));
     return(
       <div>
         <ToastContainer />
@@ -414,20 +402,23 @@ class RFPDetail extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <br/>
+            <h3>Request for Proposal </h3>
+            <br/>
+            <p>Here is the details of the request for proposal (RFP). Use the Tabs to get more infomation related to this RFP.</p>
             <br/>
             <Tabs>
               <TabList>
-                <Tab disabled={this.state.rfp ? false : true}>
+                <Tab disabled={this.props.rfp ? false : true}>
                   RFP Details
                 </Tab>
-                <Tab disabled={this.state.rfp ? false : true}>
+                <Tab disabled={this.props.rfp ? false : true}>
                   Company Overview
                 </Tab>
                 <Tab 
-                  disabled={this.state.rfp && (this.state.rfp.createdByCompanyId === this.state.company.companyId) ? false : true}>
+                  disabled={this.props.rfp && (this.props.rfp.createdByCompanyId === this.state.company.companyId) ? false : true}>
                   Company Management Contact
                 </Tab>
-                <Tab disabled={this.state.rfp && this.state.rfp.category.toUpperCase() === 'ABL' ? false : true}>
+                <Tab disabled={this.props.rfp && this.props.rfp.category.toUpperCase() === 'ABL' ? false : true}>
                   Collateral Information
                 </Tab>
               </TabList>
@@ -472,9 +463,17 @@ function mapStateToProps(state) {
 
   let rObject = {
     isFavorite  : state.rfpDetails.isFavorite,
-    favorite    : state.rfpDetails.rfpFavoritesJSON,
-    ioi         : (state.ioiList &&  state.ioiList.ioiList)? state.ioiList.ioiList[0] : null
+    favorite    : state.rfpDetails.rfpFavoritesJSON
+    
   };
+
+  if(state.ioiList.ioiList){
+    if(Array.isArray(state.ioiList.ioiList)){
+      rObject.ioi = state.ioiList.ioiList[0];
+    } else {
+      rObject.ioi = state.ioiList.ioiList;
+    }
+  }
 
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];

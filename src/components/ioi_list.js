@@ -58,7 +58,7 @@ class IOIList extends Component{
         <div>
           <h2>IOI List</h2>
           <br/>
-          Below is the list of all the Indication of Interest (IOI's) received for the RFP. Double click to view more details.
+          Below is the list of all the Indication of Interest (IOI's) received for the RFP. Click to view more details.
         </div>
       );
     } else if(this.state.user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
@@ -66,7 +66,7 @@ class IOIList extends Component{
         <div>
           <h2>My IOI List</h2>
           <br/>
-          Below is the list of all your Indication of Interest (IOI's). Double click to view more details.
+          Below is the list of all your Indication of Interest (IOI's). Click to view more details.
         </div>
       );
     } else if(this.state.user.role.toLowerCase() === constants.KEY_COMPANY.toLowerCase()
@@ -75,7 +75,7 @@ class IOIList extends Component{
           <div>
             <h2>IOI List</h2>
             <br/>
-            Below is the list of all your Indication of Interest (IOI's) received for all your RFP's. Double click to view more details.
+            Below is the list of all your Indication of Interest (IOI's) received for all your RFP's. Click to view more details.
           </div>
         );
       }    

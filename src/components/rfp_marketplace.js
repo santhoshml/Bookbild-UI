@@ -13,6 +13,7 @@ import Dropdown from 'react-dropdown'
 import NavBar from './sidebar';
 import Header from './header';
 import { ToastContainer, toast } from 'react-toastify';
+import { CircleLoader } from 'react-spinners';
 
 class RFPMarketPlace extends Component{
   constructor(props){
@@ -28,8 +29,17 @@ class RFPMarketPlace extends Component{
     this.props.fetchAllRFPAction();
     this.props.fetchTermSheetActivityStatsAction('overall');
     this.setState({
-      selectedSector : {value:'overall', label:'All Sectors'}
+      selectedSector : {value:'overall', label:'All Sectors'},
+      loading : true
     });
+  }
+
+  componentWillReceiveProps(nextProps){
+    if(nextProps.loading !== this.state.loading){
+      this.setState({
+        loading : nextProps.loading
+      });
+    }
   }
 
   componentDidMount(){
@@ -177,6 +187,9 @@ class RFPMarketPlace extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
+            <h3>All active Request for Proposals (RFP)</h3>
+            <br/>
+            <p>Click on any RFP to see more details. Use the filter to look for RFP's accross the region.</p>
             <br/>
             <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>
             <br/>
@@ -201,10 +214,12 @@ function mapStateToProps(state) {
 
   if(state.rfpList.rfpList){
     rObject.rfpList = state.rfpList.rfpList;    
+    rObject.loading = false;
   }
 
   if(state.rfpList.termSheetActivity){
     rObject.termSheetActivity = state.rfpList.termSheetActivity[0];
+    rObject.loading = false;
   }
 
   return rObject;
