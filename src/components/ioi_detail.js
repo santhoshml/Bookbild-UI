@@ -387,19 +387,19 @@ class IOIDetail extends Component{
     return(
       <TabList>
         <Tab disabled={this.props.ioi ? false : true}>
-          Composite IOI Details
+          IOI Overview
         </Tab>
         <Tab disabled={this.props.childIOIList && this.props.childIOIList[0] ? false : true}>
-          First IOI Details
+          Tranche 1 Details
         </Tab>        
         <Tab disabled={this.props.childIOIList && this.props.childIOIList[0] && this.props.childIOIList[0].yieldMatrix ? false : true}>
-          First IOI Yield Estimate
+          Tranche 1 Yield Estimate
         </Tab>
         <Tab disabled={this.props.childIOIList && this.props.childIOIList[1] ? false : true}>
-          Second IOI Details
+          Tranche 2 Details
         </Tab>        
         <Tab disabled={this.props.childIOIList && this.props.childIOIList[1] && this.props.childIOIList[1].yieldMatrix ? false : true}>
-          Second IOI Yield Estimate
+          Tranche 2 Yield Estimate
         </Tab>
       </TabList>
     );

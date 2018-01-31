@@ -248,7 +248,7 @@ class EditIOIForm extends Component{
             let lProps = {
               companyId : that.state.user.companyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
@@ -256,7 +256,7 @@ class EditIOIForm extends Component{
             let bProps={
               companyId : this.state.rfp.createdByCompanyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(bProps);
 
@@ -284,7 +284,7 @@ class EditIOIForm extends Component{
             let lProps = {
               companyId : that.state.user.companyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
@@ -292,7 +292,7 @@ class EditIOIForm extends Component{
             let bProps={
               companyId : this.state.rfp.createdByCompanyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(bProps);
 
@@ -316,7 +316,7 @@ class EditIOIForm extends Component{
             let lProps = {
               companyId : that.state.user.companyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(lProps);
 
@@ -324,7 +324,7 @@ class EditIOIForm extends Component{
             let bProps={
               companyId : this.state.rfp.createdByCompanyId,
               msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.initialValues.ioi.ioiId
+              ID : that.props.ioi.ioiId
             };
             that.props.sendAMsgFromAdminWithCompanyId(bProps);
 
@@ -644,7 +644,7 @@ class EditIOIForm extends Component{
   }
 
   displayStructureFor2Loans(suffix){
-    if(this.state.displayTwoIOIFields){
+    if(this.state.displayTwoLoanStructures){
       return(<span>
         <div className={`row`}>
           <Field

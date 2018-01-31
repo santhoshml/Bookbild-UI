@@ -70,6 +70,7 @@ export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
 export const REVOKE_IOI = 'REVOKE_IOI';
 export const DELETE_IOI = 'DELETE_IOI';
 export const FETCH_FT_LIST_FOR_RFP = 'FETCH_FT_LIST_FOR_RFP';
+export const GET_DASHBOARD_STATS = 'GET_DASHBOARD_STATS';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -81,6 +82,34 @@ const USE_CACHE = false;
 // const ROOT_URL = 'http://127.0.0.1:1127';
 // const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
+
+export function getLenderStatsForDashboard(companyId, userId){
+  // console.log('In getLenderStatsForDashboard, companyId:'+companyId);
+  const request=axios({
+    url : '/getLenderStatsForDashboard?companyId='+companyId+'&userId='+userId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_DASHBOARD_STATS,
+    payload: request
+  }  
+}
+
+export function getBorrowerStatsForDashboard(companyId, userId){
+  // console.log('In getBorrowerStatsForDashboard, companyId:'+companyId);
+  const request=axios({
+    url : '/getBorrowerStatsForDashboard?companyId='+companyId+'&userId='+userId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_DASHBOARD_STATS,
+    payload: request
+  }  
+}
 
 export function deleteIOIAction(ioiId){
   // console.log('In deleteIOIAction, ioiId:'+ioiId);

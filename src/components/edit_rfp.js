@@ -111,25 +111,20 @@ class EditRFPForm extends Component {
         || initValues.txnOverview !== values.txnOverview
         || initValues.companyDesc !== values.companyDesc
         || initValues.expiryDt !== values.expiryDt
-        || initValues.isSponsored !== values.isSponsored){
-          let uProps = {
-            rfpId : initValues.rfpId,
-            contactId : initValues.contactId,
-            requestType : values.requestType,
-            companyName : values.companyName,
-            dealSize : values.dealSize,
-            tenor : values.tenor,
-            category : values.category,
-            product : values.product,
-            sector : values.sector,
-            region : values.region,
-            ltmRevenue : values.ltmRevenue,
-            ltmEbitda : values.ltmEbitda,
-            txnOverview : values.txnOverview,
-            companyDesc : values.companyDesc,
-            expiryDt : values.expiryDt,
-            isSponsored : values.isSponsored
-          }
+        || initValues.isSponsored !== values.isSponsored
+        || initValues.acctRecvGrossAmt !== values.acctRecvGrossAmt
+        || initValues.acctRecvComment !== values.acctRecvComment
+        || initValuesvalues.invtryGrossAmt !== values.invtryGrossAmt
+        || initValuesvalues.invtryComment !== values.invtryComment
+        || initValuesvalues.ppeGrossAmt !== values.ppeGrossAmt
+        || initValuesvalues.ppeComment !== values.ppeComment
+        || initValuesvalues.maeGrossAmt !== values.maeGrossAmt
+        || initValuesvalues.maeComment !== values.maeComment
+        || initValuesvalues.realEstGrossAmt !== values.realEstGrossAmt
+        || initValuesvalues.realEstComment !== values.realEstComment
+        || initValuesvalues.otherGrossAmt !== values.otherGrossAmt
+        || initValuesvalues.otherComment !== values.otherComment
+          ){
           promiseArr.push(this.props.updateRFPAction(values));
         }
 
@@ -142,8 +137,8 @@ class EditRFPForm extends Component {
                 msg : constants.MESSAGES.RFP_UPDATED,
                 ID : that.props.initialValues.rfpId
               };
-              this.props.sendAMsgFromAdminWithCompanyId(mProps);
-              this.props.history.push({
+              that.props.sendAMsgFromAdminWithCompanyId(mProps);
+              that.props.history.push({
                 pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
                 state : constants.NOTIFICATIONS.EDIT_RFP_SUCCESS
               });
@@ -152,6 +147,11 @@ class EditRFPForm extends Component {
                 className : "notification-error"
               });
             }
+          });
+        } else {
+          that.props.history.push({
+            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+            state : constants.NOTIFICATIONS.EDIT_RFP_SUCCESS
           });
         }
     }

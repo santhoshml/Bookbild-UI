@@ -80,6 +80,13 @@ export default class Header extends Component{
 		}
 	}
 
+	displayDashboard(){
+		if(this.state.user){
+			return(
+				<a className="fa fa-tachometer header-cust-attr anchor-spacing header-menu-items" href="/dashboard">&nbsp;DASHBOARD</a>
+			);
+		}		
+	}
 
 	render(){
 		// console.log('I am in header render');
@@ -93,6 +100,7 @@ export default class Header extends Component{
 						</a>
 					</span>
 					<span className="align-right">
+						{this.displayDashboard()}
 						{this.displaySolutions()}
 						<a className="fa fa-bell-o header-cust-attr anchor-spacing header-menu-items" href="/inviteCompany">&nbsp;INVITE COMPANY</a>
 						{this.displayDemo()}

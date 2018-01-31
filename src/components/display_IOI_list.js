@@ -86,7 +86,7 @@ export default class DisplayIOIList extends Component {
       return(
         <div>
         {
-          row.blendedCost.map((bc) => {
+          row.blendedCost && row.blendedCost.map((bc) => {
             return <p key={bc.yield}>{bc.yield + ' with '+ bc.otherLender}</p>
           })
         }
@@ -96,10 +96,10 @@ export default class DisplayIOIList extends Component {
   }
 
   covenantsRenderer(cell, row){
-    let cArr = row.covenants.split(',');
+    let cArr = row.covenants && row.covenants.split(',');
     return(<div>
         {
-          cArr.map((c)=>{
+          cArr && cArr.map((c)=>{
             return <p key={c}>{c}</p>
           })
         }

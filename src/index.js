@@ -42,6 +42,7 @@ import FinalTermList from './components/finalTerm_list';
 import InviteCompany from './components/invite_company';
 import Messages from './components/messages';
 import Initializefromstate from './components/initializefromstate';
+import Dashboard from './components/dashboard';
 
 
 
@@ -71,6 +72,7 @@ ReactDOM.render(
       <BrowserRouter>
           <div>
             <Switch>
+              <Route path="/dashboard" component={Dashboard} />
               <Route path="/initializefromstate" component={Initializefromstate} />
               <Route path="/messages" component={Messages} />
               <Route path="/landing" component={LandingPage} />

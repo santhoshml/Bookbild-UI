@@ -125,7 +125,7 @@ export default class DisplayFinalTermList extends Component {
       return(
         <div>
         {
-          row.blendedCost.map((bc) => {
+          row.blendedCost && row.blendedCost.map((bc) => {
             return <p key={bc.yield}>{bc.yield + ' with '+ bc.otherLender}</p>
           })
         }
