@@ -187,9 +187,9 @@ class RFPMarketPlace extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
-            <h3>All active Request for Proposals (RFP)</h3>
+            <h3>Market Overview - Active Requests for Proposal (RFPs)</h3>
             <br/>
-            <p>Click on any RFP to see more details. Use the filter to look for RFP's accross the region.</p>
+            <p>Click on any RFP below to view details. </p>
             <br/>
             <DisplayRFPList list={this.props.rfpList} isDisplayRegionDropdown={true}/>
             <br/>

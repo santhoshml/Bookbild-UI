@@ -404,7 +404,7 @@ class RFPDetail extends Component{
             <br/>
             <h3>Request for Proposal </h3>
             <br/>
-            <p>Here is the details of the request for proposal (RFP). Use the Tabs to get more infomation related to this RFP.</p>
+            <p>Click tabs below for more detail.</p>
             <br/>
             <Tabs>
               <TabList>

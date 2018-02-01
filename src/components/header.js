@@ -88,6 +88,14 @@ export default class Header extends Component{
 		}		
 	}
 
+	displayMarkets(){
+		if(this.state.user){
+			return(
+				<a className="fa fa-line-chart header-cust-attr anchor-spacing header-menu-items" href="#">&nbsp;MARKETS</a>
+			);
+		}		
+	}
+
 	render(){
 		// console.log('I am in header render');
 		return (
@@ -101,6 +109,7 @@ export default class Header extends Component{
 					</span>
 					<span className="align-right">
 						{this.displayDashboard()}
+						{this.displayMarkets()}
 						{this.displaySolutions()}
 						<a className="fa fa-bell-o header-cust-attr anchor-spacing header-menu-items" href="/inviteCompany">&nbsp;INVITE COMPANY</a>
 						{this.displayDemo()}

@@ -871,10 +871,10 @@ class EditIOIForm extends Component{
       <Tabs>
         <TabList>
           <Tab>
-            First Loan
+            First Tranche
           </Tab>
           <Tab>
-            SecondLoan
+            Second Tranche
           </Tab>
         </TabList>
         <TabPanel>
@@ -913,9 +913,9 @@ class EditIOIForm extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
-            <h3>Edit your Indication of Interest (IOI)</h3>
+            <h3>IOI Revisions</h3>
             <br/>
-            <p>Make the nessary changes to your IOI and Click submit. Use Collateral Analysis section to ....</p>
+            <p>Replace with: Modify IOI terms below and submit. Update Collateral Analysis where applicable.</p>
             <br/>
             <hr/>
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>

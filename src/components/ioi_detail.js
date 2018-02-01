@@ -453,7 +453,7 @@ class IOIDetail extends Component{
             <br/>
             <h2>Indication of Interest (IOI)</h2>
             <br/>
-            <p> Details of the Indication of Interest (IOI) are as below. Navigate thru the tabs to find the yield estimate for this IOI.</p>
+            <p>See IOI overview below - select tabs for more detail.</p>
             <br/>
             <Tabs>
               {this.props.ioi && this.props.ioi.childIOIList ? this.displayTabListWithChildIOI() : this.displayTabListForIOI()}
