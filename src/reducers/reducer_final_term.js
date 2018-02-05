@@ -9,7 +9,6 @@ export default function(state = INITIAL_STATE, action) {
   case GET_FINAL_TERM_WITH_YIELD_MATRIX :
   case GET_FINAL_TERM :
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In reducer_final_term, data:'+JSON.stringify(action.payload.data));
       return {
         ...state
         , finalTerm: action.payload.data.data.Items

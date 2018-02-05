@@ -54,7 +54,6 @@ class PostsNew extends Component {
 }
 
 function validate(values) {
-  // console.log(values) -> { title: 'asdf', categories: 'asdf', content: 'asdf' }
   const errors = {};
 
   // Validate the inputs from 'values'

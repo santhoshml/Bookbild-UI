@@ -14,7 +14,6 @@ import Header from './header';
 class RFPFavoriteList extends Component{
   constructor(props){
     super(props);
-    // console.log('In RFPList constructor');
     this.state = {
 			rfpList : null
 		}
@@ -40,7 +39,6 @@ class RFPFavoriteList extends Component{
   }
 
   render(){
-    // console.log('In RFPList render');
     return(
       <div>
         <Header/>

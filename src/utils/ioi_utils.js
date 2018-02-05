@@ -3,23 +3,16 @@ import { min } from 'moment';
 import arraySort from 'array-sort';
 
 exports.makeClubDealList = function(list, rfp){
-  // console.log('list : '+ JSON.stringify(list));
   let condensedList = getCondensedList(list);
-  // console.log('condensedList :'+JSON.stringify(condensedList));
   if(isEligibleForClub(condensedList, rfp)){
-    // console.log('It is eligible for club deal, lets make it');
     let lenderCombinationList = combineLendersForClub(list, rfp);
     if(lenderCombinationList.length === 0){
-      // console.log('none of the lenders can be combined, returning empty');
       return null;
     } else {
-      // console.log('got the list of lender combinations');
       // sort them by yield and return
-      // console.log('lenderCombinationList :'+JSON.stringify(lenderCombinationList));
       return arraySort(lenderCombinationList, 'yield');
     }
   } else {
-    // console.log('its not eligible for club, lets exit');
     return null;
   }
 }
@@ -31,17 +24,13 @@ function combineLendersForClub(list, rfp){
   for(let i=0; i< list.length; i++){
     let ioi = list[i];
     if(ioi.loanStructure.toLowerCase().indexOf('Revolver'.toLowerCase()) >= 0){
-      // console.log('got a revolver');
       rBucket.push(ioi);
-    } else if(ioi.loanStructure.toLowerCase().indexOf('Term Loan'.toLowerCase()) >= 0
-        || ioi.loanStructure.toLowerCase().indexOf('Both'.toLowerCase()) >= 0){
-      // console.log('got a term loan or both');
+    } else if(ioi.loanStructure.toLowerCase().indexOf('Term Loan'.toLowerCase()) >= 0){
       tlBucket.push(ioi);
     }
   }
 
   if(rBucket.length > 0 && tlBucket.length > 0){
-    // console.log('need to combine revolvers and termloans');
     let minRevolver = rBucket[getIOIWithMinValue('yield', rBucket)];
     for(let i=0; i<tlBucket.length; i++){
       if(minRevolver.loanSize + tlBucket[i].loanSize >= rfp.dealSize){
@@ -54,7 +43,6 @@ function combineLendersForClub(list, rfp){
         clubList.push(getClubDealObject(tlBucket[i], tlBucket[i+1]));
       }
     }
-    // console.log('need to combine termLoans only');
   }
   return clubList;
 }
@@ -71,7 +59,6 @@ function getClubDealObject(lender1, lender2){
       lender2.createdByCompanyId
     ]
   };
-  // console.log('clubObject :'+ JSON.stringify(clubObject));
   return clubObject;
 }
 
@@ -87,7 +74,6 @@ function getIOIWithMinValue(field, list){
 }
 
 function isEligibleForClub(list, rfp){
-  // console.log('checking if its eligible, list : '+JSON.stringify(list));
   if(list.length === 1
     || !hasTermLoan(list)){
     return false;

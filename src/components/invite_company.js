@@ -59,7 +59,6 @@ class InviteCompanyForm extends Component{
 	}
 
   renderTextArea(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -81,11 +80,9 @@ class InviteCompanyForm extends Component{
       props.userEmail = this.state.user.email;
     }
     
-    // console.log('values : '+JSON.stringify(values));
 		this.props.sendInviteCompanyEmailAction(props)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-        // console.log('email sent successfully');
          this.props.reset();
          toast(constants.NOTIFICATIONS.INVITE_COMPANY_SUCCESS, {
             className : "notification-success"
@@ -94,13 +91,9 @@ class InviteCompanyForm extends Component{
            'message' : 'Your message sent. Thank you for doing this for us.'
          });
 			 } else {
-        // console.log('could not send email');
         toast(constants.NOTIFICATIONS.INVITE_COMPANY_FAILED, {
 					className : "notification-error"
 				});
-        // this.setState({
-        //   message : 'Error sending the email. Please try again.'
-        // });
 			 }
 		 });
   }
@@ -117,10 +110,7 @@ class InviteCompanyForm extends Component{
 
 
   render = () => {
-    // console.log('I am in render');
-		// console.log('props:'+JSON.stringify(this.props));
     const { handleSubmit, pristine, reset, submitting } = this.props
-		// console.log('yoyo:'+JSON.stringify(this.props.initialValues));
 
     return(
       <div>

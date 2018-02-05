@@ -49,7 +49,6 @@ class CreateIOIForm extends Component{
   }
 
   renderDropdownField(field) {
-    // console.log('field :'+JSON.stringify(field))
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -76,8 +75,6 @@ class CreateIOIForm extends Component{
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('className:'+JSON.stringify(className));
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -109,11 +106,9 @@ class CreateIOIForm extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps');
     if(nextProps.rfp){
       let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
       let totalGross = ioiUtils.getTotalGross(nextProps.rfp);  
-      // console.log('will set the rfp');      
       this.setState({
         rfp : nextProps.rfp,
         collateral : collateral,
@@ -165,8 +160,6 @@ class CreateIOIForm extends Component{
       props_2.createdByContactId = this.state.user.contactId;
 
       props.childIOIList = [props_1, props_2];
-      // console.log('props_1 :'+ JSON.stringify(props_1));
-      // console.log('props_2 :'+ JSON.stringify(props_2));
     } else {
       let keys = Object.keys(props);      
       for(let key of keys){
@@ -179,8 +172,6 @@ class CreateIOIForm extends Component{
     }
 
     //remove _1 from the props object
-
-    // console.log('props :'+JSON.stringify(props));
 
     this.props.createIOIAction(props)
       .then((data) => {
@@ -215,8 +206,6 @@ class CreateIOIForm extends Component{
 	}
 
   displayRFPSummary(){
-    // console.log(' In displayRFPSummary, this.state.rfp : '+ JSON.stringify(this.state.rfp));
-    // console.log(' In displayRFPSummary, this.props.rfp : '+ JSON.stringify(this.props.rfp));
     let {rfp} = this.props;
     if(rfp){
       return (
@@ -247,7 +236,6 @@ class CreateIOIForm extends Component{
   }
 
   onSelectCovenant(option) {
-      // console.log('You selected '+JSON.stringify(option));
       this.setState({
         selectedCovenant: this.state.selectedCovenant.push(option)
       });
@@ -255,7 +243,6 @@ class CreateIOIForm extends Component{
 
 
     onChangeCollateralValue(element, field, event){
-    // console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
     var updValue = this.state.collateral;
     updValue[element][field] = event.target.value;
 
@@ -266,8 +253,6 @@ class CreateIOIForm extends Component{
     updValue[element]['available'] = cUtils.parseNumber(updValue[element]['netCollateral']) * cUtils.parseNumber(updValue[element]['advRate']) / 100;
     updValue[element]['netEffective'] = cUtils.parseNumber(updValue[element]['available']) / (cUtils.parseNumber(updValue[element]['gross']));
 
-    // console.log('updValue:'+JSON.stringify(updValue));
-
     this.setState({
       collateral: updValue,
       totalAvailable : this.state.totalAvailable + updValue[element]['available']
@@ -275,11 +260,8 @@ class CreateIOIForm extends Component{
   }
 
   displayCollateralAnalysis(suffix){
-    // console.log('I am in displayCollateralAnalysis');
-    // console.log('thisValue:'+JSON.stringify(thisValue));
     var {rfp} = this.props;
     if(rfp){
-      // console.log('rfp:'+JSON.stringify(rfp));
       return(<div>
         <h3>Borrowing Base</h3>
         <table className="table table-striped">
@@ -712,7 +694,6 @@ class CreateIOIForm extends Component{
   }
 
   displayTwoIOIFields(){
-    // console.log('displayTwoIOIFields started');
     return(
       <Tabs>
         <TabList>
@@ -735,12 +716,10 @@ class CreateIOIForm extends Component{
 
   onSelectLoanStructure(props){
     if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') && !this.state.displayTwoLoanStructures) {
-      // console.log('will set displayTwoLoanStructures = true');
       this.setState({
         displayTwoLoanStructures : true
       });
     } else if(this.state.displayTwoLoanStructures){
-      // console.log('will set displayTwoLoanStructures = false');
       this.setState({
         displayTwoLoanStructures : false
       });
@@ -748,7 +727,6 @@ class CreateIOIForm extends Component{
   }
 
   render(){
-    // console.log('I am in create IOI');
     const {handleSubmit} = this.props;
 
     return(
@@ -801,14 +779,12 @@ function mapStateToProps(state) {
 
   if(state.rfpList.rfpList){
     intializedData.rfp = state.rfpList.rfpList[0];
-    // console.log('intializedData.rfp : '+JSON.stringify(intializedData.rfp));
   }
 
   return intializedData;
 }
 
 function validate(values){
-  // console.log('values:'+JSON.stringify(values));
   const errors={};
 
   if(!values.loanSize || values.loanSize == 0){

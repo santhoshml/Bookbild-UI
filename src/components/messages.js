@@ -23,7 +23,6 @@ class Messages extends Component{
   }
 
   componentWillMount() {
-    // console.log('In messages componentWillMount');
     let user    = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.setState({
@@ -34,7 +33,6 @@ class Messages extends Component{
   }
 
   onComponseNewMessage(){
-    // console.log('I am in onComponseNewMessage');
     if(!this.state.isComposeNewMsg){
       this.setState({
         isComposeNewMsg : true,
@@ -46,10 +44,6 @@ class Messages extends Component{
   }
 
   setActiveMessage(activeMessageId, contactName, companyName){
-    // console.log('I am in setActiveMessage');
-    // console.log('activeMessageId :'+ activeMessageId);
-    // console.log('contactName :'+contactName);
-    // console.log('companyName :'+ companyName);
     this.setState({
       activeMessageId : activeMessageId,
       contactName : contactName,
@@ -68,7 +62,6 @@ class Messages extends Component{
 
 
   render(){
-    // console.log('In messages render');
     return(
       <div>
         <Header/>

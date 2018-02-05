@@ -13,7 +13,6 @@ import Header from './header';
 class RFPCompanyList extends Component{
   constructor(props){
     super(props);
-    // console.log('In RFPList constructor');
     this.state = {
 			rfpList : null
 		}
@@ -37,7 +36,6 @@ class RFPCompanyList extends Component{
   }
 
   render(){
-    // console.log('In RFPList render');
     return(
       <div>
         <Header/>
@@ -59,16 +57,12 @@ class RFPCompanyList extends Component{
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // console.log('state:'+JSON.stringify(state));
   return {
     rfpList: state.rfpList.rfpList
   };
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
     fetchFavoriteRFPListAction: fetchFavoriteRFPListAction
     , fetchCompanyRFPListAction : fetchCompanyRFPListAction}

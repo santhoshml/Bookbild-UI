@@ -6,7 +6,6 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case CREATE_PITCH:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In reducer_create_ioi, data:'+JSON.stringify(action.payload.data));
       return {
         ...state
         , pitch: action.payload.data.data.Items

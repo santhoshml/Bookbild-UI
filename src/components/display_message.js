@@ -41,14 +41,12 @@ class DisplayMessage extends Component{
 
   componentWillReceiveProps(nextProps){
     if(nextProps.isComposeNewMsg && nextProps.isComposeNewMsg !== this.state.isComposeNewMsg){
-      // console.log('will compose a new msg');
       this.props.fetchAllContactsToMessageAction();
       this.setState({
         isComposeNewMsg : nextProps.isComposeNewMsg,
         loading : false
       });
     } else if(nextProps.activeMessageId && nextProps.activeMessageId !== this.state.activeMessageId){
-      // console.log('will get msgs list for msgId:'+nextProps.activeMessageId);
       this.props.getMsgListAction(nextProps.activeMessageId);
       this.setState({
         activeMessageId : nextProps.activeMessageId,
@@ -79,7 +77,6 @@ class DisplayMessage extends Component{
     };
     props.contactCompanyMap[props.fromId] = this.state.user.companyId;
     props.contactCompanyMap[props.toId] = msgUtils.getCompanyId(props.toId, this.props.contactList);
-    // console.log('will do postNewMsgAction, props :'+ JSON.stringify(props));
     this.props.postNewMsgAction(props)
     this.props.resetComposeNewMessage();
   }
@@ -93,7 +90,6 @@ class DisplayMessage extends Component{
       msg : this.state.newContent,
       fromId : this.state.user.contactId
     };
-    // console.log('In display_message.handleSubmit, props:'+ JSON.stringify(props));
     this.props.appendToMsgList(props)
     .then(() => {
       that.props.getMsgListAction(that.props.activeMessageId);
@@ -105,7 +101,6 @@ class DisplayMessage extends Component{
 
   displayEachPreviousMsg(){
     return this.props.messages.msgList.map((msg)=>{
-          // console.log('msg :'+ JSON.stringify(msg));
           if(msg.fromId === this.state.user.contactId){
             return(
                 <div key={new Date().getTime() * Math.random()} style={{display: 'block', textAlign: 'right', width : 'inherit', position : 'relative'}}>
@@ -139,7 +134,6 @@ class DisplayMessage extends Component{
   }
 
   displayPreviousMsgs(){
-    // console.log('now displaying adat with scrollArea');
     return (
       <ScrollArea
         speed={0.8}
@@ -155,7 +149,6 @@ class DisplayMessage extends Component{
   }
 
   displayMessageBody(){
-    // console.log('this.props.isComposeNewMsg :'+this.props.isComposeNewMsg);
     if(this.props.isComposeNewMsg){
       return(
         <div>
@@ -200,8 +193,6 @@ class DisplayMessage extends Component{
         </div>
       );
     } else {
-      // console.log('now displaying the old content');
-      // console.log('this.state.newContent :'+this.state.newContent);
       return(
         <div>
           <div><span className="body-header">{this.props.contactName}</span>, <span className="body-header-companyName">{this.props.companyName}</span></div>

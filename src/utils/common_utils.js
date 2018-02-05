@@ -60,7 +60,6 @@ exports.updateAccessControll = function(type, alObject){
 }
 
 exports.extractLenderNames = function(list){
-  // console.log('In extractLenderNames');
   let lenderMap = [];
   for(let i=0;i< list.length; i++){
     lenderMap.push({
@@ -73,8 +72,6 @@ exports.extractLenderNames = function(list){
 }
 
 exports.getDisplayData = function(complianceData, cols){
-  // console.log('In addRows');
-  // console.log('cols:'+JSON.stringify(cols));
   let dataArr=[];
   for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
     let qrow = {};
@@ -87,8 +84,6 @@ exports.getDisplayData = function(complianceData, cols){
 }
 
 exports.initComplianceData=function(cols){
-  // console.log('In addRows');
-  // console.log('cols:'+JSON.stringify(cols));
   let dataArr=[];
   for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
     let qrow = {};
@@ -117,25 +112,13 @@ exports.getMonthlyColoumns=function(typeCustomFormatter){
 
 exports.maskCompanyName = function(clist, ioiList){
   let counter = 1;
-  if(clist && clist.length > 0 && ioiList && ioiList.length > 0){
+  if(clist && clist.length > 0){
     for(var i=0; i< clist.length; i++){
-      if(isLenderCompany(clist[i].companyId, ioiList)){
-        clist[i].companyName = 'Lender '+counter;
-        counter++;
-      }
+      clist[i].companyName = 'Lender '+counter;
+      counter++;
     }
   }
-  // console.log('clist :'+ JSON.stringify(clist));
   return clist;
-}
-
-function isLenderCompany(cId, ioiList){
-  for(let i=0; i<ioiList.length; i++){
-    if(ioiList[i].createdByCompanyId === cId){
-      return true;
-    }
-  }
-  return false;
 }
 
 exports.getQuaterObject = function(period, startYear, startQtr){
@@ -147,7 +130,6 @@ exports.getQuaterObject = function(period, startYear, startQtr){
     }
     _startQtr++;
   }
-  // console.log('years done, qtrObject:'+JSON.stringify(qtrObject));
 
   let sumOfQtrs = 0;
   let yrsArr = Object.keys(qtrObject);
@@ -167,13 +149,11 @@ exports.getQuaterObject = function(period, startYear, startQtr){
       qtrObject[yrsArr[j]].push(k);
     }
   }
-  // console.log('all done, qtrObject:'+JSON.stringify(qtrObject));
   return qtrObject;
 }
 
 exports.didValuesChange = function(object1, object2){
   let changed=false;
-  // console.log('object1.size:'+Object.keys(object1).length);
   if(Object.keys(object1).length !== Object.keys(object2).length)
     changed = true;
 
@@ -182,7 +162,6 @@ exports.didValuesChange = function(object1, object2){
     if(object1[keys[i]] !== object2[keys[i]])
       changed = true;
   }
-  // console.log('changed:'+changed);
   return changed;
 }
 
@@ -196,8 +175,6 @@ exports.getS3Filename = function(url){
 }
 
 exports.getFileName = function(type, list){
-  // console.log('list :'+JSON.stringify(list));
-  // console.log('list.length :'+list.length);
   if(list){
     if(list.length > 0){
       for(let i=0; i<list.length; i++){
@@ -227,8 +204,6 @@ exports.getProductCategories = function(ioiList, companyList){
 }
 
 exports.getCompanyNameById = function(id, cmpyList){
-  // console.log('id :'+id);
-  // console.log('cmpyList :'+ JSON.stringify(cmpyList));
   for(let company of cmpyList){
     if(company.companyId === id)
       return company.companyName;
@@ -246,7 +221,6 @@ exports.getTopThreeSectors = function(obj, grandTotal){
     });
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
-  // console.log('In sectors, sortedList :'+JSON.stringify(sortedList));
   return exports.getSectorDisplayName(sortedList[0].sector) + ' ('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
     +', '+ exports.getSectorDisplayName(sortedList[1].sector) + ' ('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
     +', '+ exports.getSectorDisplayName(sortedList[2].sector) + ' ('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
@@ -262,7 +236,6 @@ exports.getTopThreeProducts = function(obj, grandTotal){
     });
   });
   let sortedList = sortJsonArray(sList, 'count', 'des');
-  // console.log('In products, sortedList :'+JSON.stringify(sortedList));
   return exports.getProductDisplayName(sortedList[0].sector) + ' ('+Math.round(Number(sortedList[0].count * 100)/grandTotal)+'%)'
     +', '+ exports.getProductDisplayName(sortedList[1].sector) + ' ('+Math.round(Number(sortedList[1].count * 100)/grandTotal)+'%)'
     +', '+ exports.getProductDisplayName(sortedList[2].sector) + ' ('+Math.round(Number(sortedList[2].count * 100)/grandTotal)+'%)';
@@ -321,7 +294,6 @@ exports.parseNumber = (val)=>{
 				return numbro().unformat(val);
 			}
 		} catch(ex){
-			// console.log('***ERR exception in sanitize the number, val:'+val+' , '+JSON.stringify(ex));
       return 0;
 		}
   }

@@ -17,7 +17,6 @@ const data = {
 const colors = ['Red', 'Orange', 'Yellow', 'Green', 'Blue', 'Indigo', 'Violet']
 
 let componentWillMount = () => {
-    // console.log('I am in component will mount');
 }
 
 let InitializeFromStateForm = props => {

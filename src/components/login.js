@@ -25,7 +25,6 @@ class LoginForm extends Component{
 	renderField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<div className={className}>
 				<label>{field.label}</label>
@@ -44,7 +43,6 @@ class LoginForm extends Component{
 	renderCheckboxField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<div className={className}>
 				<label>
@@ -65,22 +63,12 @@ class LoginForm extends Component{
 		// const {resetForm} = this.props;
 		this.props.loginAction(values)
 		 .then((data) => {
-			//  console.log('In submit then, data:'+JSON.stringify(data));
-			 // blog post has been created, navigate the user to the index
-			 // We navigate by calling this.context.router.push with the
-			 // new path to navigate to.
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
 				 // store the files in local storage
 				 lsUtils.setValue(constants.KEY_USER_OBJECT, data.payload.data.data.userObject);
 				 lsUtils.setValue(constants.KEY_COMPANY_OBJECT, data.payload.data.data.companyObject);
 
-				//  console.log('forwading now');
 				this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
-				// toast("Wow login success !")
-				// this.props.history.push({
-				// 	pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-				// 	state : 'this is a test msg'
-				// });
 				
 				//  this.props.history.push(constants.ROUTES_MAP.CREATE_RFP+'/'+ constants.RFP_NEW); // FOR LOCAL_TESTING
 			 } else {	// login failed
@@ -89,9 +77,6 @@ class LoginForm extends Component{
 				toast(constants.NOTIFICATIONS.LOGIN_FAILED, {
 					className : "notification-error"
 				});
-				// this.setState({
-				// 	errorObject : data.payload.data
-				// })
 			 }
 		 });
 	}
@@ -140,7 +125,6 @@ class LoginForm extends Component{
 }
 
 function validate(values){
-	// console.log('I am in validate');
   const errors={};
 
   if(!values.email || !validator.isEmail(values.email)){

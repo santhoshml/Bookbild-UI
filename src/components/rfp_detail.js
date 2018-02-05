@@ -49,8 +49,6 @@ class RFPDetail extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('I am in componentWillReceiveProps');
-    // console.log('nextProps :'+ JSON.stringify(nextProps));
     if(nextProps.isFavorite){
       this.setState({
         isFavorite : nextProps.isFavorite
@@ -115,12 +113,12 @@ class RFPDetail extends Component{
                 <td>{rfp.sector}</td>
               </tr>
               <tr>
-                <td>Sponsored</td>
-                <td>{cUtils.getDisplayValue(rfp.isSponsored)}</td>
-              </tr>
-              <tr>
                 <td>UoF</td>
                 <td>{cUtils.getDisplayValue(rfp.requestType)}</td>
+              </tr>              
+              <tr>
+                <td>Sponsored?</td>
+                <td>{cUtils.getDisplayValue(rfp.isSponsored)}</td>
               </tr>
               <tr>
                 <td>LTM Revenue</td>
@@ -159,7 +157,6 @@ class RFPDetail extends Component{
         <br/>
         <br/>
         <h2>Collateral Base: Encumbered Assets(E) / Unencumbered Assets(U)</h2>
-
       </div>
     );
   }
@@ -176,7 +173,6 @@ class RFPDetail extends Component{
   }
 
   removeFromFavorites(){
-    // console.log('I am in removeFromFavorites ');
     let props= {
       favoriteId : this.props.favorite.favoriteId,
       contactId : this.state.user.contactId
@@ -197,7 +193,6 @@ class RFPDetail extends Component{
   }
 
   addToFavorites(){
-    // console.log('I am in addToFavorites ');
     var props={
       userId : this.state.user.userId,
       rfpId : this.props.rfp.rfpId,
@@ -360,7 +355,6 @@ class RFPDetail extends Component{
   displayCompanyManagementContact(){
     if(this.props.rfp && this.props.rfp.contactObject){
       let {rfp} = this.props;
-      // console.log('rfp :'+JSON.stringify(rfp));
       return(
         <div>
           <br/>
@@ -392,8 +386,6 @@ class RFPDetail extends Component{
   }
 
   render(){
-    // console.log('this.props.ioi:'+JSON.stringify(this.props.ioi));
-    // console.log('In render :'+ JSON.stringify(this.props.rfp));
     return(
       <div>
         <ToastContainer />
@@ -418,7 +410,7 @@ class RFPDetail extends Component{
                   disabled={this.props.rfp && (this.props.rfp.createdByCompanyId === this.state.company.companyId) ? false : true}>
                   Company Management Contact
                 </Tab>
-                <Tab disabled={this.props.rfp && this.props.rfp.category.toUpperCase() === 'ABL' ? false : true}>
+                <Tab>
                   Collateral Information
                 </Tab>
               </TabList>
@@ -459,7 +451,6 @@ class RFPDetail extends Component{
 }
 
 function mapStateToProps(state) {
-  // console.log('state:'+JSON.stringify(state));
 
   let rObject = {
     isFavorite  : state.rfpDetails.isFavorite,

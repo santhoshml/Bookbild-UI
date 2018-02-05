@@ -140,7 +140,6 @@ class Dashboard extends Component{
   }  
 
   render = () => {
-    // console.log('I am in render');
     return(
       <div>
         <ToastContainer />
@@ -175,7 +174,6 @@ class Dashboard extends Component{
 
 function mapStateToProps(state){
   if(state.dashboard.stats){
-    // console.log('state.dashboard.stats :'+ JSON.stringify(state.dashboard.stats));
     return {
       stats : state.dashboard.stats
     }

@@ -75,8 +75,6 @@ class EditIOIForm extends Component{
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('className:'+JSON.stringify(className));
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -130,20 +128,11 @@ class EditIOIForm extends Component{
         totalGross : totalGross
       });
     }
-
-    // if(nextProps.ioi){
-    //   if(nextProps.ioi.childIOIList && !this.state.displayTwoLoanStructures){
-    //     this.setState({
-    //       displayTwoLoanStructures : true
-    //     });
-    //   }
-    // }
   }
 
   onSubmit(props){
     let that = this;
 
-    // console.log('createIOIAction:'+JSON.stringify(props));
     props.rfpId = this.state.rfp.rfpId;
     props.createdById = this.state.user.userId;
     props.createdByCompanyId = this.state.company.companyId;
@@ -180,8 +169,6 @@ class EditIOIForm extends Component{
       props_2.createdByContactId = this.state.user.contactId;
 
       props.childIOIList = [props_1, props_2];
-      // console.log('props_1 :'+ JSON.stringify(props_1));
-      // console.log('props_2 :'+ JSON.stringify(props_2));
     } else {
       let keys = Object.keys(props);      
       for(let key of keys){
@@ -229,11 +216,9 @@ class EditIOIForm extends Component{
       }      
     }
 
-    // console.log('props :'+JSON.stringify(props));
     
     if(updateDBData){
       if(this.props.ioi.childIOIList && !props.childIOIList){
-        // console.log('initially there were 2 IOIs, now has only 1 IOI');
         // initially there were 2 IOI's, now has only 1 IOI
         // delete the first one and create a new one
         this.props.deleteIOIAction(this.props.ioi.ioiId);
@@ -271,7 +256,6 @@ class EditIOIForm extends Component{
           }
         });
       } else if(!this.props.ioi.childIOIList && props.childIOIList){
-        // console.log('initially there was 1 IOI, now has 2 IOIs');
         // initially there was 1 IOI, now has 2 IOI's
         // delete the first one and create 3 new one's
         this.props.deleteIOIAction(this.props.ioi.ioiId);
@@ -308,7 +292,6 @@ class EditIOIForm extends Component{
         });
       } else {
         // initially there were 2 and now we have 2
-        // console.log('updating the IOIs');
         this.props.updateIOIAction(props)  
         .then((data) => {
           if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
@@ -340,7 +323,6 @@ class EditIOIForm extends Component{
         });
       }
     } else {
-      // console.log('Nothing changed, they just pressed submit');
       that.props.history.push({
         pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
         state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
@@ -400,14 +382,12 @@ class EditIOIForm extends Component{
   }
 
   onSelectCovenant(option) {
-      // console.log('You selected '+JSON.stringify(option));
       this.setState({
         selectedCovenant: this.state.selectedCovenant.push(option)
       });
     }
 
   onChangeCollateralValue(element, field, event){
-    // console.log('In onChangeCollateralValue, field:'+field+', value:'+event.target.value);
     var updValue = this.state.collateral;
     updValue[element][field] = event.target.value;
 
@@ -418,8 +398,6 @@ class EditIOIForm extends Component{
     updValue[element]['available'] = cUtils.parseNumber(updValue[element]['netCollateral']) * cUtils.parseNumber(updValue[element]['advRate']) / 100;
     updValue[element]['netEffective'] = cUtils.parseNumber(updValue[element]['available']) / (cUtils.parseNumber(updValue[element]['gross']));
 
-    // console.log('updValue:'+JSON.stringify(updValue));
-
     this.setState({
       collateral: updValue,
       totalAvailable : this.state.totalAvailable + updValue[element]['available']
@@ -427,11 +405,8 @@ class EditIOIForm extends Component{
   }
 
   displayCollateralAnalysis(suffix){
-    // console.log('I am in displayCollateralAnalysis');
-    // console.log('thisValue:'+JSON.stringify(thisValue));
     var rfp = this.state.rfp;
     if(rfp){
-      // console.log('rfp:'+JSON.stringify(rfp));
       return(<div>
         <h3>Borrowing Base</h3>
         <table className="table table-striped">
@@ -637,7 +612,6 @@ class EditIOIForm extends Component{
   }
 
   flipDisplayCollateralAnalysis(){
-    // console.log('will flip the collateralAnalysis');
     this.setState({
       displayCollateralAnalysis : !this.state.displayCollateralAnalysis
     });
@@ -707,7 +681,6 @@ class EditIOIForm extends Component{
   }  
 
   displayIOIFields(suffix){
-    // console.log('displayIOIFields started, suffix :'+suffix);
     return(<div>
       {
         this.state.displayCollateralAnalysis 
@@ -866,7 +839,6 @@ class EditIOIForm extends Component{
   }
 
   displayTwoIOIFields(){
-    // console.log('displayTwoIOIFields started');
     return(
       <Tabs>
         <TabList>
@@ -889,13 +861,10 @@ class EditIOIForm extends Component{
 
   onSelectLoanStructure(props){
     if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') && !this.state.displayTwoLoanStructures) {
-      // console.log('will set displayTwoLoanStructures = true');
       this.setState({
         displayTwoLoanStructures : true
       });
     } else if(this.state.displayTwoLoanStructures){
-      // console.log('will set displayTwoLoanStructures = false');
-      // console.log('this.state :'+JSON.stringify(this.state));
       this.setState({
         displayTwoLoanStructures : false
       });
@@ -903,8 +872,6 @@ class EditIOIForm extends Component{
   }
 
   render(){
-    // console.log('I am in render');
-    // console.log('this.state.displayTwoLoanStructures : '+this.state.displayTwoLoanStructures);
     const {handleSubmit} = this.props;
     return(
       <div>
@@ -983,7 +950,6 @@ function mapStateToProps(state) {
     }
 
     initData.loanStructure = ioi.loanStructure;
-    // console.log('initData :'+JSON.stringify(initData));
     intializedData.initialValues = initData;
   }
 
@@ -1024,7 +990,6 @@ function setInitData(ioi, suffix){
 }
 
 function validate(values){
-  // console.log('values:'+JSON.stringify(values));
   const errors={};
 
   if(!values.loanSize || values.loanSize == 0){

@@ -95,12 +95,10 @@ class UserProfileForm extends Component{
 			});
 		}
 
-		// console.log('that.props'+JSON.stringify(that.props));
 		this.props.initialize(this.props.initialValues);
 	}
 
 	componentDidMount() {
-		// console.log('I am in componentWillMount');
 		var that = this;
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -111,7 +109,6 @@ class UserProfileForm extends Component{
     });
 
 		if(this.props.initialValues){
-			// console.log('setting the initialize');
 			this.props.initialize(this.props.initialValues);
 		}
 
@@ -119,14 +116,12 @@ class UserProfileForm extends Component{
 			, this.props.fetchContactAction(user.contactId)
 			, this.props.fetchUserListAction(user.companyId)])
 		.then(results => {
-			// console.log('results:'+JSON.stringify(results));
 			that.setTheValuesReceivedFromBackend(results);
 		})
 	}
 
 
   onSubmit(props){
-		// console.log('In onSubmit');
     this.props.updateUserProfileAction(props)
      .then(() => {
        // blog post has been created, navigate the user to the index
@@ -138,11 +133,8 @@ class UserProfileForm extends Component{
   }
   
   render = () => {
-    // console.log('I am in render');
-		// console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { dispatch } = this.props
-		// console.log('yoyo:'+this.props.initialValues.fullName);
 
     return(
       <div>
@@ -215,8 +207,6 @@ class UserProfileForm extends Component{
   }
 
   displayUserList(){
-    // console.log('In displayUserList :'+ JSON.stringify(userListJSON));
-		// console.log('I am in displayUserList');
     return(
       <div className={`row`}>
         <br/>

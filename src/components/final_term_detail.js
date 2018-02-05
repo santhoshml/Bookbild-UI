@@ -28,7 +28,6 @@ class FinalTermDetail extends Component{
   }
 
   componentWillMount() {
-    // console.log('In componentWillMount of IOI_DETAIL');
     let paramId = this.props.match.params.id;
     let user    = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -43,7 +42,6 @@ class FinalTermDetail extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps');
     if(nextProps.link && nextProps.link.dealState !== 'IN_EXECUTION'){
       this.setState({
         displayExecuteButton : true
@@ -64,7 +62,6 @@ class FinalTermDetail extends Component{
 
   displayFinalTermSheet(){
     let finalTerm = this.props.finalTerm;
-    // console.log('In displaySelectedIOI, ioi:'+JSON.stringify(ioi));
     return(
       <div>
         <table className="table table-striped table-bordered">
@@ -172,7 +169,6 @@ class FinalTermDetail extends Component{
   displayYieldMatrix(){
     if(this.props.finalTerm.yieldMatrix){
       var yieldMatrixRender = this.props.finalTerm.yieldMatrix.map(function(row){
-        // console.log('row:'+JSON.stringify(row));
         return(<tr key={row.period}>
             <td>{numeral(row.period).format('0,0.00')}</td>
             <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
@@ -208,18 +204,13 @@ class FinalTermDetail extends Component{
   }
 
   downloadDocument(fileName){
-		// console.log('I am in downloadDocument, fileName:'+fileName);
-		// window.open(cUtils.getS3FileURL(fileName));
 		this.props.downloadLinkDocumentAction(fileName)
 		.then((data) => {
-			// console.log('downloaded the docuemnt, now in then, data:'+JSON.stringify(data));
 			window.open(data.payload.data.data);
 		});
   }
   
 	handleFileUpload(inputFiles) {
-		// console.log('In handleFileUpload, type:'+type);
-		// console.log('this.state:'+JSON.stringify(this.state));
 		inputFiles.persist();
 		var files = inputFiles.currentTarget.files;
 		if(files && files.length > 0){
@@ -233,23 +224,16 @@ class FinalTermDetail extends Component{
 			linkId 	: this.props.linkDocList[0].linkId,
 			uploadedCompanyId : this.state.user.companyId
 		  }).then((data)=>{
-			  	// console.log('file upload completed');
 				that.props.fetchLinkDocsWithFinalTermIdAction(that.props.finalTerm.finalTermId);
 				that.myFileInput=null;
 			});
-		} else {
-			// console.log('no file to upload');
 		}
   }
   
   deleteDocument(linkDocId, fileName){
-		// console.log('I am in deleteDocument, linkDocId:'+linkDocId);
 		let that = this;
-		// console.log('this.props.linkDocList:'+JSON.stringify(this.props.linkDocList));
 		this.props.deleteLinkDocumentAction(linkDocId, fileName)
 		.then((data) => {
-			// console.log('deleted the docuemnt, now in then, data:'+JSON.stringify(data));
-			// console.log('that.props.linkList:'+JSON.stringify(that.props.linkList));
 			for(let i=0;i<this.props.linkDocList.length; i++){
 				if(that.props.linkDocList[i].linkDocsId == linkDocId)
 					that.props.linkDocList.splice(i,1);
@@ -259,8 +243,6 @@ class FinalTermDetail extends Component{
   }
   
 	addDeleteIcon(item){
-		// console.log('In addDeleteIcon');
-		// console.log('item.uploadedCompanyId: '+item.uploadedCompanyId+', this.state.user.companyId:'+this.state.user.companyId);
 		if(item.uploadedCompanyId === this.state.user.companyId){
 			return(
 				<span>
@@ -274,13 +256,11 @@ class FinalTermDetail extends Component{
   }
     
 	renderDocumentItem(){
-		// console.log('In renderDocumentItem');
 		var that = this;
 		if(this.props.linkDocList && this.props.linkDocList.length > 0){
       let list = this.props.linkDocList;
 			if(list && list.length > 0){
 				return list.map(function(item){
-					// console.log('item:'+JSON.stringify(item));
 					return(<tr key={item.linkDocsId}>
 						<td>{item.originalFileName}</td>
 						<td>{item.companyName}</td>
@@ -302,7 +282,6 @@ class FinalTermDetail extends Component{
 	}  
 
 	renderDocuments(){
-		// console.log('I am in renderRFPAndDocuments');
 		let that=this;
 		let inputTagStyle= {
 			'display':'inline'
@@ -344,13 +323,13 @@ class FinalTermDetail extends Component{
     + " Also disable access to Data Room for any other lenders.")
     .then(function(result){
       if(!result){
-        // console.log('user pressed cancel');
       } else {
-        // console.log('Borrower is ready to execute the deal');
         let props = {
           linkId                : that.props.link.linkId,
           dealState             : 'IN_EXECUTION',
-          executedStateSetById  : that.state.user.userId
+          executedStateSetById  : that.state.user.userId,
+          lenderCompanyId       : that.props.link.lenderCompanyId,
+          borrowerCompanyId     : that.props.link.borrowerCompanyId
         };
         that.props.markDealAsExecutedAction(props)
         .then(()=>{
@@ -377,7 +356,6 @@ class FinalTermDetail extends Component{
   }
     
   render(){
-    // console.log('I am in final term sheet detail render');
     return(
       <div>
         <Header/>
@@ -429,7 +407,6 @@ function mapStateToProps(state) {
   }
 
   if(state.link.linkList){
-    // console.log('IN finalTermDetail mapStateToProps, state.link.linkList :'+JSON.stringify(state.link.linkList));
     rObject.link = state.link.linkList[0];
   }
 

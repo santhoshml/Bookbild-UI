@@ -21,7 +21,6 @@ class InviteCompanyForm extends Component{
   }
 
 	renderField(field) {
-    // console.log('field :'+JSON.stringify(field));
 		const { meta: { touched, error } } = field;
 		const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -41,7 +40,6 @@ class InviteCompanyForm extends Component{
 	}
 
   renderTextArea(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -62,17 +60,14 @@ class InviteCompanyForm extends Component{
       values.userEmail = this.state.user.email;
     }
     
-    // console.log('values : '+JSON.stringify(values));
 		this.props.sendInviteCompanyEmailAction(values)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-        // console.log('email sent successfully');
          this.props.reset();
          this.setState({
            'message' : 'Your message sent. Thank you for doing this for us.'
          });
 			 } else {
-        // console.log('could not send email');
         this.setState({
           message : 'Error sending the email. Please try again.'
         });
@@ -92,7 +87,6 @@ class InviteCompanyForm extends Component{
 
 	render(){
     const {handleSubmit, pristine, reset, submitting} = this.props;    
-    // console.log('this.props.initalValues : '+JSON.stringify(this.props.initalValues));
 		return (
       <div>
         <Header/>
@@ -159,7 +153,6 @@ function validate(values){
 }
 
 function mapStateToProps(state) {
-  // console.log('In mapStateToProps');
   let initValues = {
     subject : 'yyo',
     message : 'this is a test message' 

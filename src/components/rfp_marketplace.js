@@ -44,7 +44,6 @@ class RFPMarketPlace extends Component{
 
   componentDidMount(){
     if(this.props.location.state){
-      // console.log('this.props.location.state :'+this.props.location.state);
       toast(this.props.location.state, {
         className : "notification-success"
       });
@@ -52,8 +51,6 @@ class RFPMarketPlace extends Component{
   }
 
   onTermSheetActivityChange(option){
-    // console.log('I am in onTermSheetActivityChange');
-    // console.log('option:'+JSON.stringify(option));
     this.setState({
       selectedSector : option
     });
@@ -75,7 +72,6 @@ class RFPMarketPlace extends Component{
       {value:'telecoms', label:'Telecoms'},
     ];
     const defaultOption = options[0];
-    // console.log('In createTermSheetActivityDropdown, '+JSON.stringify(this.state.selectedSector));
     return(
       <div className='col-md-3'>
         <Dropdown
@@ -119,7 +115,6 @@ class RFPMarketPlace extends Component{
 
 
   displayTermSheetActivity(){
-    // console.log('I am in displayTermSheetActivity');
     if(this.props.termSheetActivity != null){
       return(<div>
         {this.createTermSheetActivityDropdown()}
@@ -209,7 +204,6 @@ class RFPMarketPlace extends Component{
 
 function mapStateToProps(state) {
 
-  // console.log('In rfpMarketPlace : '+ JSON.stringify(state));
   let rObject={};
 
   if(state.rfpList.rfpList){

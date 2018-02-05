@@ -15,7 +15,6 @@ class Admin extends Component{
   }
 
   resetActivityTermSheetStats(){
-    // console.log('In resetActivityTermSheetStats');
     this.props.resetActivityTermSheetStatsAction()
       .then(() => {
         this.props.history.push(constants.ROUTES_MAP.SUPER_ADMIN);

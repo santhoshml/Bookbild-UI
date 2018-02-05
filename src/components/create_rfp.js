@@ -24,7 +24,6 @@ class CreateRFPForm extends Component {
 
   componentWillMount() {
     var that = this;
-    // console.log('I am in createRFP componentWillMount');
     let paramId = this.props.match.params.id;
     let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -39,39 +38,15 @@ class CreateRFPForm extends Component {
 
   onSubmit(values) {
       let that = this;
-      // console.log('In onSubmit, props:'+JSON.stringify(values));
-
-      // values.createdById = this.props.createdById;
-      // values.createdByCompanyId=this.props.createdByCompanyId;
-      // values.numOfIOI = this.props.numOfIOI;
-
       values.createdById = this.state.user.userId;
       values.createdByCompanyId=this.state.user.companyId;
       values.numOfIOI = this.props.numOfIOI; // I don't know what todo with this
-
-      // if(values.category.toUpperCase() !== 'ABL'){
-      //   //erase the values in Collateral
-      //   values.acctRecvGrossAmt  = '';
-      //   values.acctRecvComment   = '';
-      //   values.invtryGrossAmt    = '';
-      //   values.invtryComment     = '';
-      //   values.ppeGrossAmt       = '';
-      //   values.ppeComment        = '';
-      //   values.maeGrossAmt       = '';
-      //   values.maeComment        = '';
-      //   values.realEstGrossAmt   = '';
-      //   values.realEstComment    = '';
-      //   values.otherGrossAmt     = '';
-      //   values.otherComment      = '';
-      // }
       
       let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
       values.createdByContactId = this.state.user.contactId;
-      // console.log('values before creating RFP :'+ JSON.stringify(values));
       this.props.createRFPAction(values)
         .then((data) => {
           if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-            // console.log('rfp created : '+ JSON.stringify(data));
             let mProps = {
               companyId : that.state.company.companyId,
               msg : constants.MESSAGES.RFP_CREATED,
@@ -203,7 +178,6 @@ class CreateRFPForm extends Component {
   }
 
   renderField(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -220,7 +194,6 @@ class CreateRFPForm extends Component {
   }
 
   renderTextArea(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -275,7 +248,6 @@ class CreateRFPForm extends Component {
   }
 
   renderRadioField(field) {
-    // console.log('field:'+JSON.stringify(field));
 		const { meta: { touched, error } } = field;
     const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -283,7 +255,6 @@ class CreateRFPForm extends Component {
       <div className={className}>
         <label>{field.label}</label><br/>
         {field.options.map(function(val){
-          // console.log('val:'+val);
           return(
             <span key={val}>
               <input
@@ -309,7 +280,6 @@ class CreateRFPForm extends Component {
   }
 
   render() {
-    // console.log('I am in create RFP render');
     const { handleSubmit } = this.props;
     return (
       <div>
@@ -551,7 +521,6 @@ function validate(values) {
     errors.expiryDt = 'Select a expiry Date for the RFP';
   }
 
-  // console.log('errors:'+JSON.stringify(errors));
   return errors;
 }
 

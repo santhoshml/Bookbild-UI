@@ -24,7 +24,6 @@ class DisplayMessageLinkList extends Component{
   }
 
   componentWillMount() {
-    // console.log('In ioiList componentWillMount');
     let user    = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     this.props.fetchAllMessagesForAction(user.contactId);
@@ -36,7 +35,6 @@ class DisplayMessageLinkList extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps will get the msgs ');
     if(nextProps.msgLinkList && nextProps.msgLinkList != this.props.msgLinkList){
       let msgObject = msgUtils.getMsgListData(nextProps.msgLinkList[0], this.state.user.contactId);
       this.props.setActiveMessage(msgObject.messageId, msgObject.contactNames, msgObject.companyNames);
@@ -48,7 +46,6 @@ class DisplayMessageLinkList extends Component{
   }
 
   formatMsgLink(msg){
-    // console.log('In formatMsgLink, msgLink :'+JSON.stringify(msg));
     let msgListObject = msgUtils.getMsgListData(msg, this.state.user.contactId);
     return (
       <a href="#" key={msgListObject.messageId}
@@ -94,7 +91,6 @@ function mapStateToProps(state) {
   let rObject =  {};
   if(state.messages.msgLinkList){
     rObject.msgLinkList = state.messages.msgLinkList;
-    // console.log('rObject.msgLinkList :'+JSON.stringify(rObject.msgLinkList));
   }
   return rObject;
 }

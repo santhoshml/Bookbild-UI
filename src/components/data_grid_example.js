@@ -16,7 +16,6 @@ class DataGrid extends Component{
   constructor(props) {
     super(props);
 
-    // console.log('I am in DataGrid constructor');
     this._columns = this.props.columns;
 
     this.state = { 
@@ -29,10 +28,7 @@ class DataGrid extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('I am in data_grid_example, componentWillReceiveProps');
     this._columns = nextProps.columns;
-    // console.log('this._columns:'+JSON.stringify(this._columns));
-    // console.log('nextProps.dataList:'+JSON.stringify(nextProps.dataList));
     this.setState({
       rows : nextProps.dataList
       , filters: {}
@@ -40,7 +36,6 @@ class DataGrid extends Component{
       , sortDirection: null
       , selectedIndexes: []      
     });
-    // this.forceUpdate();
   }
 
 
@@ -85,9 +80,7 @@ class DataGrid extends Component{
   }
 
   render() {
-    // console.log('I am in render of data_grid_example');
     if(this.props.showFilter === 'true'){
-      // console.log('I am in showFiter is true');
       return  (
         <ReactDataGrid
           rowKey="rfpId"
@@ -104,8 +97,6 @@ class DataGrid extends Component{
           onGridRowsUpdated = {this.props.onGridRowsUpdated}
         />);
     } else {
-      // console.log('I am here, where showFilter = false');
-      // console.log('this._columns:'+JSON.stringify(this._columns));
       return  (
         <ReactDataGrid
           rowKey="rfpId"

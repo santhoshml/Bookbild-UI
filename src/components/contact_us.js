@@ -39,7 +39,6 @@ class ContactUsForm extends Component{
 	}
 
   renderTextArea(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -57,20 +56,14 @@ class ContactUsForm extends Component{
 
 
 	onSubmit(values){
-    // console.log('values : '+JSON.stringify(values));
 		this.props.sendContactUsEmailAction(values)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-        // console.log('email sent successfully');
          this.props.reset();
          toast(constants.NOTIFICATIONS.CONTACTUS_SUCCESS, {
 					className : "notification-success"
 				});
-        //  this.setState({
-        //    'message' : 'Thank you for contacting us. We will contact you soon on this. '
-        //  });
 			 } else {
-        // console.log('could not send email');
 				toast(constants.NOTIFICATIONS.CONTACTUS_FAILED, {
 					className : "notification-error"
 				});
@@ -175,16 +168,12 @@ function validate(values){
 }
 
 function mapStateToProps(state) {
-  // console.log('In mapStateToProps');
   return {
   };
 }
 
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
-  // console.log('In mapDispatchToProps : '+JSON.stringify(dispatch));
   return bindActionCreators({
     sendContactUsEmailAction   : sendContactUsEmailAction,
     getLinksWithCompanyIdAction : getLinksWithCompanyIdAction

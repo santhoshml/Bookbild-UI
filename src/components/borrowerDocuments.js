@@ -21,16 +21,13 @@ import Header from './header';
 class BorrowerDocumentForm extends Component{
 	constructor(props){
 		super(props);
-		// console.log('I am in constructor');
 		this.state = {
 			user : null
 		};
 	}
 
 	componentWillMount() {
-		// console.log('I am in documents.componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
-		// console.log('user:'+JSON.stringify(user));
 		this.setState({
 			user : user
 		});
@@ -39,7 +36,6 @@ class BorrowerDocumentForm extends Component{
 
 
 	render(){
-		// console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 			<div>
@@ -63,7 +59,6 @@ class BorrowerDocumentForm extends Component{
 }
 
 function mapStateToProps(state) {
-	// console.log('In documents.mapStateToProps');
 	let rObject={};
 	if(state.rfpList.rfpList){
     rObject.rfpList = state.rfpList.rfpList;
@@ -72,8 +67,6 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  // Whenever selectBook is called, the result shoudl be passed
-  // to all of our reducers
   return bindActionCreators({
 		fetchCompanyRFPListAction : fetchCompanyRFPListAction
   }, dispatch);

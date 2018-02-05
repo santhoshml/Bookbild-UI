@@ -22,7 +22,6 @@ exports.getMsgListData = function(msgLink, currContactId){
     }
     msgListObject.contactNames = contactNames;
     msgListObject.companyNames = companyNames;    
-    // console.log('msgListObject :'+JSON.stringify(msgListObject));
 
     return msgListObject;
 }
@@ -30,9 +29,7 @@ exports.getMsgListData = function(msgLink, currContactId){
 exports.getContactId = function(val, list){
     let ltIndex = val.indexOf('<');
     let name = val.substring(0, ltIndex);
-    // console.log('name :'+name);
     let companyName = val.substring(ltIndex+1, val.length-1);
-    // console.log('companyName :'+companyName);
     for(let i=0; i< list.length; i++){
         var contact = list[i];
         if(contact.fullName === name)

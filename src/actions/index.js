@@ -80,11 +80,9 @@ export const DELETE_POST = "delete_post";
 const USE_CACHE = false;
 
 // const ROOT_URL = 'http://127.0.0.1:1127';
-// const ROOT_URL = 'http://ec2-52-37-86-2.us-west-2.compute.amazonaws.com:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
 export function getLenderStatsForDashboard(companyId, userId){
-  // console.log('In getLenderStatsForDashboard, companyId:'+companyId);
   const request=axios({
     url : '/getLenderStatsForDashboard?companyId='+companyId+'&userId='+userId,
     method : 'GET',
@@ -98,7 +96,6 @@ export function getLenderStatsForDashboard(companyId, userId){
 }
 
 export function getBorrowerStatsForDashboard(companyId, userId){
-  // console.log('In getBorrowerStatsForDashboard, companyId:'+companyId);
   const request=axios({
     url : '/getBorrowerStatsForDashboard?companyId='+companyId+'&userId='+userId,
     method : 'GET',
@@ -112,7 +109,6 @@ export function getBorrowerStatsForDashboard(companyId, userId){
 }
 
 export function deleteIOIAction(ioiId){
-  // console.log('In deleteIOIAction, ioiId:'+ioiId);
   const request=axios({
     url : '/deleteIOI?ioiId='+ ioiId,
     method : 'DELETE',
@@ -140,7 +136,6 @@ export function sendAMsgFromAdminWithCompanyIdAndCompanyName(props){
 }
 
 export function revokeIOI(ioiId){
-  // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
   const request=axios({
     url : '/revokeIOI?ioiId='+ ioiId,
     method : 'DELETE',
@@ -154,7 +149,6 @@ export function revokeIOI(ioiId){
 }
 
 export function sendAMsgFromAdmin(props){
-  // console.log('sendAMsgFromAdmin props :'+JSON.stringify(props));
   const request=axios({
     url : '/sendAMsgFromAdmin',
     method : 'POST',
@@ -169,7 +163,6 @@ export function sendAMsgFromAdmin(props){
 }
 
 export function sendAMsgFromAdminWithCompanyId(props){
-  // console.log('props :'+JSON.stringify(props));
   const request=axios({
     url : '/sendAMsgFromAdminWithCompanyId',
     method : 'POST',
@@ -184,7 +177,6 @@ export function sendAMsgFromAdminWithCompanyId(props){
 }
 
 export function appendToMsgList(props){
-  // console.log('props :'+JSON.stringify(props));
   const request=axios({
     url : '/appendToMsgList',
     method : 'POST',
@@ -199,7 +191,6 @@ export function appendToMsgList(props){
 }
 
 export function getMsgListAction(messageId){
-  // console.log('In getMsgListAction, messageId:'+messageId);
   const request=axios({
     url : '/getMsgList?messageId='+messageId,
     method : 'GET',
@@ -226,7 +217,6 @@ export function fetchAllMessagesForAction(contactId){
 }
 
 export function postNewMsgAction(props){
-  // console.log('in postNewMsgAction props :'+JSON.stringify(props));
   const request=axios({
     url : '/postNewMsg',
     method : 'POST',
@@ -254,7 +244,6 @@ export function fetchAllContactsToMessageAction(){
 }
 
 export function markDealAsExecutedAction(props){
-  // console.log('props :'+JSON.stringify(props));
   const request=axios({
     url : '/markDealAsExecuted',
     method : 'POST',
@@ -282,8 +271,6 @@ export function fetchLinkDocsWithFinalTermIdAction(finalTermId){
 }
 
 export function sendInviteCompanyEmailAction(props){
-  // console.log('In actions.sendInviteCompanyEmailAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/sendInviteCompanyEmail',
     method : 'POST',
@@ -311,7 +298,6 @@ export function fetchFinalTermListForLenderCompany(companyId){
 }
 
 export function fetchFinalTermListForBorrowerCompany(companyId){
-  // console.log('In fetchFinalTermListForBorrowerCompany, companyId:'+companyId);
   const request=axios({
     url : '/fetchFinalTermListForBorrowerCompany?companyId='+companyId,
     method : 'GET',
@@ -325,7 +311,6 @@ export function fetchFinalTermListForBorrowerCompany(companyId){
 }
 
 export function fetchFinalTermWithYieldMatrixAction(finalTermId){
-  // console.log('In actions.fetchFinalTermWithYieldMatrixAction');
   const request=axios({
     url : '/getFinalTermWithYieldMatrix?finalTermId='+finalTermId,
     method : 'GET',
@@ -339,7 +324,6 @@ export function fetchFinalTermWithYieldMatrixAction(finalTermId){
 }
 
 export function fetchFinalTerm(finalTermId){
-  // console.log('In actions.fetchFinalTermWithYieldMatrixAction');
   const request=axios({
     url : '/getFinalTerm?finalTermId='+finalTermId,
     method : 'GET',
@@ -353,7 +337,6 @@ export function fetchFinalTerm(finalTermId){
 }
 
 export function fetchFinalIOIAction(ioiId){
-  // console.log('In actions.fetchFinalIOIAction');
   const request=axios({
     url : '/getFinalIOIByIoiId?ioiId='+ioiId,
     method : 'GET',
@@ -367,8 +350,6 @@ export function fetchFinalIOIAction(ioiId){
 }
 
 export function createFinalTermAction(props){
-  // console.log('In actions.createFinalTermAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/createFinalTerm',
     method : 'POST',
@@ -383,8 +364,6 @@ export function createFinalTermAction(props){
 }
 
 export function updateFinalTermAction(props){
-  // console.log('In actions.updateIOIAction');
-  // console.log('props:'+ JSON.stringify(props));
   const request=axios({
     url : '/updateFinalTerm',
     method : 'POST',
@@ -399,7 +378,6 @@ export function updateFinalTermAction(props){
 }
 
 export function getLinkWithIOIAction(ioiId){
-  // // console.log('In actions.getLinkWithRFPAndIOIAction');
   const request=axios({
     url : '/getLinkWithIOI?ioiId='+ioiId,
     method : 'GET',
@@ -413,7 +391,6 @@ export function getLinkWithIOIAction(ioiId){
 }
 
 export function getLinkWithFinalTermAction(finalTermId){
-  // // console.log('In actions.getLinkWithRFPAndIOIAction');
   const request=axios({
     url : '/getLinkWithFinalTerm?finalTermId='+finalTermId,
     method : 'GET',
@@ -428,7 +405,6 @@ export function getLinkWithFinalTermAction(finalTermId){
 
 
 export function updateAccessToLenderFlag(data){
-  // console.log('In updateAccessToLenderFlag, data:'+JSON.stringify(data));
   const request=axios({
     url : '/updateAccessToLenderFlag',
     method : 'POST',
@@ -443,7 +419,6 @@ export function updateAccessToLenderFlag(data){
 }
 
 export function getBorrowerControlledAccessListAction(borrowerId){
-  // console.log('In getBorrowerControlledAccessListAction, borrowerId:'+borrowerId);
   const request=axios({
     url : '/getBorrowerControlledAccessList?borrowerId='+borrowerId,
     method : 'GET',
@@ -457,7 +432,6 @@ export function getBorrowerControlledAccessListAction(borrowerId){
 }
 
 export function getComplianceData(companyId){
-  // console.log('In getComplianceData, companyId:'+companyId);
   const request=axios({
     url : '/getComplianceData?companyId='+companyId,
     method : 'GET',
@@ -471,7 +445,6 @@ export function getComplianceData(companyId){
 }
 
 export function getComplianceDataWithLinkId(linkId){
-  // console.log('In getComplianceDataWithLinkId, linkId:'+linkId);
   const request=axios({
     url : '/getComplianceDataWithLinkId?linkId='+linkId,
     method : 'GET',
@@ -485,7 +458,6 @@ export function getComplianceDataWithLinkId(linkId){
 }
 
 export function saveComplianceData(data){
-  // console.log('In saveComplianceData action, data: ');
   const request=axios({
     url : '/saveComplianceData',
     method : 'POST',
@@ -500,7 +472,6 @@ export function saveComplianceData(data){
 }
 
 export function sendContactUsEmailAction(data){
-  // console.log('In sendContactUsEmailAction, data: '+JSON.stringify(data));
   const request=axios({
     url : '/sendContactUsEmail',
     method : 'POST',
@@ -515,7 +486,6 @@ export function sendContactUsEmailAction(data){
 }
 
 export function saveComparisionToolData(data){
-  // console.log('data: '+JSON.stringify(data));
   const request=axios({
     url : '/saveDealComparisionData',
     method : 'POST',
@@ -530,7 +500,6 @@ export function saveComparisionToolData(data){
 }
 
 export function getLinkDocsWithLinkIdAndTypeAction(linkId, type){
-  // console.log('In actions.getLinkDocsWithLinkIdAndTypeAction');
   const request=axios({
     url : '/getLinkDocsWithLinkIdAndType?linkId='+linkId+'&type='+type,
     method : 'GET',
@@ -544,7 +513,6 @@ export function getLinkDocsWithLinkIdAndTypeAction(linkId, type){
 }
 
 export function getLinkDocsWithLinkIdAction(linkId){
-  // console.log('In actions.getLinkDocsWithLinkIdAction');
   const request=axios({
     url : '/getLinkDocsWithLinkId?linkId='+linkId,
     method : 'GET',
@@ -558,7 +526,6 @@ export function getLinkDocsWithLinkIdAction(linkId){
 }
 
 export function getLinkDocsWithRFPAndIOIAction(ioiId){
-  // console.log('In actions.getLinkDocsWithRFPAndIOIAction');
   const request=axios({
     url : '/getLinkDocsWithRFPAndIOI?ioiId='+ioiId,
     method : 'GET',
@@ -572,7 +539,6 @@ export function getLinkDocsWithRFPAndIOIAction(ioiId){
 }
 
 export function getLinkDocsWithRFPAndIOIAndCompanyAction(rfpId, ioiId, companyId){
-  // console.log('In actions.getLinkDocsWithRFPAndIOIAndCompanyAction');
   const request=axios({
     url : '/getLinkDocsWithRFPAndIOIAndCompany?rfpId='+rfpId+'&ioiId='+ioiId+'&companyId='+companyId,
     method : 'GET',
@@ -586,8 +552,6 @@ export function getLinkDocsWithRFPAndIOIAndCompanyAction(rfpId, ioiId, companyId
 }
 
 export function getLinksWithCompanyIdAction(companyId, type){
-  // console.log('In actions.getLinksWithCompanyIdAction');
-  // console.log('companyId:'+companyId+', type:'+type);
   const request=axios({
     url : '/getLinksWithCompanyId?companyId='+companyId+'&type='+type,
     method : 'GET',
@@ -601,7 +565,6 @@ export function getLinksWithCompanyIdAction(companyId, type){
 }
 
 export function downloadLinkDocumentAction(fileName){
-  // console.log('In actions.downloadLinkDocumentAction');
   const request=axios({
     url : '/getLinkDocsPublicURL?fileName='+fileName,
     method : 'GET',
@@ -615,7 +578,6 @@ export function downloadLinkDocumentAction(fileName){
 }
 
 export function deleteLinkDocumentAction(linkDocumentId, fileName){
-  // console.log('In actions.deleteLinkDocumentAction');
   const request=axios({
     url : '/deleteLinkDocument?linkDocumentId='+linkDocumentId+'&fileName='+fileName,
     method : 'DELETE',
@@ -629,7 +591,6 @@ export function deleteLinkDocumentAction(linkDocumentId, fileName){
 }
 
 export function getLinkDocsWithRFPIdAction(rfpId){
-  // console.log('In actions.getLinkDocsWithRFPIdAction');
   const request=axios({
     url : '/getLinkDocsWithRFPId?rfpId='+rfpId,
     method : 'GET',
@@ -643,7 +604,6 @@ export function getLinkDocsWithRFPIdAction(rfpId){
 }
 
 export function uploadDocumentRequest({ file, type, ioiId, rfpId, linkId, uploadedCompanyId }) {
-  // console.log('In actions.uploadDocumentRequest');
   let data = new FormData();
   data.append('file', file);
   data.append('type', type);
@@ -659,7 +619,6 @@ export function uploadDocumentRequest({ file, type, ioiId, rfpId, linkId, upload
     data    : data
   });
 
-  // console.log('request:'+JSON.stringify(request));
   return{
     type: UPLOAD_FILE_TO_S3,
     payload: request
@@ -667,7 +626,6 @@ export function uploadDocumentRequest({ file, type, ioiId, rfpId, linkId, upload
 }
 
 export function updateContactCellWGLAction(data){
-  // console.log('In actions.updateContactCellWGLAction');
   const request=axios({
     url : '/updateContactCellWGLAction',
     method : 'PUT',
@@ -682,7 +640,6 @@ export function updateContactCellWGLAction(data){
 }
 
 export function deleteContactFromWGLAction(wglListId){
-  // console.log('In actions.deleteContactFromWGLAction');
   const request=axios({
     url : '/deleteContactFromWGL?wglListId='+wglListId,
     method : 'DELETE',
@@ -696,7 +653,6 @@ export function deleteContactFromWGLAction(wglListId){
 }
 
 export function addContactToWGLAction(data){
-  // console.log('In actions.addContactToWGLAction');
   const request=axios({
     url : '/addContactToWGL',
     method : 'POST',
@@ -711,7 +667,6 @@ export function addContactToWGLAction(data){
 }
 
 export function getWGLByLinkIdAction(linkId){
-  // console.log('In actions.getWGLByLinkIdAction');
   const request=axios({
     url : '/getWGLByLinkId?linkId='+linkId,
     method : 'GET',
@@ -725,7 +680,6 @@ export function getWGLByLinkIdAction(linkId){
 }
 
 export function getWGLByCompanyIdAction(type, companyId){
-  // console.log('In actions.getWGLByCompanyIdAction');
   const request=axios({
     url : '/getWGLByCompanyId?type='+type+'&companyId='+companyId,
     method : 'GET',
@@ -739,7 +693,6 @@ export function getWGLByCompanyIdAction(type, companyId){
 }
 
 export function inviteLenderAction(data){
-  // console.log('In actions.inviteLenderAction');
   const request=axios({
     url : '/inviteLender',
     method : 'POST',
@@ -754,7 +707,6 @@ export function inviteLenderAction(data){
 }
 
 export function getIOIForRFPAndCompanyAction(rfpId, companyId){
-  // console.log('In actions.getIOIForRFPAndCompanyAction, rfpId:'+ rfpId+', companyId:'+companyId);
   const request=axios({
     url : '/getIOIForRFPAndCompany?rfpId='+rfpId+'&companyId='+companyId,
     method : 'GET',
@@ -768,7 +720,6 @@ export function getIOIForRFPAndCompanyAction(rfpId, companyId){
 }
 
 export function getIOIWithFinalTermAction(finalTermId){
-  // console.log('In actions.getIOIForRFPAndCompanyAction');
   const request=axios({
     url : '/getIOIWithFinalTerm?finalTermId='+finalTermId,
     method : 'GET',
@@ -782,7 +733,6 @@ export function getIOIWithFinalTermAction(finalTermId){
 }
 
 export function resetActivityTermSheetStatsAction(props){
-  // console.log('In actions.resetActivityTermSheetStatsAction');
   const request=axios({
     url : '/resetTermSheetActivity',
     method : 'POST',
@@ -796,7 +746,6 @@ export function resetActivityTermSheetStatsAction(props){
 }
 
 export function createUnsolicitedPitchAction(props){
-  // console.log('In actions.createUnsolicitedPitchAction');
   const request=axios({
     url : '/createUnsolicitedPitch',
     method : 'POST',
@@ -810,22 +759,7 @@ export function createUnsolicitedPitchAction(props){
   }
 }
 
-// export function fetchAllCompanyListForRFP(){
-//   // console.log('In actions.fetchCompanyListForRFP');
-//   const request=axios({
-//     url : (USE_CACHE ? '/fetchAllCompanyListForRFPUsingCache' : '/fetchAllCompanyListForRFP'),
-//     method : 'GET',
-//     baseURL : ROOT_URL
-//   });
-
-//   return{
-//     type: FETCH_COMPANY_LIST_FOR_RFP,
-//     payload: request
-//   }
-// }
-
 export function fetchTermSheetActivityStatsAction(sector){
-  // console.log('In actions.fetchTermSheetActivityStatsAction');
   const request=axios({
     url : '/fetchTermSheetActivity?sector='+sector,
     method : 'GET',
@@ -839,7 +773,6 @@ export function fetchTermSheetActivityStatsAction(sector){
 }
 
 export function fetchRFPByIOIAction(ioiId){
-  // console.log('In actions.fetchRFPByIOIAction, ioiId:'+ioiId);
   const request=axios({
     url : '/fetchRFPByIOI?ioiId='+ioiId,
     method : 'GET',
@@ -853,7 +786,6 @@ export function fetchRFPByIOIAction(ioiId){
 }
 
 export function getRFPWithFinalTermAction(finalTermId){
-  // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
     url : '/getRFPWithFinalTerm?finalTermId='+finalTermId,
     method : 'GET',
@@ -867,7 +799,6 @@ export function getRFPWithFinalTermAction(finalTermId){
 }
 
 export function fetchRFPAction(rfpId){
-  // console.log('In actions.fetchRFPAction, rfpId:'+rfpId);
   const request=axios({
     url : '/fetchRFP?rfpId='+rfpId,
     method : 'GET',
@@ -907,7 +838,6 @@ export function fetchIOIListForBorrowerCompanyAction(companyId){
 }
 
 export function fetchCompanyRFPListAction(companyId){
-  // console.log('In actions.fetchCompanyRFPListAction');
   const request=axios({
     url : '/fetchCompanyRFPList?companyId='+companyId,
     method : 'GET',
@@ -921,8 +851,6 @@ export function fetchCompanyRFPListAction(companyId){
 }
 
 export function fetchFavoriteRFPListAction(userId){
-  // console.log('In actions.fetchMyFavoriteRFPListAction');
-  // console.log('userId:'+userId);
   const request=axios({
     url : '/fetchFavRFPList?userId='+userId,
     method : 'GET',
@@ -936,7 +864,6 @@ export function fetchFavoriteRFPListAction(userId){
 }
 
 export function fetchIOIAction(ioiId){
-  // console.log('In actions.fetchIOI');
   const request=axios({
     url : '/fetchIOI?ioiId='+ioiId,
     method : 'GET',
@@ -950,7 +877,6 @@ export function fetchIOIAction(ioiId){
 }
 
 export function fetchFinalTermListForRFPAction(rfpId){
-  // console.log('In actions.fetchFinalTermListForRFPAction');
   const request=axios({
     url : '/fetchFinalTermListForRFP?rfpId='+rfpId,
     method : 'GET',
@@ -964,7 +890,6 @@ export function fetchFinalTermListForRFPAction(rfpId){
 }
 
 export function fetchIOIListForRFPAction(rfpId){
-  // console.log('In actions.fetchIOIListForRFPAction, rfpId :'+ rfpId);
   const request=axios({
     url : '/fetchIOIListForRFP?rfpId='+rfpId,
     method : 'GET',
@@ -978,8 +903,6 @@ export function fetchIOIListForRFPAction(rfpId){
 }
 
 export function createIOIAction(props){
-  // console.log('In actions.createIOIAction');
-  // console.log('createIOIAction, props:'+JSON.stringify(props));
   const request=axios({
     url : '/createIOI',
     method : 'POST',
@@ -994,8 +917,6 @@ export function createIOIAction(props){
 }
 
 export function updateIOIAction(props){
-  // console.log('In actions.updateIOIAction');
-  // console.log('props:'+ JSON.stringify(props));
   const request=axios({
     url : '/updateIOI',
     method : 'POST',
@@ -1010,7 +931,6 @@ export function updateIOIAction(props){
 }
 
 export function getRFPFromFavoritesAction(userId, rfpId){
-  // console.log('In actions.getRFPFromFavoritesAction');
   const request=axios({
     url : '/getRFPFavorites?rfpId='+rfpId+'&userId='+userId,
     method : 'GET',
@@ -1024,7 +944,6 @@ export function getRFPFromFavoritesAction(userId, rfpId){
 }
 
 export function removeRFPFromFavoritesAction(props){
-  // console.log('In actions.removeRFPFromFavoritesAction :'+JSON.stringify(props));
   const request=axios({
     url : '/removeRFPFromFavorites',
     method : 'post',
@@ -1039,7 +958,6 @@ export function removeRFPFromFavoritesAction(props){
 }
 
 export function addRFPToFavoritesAction(props){
-  // console.log('In actions.addToFavoritesAction');
   const request=axios({
     url : '/addRFPToFavorites',
     method : 'post',
@@ -1054,7 +972,6 @@ export function addRFPToFavoritesAction(props){
 }
 
 export function fetchUserListAction(companyId){
-  // console.log('In actions.fetchUserListAction');
   const request=axios({
     url : '/getUserList?companyId='+companyId,
     method : 'get',
@@ -1068,7 +985,6 @@ export function fetchUserListAction(companyId){
 }
 
 export function addUserAction(props){
-  // console.log('In actions.addUserAction');
   const request=axios({
     url : '/addUser',
     method : 'post',
@@ -1083,8 +999,6 @@ export function addUserAction(props){
 }
 
 export function updateUserProfileAction(props){
-  // console.log('In actions.updateProfileAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateUserProfile',
     method : 'post',
@@ -1099,8 +1013,6 @@ export function updateUserProfileAction(props){
 }
 
 export function updateUserAction(props){
-  // console.log('In actions.updateProfileAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateUser',
     method : 'post',
@@ -1115,8 +1027,6 @@ export function updateUserAction(props){
 }
 
 export function updateAddressAction(props){
-  // console.log('In actions.updateProfileAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateAddress',
     method : 'post',
@@ -1131,8 +1041,6 @@ export function updateAddressAction(props){
 }
 
 export function updateContactAction(props){
-  // console.log('In actions.updateProfileAction');
-  // console.log('updateContactAction, props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateContact',
     method : 'post',
@@ -1147,7 +1055,6 @@ export function updateContactAction(props){
 }
 
 export function fetchAddressAction(addressId){
-  // console.log('In actions.fetchAddressAction');
   const request=axios({
     url : '/fetchAddress?addressId='+addressId,
     method : 'get',
@@ -1161,7 +1068,6 @@ export function fetchAddressAction(addressId){
 }
 
 export function fetchContactAction(contactId){
-  // console.log('In actions.fetchContactAction');
   const request=axios({
     url : '/fetchContact?contactId='+contactId,
     method : 'get',
@@ -1175,7 +1081,6 @@ export function fetchContactAction(contactId){
 }
 
 export function fetchAllRFPAction(){
-  // console.log('In actions.fetchAllRFPAction');
   const request=axios({
     url : (USE_CACHE ? '/fetchAllRFPsUsingCache' : '/fetchAllRFPs'),
     method : 'get',
@@ -1189,8 +1094,6 @@ export function fetchAllRFPAction(){
 }
 
 export function updateRFPAction(props){
-  // console.log('In actions.updateRFPAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/updateRFP',
     method : 'post',
@@ -1208,8 +1111,6 @@ export function updateRFPAction(props){
 }
 
 export function createRFPAction(props){
-  // console.log('In actions.createRFPAction');
-  // console.log('props:'+JSON.stringify(props));
   const request=axios({
     url : '/createRFP',
     method : 'post',
@@ -1227,7 +1128,6 @@ export function createRFPAction(props){
 }
 
 export function registerCompanyAction(props){
-  // console.log('In actions.registerCompanyAction');
   const request=axios({
     url : '/registerCompany',
     method : 'post',
@@ -1245,7 +1145,6 @@ export function registerCompanyAction(props){
 }
 
 export function loginAction(props){
-  // console.log('In actions.loginAction');
   const request=axios({
     url : '/login',
     method : 'post',

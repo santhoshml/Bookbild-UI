@@ -35,11 +35,9 @@ class UserProfileForm extends Component{
       user : null,
       company : null
     };
-    // console.log('state:'+JSON.stringify(this.state));
   };
 
   componentDidMount() {
-		// console.log('I am in componentWillMount');
 		var that = this;
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -55,13 +53,10 @@ class UserProfileForm extends Component{
   }
 
   renderField(field){
-		// console.log('ctx:'+JSON.stringify(ctx));
-		// console.log('field: '+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const disabled = field.disabled;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<div className={className}>
 				<label>{field.label}</label>
@@ -80,7 +75,6 @@ class UserProfileForm extends Component{
 	}
 
   renderDropdownField(field) {
-		// console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const disabled = field.disabled;
@@ -107,7 +101,6 @@ class UserProfileForm extends Component{
   renderRadioField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span>
 				<label className="radio-inline">
@@ -122,13 +115,11 @@ class UserProfileForm extends Component{
   }
   
   onSubmit(props){
-    // console.log('In onSubmit, props :'+ JSON.stringify(props));
     let that = this;
     let promiseArr=[];
 
     // check if the userobject has changed 
     if(this.props.initialValues.password !== props.password){
-      // console.log('user object has changed, update it');
       let uProps = {
         email : props.email,
         password : props.password,
@@ -142,7 +133,6 @@ class UserProfileForm extends Component{
     // check if the contactObject has changed
     if(this.props.initialValues.fullName !== props.fullName
       || this.props.initialValues.phoneNumber !== props.phoneNumber){
-      // console.log('user object has changed, update it');
       let uProps = {
         email : props.email,
         contactId : this.state.user.contactId,
@@ -159,7 +149,6 @@ class UserProfileForm extends Component{
       || this.props.initialValues.state !== props.state
       || this.props.initialValues.streetAddress !== props.streetAddress
       || this.props.initialValues.zipcode !== props.zipcode){
-      // console.log('user object has changed, update it');
       let uProps = {
         contactId : this.state.user.contactId,
         addressId : this.state.user.addressId,
@@ -174,7 +163,6 @@ class UserProfileForm extends Component{
     if(promiseArr.length > 0){
       Promise.all(promiseArr)
       .then((data) => {
-        // console.log('data:'+JSON.stringify(data));
         if(data[0].payload.status === 200 && data[0].payload.data.status === 'SUCCESS'){
           let mProps = {
             toId : that.state.user.contactId,
@@ -196,11 +184,8 @@ class UserProfileForm extends Component{
 	}
 
   render = () => {
-    // console.log('I am in render');
-		// console.log('props:'+JSON.stringify(this.props));
     const {address, contact} = this.props;
     const { handleSubmit, pristine, reset, submitting } = this.props
-		// console.log('yoyo:'+JSON.stringify(this.props.initialValues));
 
     return(
       <div>
@@ -339,8 +324,6 @@ class UserProfileForm extends Component{
   }
 
   displayUserList(){
-    // console.log('In displayUserList :'+ JSON.stringify(userListJSON));
-		// console.log('I am in displayUserList');
     return(
       <div className={`row`}>
         <br/>
@@ -403,7 +386,6 @@ function mapStateToProps(state) {
   if(state.userProfile.address
     && state.userProfile.contact
     && state.userProfile.userList){
-    // console.log('state.userProfile.address :'+ JSON.stringify(state.userProfile.address));
     let userAddress = state.userProfile.address[0];
     let contact = state.userProfile.contact[0];
     let userList = state.userProfile.userList
@@ -421,7 +403,6 @@ function mapStateToProps(state) {
     
     initValues.userList = userList;
 
-    // console.log('initValues : '+JSON.stringify(initValues));
     return {
       initialValues : initValues,
     };

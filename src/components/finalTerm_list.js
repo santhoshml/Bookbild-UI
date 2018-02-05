@@ -21,13 +21,10 @@ class FinalTermList extends Component{
   }
 
   componentWillMount() {
-    // console.log('In display final term list, componentWillMount');
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let displayMinimalData = true;
 
-    // console.log('user:'+JSON.stringify(user));
-    // console.log('companyId :'+JSON.stringify(company));
     if(this.props.match.params.type === constants.FT_FOR_RFP){
       this.props.fetchFinalTermListForRFPAction(this.props.match.params.id);
       this.props.fetchRFPAction(this.props.match.params.id);
@@ -47,12 +44,10 @@ class FinalTermList extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('I am in componentWillReceiveProps');
     if(this.props.match.params.type === constants.FT_FOR_RFP
       && nextProps.finalTermList 
       && nextProps.finalTermList != this.props.finalTermList
       && nextProps.rfp ){
-        // console.log('will build the clubdeal section');
         let clubDealList = ioiUtils.makeClubDealList(nextProps.finalTermList, nextProps.rfp);
         this.setState({
           clubDealList : clubDealList
@@ -69,7 +64,6 @@ class FinalTermList extends Component{
       && this.props.finalTermList && this.props.finalTermList.length > 0){
       let productCategoryMap = cUtils.getProductCategories(this.props.finalTermList, this.props.finalTermCompanyList);
       let catKeys = Object.keys(productCategoryMap);
-      // console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
       return(<div>
           <h3>Ranking by Product Category:</h3>
           <table className="table table-striped align-center table-bordered">
@@ -90,7 +84,6 @@ class FinalTermList extends Component{
 
   printHeaderForCat(list){
     return list.map(function(ele){
-      // console.log('ele:'+ele);
       return (<td key={ele}><b>{ele}</b></td>);
     });
   }
@@ -102,13 +95,11 @@ class FinalTermList extends Component{
       for(let k in pArr){
         t= t+'\n'+pArr[k];
       }
-      // console.log('t:'+console.log(t));
       return (<td key={t} className="add-newline">{t}</td>);
     });
   }
 
   updateWithBlendedCost(){
-    // console.log('this.props.finalTermList :'+ JSON.stringify(this.props.finalTermList))
     for(let i=0; i<this.props.finalTermList.length; i++){
       let blendedCostStr = [];      
       let fTerm = this.props.finalTermList[i];
@@ -158,7 +149,6 @@ class FinalTermList extends Component{
       } else if((this.state.user.role === constants.KEY_COMPANY
         || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR)
         && this.props.finalTermCompanyList){
-          // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = cUtils.getCompanyNameById(this.props.finalTermList[i].createdByCompanyId
               , this.props.finalTermCompanyList);
@@ -171,7 +161,6 @@ class FinalTermList extends Component{
         && this.state.clubDealList.length > 0){
         this.updateWithBlendedCost();
       }      
-      // console.log('this.props.finalTermList :'+JSON.stringify(this.props.finalTermList));
       return(
         <div>
           <DisplayTermSheetList
@@ -198,12 +187,10 @@ class FinalTermList extends Component{
   }
 
   displayLendersInClubDeal(list){
-    // console.log('this.props.finalTermCompanyList :'+JSON.stringify(this.props.finalTermCompanyList));
     let lName=null;
     for(let i=0; i<this.props.finalTermCompanyList.length; i++){
       if(this.props.finalTermCompanyList[i].companyId === list[0]
         || this.props.finalTermCompanyList[i].companyId === list[1]){
-        // console.log('yoyo, i='+i);
         if(!lName) lName=this.props.finalTermCompanyList[i].companyName;
         else lName=lName+', '+this.props.finalTermCompanyList[i].companyName
       }
@@ -212,7 +199,6 @@ class FinalTermList extends Component{
   }
 
   displayClubDealList(){
-    // console.log('In displayClubDealList');
     return(
       <div>
         <h3>Potential Club Pairings</h3>
@@ -235,7 +221,6 @@ class FinalTermList extends Component{
   }
 
   render(){
-    // console.log('I am in render');
     return(
       <div>
         <Header/>
@@ -277,7 +262,6 @@ function mapStateToProps(state) {
       rObject.rfp = state.rfpList.rfpList[0];
     }
 
-    // console.log('rObject :'+ JSON.stringify(rObject));
     return rObject;
 }
 

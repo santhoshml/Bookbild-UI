@@ -4,7 +4,6 @@ import Header from './header';
 
 export default class AboutUs extends Component {
     render(){
-        // console.log('I am in aboutUs');
         return(
           <div>
             <Header/>

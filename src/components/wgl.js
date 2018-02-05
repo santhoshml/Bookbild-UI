@@ -89,27 +89,8 @@ class WGL extends Component{
 			type = 'LENDER';
     }
     
-    // console.log('user.companyId :'+user.companyId);
-    // console.log('type :'+type);
     this.props.getLinksWithCompanyIdAction(user.companyId, type);
   }
-
-  // toggleDisplayWGLList(id, ctx){
-
-  //   let wglMapKeys = Object.keys(this.props.wglMap);
-  //   for(let i=0; i<wglMapKeys.length; i++){
-  //     let wgl = this.props.wglMap[wglMapKeys[i]];
-
-  //     if(wgl.linkId !== id)
-  //       wgl.display = false;
-  //     else
-  //       wgl.display = !wgl.display;
-
-  //     if(wgl.display === true){
-  //       lsUtils.setValue(constants.KEY_SELECTED_LINK, wgl.linkId);
-  //     }
-  //   }
-  // }
 
   returnTableOptions(){
     return {
@@ -119,7 +100,6 @@ class WGL extends Component{
 
 
   displayWGLListElement(wglList, ctx){
-    // console.log('In displayWGLListElement, wgl:'+JSON.stringify(wglList));
 
     const options = {
       afterInsertRow: this.onAfterInsertRow.bind(this),    // A hook for after insert rows
@@ -167,7 +147,6 @@ class WGL extends Component{
   }
 
   render(){
-    // console.log('I am in wgl render');
     return(
       <div>
         <Header/>
@@ -199,12 +178,15 @@ function mapStateToProps(state) {
   let rObject = {};
 
   if(state.wgl.wgl){
-    // console.log('state.wgl.wgl : '+ JSON.stringify(state.wgl.wgl));
-    rObject.wgl = state.wgl.wgl;
+    rObject.wgl = state.wgl.wgl.map(function(wgl){
+      if(!wgl.firm && wgl.companyName){
+        wgl.firm = wgl.companyName;
+      }
+      return wgl;
+    });
   }
 
   if(state.link.linkList){
-    // console.log('In mapStateToProps, state.link.linkList :'+JSON.stringify(state.link.linkList));
 		rObject.linkList = state.link.linkList;
 	}
   return rObject;

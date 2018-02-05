@@ -51,20 +51,6 @@ function renderDefaultTemplate(res, baseUrl) {
   });
 }
 
-// app.all('*', (req, res, next) => {
-//     console.log('development:'+development);
-//     console.log('hostname:'+`${req.hostname}:${port}${req.url}`);
-//     console.log('X-Forwarded-Proto:'+req.get('X-Forwarded-Proto'));
-//   if (!development) {
-//     if (req.get('X-Forwarded-Proto') === 'https' ) return next();
-//     return res.redirect(`https://${req.hostname}:${port}${req.url}`);
-//     // return res.redirect(`https://bookbild.com/\${req.url}`);
-//   } else {
-//     return next();
-//   }
-
-// });
-
 app.use((req, res, next) => {
   res.set('Access-Control-Allow-Origin', '*');
   next();

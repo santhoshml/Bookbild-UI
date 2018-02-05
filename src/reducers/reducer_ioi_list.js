@@ -1,4 +1,5 @@
 import { FETCH_IOI_LIST_FOR_RFP, FETCH_IOI_LIST_FOR_COMPANY, GET_IOI_FOR_RFP_COMPANY, FETCH_IOI } from '../actions/index';
+import cUtils from '../utils/common_utils';
 
 const INITIAL_STATE = { ioiList: null, ioiCompanyList : null, ioiUserList : null};
 
@@ -6,13 +7,32 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case FETCH_IOI_LIST_FOR_RFP:
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('FETCH_IOI_LIST_FOR_RFP, action.payload.data.data:'+JSON.stringify(action.payload));
       let ioiList = action.payload.data.data.IOI_LIST.Items;
       //remove the childIOI from the above list
-      let filteredIOIList = ioiList && ioiList.filter(ioi => !ioi.parentIOI);
+      // let filteredIOIList = ioiList && ioiList.filter(ioi => !ioi.parentIOI);
+      // remove the parentIOI and set the blended cost value
+      let parentIOI = {};
+      for(let ioi of ioiList){
+        if(ioi.childIOIList){
+          parentIOI[ioi.ioiId] = ioi.yield;
+        }
+      }
+      let compiledList = [];
+      for(let ioi of ioiList){
+        if(!ioi.childIOIList){
+          if(ioi.parentIOI){
+            ioi.blendedCost = [{
+              yield : cUtils.formatPercentToDisplay(parentIOI[ioi.parentIOI]),
+              otherLender : ' other tranche'
+            }];
+          }
+          compiledList.push(ioi);
+        }
+      }
+
       return {
         ...state
-        , ioiList : filteredIOIList
+        , ioiList : compiledList
         , ioiCompanyList : action.payload.data.data.COMPANY_DETAILS_LIST
       };
     } else {
@@ -24,11 +44,9 @@ export default function(state = INITIAL_STATE, action) {
     break;
   case FETCH_IOI_LIST_FOR_COMPANY :
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('action.payload.data.data:'+JSON.stringify(action.payload.data.data));
       let ioiList = action.payload.data.data.IOI_LIST.Items;
       //remove the childIOI from the above list
       let filteredIOIList = ioiList && ioiList.filter(ioi => !ioi.parentIOI);
-      // console.log('filteredIOIList : '+JSON.stringify(filteredIOIList));
       return {
         ...state
         , ioiList : filteredIOIList

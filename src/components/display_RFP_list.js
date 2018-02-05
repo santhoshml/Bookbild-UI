@@ -13,7 +13,6 @@ export default class DisplayRFPList extends Component {
   constructor(props){
     super(props);
 
-    // console.log('In the constructor of DisplayRFPList');
     this.state = {
       selectedRFPList : props.list,
       allRFPList : props.list,
@@ -23,7 +22,6 @@ export default class DisplayRFPList extends Component {
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('I am in componentWillReceiveProps');
     this.setState({
       selectedRFPList : nextProps.list,
       allRFPList : nextProps.list,
@@ -80,7 +78,6 @@ export default class DisplayRFPList extends Component {
   }
 
   updateWithDisplayData(){
-    // console.log('In updateWithDisplayData');
     if(this.state.selectedRFPList.length > 0){
       return this.state.selectedRFPList.map(function(rfp){
         rfp.product     = cUtils.getDisplayValue(rfp.product);
@@ -106,7 +103,6 @@ export default class DisplayRFPList extends Component {
   }
 
   onRegionChange(option){
-    // console.log('I am in onRegionChange');
     if(option.value === 'All Regions'){
       this.setState({
         selectedRFPList:this.state.allRFPList,
@@ -152,7 +148,6 @@ export default class DisplayRFPList extends Component {
   }
 
   render() {
-    // console.log('In DisplayRFPList');
     if (!this.state.selectedRFPList) {
       return <div>No RFPs exist</div>;
     } else {

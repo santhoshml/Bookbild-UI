@@ -28,21 +28,16 @@ class IOIList extends Component{
   }
 
   componentWillMount() {
-    // console.log('In ioiList componentWillMount');
     let user    = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
-    // console.log('company:'+JSON.stringify(company));
-    // console.log('user :'+JSON.stringify(user));
 
     if(this.props.match.params.type === constants.IOI_FOR_RFP){
       this.props.fetchIOIListForRFPAction(this.props.match.params.id);
       this.props.fetchRFPAction(this.props.match.params.id);
     } else if(user.role.toLowerCase() === constants.KEY_LENDER.toLowerCase()){
-      // console.log('calling fetchIOIListForLenderCompanyAction now');
       this.props.fetchIOIListForLenderCompanyAction(company.companyId);
     } else if(user.role.toLowerCase() === constants.KEY_COMPANY.toLowerCase()
       || user.role.toLowerCase() === constants.KEY_FINANCIAL_SPONSOR.toLowerCase()){
-        // console.log('calling fetchIOIListForBorrowerCompanyAction now');
         this.props.fetchIOIListForBorrowerCompanyAction(company.companyId);
       }
 
@@ -82,12 +77,10 @@ class IOIList extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('I am in componentWillReceiveProps');
     if(this.props.match.params.type === constants.IOI_FOR_RFP
       && nextProps.ioiList 
       && nextProps.ioiList != this.props.ioiList
       && nextProps.rfp ){
-        // console.log('will build the clubdeal section');
         let clubDealList = ioiUtils.makeClubDealList(nextProps.ioiList, nextProps.rfp);
         this.setState({
           clubDealList : clubDealList
@@ -104,7 +97,6 @@ class IOIList extends Component{
       && this.props.ioiList && this.props.ioiList.length > 0){
       let productCategoryMap = cUtils.getProductCategories(this.props.ioiList, this.props.ioiCompanyList);
       let catKeys = Object.keys(productCategoryMap);
-      // console.log('productCategoryMap:'+JSON.stringify(productCategoryMap));
       return(<div>
           <br/>
           <br/>
@@ -127,7 +119,6 @@ class IOIList extends Component{
 
   printHeaderForCat(list){
     return list.map(function(ele){
-      // console.log('ele:'+ele);
       return (<td key={ele}><b>{ele}</b></td>);
     });
   }
@@ -139,13 +130,11 @@ class IOIList extends Component{
       for(let k in pArr){
         t= t+'\n'+pArr[k];
       }
-      // console.log('t:'+console.log(t));
       return (<td key={t} className="add-newline">{t}</td>);
     });
   }
 
   updateWithBlendedCost(){
-    // console.log('this.props.ioiList :'+ JSON.stringify(this.props.ioiList))
     for(let i=0; i<this.props.ioiList.length; i++){
       let blendedCostStr = [];      
       let ioi = this.props.ioiList[i];
@@ -187,7 +176,6 @@ class IOIList extends Component{
         </div>
       );
     } else if(this.props.match.params.type === constants.IOI_FOR_RFP){
-      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       if(this.state.clubDealList && this.state.clubDealList.length > 0){
         this.updateWithBlendedCost();
       }
@@ -199,7 +187,6 @@ class IOIList extends Component{
         </div>
       );
     } else {
-      // console.log('this.props.ioiCompanyList:'+JSON.stringify(this.props.ioiCompanyList));
       return(
         <div>
           <DisplayIOIList
@@ -225,12 +212,10 @@ class IOIList extends Component{
   }
 
   displayLendersInClubDeal(list){
-    // console.log('this.props.ioiCompanyList :'+JSON.stringify(this.props.ioiCompanyList));
     let lName=null;
     for(let i=0; i<this.props.ioiCompanyList.length; i++){
       if(this.props.ioiCompanyList[i].companyId === list[0]
         || this.props.ioiCompanyList[i].companyId === list[1]){
-        // console.log('yoyo, i='+i);
         if(!lName) lName=this.props.ioiCompanyList[i].companyName;
         else lName=lName+', '+this.props.ioiCompanyList[i].companyName
       }
@@ -239,7 +224,6 @@ class IOIList extends Component{
   }
 
   displayClubDealList(){
-    // console.log('In displayClubDealList');
     return(
       <div>
         <h3>Potential Club Pairings</h3>
@@ -289,15 +273,14 @@ class IOIList extends Component{
 }
 
 function mapStateToProps(state) {
-  // Whatever is returned will show up as props
-  // console.log('state:'+JSON.stringify(state));
+
   let rObject =  {
     ioiList: state.ioiList.ioiList,
-    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList, state.ioiList.ioiList),
+    ioiCompanyList : cUtils.maskCompanyName(state.ioiList.ioiCompanyList),
     ioiUserList : state.ioiList.ioiUserList,
     rfp : state.rfpList.rfpList ? state.rfpList.rfpList[0] : null
   };
-  // console.log('rObject:'+JSON.stringify(rObject));
+
   return rObject;
 }
 

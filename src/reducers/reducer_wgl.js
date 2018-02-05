@@ -6,9 +6,7 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case GET_WGL_BY_COMPANYID :
   case GET_WGL_BY_LINKID :
-    // console.log('action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
         , wgl: action.payload.data.data.Items

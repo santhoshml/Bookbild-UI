@@ -44,7 +44,6 @@ class borrowerControlledAccess extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps :');
     this.setState({
       borrowerControlledAccessList : nextProps.borrowerControlledAccessList,
       loading : false
@@ -53,7 +52,6 @@ class borrowerControlledAccess extends Component{
   }
 
   onToggleSwitch(e){
-    // console.log('In onToggleSwitch');
     let that = this;
     let type = e.target.id
     let newStateValue = this.state.selectedAccessList;
@@ -62,7 +60,6 @@ class borrowerControlledAccess extends Component{
 
     let list = this.state.borrowerControlledAccessList;
     for(let i=0;i<list.length; i++){
-      // console.log('list[i]:'+JSON.stringify(list[i]));
       if(list[i].linkId === this.state.selectedDropDown.value){
         updatedLink = list[i];
         list[i].accessToLender = newStateValue;
@@ -70,7 +67,6 @@ class borrowerControlledAccess extends Component{
       }
     }
 
-    // console.log('updated list:'+ JSON.stringify(list));
     this.setState({
       borrowerControlledAccessList : list,
       selectedAccessList : newStateValue,
@@ -105,9 +101,6 @@ class borrowerControlledAccess extends Component{
   }
 
   _onSelectDropdown(event){
-    // console.log('I am in _onSelectDropdown');
-    // console.log('event:'+JSON.stringify(event));
-    // console.log('borrowerControlledAccessList :'+JSON.stringify(this.state.borrowerControlledAccessList));
     let selectedAccessList = null;
     for(let i=0; i< this.state.borrowerControlledAccessList.length; i++){
       if(this.state.borrowerControlledAccessList[i].linkId === event.value){
@@ -115,7 +108,6 @@ class borrowerControlledAccess extends Component{
         break;
       }
     }
-    // console.log('selectedAccessList:'+JSON.stringify(selectedAccessList));
     this.setState({
       selectedDropDown : event,
       selectedAccessList : selectedAccessList
@@ -160,7 +152,6 @@ class borrowerControlledAccess extends Component{
   }
 
   render(){
-    // console.log('In render of borrowerControlledAccess');
     return(
       <div>
         <Header/>
@@ -193,7 +184,6 @@ class borrowerControlledAccess extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  // console.log('state:'+JSON.stringify(state));
 
   let rObject = {
     borrowerControlledAccessList : state.controlledAccessList.borrowerControlledAccessList

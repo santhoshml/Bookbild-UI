@@ -14,7 +14,6 @@ import DataroomDropdown from './data_room_dropdown';
 class NonBorrowerDocumentForm extends Component{
 	constructor(props){
 		super(props);
-		// console.log('I am in constructor');
 		this.state = {
 			user : null,
 			displayLinkId : null
@@ -22,10 +21,8 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	componentWillMount() {
-		// console.log('I am in documents.componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 		let type = null;
-		// console.log('user:'+JSON.stringify(user));
 		if(user.role === constants.KEY_COMPANY || user.role === constants.KEY_FINANCIAL_SPONSOR){
 			type = 'BORROWER';
 		} else if(user.role === constants.KEY_LENDER){
@@ -38,8 +35,6 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	_onSelectDropdown(event){
-		// console.log('In _onSelectDropdown');
-		// console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
 			if(link.linkId === event.value){
 				this.setState({
@@ -51,7 +46,6 @@ class NonBorrowerDocumentForm extends Component{
 	}
 
 	render(){
-		// console.log('I am in documents.render');
 		const {handleSubmit, errors, pristine, reset, submitting} = this.props;
 		return (
 			<div>
@@ -79,10 +73,8 @@ class NonBorrowerDocumentForm extends Component{
 }
 
 function mapStateToProps(state) {
-	// console.log('In documents.mapStateToProps');
 	let rObject={};
 	if(state.link.linkList){
-		// console.log('state.link.linkList:'+JSON.stringify(state.link.linkList));
 		rObject.linkList = state.link.linkList;
 	}
   return rObject;

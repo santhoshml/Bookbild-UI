@@ -29,7 +29,6 @@ class EditRFPForm extends Component {
 
   componentWillMount() {
     var that = this;
-    // console.log('I am in createRFP componentWillMount');
     let paramId = this.props.match.params.id;
     let user= lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -46,31 +45,9 @@ class EditRFPForm extends Component {
 
   onSubmit(values) {
       let that = this;
-      // console.log('In onSubmit, props:'+JSON.stringify(values));
-
-      // values.createdById = this.props.createdById;
-      // values.createdByCompanyId=this.props.createdByCompanyId;
-      // values.numOfIOI = this.props.numOfIOI;
-
       values.createdById = this.state.user.userId;
       values.createdByCompanyId=this.state.user.companyId;
       values.numOfIOI = this.props.numOfIOI; // I don't know what todo with this
-
-      // if(values.category.toUpperCase() !== 'ABL'){
-      //   //erase the values in Collateral
-      //   values.acctRecvGrossAmt  = '';
-      //   values.acctRecvComment   = '';
-      //   values.invtryGrossAmt    = '';
-      //   values.invtryComment     = '';
-      //   values.ppeGrossAmt       = '';
-      //   values.ppeComment        = '';
-      //   values.maeGrossAmt       = '';
-      //   values.maeComment        = '';
-      //   values.realEstGrossAmt   = '';
-      //   values.realEstComment    = '';
-      //   values.otherGrossAmt     = '';
-      //   values.otherComment      = '';
-      // }
 
       let promiseArr = [];
       let initValues = this.props.initialValues;
@@ -267,7 +244,6 @@ class EditRFPForm extends Component {
   }
 
   renderField(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -284,7 +260,6 @@ class EditRFPForm extends Component {
   }
 
   renderTextArea(field) {
-    // console.log('field:'+JSON.stringify(field));
     const { meta: { touched, error } } = field;
     const { size } = field;
     const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -339,7 +314,6 @@ class EditRFPForm extends Component {
   }
 
   renderRadioField(field) {
-    // console.log('field:'+JSON.stringify(field));
 		const { meta: { touched, error } } = field;
     const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
@@ -347,7 +321,6 @@ class EditRFPForm extends Component {
       <div className={className}>
         <label>{field.label}</label><br/>
         {field.options.map(function(val){
-          // console.log('val:'+val);
           return(
             <span key={val}>
               <input
@@ -373,7 +346,6 @@ class EditRFPForm extends Component {
   }
 
   render() {
-    // console.log('I am in create RFP render');
     const { handleSubmit } = this.props;
     return (
       <div>
@@ -547,13 +519,10 @@ class EditRFPForm extends Component {
   }
 
 function mapStateToProps(state) {
-  // console.log('In mapStateToProps, gType:'+gType);
-  // console.log('In mapStateToProps, state:'+JSON.stringify(state));
   let initialValues = {};
   
   if(state.rfpList.rfpList){
     let rfp = state.rfpList.rfpList[0];
-    // console.log('rfp :'+JSON.stringify(rfp));
 
     initialValues.rfpId = rfp.rfpId;
     initialValues.requestType = rfp.requestType;
@@ -658,7 +627,6 @@ function validate(values) {
     errors.expiryDt = 'Select a expiry Date for the RFP';
   }
 
-  // console.log('errors:'+JSON.stringify(errors));
   return errors;
 }
 

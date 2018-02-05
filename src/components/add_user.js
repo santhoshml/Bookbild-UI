@@ -51,8 +51,6 @@ class AddUserForm extends Component{
 		const { size } = field;
 		const disabled = field.disabled;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('className:'+JSON.stringify(className));
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -74,7 +72,6 @@ class AddUserForm extends Component{
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -93,7 +90,6 @@ class AddUserForm extends Component{
 	renderRadioField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span>
 				<label className="radio-inline">
@@ -113,11 +109,9 @@ class AddUserForm extends Component{
 		props.addedByUserId = this.state.user.userId;
 		props.companyId = this.state.user.companyId;
 		props.role = this.state.user.role;
-		// console.log('props : '+JSON.stringify(props));
 		this.props.addUserAction(props)
 		 .then((data) => {
 			 if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on add user
-				// console.log('data :'+JSON.stringify(data));
 					// send msgs to all in the company
 					let mProps={
 						companyId : that.state.user.companyId,
@@ -347,7 +341,6 @@ function validate(values){
 function mapStateToProps(state){
 	if(state.userProfile.address){
 		let address = state.userProfile.address[0];
-		// console.log('address :'+JSON.stringify(address));
 		let initData = {
 			streetAddress : address.streetAddress,
 			city : address.city,

@@ -51,7 +51,6 @@ const Title = styled.div`
 class Sidenav extends Component {
 
 	componentWillMount(){
-		// console.log('I am in header componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
         let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
         // get the user name
@@ -63,7 +62,6 @@ class Sidenav extends Component {
 	}
 
     onSelect(id, parent, ctx){
-        // console.log('In onSelect, id:'+id+', parent:'+parent);
         if(id === 'rfp/rfpList'){
             this.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
         } else if(id === 'rfp/myFavorites'){
@@ -335,7 +333,6 @@ class Sidenav extends Component {
     }
 
   render() {
-    // console.log('I am in sidenav render');
 
     return (
     <BaseContainer style={{ background: '#2c3e50', width: '210px', color: '#FFF', height:'100%', position: 'absolute'}}>
@@ -363,7 +360,6 @@ function mapStateToProps(state) {
     let rObject = {};
     
     if(state.userProfile.contact){
-        // console.log('state.userProfile.contact :'+JSON.stringify(state.userProfile.contact));
         rObject.userContact = state.userProfile.contact[0];
     }
     return rObject;

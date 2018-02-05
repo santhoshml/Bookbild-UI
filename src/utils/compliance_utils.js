@@ -1,8 +1,6 @@
 import constants from './constants';
 
 exports.getDisplayData = function(complianceData, cols){
-    // console.log('In addRows');
-    // console.log('cols:'+JSON.stringify(cols));
     let dataArr=[];
     for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
       let qrow = {};
@@ -15,8 +13,6 @@ exports.getDisplayData = function(complianceData, cols){
   }
   
   exports.initComplianceData=function(cols){
-    // console.log('In addRows');
-    // console.log('cols:'+JSON.stringify(cols));
     let dataArr=[];
     for(let i=0; i<constants.QCOMPLIANCE_ROWS.length;i++){
       let qrow = {};
@@ -28,7 +24,6 @@ exports.getDisplayData = function(complianceData, cols){
       }
       dataArr.push(qrow);
     }
-    // console.log('dataArr:'+JSON.stringify(dataArr));
     return dataArr;
   }
   
@@ -68,6 +63,5 @@ exports.getYearOptions=function(){
 
 exports.getYearToDisplay = function(yrString){
     let yr = yrString.substring(yrString.indexOf('_')+1);
-    // console.log('getYearToDisplay :'+yr);
     return yr;
 }

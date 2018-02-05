@@ -6,7 +6,6 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
   case FETCH_FINAL_TERM_LIST_FOR_COMPANY :
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In reducer_create_ioi, data:'+JSON.stringify(action.payload.data));
       return {
         ...state
         , finalTermList : action.payload.data.data.Items
@@ -20,7 +19,6 @@ export default function(state = INITIAL_STATE, action) {
     break;
     case FETCH_FT_LIST_FOR_RFP :
       if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-        // console.log('In reducer_create_ioi, data:'+JSON.stringify(action.payload.data));
         return {
           ...state
           , finalTermList : action.payload.data.data.FT_LIST.Items

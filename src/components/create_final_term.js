@@ -66,8 +66,6 @@ class CreateFinalTermForm extends Component{
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('className:'+JSON.stringify(className));
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -135,7 +133,6 @@ class CreateFinalTermForm extends Component{
         props.createdByCompanyId = that.state.company.companyId;
         props.ioiId = that.state.ioi.ioiId;
         props.forCompanyId = that.state.rfp.createdByCompanyId;
-        // console.log('will make createFinalTermAction call :'+JSON.stringify(props));
         that.props.createFinalTermAction(props)
         .then((data) => {
           if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
@@ -333,8 +330,6 @@ class CreateFinalTermForm extends Component{
   }
 
 	handleFileUpload(type, inputFiles) {
-		// console.log('In handleFileUpload, type:'+type);
-		// console.log('this.state:'+JSON.stringify(this.state));
 		inputFiles.persist();
 		var files = inputFiles.currentTarget.files;
 		if(files && files.length > 0){
@@ -348,24 +343,16 @@ class CreateFinalTermForm extends Component{
         linkId 	: this.state.link.linkId,
         uploadedCompanyId : this.state.user.companyId
       }).then((data)=>{
-          // console.log('file upload completed');
-        // that.props.getLinkDocsWithLinkIdAction(that.props.link.linkId);
         that.myFileInput=null;
         this.props.getLinkDocsWithLinkIdAndTypeAction(this.state.link.linkId, "FINAL_TERM");
       });
-		} else {
-			// console.log('no file to upload');
 		}
   }
 
   deleteDocument(linkDocId, fileName){
-		// console.log('I am in deleteDocument, linkDocId:'+linkDocId);
 		let that = this;
-		// console.log('this.props.linkDocList:'+JSON.stringify(this.props.linkDocList));
 		this.props.deleteLinkDocumentAction(linkDocId, fileName)
 		.then((data) => {
-			// console.log('deleted the docuemnt, now in then, data:'+JSON.stringify(data));
-			// console.log('that.props.linkList:'+JSON.stringify(that.props.linkList));
 			for(let i=0;i<this.props.linkDocList.length; i++){
 				if(that.props.linkDocList[i].linkDocsId == linkDocId)
 					that.props.linkDocList.splice(i,1);
@@ -375,8 +362,6 @@ class CreateFinalTermForm extends Component{
 	}
 
 	addDeleteIcon(item){
-		// console.log('In addDeleteIcon');
-		// console.log('item.uploadedCompanyId: '+item.uploadedCompanyId+', this.state.user.companyId:'+this.state.user.companyId);
 		if(item.uploadedCompanyId === this.state.user.companyId){
 			return(
 				<span>
@@ -390,23 +375,18 @@ class CreateFinalTermForm extends Component{
   }
 
 	downloadDocument(fileName){
-		// console.log('I am in downloadDocument, fileName:'+fileName);
-		// window.open(cUtils.getS3FileURL(fileName));
 		this.props.downloadLinkDocumentAction(fileName)
 		.then((data) => {
-			// console.log('downloaded the docuemnt, now in then, data:'+JSON.stringify(data));
 			window.open(data.payload.data.data);
 		});
 	}
   
 	renderDocumentItem(type){
-		// console.log('In renderDocumentItem');
 		var that = this;
 		if(this.props.linkDocList && this.props.linkDocList.length > 0){
 			let list = this.props.linkDocList.filter(linkDoc => linkDoc.type === type);
 			if(list && list.length > 0){
 				return list.map(function(item){
-					// console.log('item:'+JSON.stringify(item));
 					return(<tr key={item.linkDocsId}>
 						<td>{item.originalFileName}</td>
 						<td>{item.companyName}</td>
@@ -428,7 +408,6 @@ class CreateFinalTermForm extends Component{
 	}  
 
   displayFileUploadBlock(){
-    // console.log('I am in displayFileUploadBlock');
     let inputTagStyle= {
 			'display':'inline'
 		};
@@ -463,7 +442,6 @@ class CreateFinalTermForm extends Component{
   }
 
   render(){
-    // console.log('I am in create IOI');
     const {handleSubmit} = this.props;
 
     return(
@@ -543,7 +521,6 @@ function mapStateToProps(state) {
 }
 
 function validate(values){
-  // console.log('values:'+JSON.stringify(values));
   const errors={};
 
   if(!values.cashInterest){

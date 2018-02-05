@@ -18,7 +18,6 @@ class RegisterCompanyForm extends Component{
 
 	onSubmit(props){
 		let that = this;
-		// console.log('In RegisterCompanyForm, props:'+JSON.stringify(props));
 		this.props.registerCompanyAction(props)
 		 .then((data) => {
 			if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
@@ -62,8 +61,6 @@ class RegisterCompanyForm extends Component{
 		const { meta: { touched, error } } = field;
 		const { size } = field;
 		const className = `form-group ${size} ${touched && error ? "has-danger" : ""}`;
-		// console.log('className:'+JSON.stringify(className));
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span className={className}>
 				<label>{field.label}</label>
@@ -82,7 +79,6 @@ class RegisterCompanyForm extends Component{
 	renderRadioField(field) {
 		const { meta: { touched, error } } = field;
 		const className = `form-group ${touched && error ? "has-danger" : ""}`;
-		// console.log('field:'+JSON.stringify(field));
 		return (
 			<span>
 				<label className="radio-inline">

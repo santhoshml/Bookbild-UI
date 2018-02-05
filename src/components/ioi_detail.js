@@ -35,7 +35,6 @@ class IOIDetail extends Component{
   }
 
   componentWillMount() {
-    // console.log('In componentWillMount of IOI_DETAIL');
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
     let paramId = this.props.match.params.id;
@@ -53,7 +52,6 @@ class IOIDetail extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps');
     
     if(nextProps.link){
       this.setState({
@@ -247,13 +245,12 @@ class IOIDetail extends Component{
     JSAlert.confirm("Are you sure you want to invite the Lender ?")
     .then(function(result){
       if(!result){
-        // console.log('user did not want to invite, he pressed no');
       } else {
         let data = {
-          rfpId: that.state.ioi.rfpId,
-          ioiId: that.state.ioi.ioiId,
-          borrowerCompanyId : that.state.ioi.forCompanyId,
-          lenderCompanyId : that.state.ioi.createdByCompanyId,
+          rfpId: that.props.ioi.rfpId,
+          ioiId: that.props.ioi.ioiId,
+          borrowerCompanyId : that.props.ioi.forCompanyId,
+          lenderCompanyId : that.props.ioi.createdByCompanyId,
           name : null,
           accessToLender : { 
             "DOCUMENTS" : false, 
@@ -263,10 +260,8 @@ class IOIDetail extends Component{
           },
           borrowerContactId : that.state.user.contactId
         };
-        // console.log('data:'+JSON.stringify(data));
         that.props.inviteLenderAction(data)
           .then(data => {
-            // console.log('IN inviteLenderAction response, data:'+JSON.stringify(data));
             that.setState({
               disableInvite : true
             });
@@ -303,7 +298,7 @@ class IOIDetail extends Component{
     let that = this;
     JSAlert.confirm("Are you sure you want to revoke the IOI, this action cannot be REVERSED ?")
     .then(function(result){
-      that.props.revokeIOI(that.state.ioi.ioiId)
+      that.props.revokeIOI(that.props.ioi.ioiId)
       .then(() => {
         that.props.history.push(constants.ROUTES_MAP.RFP_MARKETPLACE);
       })
@@ -312,7 +307,6 @@ class IOIDetail extends Component{
 
   displayYieldMatrix(yieldMatrix){
     var yieldMatrixRender = yieldMatrix.map(function(row){
-      // console.log('row:'+JSON.stringify(row));
       return(<tr key={row.period}>
           <td>{numeral(row.period).format('0,0.00')}</td>
           <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
@@ -419,8 +413,6 @@ class IOIDetail extends Component{
   }
 
   displayTabPanelWithChildIOI(){
-    // console.log('In displayTabPanelWithChildIOI');
-    // console.log('this.props.childIOIList :'+JSON.stringify(this.props.childIOIList));
     return(
       <span>
         <TabPanel>
@@ -443,7 +435,6 @@ class IOIDetail extends Component{
   }
 
   render(){
-    // console.log('I am in IOI_DETAIL render');
     return(
       <div>
         <Header/>
@@ -475,13 +466,11 @@ class IOIDetail extends Component{
 
 function mapStateToProps(state) {
   // Whatever is returned will show up as props
-  // console.log('In IOI_DETAIL, state:'+JSON.stringify(state));
   let rObject = {
     childIOIList : []
   };
 
   if(state.ioiList.ioi){
-    // console.log('state.ioiList.ioi :'+JSON.stringify(state.ioiList.ioi));
     if(Array.isArray(state.ioiList.ioi)){
       rObject.ioi = state.ioiList.ioi[0];
   
@@ -491,8 +480,6 @@ function mapStateToProps(state) {
       if(state.ioiList.ioi[2])
         rObject.childIOIList.push(state.ioiList.ioi[2]);
       
-        // console.log('rObject.childIOIList : '+JSON.stringify(rObject.childIOIList));
-      // rObject.childIOIList = childIOIList;
     } else {
       rObject.ioi = state.ioiList.ioi;
     }
@@ -508,7 +495,6 @@ function mapStateToProps(state) {
   }
 
   if(state.rfpList.rfpList){
-    // console.log('state.rfpList.rfpList :'+JSON.stringify(state.rfpList.rfpList));
     rObject.rfp = state.rfpList.rfpList[0];
   }
 

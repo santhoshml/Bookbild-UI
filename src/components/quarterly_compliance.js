@@ -25,7 +25,6 @@ class complianceForm extends Component{
 
 	constructor(props){
 		super(props);
-		// console.log('I am in constructor');
 		this.state = {
 			user : null,
       company : null,
@@ -39,7 +38,6 @@ class complianceForm extends Component{
   }
   
 	componentWillMount() {
-    // console.log('I am in documents.componentWillMount');
     let that = this;
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
@@ -63,24 +61,19 @@ class complianceForm extends Component{
   }
 
   componentWillReceiveProps(nextProps){
-    // console.log('In componentWillReceiveProps ');
     let data = {};
 
-    // console.log('nextProps :'+JSON.stringify(nextProps));
 
     // if(!this.state.complianceData){
     if(nextProps.complianceData){
-      // console.log('there is no compliance data in the state');
       if(nextProps.complianceData && nextProps.complianceData.data){
         data = nextProps.complianceData.data;
         let thisYearComplianceData = data[this.state.selectedYear];
         if(!thisYearComplianceData){
           // if there data is not in the db, then do a init
-          // console.log('there is no data for the selectedYear :'+this.state.selectedYear+', calling a init');
           data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
         }
       } else {
-        // console.log('there is no data object calling a init');
         data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
       }
       
@@ -92,20 +85,16 @@ class complianceForm extends Component{
       });
     } else if(!nextProps.complianceData && this.state.selectedLink){
       // link is selected but there is no compliance data, so init
-      // console.log('complianceData object is null');
       data[this.state.selectedYear] = complainceUtils.initComplianceData(this.state.coloumns);
       this.setState({
         complianceData : data,
         complianceDataId : nextProps.complianceData ? nextProps.complianceData.complianceDataId : null,
         complianceDisplayData : complainceUtils.getDisplayData(data[this.state.selectedYear], this.state.coloumns)
       });      
-    } else {
-      // console.log('link is not selected and there is no complianceData');
     }
   }
 
   typeCustomFormatter(type){
-    // console.log('type:'+JSON.stringify(type));
     if(type.value.indexOf('(x)') > 0 
       || type.value.indexOf('(%)') > 0
       || type.value.indexOf('($)') > 0
@@ -121,8 +110,6 @@ class complianceForm extends Component{
   }
   
   handleGridRowsUpdated({ fromRow, toRow, updated }) {
-    // console.log('fromRow:'+fromRow+', toRow:'+toRow+', updated:'+JSON.stringify(updated));
-    // console.log('year:'+this.state.selectedYear+', view:'+this.state.selectedView);
     let x = fromRow;
     let y = (Object.keys(updated))[0];
     // update the state with the values
@@ -137,7 +124,6 @@ class complianceForm extends Component{
   }
 
   onChangeYear(event){
-    // console.log('I am in onChangeYear, val:'+event.target.value);
     let selectedYear = 'YR_'+event.target.value;
     let cData = this.state.complianceData;
     if(!cData[selectedYear])
@@ -152,9 +138,7 @@ class complianceForm extends Component{
   }
 
   onChangeSelectView(val){
-    // console.log('I am in onClickSelectView, val:'+val);
     if(val === 'quaterly'){
-      // console.log('I am in onClickSelectView, quaterly');
       let cols = complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable);
       this.setState({
         selectedView : 'quaterly',
@@ -162,7 +146,6 @@ class complianceForm extends Component{
         complianceDisplayData : complainceUtils.getDisplayData(this.state.complianceData[this.state.selectedYear], cols)
       });
     } else {
-      // console.log('I am in onClickSelectView, monthly');
       let cols = complainceUtils.getMonthlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable);
       this.setState({
         selectedView : 'monthly',
@@ -173,8 +156,6 @@ class complianceForm extends Component{
   }
 
   displayComplianceView(){
-    // console.log('In displayComplianceView');
-    // console.log('this.state:'+JSON.stringify(this.state));
     return(
       <div>
         <DataGrid
@@ -191,7 +172,6 @@ class complianceForm extends Component{
   }
 
   saveComplianceData(){
-    // console.log('In saveComplianceData');
     let dObject = {};
     dObject.companyId = this.state.company.companyId;
     dObject.userId = this.state.user.userId;
@@ -213,7 +193,6 @@ class complianceForm extends Component{
   }
 
   displayDropdownSelections(){
-    // console.log('In displayDropdownSelections, ');
     return(<div>
       <p>Select the year from the dropdown to view the compliance data. Switch between quaterly and monthly views to view data. </p>
       <br/>
@@ -260,9 +239,6 @@ class complianceForm extends Component{
   }
 
   getComplianceDataForLender(link){
-    // console.log('In getComplianceDataForLender');
-    // console.log('linkList :'+JSON.stringify(this.props.linkList));
-    // console.log('\nselected link:'+ JSON.stringify(link));
     if((link.accessToLender && this.state.user.role !== constants.KEY_COMPANY && this.state.user.role !== constants.KEY_FINANCIAL_SPONSOR)
       || this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
         for(let i=0;i< this.state.linkList.length; i++){
@@ -273,19 +249,14 @@ class complianceForm extends Component{
         }
         this.props.getComplianceData(link.borrowerCompanyId);
     } else {
-      // console.log('Cannot see the Quaterly compliance data');
       JSAlert.alert("To view this data, borrower need to grant access to you.");
     }
   }
 
   displayLinks(){
-    // console.log('I am displaying the links');
     let that = this;
-    // console.log('In displayLinks :'+ JSON.stringify(this.props.linkList));
 		return(<ul>
       {this.state.linkList && this.state.linkList.map(function(link){
-        // console.log('link :'+JSON.stringify(link));
-        // console.log('link.view :'+link.view);
         return (<li key={link.linkId ? link.linkId : link.rfpId} style={{listStyleType : 'none'}}>
           <Link to="#" onClick={that.getComplianceDataForLender.bind(that, link)}>
             {link.view ? <i className="fa fa-folder-open-o fa-lg" aria-hidden="true"><span className="indent">{link.name}</span></i>
@@ -305,7 +276,6 @@ class complianceForm extends Component{
   }
 
   displayDataMatrix(){
-    // console.log('I am in displayDataMatrix');
     return (
       <div>
       {this.state.complianceDisplayData.length > 0 ? this.displayDropdownSelections() : ''}
@@ -315,8 +285,6 @@ class complianceForm extends Component{
   }
 
   _onSelectDropdown(event){
-		// console.log('In _onSelectDropdown');
-		// console.log('event:'+JSON.stringify(event));
 		this.props.linkList.forEach(link => {
 			if(link.linkId === event.value ){
         if(link.accessToLender[constants.KEY_ACCESS_CONTROL_QCOMPLIANCE]){
@@ -328,7 +296,6 @@ class complianceForm extends Component{
             coloumns : complainceUtils.getQuaterlyColoumns(this.typeCustomFormatter, this.state.isColoumnsEditable),
           });
         } else {
-          // console.log('link not activated');
           this.setState({
             selectedLink : link,
             selectedDropDown : event
@@ -345,7 +312,6 @@ class complianceForm extends Component{
   }  
 
 	render(){
-    // console.log('I am in quaterly_compliance.render');
     return (
       <div>
         <Header/>
@@ -396,8 +362,6 @@ class complianceForm extends Component{
 }
 
 function mapStateToProps(state) {
-  // console.log('In mapStateToProps');
-  // console.log('state:'+JSON.stringify(state));
   let rObject={};
   if(state.link.linkList){
     rObject.linkList = state.link.linkList;
@@ -407,7 +371,6 @@ function mapStateToProps(state) {
     rObject.complianceData = state.complianceData.complianceData[0];
   }
   
-  // console.log('returning rObject :'+JSON.stringify(rObject));
   return rObject;
 }
 

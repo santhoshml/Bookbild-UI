@@ -39,11 +39,7 @@ export default class DisplayIOIList extends Component {
   }
 
   investorRenderer(cell, row){
-    // console.log('cell :'+ JSON.stringify(cell));
-    // console.log('row :'+ JSON.stringify(row));
     if(this.state.companyList){
-      // console.log('row.createdByCompanyId:'+row.createdByCompanyId);
-      // console.log('this.state.companyList:'+JSON.stringify(this.state.companyList));
       return cUtils.getCompanyNameById(row.createdByCompanyId, this.state.companyList);
     } else
       return null;
@@ -131,15 +127,14 @@ export default class DisplayIOIList extends Component {
     // return  <FormattedDate value={row.timestamp} format="short" />
   }
   onDoubleClicked(row){
-    // console.log('row clicked in IOI list :'+ row.id);
     if(row){
-      // console.log('row:'+JSON.stringify(row));
-      this.context.router.history.push(constants.ROUTES_MAP.IOI_DETAIL+'/'+row.ioiId);
+      this.context.router.history.push(constants.ROUTES_MAP.IOI_DETAIL
+        +'/'
+        + (row.parentIOI ? row.parentIOI : row.ioiId));
     }
   }
 
   render() {
-    // console.log('In DisplayIOIList');
     if (!this.state.ioiList) {
       return <div>No IOIs exist</div>;
     } else if(this.state.minimalData){

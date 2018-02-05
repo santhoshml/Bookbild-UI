@@ -32,8 +32,6 @@ export default class DisplayFinalTermList extends Component {
 
   investorRenderer(cell, row){
     if(this.state.companyList){
-      // console.log('row.createdByCompanyId:'+row.createdByCompanyId);
-      // console.log('this.state.companyList:'+JSON.stringify(this.state.companyList));
       return cUtils.getCompanyNameById(row.createdByCompanyId, this.state.companyList);
     } else
       return null;
@@ -136,9 +134,7 @@ export default class DisplayFinalTermList extends Component {
 
 
   onDoubleClicked(row){
-    // console.log('row clicked in IOI list :'+ row.id);
     if(row){
-      // console.log('row:'+JSON.stringify(row));
       this.context.router.history.push(constants.ROUTES_MAP.VIEW_FINAL_TERM+'/'+row.finalTermId);
     }
   }
@@ -148,7 +144,6 @@ export default class DisplayFinalTermList extends Component {
     if (!this.props.finalTermList) {
       return <div>No Final Term sheets exist</div>;
     } else if(this.state.minimalData){
-      // console.log('will display minimal Data now');
       const options = {
         onRowClick : this.onDoubleClicked.bind(this),
         onRowDoubleClick : this.onDoubleClicked.bind(this)

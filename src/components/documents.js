@@ -13,7 +13,6 @@ import NonBorrowerDocumentForm from './nonBorrowerDocuments' ;
 export default class DocumentForm extends Component{
 	constructor(props){
 		super(props);
-		// console.log('I am in constructor');
 		this.state = {
 			user : null,
 			company : null,
@@ -22,7 +21,6 @@ export default class DocumentForm extends Component{
 	}
 
 	componentWillMount() {
-		// console.log('I am in documents.componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
     let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 		this.setState({
@@ -32,14 +30,11 @@ export default class DocumentForm extends Component{
 	}
 
 	render(){
-		// console.log('I am in documents.render');
 		if(this.state.user.role === constants.KEY_COMPANY || this.state.user.role === constants.KEY_FINANCIAL_SPONSOR){
-			// console.log('forwading to borrower Document form');
 			return (
 				<NonBorrowerDocumentForm history={this.props.history}/>
 			);
 		} else {
-			// console.log('forwading to Non-borrower Document form');
 			return (
 				<NonBorrowerDocumentForm history={this.props.history}/>
 			);

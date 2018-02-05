@@ -9,7 +9,6 @@ import ellipsis from 'text-ellipsis';
 export default class Header extends Component{
 
 	componentWillMount(){
-		// console.log('I am in header componentWillMount');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 		let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 		this.setState({
@@ -19,7 +18,6 @@ export default class Header extends Component{
 	}
 
 	componentWillReceiveProps(nextProps){
-		// console.log('I am in header componentWillReceiveProps');
 		let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
 		let company = lsUtils.getValue(constants.KEY_COMPANY_OBJECT);
 		this.setState({
@@ -97,7 +95,6 @@ export default class Header extends Component{
 	}
 
 	render(){
-		// console.log('I am in header render');
 		return (
 			<header>
 				<nav className="header-nav-cust-attr">

@@ -7,9 +7,7 @@ export default function(state = INITIAL_STATE, action) {
   case GET_LINKS_WITH_COMPANYID :
   case GET_LINKS_WITH_IOI :
   case GET_LINK_WITH_FINAL_TERM :
-    // console.log('action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
         , linkList: action.payload.data.data.Items
@@ -26,9 +24,7 @@ export default function(state = INITIAL_STATE, action) {
   case GET_LINKS_DOCS_WITH_RFP_IOI_COMPANY :
   case GET_LINKS_DOCS_WITH_LINK :
   case FETCH_LINK_DOCS_WITH_FINAL_TERM_ID :
-    // console.log('action:'+JSON.stringify(action));
     if(action.payload.status === 200 && action.payload.data.status === 'SUCCESS'){
-      // console.log('In wgl reducer:'+JSON.stringify(action.payload));
       return {
         ...state
         , linkDocList: action.payload.data.data.Items
