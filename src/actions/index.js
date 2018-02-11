@@ -69,8 +69,10 @@ export const GET_FINAL_TERM = 'GET_FINAL_TERM';
 export const UPDATE_FINAL_TERM = 'UPDATE_FINAL_TERM';
 export const REVOKE_IOI = 'REVOKE_IOI';
 export const DELETE_IOI = 'DELETE_IOI';
+export const DELETE_FINAL_TERM = 'DELETE_FINAL_TERM';
 export const FETCH_FT_LIST_FOR_RFP = 'FETCH_FT_LIST_FOR_RFP';
 export const GET_DASHBOARD_STATS = 'GET_DASHBOARD_STATS';
+export const GET_LINKS_WITH_RFP = 'GET_LINKS_WITH_RFP';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -106,6 +108,19 @@ export function getBorrowerStatsForDashboard(companyId, userId){
     type: GET_DASHBOARD_STATS,
     payload: request
   }  
+}
+
+export function deleteFTAction(ftId){
+  const request=axios({
+    url : '/deleteFinalTerm?finalTermId='+ ftId,
+    method : 'DELETE',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: DELETE_FINAL_TERM,
+    payload: request
+  }
 }
 
 export function deleteIOIAction(ioiId){
@@ -386,6 +401,19 @@ export function getLinkWithIOIAction(ioiId){
 
   return{
     type: GET_LINKS_WITH_IOI,
+    payload: request
+  }
+}
+
+export function getLinkWithRFPAction(rfpId){
+  const request=axios({
+    url : '/getLinkWithRFP?rfpId='+rfpId,
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_LINKS_WITH_RFP,
     payload: request
   }
 }

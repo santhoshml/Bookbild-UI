@@ -126,6 +126,7 @@ export default class DisplayIOIList extends Component {
     return <span>{dateFormat(moment(row.timestamp), 'longDate')}</span>
     // return  <FormattedDate value={row.timestamp} format="short" />
   }
+
   onDoubleClicked(row){
     if(row){
       this.context.router.history.push(constants.ROUTES_MAP.IOI_DETAIL
@@ -139,8 +140,8 @@ export default class DisplayIOIList extends Component {
       return <div>No IOIs exist</div>;
     } else if(this.state.minimalData){
       const options = {
-        onRowClick : this.onDoubleClicked.bind(this),
-        onRowDoubleClick : this.onDoubleClicked.bind(this)
+        onRowClick : this.onDoubleClicked.bind(this)
+        // onRowDoubleClick : this.onDoubleClicked.bind(this)
       }      
       return (
           <div>
@@ -162,8 +163,8 @@ export default class DisplayIOIList extends Component {
       );
     } else {
       const options = {
-        onRowClick : this.onDoubleClicked.bind(this),
-        onRowDoubleClick : this.onDoubleClicked.bind(this)
+        onRowClick : this.onDoubleClicked.bind(this)
+        // onRowDoubleClick : this.onDoubleClicked.bind(this)
       }
       return (
         <div>

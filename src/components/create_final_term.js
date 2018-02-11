@@ -24,8 +24,9 @@ import JSAlert from "js-alert";
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
-
+const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
 class CreateFinalTermForm extends Component{
 
   constructor(props){
@@ -95,7 +96,9 @@ class CreateFinalTermForm extends Component{
 
     this.setState({
       company             : company,
-      user                : user
+      user                : user,
+      displayCollateralAnalysis : false,
+      displayTwoLoanStructures : false
     });
   }
 
@@ -117,6 +120,15 @@ class CreateFinalTermForm extends Component{
         ioi : nextProps.ioi
       });
     }
+
+    if(this.props.ioi 
+      && !this.state.displayTwoLoanStructures
+      && (this.props.ioi.loanStructure === 'ABL-Both'
+        || this.props.ioi.loanStructure === 'CashFlow-Both')){
+      this.setState({
+        displayTwoLoanStructures : true
+      });
+    }
   }
 
 
@@ -133,6 +145,51 @@ class CreateFinalTermForm extends Component{
         props.createdByCompanyId = that.state.company.companyId;
         props.ioiId = that.state.ioi.ioiId;
         props.forCompanyId = that.state.rfp.createdByCompanyId;
+
+        if(that.state.displayTwoLoanStructures){
+          // copy props into 2 diffrent datastructures
+          let props_1 = {}, props_2 = {};
+          let keys = Object.keys(props);
+          for(let i=0; i<keys.length; i++){        
+            if(keys[i].indexOf("_1") >= 0){
+              let eKey = keys[i].substr(0, keys[i].length-2);
+              props_1[eKey] = props[keys[i]];
+              delete props[keys[i]];
+            } else if(keys[i].indexOf("_2") >= 0){
+              let eKey = keys[i].substr(0, keys[i].length-2);
+              props_2[eKey] = props[keys[i]];
+              delete props[keys[i]];
+            }
+          }
+          // populate Id's
+          props_1.rfpId = that.props.rfp.rfpId;
+          props_1.createdById = that.state.user.userId;
+          props_1.createdByCompanyId = that.state.company.companyId;
+          props_1.forCompanyId = that.props.rfp.createdByCompanyId;
+          props_1.createdByContactId = that.state.user.contactId;
+          props_1.ioiId = that.state.ioi.ioiId;
+          props_1.linkId = that.state.link.linkId;
+    
+          props_2.rfpId = that.props.rfp.rfpId;
+          props_2.createdById = that.state.user.userId;
+          props_2.createdByCompanyId = that.state.company.companyId;
+          props_2.forCompanyId = that.props.rfp.createdByCompanyId;
+          props_2.createdByContactId = that.state.user.contactId;
+          props_2.ioiId = that.state.ioi.ioiId;
+          props_2.linkId = that.state.link.linkId;
+    
+          props.childFTList = [props_1, props_2];
+        } else {
+          let keys = Object.keys(props);      
+          for(let key of keys){
+            if(key.indexOf("_1") >= 0){
+              let eKey = key.substr(0, key.length-2);
+              props[eKey] = props[key];
+              delete props[key];
+            }
+          }
+        }
+
         that.props.createFinalTermAction(props)
         .then((data) => {
           if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){ // on succesful login
@@ -202,41 +259,94 @@ class CreateFinalTermForm extends Component{
     );
   }
 
-  displayFinalTermSheetForm(){
+  displayTwoFinalTermSheetFields(){
+    return(
+      <Tabs>
+        <TabList>
+          <Tab>
+            First Loan
+          </Tab>
+          <Tab>
+            SecondLoan
+          </Tab>
+        </TabList>
+        <TabPanel>
+          {this.displayFinalTermSheetFields("_1")}
+        </TabPanel>
+        <TabPanel>
+          {this.displayFinalTermSheetFields("_2")}
+        </TabPanel>
+      </Tabs>
+    );
+  }
+
+  displayStructureFor2Loans(suffix){
+    if(this.state.displayTwoLoanStructures){
+      return(<span>
+        <div className={`row`}>
+          <Field
+            name={"loanSize"+suffix}
+            label="Final Loan Size"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            name={"loanStructure"+suffix}
+            label="Loan Structure"
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={loanStructOptions}
+          />
+        </div>
+        <div className={`row`}>
+          <Field
+            name={"upfrontFee"+suffix}
+            label="Final OID / Upfront Fee (%)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Final Maturity (years)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+        </div>        
+        </span>);
+    } else {
+      // there is only 1 IOI
+      return (
+        <div className={`row`}>
+          <Field
+            name={"loanSize"+suffix}
+            label="Final Loan Size"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="Final OID / Upfront Fee (%)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Final Maturity (years)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+        </div>
+      )
+    }
+  }
+
+  displayFinalTermSheetFields(suffix){
     return(<div>
-      <div className={`row`}>
-        <Field
-          name="loanSize"
-          label="Final Loan Size"
-          size="col-xs-6 col-md-6"
-          component={this.renderField}
-        />
-        <Field
-          name="loanStructure"
-          label="Loan Structure"
-          size="col-xs-6 col-md-6"
-          component={this.renderField}
-        />
-      </div>
+      {this.displayStructureFor2Loans(suffix)}
       <br/>
       <div className={`row`}>
         <Field
-          name="upfrontFee"
-          label="Final OID / Upfront Fee (%)"
-          size="col-xs-6 col-md-6"
-          component={this.renderField}
-        />
-        <Field
-          name="maturity"
-          label="Final Maturity (years)"
-          size="col-xs-6 col-md-6"
-          component={this.renderField}
-        />
-      </div>
-      <br/>
-      <div className={`row`}>
-        <Field
-          name="warrants"
+          name={"warrants"+suffix}
           label="Warrants"
           size="col-xs-12 col-md-12"
           component={this.renderField}
@@ -247,19 +357,19 @@ class CreateFinalTermForm extends Component{
         <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
           <legend className="scheduler-border">Loan Pricing(%)</legend>
           <Field
-            name="cashInterest"
+            name={"cashInterest"+suffix}
             label="Cash Interest"
             component={this.renderField}
           />
           <br/>
           <Field
-            name="pikIntreset"
+            name={"pikIntreset"+suffix}
             label="PIK Interest"
             component={this.renderField}
           />
           <br/>
           <Field
-            name="liborFloor"
+            name={"liborFloor"+suffix}
             label="LIBOR Floor"
             component={this.renderField}
           />
@@ -271,19 +381,19 @@ class CreateFinalTermForm extends Component{
       <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
         <legend className="scheduler-border">Covenants</legend>
         <Field
-          name="totalLeverage"
+          name={"totalLeverage"+suffix}
           label="Total Leverage"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="intrestCoverage"
+          name={"intrestCoverage"+suffix}
           label="Interest Coverage"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="fixedChargeCoverage"
+          name={"fixedChargeCoverage"+suffix}
           label="Fixed Charge Coverage"
           component={this.renderField}
         />
@@ -295,31 +405,31 @@ class CreateFinalTermForm extends Component{
       <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
         <legend className="scheduler-border">Amortization(%)</legend>
         <Field
-          name="year1"
+          name={"year1"+suffix}
           label="Year 1"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year2"
+          name={"year2"+suffix}
           label="Year 2"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year3"
+          name={"year3"+suffix}
           label="Year 3"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year4"
+          name={"year4"+suffix}
           label="Year 4"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year5"
+          name={"year5"+suffix}
           label="Year 5"
           component={this.renderField}
         />
@@ -441,6 +551,19 @@ class CreateFinalTermForm extends Component{
     </div>);
   }
 
+  onSelectLoanStructure(props){
+    if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') 
+    && !this.state.displayTwoLoanStructures) {
+      this.setState({
+        displayTwoLoanStructures : true
+      });
+    } else if(this.state.displayTwoLoanStructures){
+      this.setState({
+        displayTwoLoanStructures : false
+      });
+    }
+  }
+
   render(){
     const {handleSubmit} = this.props;
 
@@ -458,7 +581,21 @@ class CreateFinalTermForm extends Component{
               <br/>
               {this.state.link ? this.displayFileUploadBlock() : null}
               <br/>
-              {this.displayFinalTermSheetForm()}
+              <div className={`row`}>
+                <Field
+                  label="Loan Structure"
+                  name="loanStructure"
+                  size="col-xs-12 col-md-12"
+                  onChange={this.onSelectLoanStructure.bind(this)}
+                  component={this.renderDropdownField}
+                  dpField={loanStructOptions}
+                />
+              </div>
+              <br/>
+              {this.state.displayTwoLoanStructures ? this.displayTwoFinalTermSheetFields() : this.displayFinalTermSheetFields("_1")}
+              {
+                // this.displayFinalTermSheetForm()
+              }
               <div className={`row`}>
                 <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
                 <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
@@ -488,25 +625,31 @@ function mapStateToProps(state) {
   }
 
   if(state.ioiList.ioi){
-    let ioi = state.ioiList.ioi[0];
-    intializedData.ioi = ioi;
-    let initData ={
-      loanSize : ioi.loanSize,
-      yield : ioi.yield,
-      maturity : ioi.maturity,
-      liborFloor : ioi.liborFloor,
-      upfrontFee : ioi.upfrontFee,
-      pikIntreset : ioi.pikIntreset,
-      cashInterest : ioi.cashInterest,
-      loanStructure : ioi.loanStructure,
-      warrants : ioi.warrants,
-      year1 : ioi.year1,
-      year2 : ioi.year2,
-      year3 : ioi.year3,
-      year4 : ioi.year4,
-      year5 : ioi.year5      
-    };
-    intializedData.initialValues = initData;
+    let initData = {};
+    let ioi = {};
+    if(Array.isArray(state.ioiList.ioi)){
+      ioi = state.ioiList.ioi[0];
+      intializedData.ioi = ioi;
+
+      let childIOIList = [];
+      if(state.ioiList.ioi[1])
+        childIOIList.push(state.ioiList.ioi[1]);
+  
+      if(state.ioiList.ioi[2])
+        childIOIList.push(state.ioiList.ioi[2]);
+      
+      initData = {
+        ...setInitData(childIOIList[0], "_1"),
+        ...setInitData(childIOIList[1], "_2")
+      }      
+    } else {
+      ioi = state.ioiList.ioi;
+      intializedData.ioi = ioi;
+      initData = setInitData(state.ioiList.ioi, "_1");      
+    }
+
+    initData.loanStructure = ioi.loanStructure;
+    intializedData.initialValues = initData;    
   }
 
   if(state.rfpList.rfpList){
@@ -518,6 +661,25 @@ function mapStateToProps(state) {
   }
 
   return intializedData;
+}
+
+function setInitData(ioi, suffix){
+  let params = {};
+  params['ioiId'+suffix] = ioi.ioiId;
+  params['loanSize'+suffix] = ioi.loanSize;
+  params['liborFloor'+suffix] = ioi.liborFloor;
+  params['pikIntreset'+suffix] = ioi.pikIntreset;
+  params['upfrontFee'+suffix] = ioi.upfrontFee;
+  params['maturity'+suffix] = ioi.maturity;
+  params['loanStructure'+suffix] = ioi.loanStructure;
+  params['cashInterest'+suffix] = ioi.cashInterest;
+  params['year1'+suffix] = ioi.year1;
+  params['year2'+suffix] = ioi.year2;
+  params['year3'+suffix] = ioi.year3;
+  params['year4'+suffix] = ioi.year4;
+  params['year5'+suffix] = ioi.year5;
+
+  return params;
 }
 
 function validate(values){

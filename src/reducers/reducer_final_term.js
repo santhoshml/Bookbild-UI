@@ -1,10 +1,9 @@
-import { GET_FINAL_TERM, CREATE_FINAL_TERM, GET_FINAL_TERM_BY_IOI, GET_FINAL_TERM_WITH_YIELD_MATRIX } from '../actions/index';
+import { GET_FINAL_TERM, GET_FINAL_TERM_BY_IOI, GET_FINAL_TERM_WITH_YIELD_MATRIX } from '../actions/index';
 
 const INITIAL_STATE = { finalTerm: null};
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
-  case CREATE_FINAL_TERM :
   case GET_FINAL_TERM_BY_IOI :
   case GET_FINAL_TERM_WITH_YIELD_MATRIX :
   case GET_FINAL_TERM :

@@ -8,7 +8,10 @@ import { fetchFinalTerm
   , updateFinalTermAction
   , uploadDocumentRequest
   , deleteLinkDocumentAction
+  , deleteFTAction
   , getLinkDocsWithLinkIdAndTypeAction
+  , fetchLinkDocsWithFinalTermIdAction
+  , createFinalTermAction
   , sendAMsgFromAdminWithCompanyId } from '../actions/index';
 import {Link} from 'react-router-dom';
 import validator from 'validator';
@@ -25,7 +28,9 @@ import JSAlert from "js-alert";
 import dateFormat from 'dateformat';
 import moment from 'moment';
 import { ToastContainer, toast } from 'react-toastify';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 
+const loanStructOptions= ['ABL-Revolver', 'ABL-Term Loan', 'ABL-Both', 'CashFlow-Revolver', 'CashFlow-Term Loan', 'CashFlow-Both', '2nd Lien Term Loan', 'Sub Debt', 'Mezzanine'];
 class EditFinalTermForm extends Component{
 
   constructor(props){
@@ -81,6 +86,7 @@ class EditFinalTermForm extends Component{
 	}
 
   componentWillMount() {
+    let that = this;
     let paramId = this.props.match.params.id;
 
     let user = lsUtils.getValue(constants.KEY_USER_OBJECT);
@@ -89,11 +95,23 @@ class EditFinalTermForm extends Component{
     // this.props.getIOIWithFinalTermAction(paramId);
     this.props.getLinkWithFinalTermAction(paramId);
     this.props.getRFPWithFinalTermAction(paramId);
-    this.props.fetchFinalTerm(paramId);
-
+    this.props.fetchLinkDocsWithFinalTermIdAction(paramId);
+    this.props.fetchFinalTerm(paramId)
+    .then(data => {
+      if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+        let ftList = data.payload.data.data.Items;
+        if(Array.isArray(ftList) && ftList.length > 1){
+          that.setState({
+            displayTwoLoanStructures : true
+          });
+        }
+      }
+    });
+    
     this.setState({
       company             : company,
-      user                : user
+      user                : user,
+      displayTwoLoanStructures : false
     });
   }
 
@@ -116,36 +134,187 @@ class EditFinalTermForm extends Component{
     let that = this;
 
     props.lastEditedById = this.state.user.userId;
-    props.finalTermId = this.props.initialValues.finalTermId;
-    this.props.updateFinalTermAction(props)
-      .then((data) => {
-        if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-          // send a msg to lender's company
-          let lProps = {
-            companyId : that.state.user.companyId,
-            msg : constants.MESSAGES.FINAL_TERM_EDITED,
-            ID : that.props.initialValues.finalTermId
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(lProps);
-
-          // now send msg to the borrower's company
-          let bProps={
-            companyId : this.state.rfp.createdByCompanyId,
-            msg : constants.MESSAGES.FINAL_TERM_EDITED,
-            ID : that.props.initialValues.finaltermId
-          };
-          that.props.sendAMsgFromAdminWithCompanyId(bProps);
-          this.props.history.push({
-            pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-            state : constants.NOTIFICATIONS.EDIT_FINAL_TERM_SUCCESS
-          });
-        } else {
-          toast(constants.NOTIFICATIONS.EDIT_FINAL_TERM_FAILED, {
-            className : "notification-error"
-          });  
+    props.finalTermId = this.props.finalTerm.finalTermId;
+    props.rfpId = this.props.rfp.rfpId;
+    props.createdById = this.props.finalTerm.createdById;
+    props.createdByCompanyId = this.state.company.companyId;
+    props.ioiId = this.props.finalTerm.ioiId;
+    props.forCompanyId = this.props.rfp.createdByCompanyId;
+    props.createdByContactId = this.state.user.contactId;
+    
+    if(this.state.displayTwoLoanStructures){
+      // copy props into 2 diffrent datastructures
+      let props_1 = {}, props_2 = {};
+      let keys = Object.keys(props);
+      for(let i=0; i<keys.length; i++){        
+        if(keys[i].indexOf("_1") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_1[eKey] = props[keys[i]];
+          delete props[keys[i]];
+        } else if(keys[i].indexOf("_2") >= 0){
+          let eKey = keys[i].substr(0, keys[i].length-2);
+          props_2[eKey] = props[keys[i]];
+          delete props[keys[i]];
         }
-    });
+      }
+      // populate Id's
+      props_1.lastEditedById = this.state.user.userId;
+      props_1.rfpId = this.props.rfp.rfpId;
+      props_1.createdById = this.props.finalTerm.createdById;
+      props_1.createdByCompanyId = this.state.company.companyId;
+      props_1.ioiId = this.props.finalTerm.ioiId;
+      props_1.forCompanyId = this.props.rfp.createdByCompanyId;
+      props_1.createdByContactId = this.state.user.contactId;
+
+      props_2.lastEditedById = this.state.user.userId;
+      props_2.rfpId = this.props.rfp.rfpId;
+      props_2.createdById = this.props.finalTerm.createdById;
+      props_2.createdByCompanyId = this.state.company.companyId;
+      props_2.ioiId = this.props.finalTerm.ioiId;
+      props_2.forCompanyId = this.props.rfp.createdByCompanyId;
+      props_2.createdByContactId = this.state.user.contactId;
+
+      props.childFTList = [props_1, props_2];
+    } else {
+      let keys = Object.keys(props);      
+      for(let key of keys){
+        if(key.indexOf("_1") >= 0){
+          let eKey = key.substr(0, key.length-2);
+          if(eKey !== 'loanStructure'){ // this is an exception
+            props[eKey] = props[key];
+          }
+          delete props[key];
+        }
+      }
+    }
+
+    let updateDBData = false;
+    // find if any fields changed and then set the flags
+    if(this.state.displayTwoLoanStructures){
+
+      if(this.isValuesUpdated(props.childFTList[0], "_1")){
+        props.childFTList[0].updateData = true;
+        updateDBData = true;
+      } else {
+        props.childFTList[0].updateData = false;
+      }
+
+      if(this.isValuesUpdated(props.childFTList[1], "_2")){
+        props.childFTList[1].updateData = true;
+        updateDBData = true;
+      } else {
+        props.childFTList[1].updateData = false;
+      }
+
+      if(props.loanStructure !== this.props.initialValues.loanStructure
+        || updateDBData){
+        props.updateData = true;
+        updateDBData = true;
+      }
+    } else {
+      // there is only 1 IOI, so just check the main props
+      if(this.isValuesUpdated(props, "_1")
+        || props.loanStructure !== this.props.initialValues.loanStructure){
+        props.updateData = true;
+        updateDBData = true;
+      } else {
+        props.updateData = false;
+      }      
+    }
+
+    if(updateDBData){
+      if(this.props.finalTerm.childFTList && !props.childFTList){
+        // initially there were 2 FT's, now has only 1 FT
+        // delete the first one and create a new one
+        this.props.deleteFTAction(this.props.finalTerm.finalTermId);
+        this.props.deleteFTAction(this.props.finalTerm.childFTList[0]);
+        this.props.deleteFTAction(this.props.finalTerm.childFTList[1]);
+        // use the id of the parent FT which got deleted, since it may have links to other things
+        props.finaltermId=this.props.finalTerm.finaltermId;
+        this.props.createFinalTermAction(props)
+        .then(data => that.sendMsgsAndRedirect(data
+            , that.props.finalTerm.finalTermId
+            , that.state.user.companyId
+            , that.state.rfp.createdByCompanyId)
+        );
+      } else if(!this.props.finalTerm.childFTList && props.childFTList){
+        // initially there was 1 FT, now has 2 FT's
+        // delete the first one and create 3 new one's
+        this.props.deleteFTAction(this.props.finalTerm.finalTermId);
+        // use the id of the parent FT which got deleted, since it may have links to other things
+        props.finalTermId=this.props.finalTerm.finalTermId;
+        this.props.createFinalTermAction(props)
+        .then(data => that.sendMsgsAndRedirect(data
+          , that.props.finalTerm.finalTermId
+          , that.state.user.companyId
+          , that.state.rfp.createdByCompanyId)
+        );
+      } else {
+        // initially there were 2 and now we have 2        
+        this.props.updateFinalTermAction(props)
+        .then(data => that.sendMsgsAndRedirect(data
+          , that.props.finalTerm.finalTermId
+          , that.state.user.companyId
+          , that.state.rfp.createdByCompanyId)
+        );
+      }
+    } else {
+      that.props.history.push({
+        pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+        state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+      });
+    }
 	}
+
+  sendMsgsAndRedirect(data, ftId, lCompanyId, bCompanyId){
+    if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+      // send a msg to lender's company
+      let lProps = {
+        companyId : lCompanyId,
+        msg : constants.MESSAGES.FINAL_TERM_EDITED,
+        ID : ftId
+      };
+      this.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+      // now send msg to the borrower's company
+      let bProps={
+        companyId : bCompanyId,
+        msg : constants.MESSAGES.FINAL_TERM_EDITED,
+        ID : ftId
+      };
+      this.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+      this.props.history.push({
+        pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+        state : constants.NOTIFICATIONS.EDIT_FINAL_TERM_SUCCESS
+      });
+    } else {
+      toast(constants.NOTIFICATIONS.EDIT_FINAL_TERM_FAILED, {
+        className : "notification-error"
+      });  
+    }
+  }
+
+  isValuesUpdated(ft, suffix){
+    if(ft.loanSize !== this.props.initialValues['loanSize'+suffix]
+      || ft.loanStructure !== this.props.initialValues['loanStructure'+suffix]
+      || ft.maturity !== this.props.initialValues['maturity'+suffix]
+      || ft.upfrontFee !== this.props.initialValues['upfrontFee'+suffix]    
+      || ft.cashInterest !== this.props.initialValues['cashInterest'+suffix]
+      || ft.pikIntreset !== this.props.initialValues['pikIntreset'+suffix]
+      || ft.liborFloor !== this.props.initialValues['liborFloor'+suffix]
+      || ft.year1 !== this.props.initialValues['year1'+suffix]
+      || ft.year2 !== this.props.initialValues['year2'+suffix]
+      || ft.year3 !== this.props.initialValues['year3'+suffix]
+      || ft.year4 !== this.props.initialValues['year4'+suffix]
+      || ft.year5 !== this.props.initialValues['year5'+suffix]
+      || ft.totalLeverage !== this.props.initialValues['totalLeverage'+suffix]
+      || ft.interestCoverage !== this.props.initialValues['interestCoverage'+suffix]
+      || ft.fixedChargeCoverage !== this.props.initialValues['fixedChargeCoverage'+suffix]
+    )
+    return true;
+    return false;
+  }
 
   displayRFPSummary(){
     return (
@@ -183,47 +352,87 @@ class EditFinalTermForm extends Component{
     );
   }
 
-  displayFinalTermSheetForm(){
+  displayStructureFor2Loans(suffix){
+    if(this.state.displayTwoLoanStructures){
+      return(<span>
+        <div className={`row`}>
+          <Field
+            name={"loanSize"+suffix}
+            label="Final Loan Size"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            label="Loan Structure"
+            name={"loanStructure"+suffix}
+            size="col-xs-6 col-md-6"
+            component={this.renderDropdownField}
+            dpField={loanStructOptions}
+          />
+        </div>
+        <div className={`row`}>
+          <Field
+            name={"upfrontFee"+suffix}
+            label="Final OID / Upfront Fee (%)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Final Maturity (years)"
+            size="col-xs-6 col-md-6"
+            component={this.renderField}
+          />
+        </div>
+      </span>);
+    } else {
+      return(<span>
+        <div className={`row`}>
+          <Field
+            name={"loanSize"+suffix}
+            label="Final Loan Size"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"upfrontFee"+suffix}
+            label="Final OID / Upfront Fee (%)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+          <Field
+            name={"maturity"+suffix}
+            label="Final Maturity (years)"
+            size="col-xs-4 col-md-4"
+            component={this.renderField}
+          />
+        </div>
+      </span>);
+    }
+  }
+
+  displayFinalTermSheetForm(suffix){
     return(<div>
-      <div className={`row`}>
-        <Field
-          name="loanSize"
-          label="Final Loan Size"
-          size="col-xs-4 col-md-4"
-          component={this.renderField}
-        />
-        <Field
-          name="upfrontFee"
-          label="Final OID / Upfront Fee (%)"
-          size="col-xs-4 col-md-4"
-          component={this.renderField}
-        />
-        <Field
-          name="maturity"
-          label="Final Maturity (years)"
-          size="col-xs-4 col-md-4"
-          component={this.renderField}
-        />
-      </div>
+      { this.displayStructureFor2Loans(suffix) }
       <br/>
 
       <div className={`row`}>
         <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
           <legend className="scheduler-border">Loan Pricing(%)</legend>
           <Field
-            name="cashInterest"
+            name={"cashInterest"+suffix}
             label="Cash Interest"
             component={this.renderField}
           />
           <br/>
           <Field
-            name="pikIntreset"
+            name={"pikIntreset"+suffix}
             label="PIK Interest"
             component={this.renderField}
           />
           <br/>
           <Field
-            name="liborFloor"
+            name={"liborFloor"+suffix}
             label="LIBOR Floor"
             component={this.renderField}
           />
@@ -235,19 +444,19 @@ class EditFinalTermForm extends Component{
       <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
         <legend className="scheduler-border">Covenants</legend>
         <Field
-          name="totalLeverage"
+          name={"totalLeverage"+suffix}
           label="Total Leverage"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="intrestCoverage"
-          label="Intrest Coverage"
+          name={"interestCoverage"+suffix}
+          label="Interest Coverage"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="fixedChargeCoverage"
+          name={"fixedChargeCoverage"+suffix}
           label="Fixed Charge Coverage"
           component={this.renderField}
         />
@@ -259,31 +468,31 @@ class EditFinalTermForm extends Component{
       <fieldset className="form-group col-xs-3 col-md-3 scheduler-border">
         <legend className="scheduler-border">Amortization(%)</legend>
         <Field
-          name="year1"
+          name={"year1"+suffix}
           label="Year 1"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year2"
+          name={"year2"+suffix}
           label="Year 2"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year3"
+          name={"year3"+suffix}
           label="Year 3"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year4"
+          name={"year4"+suffix}
           label="Year 4"
           component={this.renderField}
         />
         <br/>
         <Field
-          name="year5"
+          name={"year5"+suffix}
           label="Year 5"
           component={this.renderField}
         />
@@ -405,6 +614,39 @@ class EditFinalTermForm extends Component{
     </div>);
   }
 
+  onSelectLoanStructure(props){
+    if((props.target.value === 'ABL-Both' || props.target.value === 'CashFlow-Both') && !this.state.displayTwoLoanStructures) {
+      this.setState({
+        displayTwoLoanStructures : true
+      });
+    } else if(this.state.displayTwoLoanStructures){
+      this.setState({
+        displayTwoLoanStructures : false
+      });
+    }
+  }
+
+  displayTwoFTFields(){
+    return(
+      <Tabs>
+        <TabList>
+          <Tab>
+            First Tranche
+          </Tab>
+          <Tab>
+            Second Tranche
+          </Tab>
+        </TabList>
+        <TabPanel>
+          {this.displayFinalTermSheetForm("_1")}
+        </TabPanel>
+        <TabPanel>
+          {this.displayFinalTermSheetForm("_2")}
+        </TabPanel>
+      </Tabs>
+    );
+  }
+
   render(){
     const {handleSubmit} = this.props;
 
@@ -415,14 +657,31 @@ class EditFinalTermForm extends Component{
         <div style={{ display: 'flex' }}>
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
+            <h3>Final Term Sheet Revisions</h3>
+            <br/>
+            <p>Modify Final terms below and submit.</p>
+            <br/>
+            <hr/>
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
               {this.state.rfp ? this.displayRFPSummary() : ''}
               <br/>
               {this.displaySubtitle()}
               <br/>
               {this.state.link ? this.displayFileUploadBlock() : null}
+              <hr/>
+              <div className={`row`}>
+                <Field
+                  label="Loan Structure"
+                  name="loanStructure"
+                  size="col-xs-12 col-md-12"
+                  onChange={this.onSelectLoanStructure.bind(this)}
+                  component={this.renderDropdownField}
+                  dpField={loanStructOptions}
+                />
+              </div>
               <br/>
-              {this.displayFinalTermSheetForm()}
+              <hr/>              
+              {this.state.displayTwoLoanStructures ? this.displayTwoFTFields() : this.displayFinalTermSheetForm("_1")}
               <div className={`row`}>
                 <button type="submit" className="btn btn-primary">SUBMIT</button>&nbsp;&nbsp;
                 <Link to="/rfpMarketPlace" className="btn btn-danger">Cancel</Link>
@@ -448,24 +707,32 @@ function mapStateToProps(state) {
     intializedData.linkDocList = state.link.linkDocList
   }
 
-
   if(state.finalTerm.finalTerm){
-    let finalTerm = state.finalTerm.finalTerm[0];
-    let initData ={
-      finalTermId : finalTerm.finalTermId,
-      loanSize : finalTerm.loanSize,
-      yield : finalTerm.yield,
-      maturity : finalTerm.maturity,
-      liborFloor : finalTerm.liborFloor,
-      upfrontFee : finalTerm.upfrontFee,
-      pikIntreset : finalTerm.pikIntreset,
-      cashInterest : finalTerm.cashInterest,
-      year1 : finalTerm.year1,
-      year2 : finalTerm.year2,
-      year3 : finalTerm.year3,
-      year4 : finalTerm.year4,
-      year5 : finalTerm.year5
+    let initData = {};
+    let finalTerm = {};
+
+    if(Array.isArray(state.finalTerm.finalTerm)){
+      finalTerm = state.finalTerm.finalTerm[0];
+  
+      let childFTList = [];
+      if(state.finalTerm.finalTerm[1]){
+        childFTList.push(state.finalTerm.finalTerm[1]);
+      }
+  
+      if(state.finalTerm.finalTerm[2]){
+        childFTList.push(state.finalTerm.finalTerm[2]);
+      }
+
+      initData = {
+        ...setInitData(childFTList[0], "_1"),
+        ...setInitData(childFTList[1], "_2")
+      }
+    } else {
+      finalTerm = state.finalTerm.finalTerm;
+      initData = setInitData(state.finalTerm.finalTerm, "_1");
     }
+    intializedData={finalTerm};
+    initData.loanStructure = finalTerm.loanStructure;
     intializedData.initialValues = initData;
   }
   
@@ -477,7 +744,33 @@ function mapStateToProps(state) {
     intializedData.link = state.link.linkList[0];
   }
 
+  if(state.link.linkDocList){
+    intializedData.linkDocList = state.link.linkDocList;
+  }
+
   return intializedData;
+}
+
+function setInitData(ft, suffix){
+  let params = {};
+  params['finalTermId'+suffix] = ft.finalTermId;
+  params['loanSize'+suffix] = ft.loanSize;
+  params['liborFloor'+suffix] = ft.liborFloor;
+  params['pikIntreset'+suffix] = ft.pikIntreset;
+  params['upfrontFee'+suffix] = ft.upfrontFee;
+  params['maturity'+suffix] = ft.maturity;
+  params['loanStructure'+suffix] = ft.loanStructure;  
+  params['cashInterest'+suffix] = ft.cashInterest;
+  params['totalLeverage'+suffix] = ft.totalLeverage;
+  params['interestCoverage'+suffix] = ft.interestCoverage;
+  params['fixedChargeCoverage'+suffix] = ft.fixedChargeCoverage;
+  params['year1'+suffix] = ft.year1;
+  params['year2'+suffix] = ft.year2;
+  params['year3'+suffix] = ft.year3;
+  params['year4'+suffix] = ft.year4;
+  params['year5'+suffix] = ft.year5;
+
+  return params;
 }
 
 function validate(values){
@@ -519,6 +812,9 @@ function mapDispatchToProps(dispatch) {
     getIOIWithFinalTermAction : getIOIWithFinalTermAction,
     getRFPWithFinalTermAction : getRFPWithFinalTermAction,
     fetchFinalTerm : fetchFinalTerm,
+    createFinalTermAction : createFinalTermAction,
+    deleteFTAction : deleteFTAction,
+    fetchLinkDocsWithFinalTermIdAction : fetchLinkDocsWithFinalTermIdAction,
     sendAMsgFromAdminWithCompanyId : sendAMsgFromAdminWithCompanyId
   }, dispatch);
 }

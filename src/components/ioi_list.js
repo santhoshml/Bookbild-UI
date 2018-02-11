@@ -130,7 +130,7 @@ class IOIList extends Component{
       for(let k in pArr){
         t= t+'\n'+pArr[k];
       }
-      return (<td key={t} className="add-newline">{t}</td>);
+      return (<td key={t+key} className="add-newline">{t}</td>);
     });
   }
 

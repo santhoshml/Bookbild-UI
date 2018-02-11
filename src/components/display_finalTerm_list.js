@@ -145,8 +145,8 @@ export default class DisplayFinalTermList extends Component {
       return <div>No Final Term sheets exist</div>;
     } else if(this.state.minimalData){
       const options = {
-        onRowClick : this.onDoubleClicked.bind(this),
-        onRowDoubleClick : this.onDoubleClicked.bind(this)
+        onRowClick : this.onDoubleClicked.bind(this)
+        // onRowDoubleClick : this.onDoubleClicked.bind(this)
       }
       return (
         <div>
@@ -168,8 +168,8 @@ export default class DisplayFinalTermList extends Component {
       );
     } else {
       const options = {
-        onRowClick : this.onDoubleClicked.bind(this),
-        onRowDoubleClick : this.onDoubleClicked.bind(this)
+        onRowClick : this.onDoubleClicked.bind(this)
+        // onRowDoubleClick : this.onDoubleClicked.bind(this)
       }
       return (
         <div>

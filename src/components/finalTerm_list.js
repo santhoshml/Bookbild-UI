@@ -65,7 +65,9 @@ class FinalTermList extends Component{
       let productCategoryMap = cUtils.getProductCategories(this.props.finalTermList, this.props.finalTermCompanyList);
       let catKeys = Object.keys(productCategoryMap);
       return(<div>
-          <h3>Ranking by Product Category:</h3>
+          <br/>
+          <br/>
+          <h3>Comparative Analytics - Second-round Lender Terms</h3>
           <table className="table table-striped align-center table-bordered">
             <thead>
               <tr>
@@ -152,7 +154,6 @@ class FinalTermList extends Component{
         for(let i=0; i< this.props.finalTermList.length; i++){
           this.props.finalTermList[i].createdByCompanyName = cUtils.getCompanyNameById(this.props.finalTermList[i].createdByCompanyId
               , this.props.finalTermCompanyList);
-          console    
         }
       }
 
@@ -160,7 +161,8 @@ class FinalTermList extends Component{
         && this.state.clubDealList 
         && this.state.clubDealList.length > 0){
         this.updateWithBlendedCost();
-      }      
+      }
+
       return(
         <div>
           <DisplayTermSheetList

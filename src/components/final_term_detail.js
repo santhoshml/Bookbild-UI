@@ -60,8 +60,92 @@ class FinalTermDetail extends Component{
     }
   }
 
-  displayFinalTermSheet(){
-    let finalTerm = this.props.finalTerm;
+  displayMaturityElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Maturity (yrs)</td><td>{ft.maturity}</td></tr>);
+    }
+  }
+
+  displayCashInterestElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Cash Interest</td><td>{cUtils.formatPercentToDisplay(ft.cashInterest)}</td></tr>);
+    }
+  }
+
+  displayPIKInterestElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>PIK Interest</td><td>{cUtils.formatPercentToDisplay(ft.pikIntreset)}</td></tr>);
+    }
+  }
+
+  displayLIBORFloorElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>LIBOR Floor</td><td>{cUtils.formatPercentToDisplay(ft.liborFloor)}</td></tr>);
+    }
+  }
+
+  displayUpfrontFeeElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Upfront Fee</td><td>{cUtils.formatPercentToDisplay(ft.upfrontFee)}</td></tr>);
+    }
+  }
+
+  displayAmortizationElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Amortization</td><td></td></tr>);
+    }
+  }
+
+  displayYear1Element(ft, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td><td>{cUtils.formatPercentToDisplay(ft.year1)}</td></tr>);
+    }
+  }
+
+  displayYear2Element(ft, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td><td>{cUtils.formatPercentToDisplay(ft.year2)}</td></tr>);
+    }
+  }
+  
+  displayYear3Element(ft, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td><td>{cUtils.formatPercentToDisplay(ft.year3)}</td></tr>);
+    }
+  }
+
+  displayYear4Element(ft, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td><td>{cUtils.formatPercentToDisplay(ft.year4)}</td></tr>);
+    }
+  }
+
+  displayYear5Element(ft, isParent){
+    if(!isParent){
+      return(<tr><td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td><td>{cUtils.formatPercentToDisplay(ft.year5)}</td></tr>);
+    }
+  }
+
+  displayTotalLeverageElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Total Leverage</td><td>{cUtils.formatPercentToDisplay(ft.totalLeverage)}</td></tr>);
+    }
+  }
+
+  displayInterestCoverageElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Interest Coverage</td><td>{cUtils.formatPercentToDisplay(ft.interestCoverage)}</td></tr>);
+    }
+  }
+
+  displayFixedChargeCoverageElement(ft, isParent){
+    if(!isParent){
+      return(<tr><td>Fixed Charge Coverage</td><td>{cUtils.formatPercentToDisplay(ft.fixedChargeCoverage)}</td></tr>);
+    }
+  }
+
+  displayFinalTermSheet(finalTerm, isParent){
+    // let finalTerm = this.props.finalTerm;
     return(
       <div>
         <table className="table table-striped table-bordered">
@@ -72,49 +156,23 @@ class FinalTermDetail extends Component{
               <td>{cUtils.formatCurrencyToDisplay(finalTerm.loanSize)}</td>
             </tr>
             <tr>
-              <td>Maturity (yrs)</td>
-              <td>{finalTerm.maturity}</td>
-            </tr>
-            <tr>
-              <td>Cash Interest</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.cashInterest)}</td>
-            </tr>
-            <tr>
-              <td>PIK Interest</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.pikIntreset)}</td>
-            </tr>
-            <tr>
-              <td>LIBOR Floor</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.liborFloor)}</td>
-            </tr>
-            <tr>
-              <td>Upfront Fee</td>
-              <td>{finalTerm.upfrontFee}</td>
-            </tr>
-            <tr>
-              <td><b>Amortization</b></td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 1</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year1)}</td>
-            </tr>
-            <tr>
-              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 2</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year2)}</td>
-            </tr>
-            <tr>
-              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 3</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year3)}</td>
-            </tr>
-            <tr>
-              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 4</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year4)}</td>
-            </tr>
-            <tr>
-              <td>&emsp;&emsp;&emsp;&emsp;&emsp;Year 5</td>
-              <td>{cUtils.formatPercentToDisplay(finalTerm.year5)}</td>
-            </tr>
+              <td>Loan Structure</td>
+              <td>{finalTerm.loanStructure}</td>
+            </tr>            
+            {this.displayMaturityElement(finalTerm, isParent)}
+            {this.displayCashInterestElement(finalTerm, isParent)}
+            {this.displayPIKInterestElement(finalTerm, isParent)}
+            {this.displayLIBORFloorElement(finalTerm, isParent)}
+            {this.displayUpfrontFeeElement(finalTerm, isParent)}
+            {this.displayTotalLeverageElement(finalTerm, isParent)}
+            {this.displayInterestCoverageElement(finalTerm, isParent)}
+            {this.displayFixedChargeCoverageElement(finalTerm, isParent)}
+            {this.displayAmortizationElement(finalTerm, isParent)}
+            {this.displayYear1Element(finalTerm, isParent)}
+            {this.displayYear2Element(finalTerm, isParent)}
+            {this.displayYear3Element(finalTerm, isParent)}
+            {this.displayYear4Element(finalTerm, isParent)}
+            {this.displayYear5Element(finalTerm, isParent)}
             <tr>
               <td>Yield Estimate</td>
               <td><b>{cUtils.formatPercentToDisplay(finalTerm.yield)}</b></td>
@@ -156,7 +214,8 @@ class FinalTermDetail extends Component{
 }
 
   displayEditFinalTermButton(){
-    if(this.state.company.companyId === this.props.finalTerm.createdByCompanyId){
+    if(this.state.company.companyId === this.props.finalTerm.createdByCompanyId
+      && this.props.link.dealState !== 'IN_EXECUTION'){
       return( <span>
       <Link to={constants.ROUTES_MAP.EDIT_FINAL_TERM+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
         Edit Final Term Sheet
@@ -166,9 +225,9 @@ class FinalTermDetail extends Component{
     }
   }
 
-  displayYieldMatrix(){
-    if(this.props.finalTerm.yieldMatrix){
-      var yieldMatrixRender = this.props.finalTerm.yieldMatrix.map(function(row){
+  displayYieldMatrix(yieldMatrix){
+    // if(this.props.finalTerm.yieldMatrix){
+      var yieldMatrixRender = yieldMatrix && yieldMatrix.map(function(row){
         return(<tr key={row.period}>
             <td>{numeral(row.period).format('0,0.00')}</td>
             <td>{cUtils.formatCurrencyToDisplay(row.cashFlow)}</td>
@@ -200,7 +259,7 @@ class FinalTermDetail extends Component{
           </tbody>
         </table>
         </div>);
-    }
+    // }
   }
 
   downloadDocument(fileName){
@@ -354,7 +413,71 @@ class FinalTermDetail extends Component{
         </span>);
     }
   }
-    
+
+  displayTabListForFT(){
+    return(
+      <TabList>
+        <Tab>Final Term Sheet Details</Tab>
+        <Tab>Final Term Sheet Yield Estimate</Tab>
+        <Tab>Final Term Sheet Documents</Tab>
+      </TabList>
+    );    
+  }
+
+  displayTabListWithChildFT(){
+    return(
+      <TabList>
+        <Tab>Final Term Details</Tab>
+        <Tab>Final Term Docs</Tab>
+        <Tab>Tranche 1 Details</Tab>
+        <Tab>Tranche 1 Yield Estimate</Tab>
+        <Tab>Tranche 2 Details</Tab>
+        <Tab>Tranche 2 Yield Estimate</Tab>
+      </TabList>
+    );
+  }
+
+  displayTabPanelForFT(){
+    return(
+      <span>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayFinalTermSheet(this.props.finalTerm, false) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayYieldMatrix(this.props.finalTerm.yieldMatrix) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.renderDocuments() : ''}
+        </TabPanel>
+      </span>
+    );
+  }
+
+  displayTabPanelWithChildFT(){
+    return(
+      <span>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayFinalTermSheet(this.props.finalTerm, true) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.renderDocuments() : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayFinalTermSheet(this.props.childFTList[0], false) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayYieldMatrix(this.props.childFTList[0].yieldMatrix) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayFinalTermSheet(this.props.childFTList[1], false) : ''}
+        </TabPanel>
+        <TabPanel>
+          {this.props.finalTerm ? this.displayYieldMatrix(this.props.childFTList[1].yieldMatrix) : ''}
+        </TabPanel>
+      </span>
+    );
+  }
+
   render(){
     return(
       <div>
@@ -368,20 +491,8 @@ class FinalTermDetail extends Component{
             <p> Details of the final Term sheet are as below. Navigate thru the tabs to find the yield estimate for this term sheet and the documents uplaoded for the same.</p>
             <br/>
             <Tabs>
-              <TabList>
-                <Tab>Final Term Sheet Details</Tab>
-                <Tab>Final Term Sheet Yield Estimate</Tab>
-                <Tab>Final Term Sheet Documents</Tab>
-              </TabList>
-              <TabPanel>
-                {this.props.finalTerm ? this.displayFinalTermSheet() : ''}
-              </TabPanel>
-              <TabPanel>
-                {this.props.finalTerm ? this.displayYieldMatrix() : ''}
-              </TabPanel>
-              <TabPanel>
-                {this.props.finalTerm ? this.renderDocuments() : ''}
-              </TabPanel>
+              {this.props.finalTerm && this.props.finalTerm.childFTList ? this.displayTabListWithChildFT() : this.displayTabListForFT()}
+              {this.props.finalTerm && this.props.finalTerm.childFTList ? this.displayTabPanelWithChildFT() : this.displayTabPanelForFT()}
             </Tabs>
             {this.props.finalTerm ? this.displayViewAttachedRFPButton() : ''}
             {this.props.finalTerm ? this.displayViewAttachedIOIButton() : ''}
@@ -397,9 +508,22 @@ class FinalTermDetail extends Component{
 }
 
 function mapStateToProps(state) {
-  let rObject = {};
+  let rObject = {
+    childFTList : []
+  };
+  
   if(state.finalTerm.finalTerm){
-    rObject.finalTerm = state.finalTerm.finalTerm[0];
+    if(Array.isArray(state.finalTerm.finalTerm)){
+      rObject.finalTerm = state.finalTerm.finalTerm[0];
+
+      if(state.finalTerm.finalTerm[1])
+        rObject.childFTList.push(state.finalTerm.finalTerm[1]);
+    
+      if(state.finalTerm.finalTerm[2])
+        rObject.childFTList.push(state.finalTerm.finalTerm[2]);
+    } else {
+      rObject.finalTerm = state.finalTerm.finalTerm;
+    }
   }
 
   if(state.link.linkDocList){

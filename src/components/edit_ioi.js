@@ -227,34 +227,11 @@ class EditIOIForm extends Component{
         // use the id of the parent IOI which got deleted, since it may have links to other things
         props.ioiId=this.props.ioi.ioiId;
         this.props.createIOIAction(props)
-        .then((data) => {
-          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-            // send a msg to lender's company
-            let lProps = {
-              companyId : that.state.user.companyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(lProps);
-
-            // now send msg to the borrower's company
-            let bProps={
-              companyId : this.state.rfp.createdByCompanyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(bProps);
-
-            that.props.history.push({
-              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
-            });
-          } else {
-            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
-              className : "notification-error"
-            });
-          }
-        });
+        .then(data => that.sendMsgsAndRedirect( data
+          , that.props.ioi.ioiId
+          , that.state.user.companyId
+          , that.state.rfp.createdByCompanyId)
+        );
       } else if(!this.props.ioi.childIOIList && props.childIOIList){
         // initially there was 1 IOI, now has 2 IOI's
         // delete the first one and create 3 new one's
@@ -262,65 +239,19 @@ class EditIOIForm extends Component{
         // use the id of the parent IOI which got deleted, since it may have links to other things
         props.ioiId=this.props.ioi.ioiId;
         this.props.createIOIAction(props)
-        .then((data) => {
-          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-            // send a msg to lender's company
-            let lProps = {
-              companyId : that.state.user.companyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(lProps);
-
-            // now send msg to the borrower's company
-            let bProps={
-              companyId : this.state.rfp.createdByCompanyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(bProps);
-
-            that.props.history.push({
-              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
-            });
-          } else {
-            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
-              className : "notification-error"
-            });
-          }
-        });
+        .then(data => that.sendMsgsAndRedirect( data
+          , that.props.ioi.ioiId
+          , that.state.user.companyId
+          , that.state.rfp.createdByCompanyId)
+        );
       } else {
         // initially there were 2 and now we have 2
         this.props.updateIOIAction(props)  
-        .then((data) => {
-          if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
-            // send a msg to lender's company
-            let lProps = {
-              companyId : that.state.user.companyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(lProps);
-
-            // now send msg to the borrower's company
-            let bProps={
-              companyId : this.state.rfp.createdByCompanyId,
-              msg : constants.MESSAGES.IOI_EDITED,
-              ID : that.props.ioi.ioiId
-            };
-            that.props.sendAMsgFromAdminWithCompanyId(bProps);
-
-            that.props.history.push({
-              pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
-              state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
-            });
-          } else {
-            toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
-              className : "notification-error"
-            });
-          }
-        });
+        .then(data => that.sendMsgsAndRedirect( data
+          , that.props.ioi.ioiId
+          , that.state.user.companyId
+          , that.state.rfp.createdByCompanyId)
+        );
       }
     } else {
       that.props.history.push({
@@ -330,6 +261,35 @@ class EditIOIForm extends Component{
     }
   }
   
+  sendMsgsAndRedirect(data, ioiId, lCompanyId, bCompanyId){
+    if(data.payload.status === 200 && data.payload.data.status === 'SUCCESS'){
+      // send a msg to lender's company
+      let lProps = {
+        companyId : lCompanyId,
+        msg : constants.MESSAGES.IOI_EDITED,
+        ID : ioiId
+      };
+      this.props.sendAMsgFromAdminWithCompanyId(lProps);
+
+      // now send msg to the borrower's company
+      let bProps={
+        companyId : bCompanyId,
+        msg : constants.MESSAGES.IOI_EDITED,
+        ID : ioiId
+      };
+      this.props.sendAMsgFromAdminWithCompanyId(bProps);
+
+      this.props.history.push({
+        pathname : constants.ROUTES_MAP.RFP_MARKETPLACE,
+        state : constants.NOTIFICATIONS.EDIT_IOI_SUCCESS
+      });
+    } else {
+      toast(constants.NOTIFICATIONS.EDIT_IOI_FAILED, {
+        className : "notification-error"
+      });
+    }    
+  }
+
   isValuesUpdated(ioi, suffix){
     if(ioi.maxDebtAllowed !== this.props.initialValues['maxDebtAllowed'+suffix]
       || ioi.loanSize !== this.props.initialValues['loanSize'+suffix]
@@ -882,7 +842,7 @@ class EditIOIForm extends Component{
           <div className="container main-container-left-padding" >
             <h3>IOI Revisions</h3>
             <br/>
-            <p>Replace with: Modify IOI terms below and submit. Update Collateral Analysis where applicable.</p>
+            <p>Modify IOI terms below and submit. Update Collateral Analysis where applicable.</p>
             <br/>
             <hr/>
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>

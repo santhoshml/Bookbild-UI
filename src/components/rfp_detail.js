@@ -7,7 +7,8 @@ import { fetchRFPAction
   , removeRFPFromFavoritesAction
   , getRFPFromFavoritesAction
   , getIOIForRFPAndCompanyAction
-  , fetchFinalTermListForRFPAction } from '../actions/index';
+  , fetchFinalTermListForRFPAction
+  , getLinkWithRFPAction } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
 import constants from '../utils/constants';
@@ -36,6 +37,7 @@ class RFPDetail extends Component{
     let paramId = this.props.match.params.id;
     this.props.fetchRFPAction(paramId);
     this.props.fetchFinalTermListForRFPAction(paramId);
+    this.props.getLinkWithRFPAction(paramId);
 
     this.props.getRFPFromFavoritesAction(user.userId, paramId)
 
@@ -243,7 +245,9 @@ class RFPDetail extends Component{
   }
 
   displayEditRFPButton(){
-    if(this.props.rfp && this.state.company.companyId === this.props.rfp.createdByCompanyId){
+    if(this.props.rfp 
+      && this.state.company.companyId === this.props.rfp.createdByCompanyId
+      && ((this.props.link && this.props.link.dealState !== 'IN_EXECUTION' ) || !this.props.link)){
       return( <span>
         &nbsp;&nbsp;&nbsp;
         <Link to={constants.ROUTES_MAP.EDIT_RFP+"/"+this.props.rfp.rfpId} className="btn btn-primary">
@@ -466,6 +470,10 @@ function mapStateToProps(state) {
     }
   }
 
+  if(state.link.linkList){
+    rObject.link = state.link.linkList[0];
+  }
+
   if(state.rfpList.rfpList){
     rObject.rfp = state.rfpList.rfpList[0];
   }
@@ -486,7 +494,8 @@ function mapDispatchToProps(dispatch) {
     getRFPFromFavoritesAction : getRFPFromFavoritesAction,
     getIOIForRFPAndCompanyAction : getIOIForRFPAndCompanyAction,
     fetchRFPAction : fetchRFPAction,
-    fetchFinalTermListForRFPAction : fetchFinalTermListForRFPAction
+    fetchFinalTermListForRFPAction : fetchFinalTermListForRFPAction,
+    getLinkWithRFPAction : getLinkWithRFPAction
   }, dispatch);
 }
 

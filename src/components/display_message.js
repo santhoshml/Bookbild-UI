@@ -107,7 +107,7 @@ class DisplayMessage extends Component{
                   <div style={{padding: '10px', fontSize : '13px'}}>
                     {this.props.convContactMap[msg.fromId]} says ({dateFormat(msg.timestamp, 'hh:MM tt, mmm dd')})...
                   </div>
-                  <div style={{padding: '10px', margin: '5px', borderRadius : '25px', background: '#F5F5F5'}}>
+                  <div style={{padding: '10px', margin: '5px', borderRadius : '25px', background: '#F5F5F5', textAlign: 'left'}}>
                     {this.getFormattedText(msg.msg)}
                   </div>
                   <br/>
@@ -184,7 +184,7 @@ class DisplayMessage extends Component{
             </div>
             <div>
               <input 
-                style = {{float:"right", paddingLeft: "20px", paddingRight: "20px", marginRight:"20px"}}
+                style = {{float:"right", paddingLeft: "20px", paddingRight: "20px", marginRight:"20px", paddingTop: "10px"}}
                 type="submit" 
                 name="buttonArea" 
                 value="Send"/>
@@ -214,7 +214,7 @@ class DisplayMessage extends Component{
             </div>
             <div>
               <input 
-                style = {{float:"right", paddingLeft: "20px", paddingRight: "20px", marginRight:"20px"}}
+                style = {{float:"right", paddingLeft: "20px", paddingRight: "20px", marginRight:"20px", marginTop: "10px"}}
                 type="submit" 
                 name="buttonArea" 
                 value="Send"/>

@@ -284,7 +284,9 @@ class IOIDetail extends Component{
   }
 
   displayEditIOIButton(){
-    if(this.props.ioi && this.state.company.companyId === this.props.ioi.createdByCompanyId){
+    if(this.props.ioi 
+      && this.state.company.companyId === this.props.ioi.createdByCompanyId
+      && (!this.props.link || (this.props.link && this.props.link.dealState !== 'IN_EXECUTION'))){
       return( <span>
         <Link to={constants.ROUTES_MAP.EDIT_IOI+'/'+this.props.ioi.ioiId} className="btn btn-primary">
           Edit IOI
@@ -343,24 +345,24 @@ class IOIDetail extends Component{
   }
 
   displayFinalTermButton(){
-    if(this.props.ioi 
-      && (this.state.company.companyId === this.props.ioi.createdByCompanyId 
-        || this.state.company.companyId === this.props.ioi.forCompanyId )
-      && this.props.finalTerm){
-      return(<span>
-        <Link to={constants.ROUTES_MAP.VIEW_FINAL_TERM+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
-          View Final Term Sheet
-        </Link>
-        </span>);
-    } else if(this.props.ioi 
-      && this.state.company.companyId === this.props.ioi.createdByCompanyId
-      && this.props.link){
-      return( <span>
-      <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+this.props.ioi.ioiId} className="btn btn-primary">
-        Submit Final Term Sheet
-      </Link>
-      &nbsp;&nbsp;&nbsp;
-      </span>);
+    if(this.props.ioi){
+      if(this.props.finalTerm 
+        && (this.state.company.companyId === this.props.ioi.createdByCompanyId 
+          || this.state.company.companyId === this.props.ioi.forCompanyId )){
+            return(<span>
+              <Link to={constants.ROUTES_MAP.VIEW_FINAL_TERM+"/"+this.props.finalTerm.finalTermId} className="btn btn-primary">
+                View Final Term Sheet
+              </Link>
+              </span>);
+          } else if(this.state.company.companyId === this.props.ioi.createdByCompanyId
+            && this.props.link){
+              return( <span>
+                <Link to={constants.ROUTES_MAP.CREATE_FINAL_TERM+"/"+this.props.ioi.ioiId} className="btn btn-primary">
+                  Submit Final Term Sheet
+                </Link>
+                &nbsp;&nbsp;&nbsp;
+                </span>);
+          }
     }
   }
 
@@ -483,7 +485,6 @@ function mapStateToProps(state) {
     } else {
       rObject.ioi = state.ioiList.ioi;
     }
-
   }
 
   if(state.link.linkList){
