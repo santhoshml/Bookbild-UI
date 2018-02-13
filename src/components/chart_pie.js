@@ -8,7 +8,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#154360', '#873600'
 
 const RADIAN = Math.PI / 180;                    
 const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent, index }) => {
- 	const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
+ 	const radius = innerRadius + (outerRadius - innerRadius) * 0.6;
   const x  = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy  + radius * Math.sin(-midAngle * RADIAN);
  
@@ -23,17 +23,15 @@ export default class PieChartComponent extends Component {
 	render () {
   	return (
       <span>
-        <h3>{this.props.title}</h3>
-        <PieChart width={800} height={500} onMouseEnter={this.onPieEnter}>
+        <h4 style={{textAlign:'center'}}>{this.props.title}</h4>
+        <PieChart width={600} height={400} onMouseEnter={this.onPieEnter}>
           <Legend height={36} layout='vertical' align='right' verticalAlign='top'/>
           <Pie
             dataKey='value'
             data={this.props.data} 
-            cx={300} 
-            cy={200} 
             labelLine={false}
             label={renderCustomizedLabel}
-            outerRadius={200} 
+            outerRadius={150} 
             fill="#8884d8"
           >
             {

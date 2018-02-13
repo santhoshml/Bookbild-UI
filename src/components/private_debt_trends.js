@@ -61,7 +61,6 @@ class PrivateDebtTrends extends Component{
   }
 
   displayRFPChart(){
-    console.log('In displayRFPChart');
     if(this.props.keyStats){
       let sectorCountMap = this.props.keyStats.overall.sector_count;
       let sectorList = Object.keys(sectorCountMap);      
@@ -72,13 +71,11 @@ class PrivateDebtTrends extends Component{
           }
       }); 
       sectorData = sectorData.filter(data => data.value > 0);
-      console.log('sectorData :'+JSON.stringify(sectorData));
       return <PieChartComponent data={sectorData} title="# of RFP active for each sector"/>
     }
   }
 
   displayAvgDealChart(){
-    console.log('In displayAvgDealChart');
     if(this.props.keyStats){
       let overallAvgDeal = this.props.keyStats.overall.avg_deal_size;
       let sectors = Object.keys(this.props.keyStats);
@@ -91,13 +88,11 @@ class PrivateDebtTrends extends Component{
           "Overall Market":  overallAvgDeal
         }
       });
-      console.log('sectorData :'+JSON.stringify(sectorData));
       return <BarLineChartComponent data={sectorData} title="Avg. Deal Size for each sector and overall market"/>
     }    
   }
 
   displayLeverageChart(){
-    console.log('In displayLeverageChart');
     if(this.props.keyStats){
       let overallLevarage = this.props.keyStats.overall.levarage;
       let sectors = Object.keys(this.props.keyStats);
@@ -110,21 +105,61 @@ class PrivateDebtTrends extends Component{
           "Overall Market":  overallLevarage
         }
       });
-      console.log('sectorData :'+JSON.stringify(sectorData));
       return <BarLineChartComponent data={sectorData} title="Avg Leverage for each Sector and overall market"/>
     }    
   }  
 
+  displayStructureChart(){
+    if(this.props.keyStats){
+      let structCountMap = this.props.keyStats.overall.struct_count;
+      let structList = Object.keys(structCountMap);
+      let structData= structList.map(struct => {
+          return {
+            name : constants.PRODUCT_MAP[struct],
+            value : structCountMap[struct]
+          }
+      }); 
+      structData = structData.filter(data => data.value > 0);
+      return <PieChartComponent data={structData} title="Overall Market loan structures"/>
+    }
+  }
+
+  displayLtmEbitdaChart(){
+    if(this.props.keyStats){
+      let overall = this.props.keyStats.overall.avg_ltm_ebitda;
+      let sectors = Object.keys(this.props.keyStats);
+      sectors.splice(sectors.indexOf('overall'), 1);
+
+      let sectorData = sectors.map(sector => {
+        return {
+          name : constants.SECTOR_MAP[sector],
+          "Sector" : this.props.keyStats[sector].avg_ltm_ebitda,
+          "Overall Market":  overall
+        }
+      });
+      return <BarLineChartComponent data={sectorData} title="Avg. LTM EBITDA for each sector and overall market"/>
+    }    
+  }
+
+  displayLtmRevenueChart(){
+    if(this.props.keyStats){
+      let overall = this.props.keyStats.overall.avg_ltm_revenue;
+      let sectors = Object.keys(this.props.keyStats);
+      sectors.splice(sectors.indexOf('overall'), 1);
+
+      let sectorData = sectors.map(sector => {
+        return {
+          name : constants.SECTOR_MAP[sector],
+          "Sector" : this.props.keyStats[sector].avg_ltm_revenue,
+          "Overall Market":  overall
+        }
+      });
+      return <BarLineChartComponent data={sectorData} title="Avg. LTM Revenue for each sector and overall market"/>
+    }    
+  }
+
   render(){
-    console.log('I am in render');
-  //   <div className={`row`}>
-  //   <div className={`col-xs-6 col-md-6`}>
-  //     {this.displayRFPChart()}
-  //   </div>
-  //   <div className={`col-xs-6 col-md-6`}>
-  //     {this.displayAvgDealChart()}
-  //   </div>              
-  // </div>
+    // console.log('I am in render');
 
     return(
       <div>
@@ -135,11 +170,34 @@ class PrivateDebtTrends extends Component{
           <div className="container" >
             <h3>Private Debt Trends</h3>
             <br/>
-            {this.displayRFPChart()}
-            {this.displayAvgDealChart()}
-            {this.displayLeverageChart()}
-            
-
+            <table className='table table-borderless' style={{marginLeft : -100}}>
+              <tbody>
+                <tr>
+                  <td>
+                    {this.displayRFPChart()}
+                  </td>
+                  <td>
+                    {this.displayStructureChart()}
+                  </td>                
+                </tr>
+                <tr>
+                  <td>
+                    {this.displayAvgDealChart()}
+                  </td>
+                  <td>
+                    {this.displayLeverageChart()}
+                  </td>                
+                </tr>
+                <tr>
+                  <td>
+                    {this.displayLtmEbitdaChart()}
+                  </td>
+                  <td>
+                    {this.displayLtmRevenueChart()}
+                  </td>                
+                </tr>
+              </tbody>
+            </table>
             <br/>
             </div>
         </div>
@@ -154,7 +212,6 @@ function mapStateToProps(state) {
 
   if(state.stats.keyStats){
     rObject.keyStats = state.stats.keyStats;
-    // console.log('rObject.keyStats :'+ JSON.stringify(rObject.keyStats));
   }
 
   return rObject;
