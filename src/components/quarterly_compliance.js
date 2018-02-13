@@ -63,7 +63,6 @@ class complianceForm extends Component{
   componentWillReceiveProps(nextProps){
     let data = {};
 
-
     // if(!this.state.complianceData){
     if(nextProps.complianceData){
       if(nextProps.complianceData && nextProps.complianceData.data){

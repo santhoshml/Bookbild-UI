@@ -103,7 +103,8 @@ exports.ROUTES_MAP = {
   EDIT_FINAL_TERM             : '/editFinalTerm',
   VIEW_FINAL_TERM             : '/finalTermDetail',
   FINAL_TERM_LIST             : '/finalTermList',
-  MESSAGES                    : '/messages'
+  MESSAGES                    : '/messages',
+  PRIVATE_DEBT_TRENDS         : '/privateDebtTrends'
 };
 
 exports.S3_BUCKET_MAP = {

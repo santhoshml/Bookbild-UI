@@ -128,19 +128,19 @@ class FinalTermDetail extends Component{
 
   displayTotalLeverageElement(ft, isParent){
     if(!isParent){
-      return(<tr><td>Total Leverage</td><td>{cUtils.formatPercentToDisplay(ft.totalLeverage)}</td></tr>);
+      return(<tr><td>Total Leverage</td><td>{ft.totalLeverage+'x'}</td></tr>);
     }
   }
 
   displayInterestCoverageElement(ft, isParent){
     if(!isParent){
-      return(<tr><td>Interest Coverage</td><td>{cUtils.formatPercentToDisplay(ft.interestCoverage)}</td></tr>);
+      return(<tr><td>Interest Coverage</td><td>{ft.interestCoverage+'x'}</td></tr>);
     }
   }
 
   displayFixedChargeCoverageElement(ft, isParent){
     if(!isParent){
-      return(<tr><td>Fixed Charge Coverage</td><td>{cUtils.formatPercentToDisplay(ft.fixedChargeCoverage)}</td></tr>);
+      return(<tr><td>Fixed Charge Coverage</td><td>{ft.fixedChargeCoverage+'x'}</td></tr>);
     }
   }
 

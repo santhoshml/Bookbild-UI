@@ -90,7 +90,11 @@ class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.BORROWER_CONTROLLED_ACCESS);
         } else if(id === 'concourse/messages'){
             this.props.history.push(constants.ROUTES_MAP.MESSAGES);
-        }
+        } else if(id === 'marketData/privateDebtTrends'){
+            this.props.history.push(constants.ROUTES_MAP.PRIVATE_DEBT_TRENDS);
+        } 
+
+        
         //  else{
         //     this.props.history.push('#');
         // } 

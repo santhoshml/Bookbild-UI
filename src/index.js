@@ -43,7 +43,7 @@ import InviteCompany from './components/invite_company';
 import Messages from './components/messages';
 import Initializefromstate from './components/initializefromstate';
 import Dashboard from './components/dashboard';
-
+import PrivateDebtTrends from './components/private_debt_trends';
 
 
 
@@ -72,6 +72,7 @@ ReactDOM.render(
       <BrowserRouter>
           <div>
             <Switch>
+              <Route path="/privateDebtTrends" component={PrivateDebtTrends} />
               <Route path="/dashboard" component={Dashboard} />
               <Route path="/initializefromstate" component={Initializefromstate} />
               <Route path="/messages" component={Messages} />

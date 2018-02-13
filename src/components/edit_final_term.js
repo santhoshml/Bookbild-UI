@@ -115,21 +115,6 @@ class EditFinalTermForm extends Component{
     });
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.rfp){
-      this.setState({
-        rfp : nextProps.rfp
-      });
-    }
-
-    if(nextProps.link){
-      this.setState({
-        link : nextProps.link
-      });
-    }
-  }
-
-
   onSubmit(props){
     let that = this;
 
@@ -235,7 +220,7 @@ class EditFinalTermForm extends Component{
         .then(data => that.sendMsgsAndRedirect(data
             , that.props.finalTerm.finalTermId
             , that.state.user.companyId
-            , that.state.rfp.createdByCompanyId)
+            , that.props.rfp.createdByCompanyId)
         );
       } else if(!this.props.finalTerm.childFTList && props.childFTList){
         // initially there was 1 FT, now has 2 FT's
@@ -247,7 +232,7 @@ class EditFinalTermForm extends Component{
         .then(data => that.sendMsgsAndRedirect(data
           , that.props.finalTerm.finalTermId
           , that.state.user.companyId
-          , that.state.rfp.createdByCompanyId)
+          , that.props.rfp.createdByCompanyId)
         );
       } else {
         // initially there were 2 and now we have 2        
@@ -255,7 +240,7 @@ class EditFinalTermForm extends Component{
         .then(data => that.sendMsgsAndRedirect(data
           , that.props.finalTerm.finalTermId
           , that.state.user.companyId
-          , that.state.rfp.createdByCompanyId)
+          , that.props.rfp.createdByCompanyId)
         );
       }
     } else {
@@ -321,21 +306,21 @@ class EditFinalTermForm extends Component{
       <div>
         <h4>RFP Details : </h4>
         <br/>
-        {this.state.rfp.companyDesc}
+        {this.props.rfp.companyDesc}
         <br/>
         <br/>
-        {this.state.rfp.txnOverview}
+        {this.props.rfp.txnOverview}
         <br/>
         <br/>
         <table className="table table-bordered">
           <tbody>
             <tr>
-              <td>Sector: {this.state.rfp.sector}</td>
-              <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+              <td>Sector: {this.props.rfp.sector}</td>
+              <td>Deal Size : {this.props.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.props.rfp.product)}</td>
             </tr>
             <tr>
-              <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmRevenue)}</td>
-              <td>LTM EBITDA:{cUtils.formatCurrencyToDisplay(this.state.rfp.ltmEbitda)}</td>
+              <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.props.rfp.ltmRevenue)}</td>
+              <td>LTM EBITDA:{cUtils.formatCurrencyToDisplay(this.props.rfp.ltmEbitda)}</td>
             </tr>
           </tbody>
         </table>
@@ -511,13 +496,13 @@ class EditFinalTermForm extends Component{
 		  this.props.uploadDocumentRequest({
 		    file,
 		    type	: type,
-        ioiId 	: this.state.link.ioiId,
-        rfpId 	: this.state.rfp.rfpId,
-        linkId 	: this.state.link.linkId,
+        ioiId 	: this.props.link.ioiId,
+        rfpId 	: this.props.rfp.rfpId,
+        linkId 	: this.props.link.linkId,
         uploadedCompanyId : this.state.user.companyId
       }).then((data)=>{
         that.myFileInput=null;
-        this.props.getLinkDocsWithLinkIdAndTypeAction(this.state.link.linkId, "FINAL_TERM");
+        this.props.getLinkDocsWithLinkIdAndTypeAction(this.props.link.linkId, "FINAL_TERM");
       });
 		}
   }
@@ -595,7 +580,7 @@ class EditFinalTermForm extends Component{
             <th>Action</th>
           </tr>
         </thead>
-        <tbody key={this.state.link.linkId+'__FINAL_TERM'}>
+        <tbody key={this.props.link.linkId+'__FINAL_TERM'}>
           {this.renderDocumentItem('FINAL_TERM')}
           <tr>
             <td colSpan="4">
@@ -663,11 +648,11 @@ class EditFinalTermForm extends Component{
             <br/>
             <hr/>
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-              {this.state.rfp ? this.displayRFPSummary() : ''}
+              {this.props.rfp ? this.displayRFPSummary() : ''}
               <br/>
               {this.displaySubtitle()}
               <br/>
-              {this.state.link ? this.displayFileUploadBlock() : null}
+              {this.props.link ? this.displayFileUploadBlock() : null}
               <hr/>
               <div className={`row`}>
                 <Field

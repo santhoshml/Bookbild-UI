@@ -123,7 +123,6 @@ class EditIOIForm extends Component{
       let totalGross = ioiUtils.getTotalGross(nextProps.rfp);
 
       this.setState({
-        rfp : nextProps.rfp,
         collateral : collateral,
         totalGross : totalGross
       });
@@ -133,11 +132,11 @@ class EditIOIForm extends Component{
   onSubmit(props){
     let that = this;
 
-    props.rfpId = this.state.rfp.rfpId;
+    props.rfpId = this.props.rfp.rfpId;
     props.createdById = this.state.user.userId;
     props.createdByCompanyId = this.state.company.companyId;
     props.ioiId = this.props.ioi.ioiId;
-    props.forCompanyId = this.state.rfp.createdByCompanyId;
+    props.forCompanyId = this.props.rfp.createdByCompanyId;
     props.createdByContactId = this.state.user.contactId;
 
     if(this.state.displayTwoLoanStructures){
@@ -156,16 +155,16 @@ class EditIOIForm extends Component{
         }
       }
       // populate Id's
-      props_1.rfpId = this.state.rfp.rfpId;
+      props_1.rfpId = this.props.rfp.rfpId;
       props_1.createdById = this.state.user.userId;
       props_1.createdByCompanyId = this.state.company.companyId;
-      props_1.forCompanyId = this.state.rfp.createdByCompanyId;
+      props_1.forCompanyId = this.props.rfp.createdByCompanyId;
       props_1.createdByContactId = this.state.user.contactId;
 
-      props_2.rfpId = this.state.rfp.rfpId;
+      props_2.rfpId = this.props.rfp.rfpId;
       props_2.createdById = this.state.user.userId;
       props_2.createdByCompanyId = this.state.company.companyId;
-      props_2.forCompanyId = this.state.rfp.createdByCompanyId;
+      props_2.forCompanyId = this.props.rfp.createdByCompanyId;
       props_2.createdByContactId = this.state.user.contactId;
 
       props.childIOIList = [props_1, props_2];
@@ -230,7 +229,7 @@ class EditIOIForm extends Component{
         .then(data => that.sendMsgsAndRedirect( data
           , that.props.ioi.ioiId
           , that.state.user.companyId
-          , that.state.rfp.createdByCompanyId)
+          , that.props.rfp.createdByCompanyId)
         );
       } else if(!this.props.ioi.childIOIList && props.childIOIList){
         // initially there was 1 IOI, now has 2 IOI's
@@ -242,7 +241,7 @@ class EditIOIForm extends Component{
         .then(data => that.sendMsgsAndRedirect( data
           , that.props.ioi.ioiId
           , that.state.user.companyId
-          , that.state.rfp.createdByCompanyId)
+          , that.props.rfp.createdByCompanyId)
         );
       } else {
         // initially there were 2 and now we have 2
@@ -250,7 +249,7 @@ class EditIOIForm extends Component{
         .then(data => that.sendMsgsAndRedirect( data
           , that.props.ioi.ioiId
           , that.state.user.companyId
-          , that.state.rfp.createdByCompanyId)
+          , that.props.rfp.createdByCompanyId)
         );
       }
     } else {
@@ -314,25 +313,25 @@ class EditIOIForm extends Component{
   }
 
   displayRFPSummary(){
-    if(this.state.rfp){
+    if(this.props.rfp){
       return (
         <div>
           <h4>Related RFP Details : </h4>
-          {this.state.rfp.companyDesc}
+          {this.props.rfp.companyDesc}
           <br/>
           <br/>
-          {this.state.rfp.txnOverview}
+          {this.props.rfp.txnOverview}
           <br/>
           <br/>
           <table className="table table-bordered">
             <tbody>
               <tr>
-                <td>Sector: {this.state.rfp.sector}</td>
-                <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+                <td>Sector: {this.props.rfp.sector}</td>
+                <td>Deal Size : {this.props.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.props.rfp.product)}</td>
               </tr>
               <tr>
-                <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmRevenue)}</td>
-                <td>LTM EBITDA : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmEbitda)}</td>
+                <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.props.rfp.ltmRevenue)}</td>
+                <td>LTM EBITDA : {cUtils.formatCurrencyToDisplay(this.props.rfp.ltmEbitda)}</td>
               </tr>
             </tbody>
           </table>
@@ -365,7 +364,7 @@ class EditIOIForm extends Component{
   }
 
   displayCollateralAnalysis(suffix){
-    var rfp = this.state.rfp;
+    var rfp = this.props.rfp;
     if(rfp){
       return(<div>
         <h3>Borrowing Base</h3>

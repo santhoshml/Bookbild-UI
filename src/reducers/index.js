@@ -17,6 +17,7 @@ import FinalTermListReducer from "./reducer_finalTerm_list";
 import contactListReducer from './reducer_contacts';
 import MessagesReducer from './reducer_messages';
 import DashboardReducer from './reducer_dashboard';
+import StatsReducer from './reducer_stats';
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -36,7 +37,8 @@ const rootReducer = combineReducers({
   finalTermList : FinalTermListReducer,
   contactList : contactListReducer,
   messages : MessagesReducer,
-  dashboard : DashboardReducer
+  dashboard : DashboardReducer,
+  stats : StatsReducer
 });
 
 export default rootReducer;

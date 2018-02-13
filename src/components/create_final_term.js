@@ -92,7 +92,19 @@ class CreateFinalTermForm extends Component{
       this.props.fetchIOIAction(paramId),
       this.props.fetchRFPByIOIAction(paramId),
       this.props.getLinkWithIOIAction(paramId)
-    ]);
+    ])
+    .then(data =>{
+      if(data[0].type === 'FETCH_IOI' 
+        && data[0].payload.status === 200
+        && data[0].payload.data.status === 'SUCCESS'){
+          let ioiList = data[0].payload.data.data.Items;
+          if(ioiList.length > 1){
+            this.setState({
+              displayTwoLoanStructures : true
+            });
+          }
+        }
+    });
 
     this.setState({
       company             : company,
@@ -102,36 +114,6 @@ class CreateFinalTermForm extends Component{
     });
   }
 
-  componentWillReceiveProps(nextProps){
-    if(nextProps.rfp){
-      this.setState({
-        rfp : nextProps.rfp
-      });
-    }
-
-    if(nextProps.link){
-      this.setState({
-        link : nextProps.link
-      });
-    }
-
-    if(nextProps.ioi){
-      this.setState({
-        ioi : nextProps.ioi
-      });
-    }
-
-    if(this.props.ioi 
-      && !this.state.displayTwoLoanStructures
-      && (this.props.ioi.loanStructure === 'ABL-Both'
-        || this.props.ioi.loanStructure === 'CashFlow-Both')){
-      this.setState({
-        displayTwoLoanStructures : true
-      });
-    }
-  }
-
-
   onSubmit(props){
     let that = this;
     JSAlert.confirm("Are you sure you want to submit the Final Term Sheet ?")
@@ -139,12 +121,12 @@ class CreateFinalTermForm extends Component{
       if(!result){
         // console.log('user did cancel before submitting the final term');
       } else {
-        props.linkId = that.state.link.linkId;
-        props.rfpId = that.state.rfp.rfpId;
+        props.linkId = that.props.link.linkId;
+        props.rfpId = that.props.rfp.rfpId;
         props.createdById = that.state.user.userId;
         props.createdByCompanyId = that.state.company.companyId;
-        props.ioiId = that.state.ioi.ioiId;
-        props.forCompanyId = that.state.rfp.createdByCompanyId;
+        props.ioiId = that.props.ioi.ioiId;
+        props.forCompanyId = that.props.rfp.createdByCompanyId;
 
         if(that.state.displayTwoLoanStructures){
           // copy props into 2 diffrent datastructures
@@ -167,16 +149,16 @@ class CreateFinalTermForm extends Component{
           props_1.createdByCompanyId = that.state.company.companyId;
           props_1.forCompanyId = that.props.rfp.createdByCompanyId;
           props_1.createdByContactId = that.state.user.contactId;
-          props_1.ioiId = that.state.ioi.ioiId;
-          props_1.linkId = that.state.link.linkId;
+          props_1.ioiId = that.props.ioi.ioiId;
+          props_1.linkId = that.props.link.linkId;
     
           props_2.rfpId = that.props.rfp.rfpId;
           props_2.createdById = that.state.user.userId;
           props_2.createdByCompanyId = that.state.company.companyId;
           props_2.forCompanyId = that.props.rfp.createdByCompanyId;
           props_2.createdByContactId = that.state.user.contactId;
-          props_2.ioiId = that.state.ioi.ioiId;
-          props_2.linkId = that.state.link.linkId;
+          props_2.ioiId = that.props.ioi.ioiId;
+          props_2.linkId = that.props.link.linkId;
     
           props.childFTList = [props_1, props_2];
         } else {
@@ -203,7 +185,7 @@ class CreateFinalTermForm extends Component{
 
             // now send msg to the borrower's company
             let bProps={
-              companyId : that.state.rfp.createdByCompanyId,
+              companyId : that.props.rfp.createdByCompanyId,
               msg : constants.MESSAGES.FINAL_TERM_CREATED_BORROWER,
               ID : data.payload.data.data
             };
@@ -228,21 +210,21 @@ class CreateFinalTermForm extends Component{
       <div>
         <h4>RFP Details : </h4>
         <br/>
-        {this.state.rfp.companyDesc}
+        {this.props.rfp.companyDesc}
         <br/>
         <br/>
-        {this.state.rfp.txnOverview}
+        {this.props.rfp.txnOverview}
         <br/>
         <br/>
         <table className="table table-bordered">
           <tbody>
             <tr>
-              <td>Sector: {this.state.rfp.sector}</td>
-              <td>Deal Size : {this.state.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.state.rfp.product)}</td>
+              <td>Sector: {this.props.rfp.sector}</td>
+              <td>Deal Size : {this.props.rfp.dealSize} &nbsp; {cUtils.getDisplayValue(this.props.rfp.product)}</td>
             </tr>
             <tr>
-              <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.state.rfp.ltmRevenue)}</td>
-              <td>LTM EBITDA:{cUtils.formatCurrencyToDisplay(this.state.rfp.ltmEbitda)}</td>
+              <td>LTM Revenue : {cUtils.formatCurrencyToDisplay(this.props.rfp.ltmRevenue)}</td>
+              <td>LTM EBITDA:{cUtils.formatCurrencyToDisplay(this.props.rfp.ltmEbitda)}</td>
             </tr>
           </tbody>
         </table>
@@ -387,7 +369,7 @@ class CreateFinalTermForm extends Component{
         />
         <br/>
         <Field
-          name={"intrestCoverage"+suffix}
+          name={"interestCoverage"+suffix}
           label="Interest Coverage"
           component={this.renderField}
         />
@@ -448,13 +430,13 @@ class CreateFinalTermForm extends Component{
 		  this.props.uploadDocumentRequest({
 		    file,
 		    type	: type,
-        ioiId 	: this.state.ioi.ioiId,
-        rfpId 	: this.state.rfp.rfpId,
-        linkId 	: this.state.link.linkId,
+        ioiId 	: this.props.ioi.ioiId,
+        rfpId 	: this.props.rfp.rfpId,
+        linkId 	: this.props.link.linkId,
         uploadedCompanyId : this.state.user.companyId
       }).then((data)=>{
         that.myFileInput=null;
-        this.props.getLinkDocsWithLinkIdAndTypeAction(this.state.link.linkId, "FINAL_TERM");
+        this.props.getLinkDocsWithLinkIdAndTypeAction(this.props.link.linkId, "FINAL_TERM");
       });
 		}
   }
@@ -532,7 +514,7 @@ class CreateFinalTermForm extends Component{
             <th>Action</th>
           </tr>
         </thead>
-        <tbody key={this.state.link.linkId+'__FINAL_TERM'}>
+        <tbody key={this.props.link.linkId+'__FINAL_TERM'}>
           {this.renderDocumentItem('FINAL_TERM')}
           <tr>
             <td colSpan="4">
@@ -575,11 +557,11 @@ class CreateFinalTermForm extends Component{
           <NavBar history={this.props.history}/>
           <div className="container main-container-left-padding" >
             <form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-              {this.state.rfp ? this.displayRFPSummary() : ''}
+              {this.props.rfp ? this.displayRFPSummary() : ''}
               <br/>
               {this.displaySubtitle()}
               <br/>
-              {this.state.link ? this.displayFileUploadBlock() : null}
+              {this.props.link ? this.displayFileUploadBlock() : null}
               <br/>
               <div className={`row`}>
                 <Field

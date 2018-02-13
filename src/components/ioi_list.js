@@ -19,12 +19,6 @@ import {Table, Column, Cell} from 'fixed-data-table';
 class IOIList extends Component{
   constructor(props){
     super(props);
-    this.state = {
-			ioiList : null,
-      ioiCompanyList : null,
-      ioiUserList : null,
-      clubDealList : null
-		}
   }
 
   componentWillMount() {

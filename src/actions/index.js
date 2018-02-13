@@ -73,6 +73,8 @@ export const DELETE_FINAL_TERM = 'DELETE_FINAL_TERM';
 export const FETCH_FT_LIST_FOR_RFP = 'FETCH_FT_LIST_FOR_RFP';
 export const GET_DASHBOARD_STATS = 'GET_DASHBOARD_STATS';
 export const GET_LINKS_WITH_RFP = 'GET_LINKS_WITH_RFP';
+export const GET_ALL_KEY_STATS = 'GET_ALL_KEY_STATS';
+
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -83,6 +85,19 @@ const USE_CACHE = false;
 
 // const ROOT_URL = 'http://127.0.0.1:1127';
 const ROOT_URL = 'https://services.bookbild.com';
+
+export function getAllStatsAction(){
+  const request=axios({
+    url : '/getAllKeyStats',
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_ALL_KEY_STATS,
+    payload: request
+  }  
+}
 
 export function getLenderStatsForDashboard(companyId, userId){
   const request=axios({

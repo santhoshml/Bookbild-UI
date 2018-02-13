@@ -110,15 +110,8 @@ class CreateIOIForm extends Component{
       let collateral = ioiUtils.getCollataralArr(nextProps.rfp, this.state.collateral);
       let totalGross = ioiUtils.getTotalGross(nextProps.rfp);  
       this.setState({
-        rfp : nextProps.rfp,
         collateral : collateral,
         totalGross : totalGross
-      });
-    }
-
-    if(nextProps.ioi){
-      this.setState({
-        ioi : nextProps.ioi
       });
     }
   }
