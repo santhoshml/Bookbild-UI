@@ -175,6 +175,18 @@ class Sidenav extends Component {
 		}
 	}
 
+	displayAddCompanyLink(){
+		if((this.state.user && this.state.user.isAdmin && this.state.user.isAdmin=== 'Yes')
+			||(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true)
+		){
+			return(
+                <Nav id="addCompany">
+                    <NavText> Add a Company </NavText>
+                </Nav>
+			);
+		}
+	}
+
 	displayMyAccount(){
         return (
             <Nav id="myAccount">
@@ -187,6 +199,7 @@ class Sidenav extends Component {
                     <NavText> My Team </NavText>
                 </Nav>
                 {this.displayAddUserLink()}
+                {this.displayAddCompanyLink()}
                 <Nav id="logout">
                     <NavText> Logout </NavText>
                 </Nav>
