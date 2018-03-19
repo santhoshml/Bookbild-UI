@@ -9,6 +9,7 @@ import { fetchRFPByIOIAction
   , inviteLenderAction
   , fetchIOIAction
   , getLinkWithIOIAction
+  , inviteOtherLendersToTheDeal
   , revokeIOI } from '../actions/index';
 import * as actionCreators from '../actions/index';
 import lsUtils from '../utils/ls_utils';
@@ -436,6 +437,36 @@ class IOIDetail extends Component{
     );
   }
 
+  inviteOtherLendersForRFP(){
+    console.log('I am in inviteOtherLendersForRFP');
+    this.props.inviteOtherLendersToTheDeal({
+      emailArr: this.refs.otherLenderEmail.value,
+      ioiId: this.props.ioi.ioiId,
+      rfpId: this.props.rfp.rfpId,
+      userId: this.state.user.contactId
+    });
+  }
+  
+  inviteOtherLenders(){
+    if(this.props.ioi 
+      && this.state.company.companyId === this.props.ioi.createdByCompanyId
+      && (!this.props.link || (this.props.link && this.props.link.dealState !== 'IN_EXECUTION'))){
+      return( <div>
+				<input
+          className="col-xs-6 col-lg-6"
+          placeholder="john@companyX.com, ggal@example.com, ..."          
+          type="text"
+          ref="otherLenderEmail"
+          style={{height:'35px'}}
+					/>
+          <Link type="submit" to="#" onClick={this.inviteOtherLendersForRFP.bind(this)} className="btn btn-primary col-xs-5 col-lg-5" style={{marginLeft:'10px', height:'35px'}}>
+            Invite Other lenders to partner in this deal
+          </Link>
+      </div>
+      );
+    }
+  }
+
   render(){
     return(
       <div>
@@ -451,7 +482,12 @@ class IOIDetail extends Component{
             <Tabs>
               {this.props.ioi && this.props.ioi.childIOIList ? this.displayTabListWithChildIOI() : this.displayTabListForIOI()}
               {this.props.ioi && this.props.ioi.childIOIList ? this.displayTabPanelWithChildIOI() : this.displayTabPanelForIOI()}
-            </Tabs>      
+            </Tabs>
+            {this.inviteOtherLenders()}
+            <br/>
+            <br/>
+            <br/>
+            <br/>
             {this.displayViewAttachedRFPButton()}
             {this.displayEditIOIButton()}
             {
@@ -513,7 +549,8 @@ function mapDispatchToProps(dispatch) {
     getLinkWithIOIAction  : getLinkWithIOIAction,
     fetchFinalIOIAction         : fetchFinalIOIAction,
     fetchRFPByIOIAction         : fetchRFPByIOIAction,
-    revokeIOI                   : revokeIOI
+    revokeIOI                   : revokeIOI,
+    inviteOtherLendersToTheDeal : inviteOtherLendersToTheDeal
   }, dispatch);
 }
 
