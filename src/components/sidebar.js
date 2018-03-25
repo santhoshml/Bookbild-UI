@@ -181,7 +181,7 @@ class Sidenav extends Component {
 		if(this.state.user){
 			return(
                 <Nav id="addCompany">
-                    <NavText> Follow Company </NavText>
+                    <NavText> Add Company </NavText>
                 </Nav>
 			);
 		}
