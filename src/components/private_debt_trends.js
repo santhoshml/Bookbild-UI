@@ -159,8 +159,6 @@ class PrivateDebtTrends extends Component{
   }
 
   render(){
-    // console.log('I am in render');
-
     return(
       <div>
         <ToastContainer />

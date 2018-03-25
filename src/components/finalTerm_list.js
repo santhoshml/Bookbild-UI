@@ -46,7 +46,7 @@ class FinalTermList extends Component{
   componentWillReceiveProps(nextProps){
     if(this.props.match.params.type === constants.FT_FOR_RFP
       && nextProps.finalTermList 
-      && nextProps.finalTermList != this.props.finalTermList
+      // && nextProps.finalTermList != this.props.finalTermList
       && nextProps.rfp ){
         let clubDealList = ioiUtils.makeClubDealList(nextProps.finalTermList, nextProps.rfp);
         this.setState({

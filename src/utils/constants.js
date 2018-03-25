@@ -79,6 +79,7 @@ exports.QCOMPLIANCE_ROWS = [
 
 exports.ROUTES_MAP = {
   MY_PROFILE      : '/myProfile',
+  ADD_COMPANY     : '/addCompany',
   ADD_USER        : '/addUser',
   RFP_MARKETPLACE : '/rfpMarketPlace',
   CREATE_RFP      : '/createRFP',
@@ -259,5 +260,6 @@ exports.NOTIFICATIONS = {
   REMOVE_FROM_FAVORITES_FAILED : 'Error removing from your favorites',
   USER_PROFILE_SUCCESS : 'User Profile updated.',
   USER_PROFILE_FAILED : 'Error updating your profile, try again.',
-
+  ADD_COMPANY_SUCCESS : 'Thanks for adding the company, we will track for you',
+  ADD_COMPANY_FAILED : 'Error while adding the company, try again'
 };

@@ -8,7 +8,18 @@ import numeral from 'numeral';
 import roundTo from 'round-to';
 import ioi_list from '../components/ioi_list';
 
+exports.getCompanyId = function(cList, cName){
+  if(cName && cList && cList.length > 0){
+    return cList.find((company)=> company.companyName == cName);
+  }
+  return null;
+}
 
+exports.condensedCompanyList = function(cList){
+  return cList.map((company) => {
+    return company.companyName;
+  });
+}
 
 exports.getMsgNameForAccess = function(type){
   if(type === constants.KEY_ACCESS_CONTROL_DEAL_TEAM){

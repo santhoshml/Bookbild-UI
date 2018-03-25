@@ -92,6 +92,8 @@ class Sidenav extends Component {
             this.props.history.push(constants.ROUTES_MAP.MESSAGES);
         } else if(id === 'marketData/privateDebtTrends'){
             this.props.history.push(constants.ROUTES_MAP.PRIVATE_DEBT_TRENDS);
+        } else if(id === 'myAccount/addCompany'){
+            this.props.history.push(constants.ROUTES_MAP.ADD_COMPANY);
         } 
 
         
@@ -169,19 +171,17 @@ class Sidenav extends Component {
 		){
 			return(
                 <Nav id="addUser">
-                    <NavText> Add a User </NavText>
+                    <NavText> Add User </NavText>
                 </Nav>
 			);
 		}
 	}
 
 	displayAddCompanyLink(){
-		if((this.state.user && this.state.user.isAdmin && this.state.user.isAdmin=== 'Yes')
-			||(this.state.user && this.state.user.isSuperAdmin && this.state.user.isSuperAdmin=== true)
-		){
+		if(this.state.user){
 			return(
                 <Nav id="addCompany">
-                    <NavText> Add a Company </NavText>
+                    <NavText> Follow Company </NavText>
                 </Nav>
 			);
 		}

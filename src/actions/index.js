@@ -75,7 +75,8 @@ export const GET_DASHBOARD_STATS = 'GET_DASHBOARD_STATS';
 export const GET_LINKS_WITH_RFP = 'GET_LINKS_WITH_RFP';
 export const GET_ALL_KEY_STATS = 'GET_ALL_KEY_STATS';
 export const INVITE_OTHER_LENDERS_FOR_DEAL = 'INVITE_OTHER_LENDERS_FOR_DEAL';
-
+export const ADD_COMPANY = 'ADD_COMPANY';
+export const GET_ALL_COMPANY_LIST = 'GET_ALL_COMPANY_LIST';
 
 export const FETCH_POSTS = "fetch_posts";
 export const FETCH_POST = "fetch_post";
@@ -87,8 +88,34 @@ const USE_CACHE = false;
 // const ROOT_URL = 'http://127.0.0.1:1127';
 const ROOT_URL = 'https://services.bookbild.com';
 
+export function getAllCompanyListAction(){
+  const request=axios({
+    url : '/fetchAllCompanyListUsingCache',
+    method : 'GET',
+    baseURL : ROOT_URL
+  });
+
+  return{
+    type: GET_ALL_COMPANY_LIST,
+    payload: request
+  }  
+}
+
+export function addLostDealAction(props){
+  const request=axios({
+    url : '/addLostDeal',
+    method : 'POST',
+    baseURL : ROOT_URL,
+    data : props
+  });
+
+  return{
+    type: ADD_COMPANY,
+    payload: request
+  }  
+}
+
 export function inviteOtherLendersToTheDeal(props){
-  console.log(`props : ${JSON.stringify(props, null, 2)}`);
   const request=axios({
     url : '/inviteOtherLendersToTheDeal',
     method : 'POST',

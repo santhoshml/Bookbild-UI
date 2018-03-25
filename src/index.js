@@ -44,6 +44,7 @@ import Messages from './components/messages';
 import Initializefromstate from './components/initializefromstate';
 import Dashboard from './components/dashboard';
 import PrivateDebtTrends from './components/private_debt_trends';
+import AddCompany from './components/add_company';
 
 
 
@@ -110,6 +111,7 @@ ReactDOM.render(
               <Route path="/borrowerControlledAccess" component={BorrowerControlledAccess} />
               <Route path="/finalTermList" component={FinalTermList} />
               <Route path="/inviteCompany" component={InviteCompany} />
+              <Route path="/addCompany" component={AddCompany} />
               <Route path="/" component={LandingPage} />
             </Switch>
           </div>

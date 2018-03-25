@@ -73,7 +73,7 @@ class IOIList extends Component{
   componentWillReceiveProps(nextProps){
     if(this.props.match.params.type === constants.IOI_FOR_RFP
       && nextProps.ioiList 
-      && nextProps.ioiList != this.props.ioiList
+      // && nextProps.ioiList != this.props.ioiList
       && nextProps.rfp ){
         let clubDealList = ioiUtils.makeClubDealList(nextProps.ioiList, nextProps.rfp);
         this.setState({

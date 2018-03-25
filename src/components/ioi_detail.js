@@ -438,7 +438,6 @@ class IOIDetail extends Component{
   }
 
   inviteOtherLendersForRFP(){
-    console.log('I am in inviteOtherLendersForRFP');
     this.props.inviteOtherLendersToTheDeal({
       emailArr: this.refs.otherLenderEmail.value,
       ioiId: this.props.ioi.ioiId,

@@ -18,6 +18,7 @@ import contactListReducer from './reducer_contacts';
 import MessagesReducer from './reducer_messages';
 import DashboardReducer from './reducer_dashboard';
 import StatsReducer from './reducer_stats';
+import CompanyReducer from './reducer_company';
 
 const rootReducer = combineReducers({
   form : formReducer,
@@ -38,7 +39,8 @@ const rootReducer = combineReducers({
   contactList : contactListReducer,
   messages : MessagesReducer,
   dashboard : DashboardReducer,
-  stats : StatsReducer
+  stats : StatsReducer,
+  company : CompanyReducer
 });
 
 export default rootReducer;
