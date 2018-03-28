@@ -14,10 +14,6 @@ export default class Landing extends Component {
                 <div className="text-vertical-center">
                   <h1 style={{marginBottom: '50px', color : 'white'}}>BOOKBILD</h1>
                   <h3 style={{color : 'white'}}>Enterprise Software for Private Debt Transactions</h3>
-                  <br/>
-                  <br/>
-                  <br/>
-                  <span className="index-bottom-text">Our platform features a marketplace supported by blockchain infrastructure, <br/>aggregate data analytics, and custom transaction diligence support</span>
                 </div>
               </header>
 
